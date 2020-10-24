@@ -17,7 +17,7 @@ using namespace std;
 
 // Validate the user's input and prompt if it's incorrect.
 // INPUT:
-//  
+//  max_input: The maximum integer allowed for the main menu
 // OUTPUT:
 //  Returns the option entered by the user.
 int validate_input(const int max_input) {
