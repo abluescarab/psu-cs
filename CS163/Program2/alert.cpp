@@ -68,16 +68,10 @@ int alert::copy_from(const char * new_date, const char * new_time, const char * 
 // OUTPUT:
 //  0 if the copy fails due to missing data
 //  1 if the copy succeeds
-int alert::copy_from(const alert & alert_to_copy) {
-    if(alert_to_copy.is_empty()) return 0;
-
-    copy_char_array(origin, alert_to_copy.origin);
-    copy_char_array(date, alert_to_copy.date);
-    copy_char_array(time, alert_to_copy.time);
-    copy_char_array(message, alert_to_copy.message);
-    copy_char_array(agency, alert_to_copy.agency); 
-
-    return 1;
+int alert::copy_from(const alert & alert_to_copy) { 
+    return copy_from(alert_to_copy.origin, alert_to_copy.date,
+            alert_to_copy.time, alert_to_copy.message,
+            alert_to_copy.agency);
 }
 
 
