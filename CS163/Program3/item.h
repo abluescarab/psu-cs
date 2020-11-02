@@ -11,8 +11,19 @@ class item {
     public:
         item(void);
         ~item(void);
+        // Copy the item data from another item.
+        int copy_from(const item & item_to_copy);
+        // Display the content of the item.
+        int display(void) const;
+        // Check if the item has no data.
+        int is_empty(void) const;
+        // Check if the item is a match to the current data.
+        int is_match(const char * name, const char * location, const char * hint) const;
 
     private:
+        char * name; // the name of the item
+        char * location; // the location where the item can be found
+        char * hint; // a hint to find the item
 };
 
 #endif
