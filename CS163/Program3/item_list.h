@@ -10,7 +10,7 @@
 #include "item.h"
 
 struct item_node {
-    item * this_item;
+    item this_item;
     item_node * next;
 };
 
