@@ -9,9 +9,9 @@
 #define ITEM_LIST_H
 #include "item.h"
 
-struct item_node {
-    item this_item;
-    item_node * next;
+struct queue_node {
+    char * item_name;
+    queue_node * next;
 };
 
 class item_list {
@@ -24,6 +24,8 @@ class item_list {
         int dequeue(void);
         // Peek at the last item.
         int peek(item & result) const;
+        // Clear the list.
+        int clear(void);
         // Check if the list is empty.
         int is_empty(void) const;
         // Display the contents of the list.
