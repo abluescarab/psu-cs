@@ -11,14 +11,16 @@ class item {
     public:
         item(void);
         ~item(void);
+        // Copy item data from multiple arguments.
+        int copy_from(const char * new_name, const char * new_location, const char * new_hint);
         // Copy the item data from another item.
         int copy_from(const item & item_to_copy);
         // Display the content of the item.
         int display(void) const;
         // Check if the item has no data.
         int is_empty(void) const;
-        // Check if the item is a match to the current data.
-        int is_match(const char * name, const char * location, const char * hint) const;
+        // Check if the item is a match to the provided title.
+        int is_match(const char * item_name) const;
 
     private:
         char * name; // the name of the item
