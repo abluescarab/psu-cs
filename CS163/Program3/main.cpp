@@ -62,6 +62,7 @@ int main(int argc, char ** argv) {
         return 1;
     }
 
+    table->display_all();
     queue_count = create_queue(queue);
 
     if(queue_count < 0) {

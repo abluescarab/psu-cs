@@ -190,20 +190,32 @@ int item_table::display(const char * item_name) const {
 //  Returns the number of items displayed
 int item_table::display_all(void) const {
     int count = 0;
+    int chains = 0;
+    int chain_elements = 0;
+    int largest_chain = 0;
 
     for(int i = 0; i < SIZE; ++i) {
+        chain_elements = 0;
         table_node * temp = table[i];
     
-        if(temp)
+        if(temp) {
             cout << "CHAIN " << i << ": " << endl;
+            ++chains;
+        }
 
         while(temp) {
             count += temp->this_item.display();
             cout << endl;
             temp = temp->next;
+            ++chain_elements;
         }
+
+        if(chain_elements > largest_chain)
+            largest_chain = chain_elements;
     }
 
+    cout << "Number of chains with data: " << chains << endl;
+    cout << "Largest chain was: " << largest_chain << endl;
     return count;
 }
 
