@@ -91,12 +91,9 @@ int main(int argc, char ** argv) {
         cout << "4) I found it!" << endl;
         cout << "5) Exit" << endl;
 
-        option = validate_input(0, MAX_MENU_OPTION);
+        option = validate_input(1, MAX_MENU_OPTION);
 
         switch(option) {
-            case 0: // hidden diagnostics option
-                table->display_diagnostics();
-                break;
             case 1: // print current item
                 cout << "You need to find a..." << endl;
                 table->display(peek_result, item_data::name);
@@ -126,7 +123,7 @@ int main(int argc, char ** argv) {
                 quit = true;
                 break;
             default:
-                option = validate_input(0, MAX_MENU_OPTION);
+                option = validate_input(1, MAX_MENU_OPTION);
                 break;
         }
 
