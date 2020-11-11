@@ -31,6 +31,8 @@ class item_table {
         int find(const char * item_name, item & result) const;
         // Remove all items from the table.
         int clear(void);
+        // Remove all items from a specified index.
+        int clear(const int index);
         // Display all information from an item matching a key.
         int display(const char * item_name) const;
         // Display only selected information from an item matching a key.

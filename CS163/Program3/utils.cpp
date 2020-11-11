@@ -3,6 +3,7 @@
  *
  * This is the implementation file for basic utility function(s).
  */
+#include <algorithm>
 #include <limits>
 #include <iostream>
 #include <cstring>
@@ -56,21 +57,36 @@ int copy_char_array(char * & destination, const char * source) {
 //  max_input: The maximum number allowed
 // OUTPUT:
 //  Returns the valid input
-int validate_input(const int max_input) {
+int validate_input(const int min_input, const int max_input) {
     int input;
+    int min_width = count_digits(min_input) + (min_input < 0);
+    int max_width = count_digits(max_input) + (max_input < 0);
+    int width = max(min_width, max_width);
 
     cout << "> ";
-    cin.width(1);
+    cin.width(width);
     cin >> input;
 
     cin.clear();
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-    if(cin.fail() || input < 1 || input > max_input) {
+    if(cin.fail() || input < min_input || input > max_input) {
         cout << "Invalid input. Please try again." << endl;
-        return validate_input(max_input);
+        return validate_input(min_input, max_input);
     }
 
     cout << endl;
     return input;
+}
+
+
+
+// Count number of digits in an integer.
+// INPUT:
+//  number: The number to count digits for
+// OUTPUT:
+//  Returns the number of digits counted
+int count_digits(const int number) {
+    if(number == 0) return 0;
+    return count_digits(number / 10) + 1;
 }

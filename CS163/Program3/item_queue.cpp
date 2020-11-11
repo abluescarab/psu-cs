@@ -22,6 +22,7 @@ item_queue::item_queue(void) {
 
 item_queue::~item_queue(void) {
     clear();
+    rear = nullptr;
 }
 
 
@@ -65,11 +66,13 @@ int item_queue::dequeue(void) {
     if(!rear) return 0;
 
     if(rear->next == rear) {
+        delete [] rear->item_name;
         delete rear;
         rear = nullptr;
     }
     else {
         queue_node * temp = rear->next->next;
+        delete [] rear->next->item_name;
         delete rear->next;
         rear->next = temp;
     }
@@ -87,7 +90,7 @@ int item_queue::dequeue(void) {
 //  1 if item is returned
 int item_queue::peek(char * & result) const {
     if(!rear) {
-        delete result;
+        delete [] result;
         result = nullptr;
         return 0;
     }
@@ -109,16 +112,15 @@ int item_queue::clear(void) {
     rear->next = nullptr;
 
     while(temp) {
-        rear = temp->next;
+        rear = temp;
+        temp = rear->next;
+        delete [] rear->item_name;
         delete rear;
-        temp = rear;
         ++count;
     }
 
     return count;
 }
-
-
 // Check if the queue is empty.
 // OUTPUT:
 //  0 if queue has data

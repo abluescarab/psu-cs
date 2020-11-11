@@ -11,6 +11,7 @@
 #include <fstream>
 #include <cmath>
 #include <cstring>
+#include "utils.h"
 #include "item_table.h"
 
 using namespace std;
@@ -28,6 +29,8 @@ item_table::item_table(void) {
 
 item_table::~item_table(void) {
     clear();
+    delete [] table;
+    table = nullptr;
 }
 
 
@@ -44,11 +47,15 @@ int item_table::load_items(const char * filename) {
     char * location = new char[MAX_STREAM_SIZE];
     char * hint = new char[MAX_STREAM_SIZE];
     int count = 0;
+    bool is_open = true;
     ifstream file(filename);
 
-    if(!file.is_open()) return -1;
+    if(!file.is_open()) {
+        is_open = false;
+        count = -1;
+    }
 
-    while(!file.eof()) {
+    while(is_open && !file.eof()) {
         file.get(name, MAX_STREAM_SIZE, '|');
         file.ignore(stream_size, '|');
         file.get(location, MAX_STREAM_SIZE, '|');
@@ -60,10 +67,12 @@ int item_table::load_items(const char * filename) {
             ++count;
     }
 
-    file.close();
-    delete name;
-    delete location;
-    delete hint;
+    if(is_open)
+        file.close();
+
+    delete [] name;
+    delete [] location;
+    delete [] hint;
     return count;
 }
 
@@ -148,23 +157,32 @@ int item_table::find(const char * item_name, item & result) const {
 //  Returns the number of items removed
 int item_table::clear(void) {
     if(!table) return 0;
+    return clear(0);
+}
+
+
+
+// Remove all items from a specified index.
+// INPUT:
+//  index: The table index to start at
+// OUTPUT:
+//  Returns the number of elements removed
+int item_table::clear(const int index) {
+    if(index == SIZE) return 0;
 
     int count = 0;
+    table_node * temp = table[index];
 
-    for(int i = 0; i < SIZE; ++i) {
-        table_node * temp = table[i];
-
-        if(temp) {
-            while(temp->next) {
-                table_node * next = temp->next;
-                delete temp;
-                temp = next;
-                ++count;
-            }
+    if(temp) {
+        while(temp) {
+            table_node * next = temp->next;
+            delete temp;
+            temp = next;
+            ++count;
         }
     }
 
-    return count;
+    return clear(index + 1) + count;
 }
 
 
@@ -257,7 +275,7 @@ int item_table::display_diagnostics(void) const {
         if(chain_elements > 1)
             ++chains_with_multiple;
 
-        if(i % 15 == 0)
+        if(i % 20 == 0)
             cout << endl;
 
         cout << setw(3) << i + 1 << ":" << chain_elements << " ";

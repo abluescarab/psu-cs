@@ -22,11 +22,11 @@ item::item(void) {
 
 
 item::~item(void) {
-    delete name;
+    delete [] name;
     name = nullptr;
-    delete location;
+    delete [] location;
     location = nullptr;
-    delete hint;
+    delete [] hint;
     hint = nullptr;
 }
 
