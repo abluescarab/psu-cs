@@ -1,0 +1,29 @@
+Size 200:
+ Number of chains with data: 163
+ Average number of nodes in chains with data: 1
+ Number of nodes in largest chain: 6
+
+Size 201:
+ Number of chains with data: 161
+ Average number of nodes in chains with data: 1
+ Number of nodes in largest chain: 7
+
+Size 300:
+ Number of chains with data: 192
+ Average number of nodes in chains with data: 1
+ Number of nodes in largest chain: 4
+
+Size 301:
+ Number of chains with data: 194
+ Average number of nodes in chains with data: 1
+ Number of nodes in largest chain: 5
+
+Size 500:
+ Number of chains with data: 230
+ Average number of nodes in chains with data: 1
+ Number of nodes in largest chain: 4
+
+Size 501:
+ Number of chains with data: 215
+ Average number of nodes in chains with data: 1
+ Number of nodes in largest chain: 4

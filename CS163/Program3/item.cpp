@@ -33,6 +33,13 @@ item::~item(void) {
 
 
 // Copy item data from multiple arguments.
+// INPUT:
+//  new_name: Name to copy
+//  new_location: Location to copy
+//  new_hint: Hint to copy
+// OUTPUT:
+//  0 if the data is missing or empty
+//  1 if the data is copied successfully
 int item::copy_from(const char * new_name, const char * new_location, const char * new_hint) {
     if(char_array_empty(new_name) ||
        char_array_empty(new_location) ||
@@ -70,10 +77,39 @@ int item::copy_from(const item & item_to_copy) {
 //  1 if the item displayed successfully
 int item::display(void) const {
     if(is_empty()) return 0;
-    
-    cout << name << endl;
-    cout << "Location: " << location << endl;
-    cout << "Hint: " << hint << endl;
+
+    display(item_data::name);
+    display(item_data::location);
+    display(item_data::hint);
+    return 1;
+}
+
+
+
+// Display only a certain element of the item.
+// INPUT:
+//  data: The data of the item to display
+// OUTPUT:
+//  0 if the data passed was invalid or the item is empty
+//  1 if the data displayed correctly
+int item::display(const item_data data) const {
+    if(is_empty()) return 0;
+
+    switch(data) {
+        case item_data::name:
+            cout << name;
+            break;
+        case item_data::location:
+            cout << location;
+            break;
+        case item_data::hint:
+            cout << hint;
+            break;
+        default:
+            return 0;
+    }
+
+    cout << endl;
     return 1;
 }
 

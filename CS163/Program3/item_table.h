@@ -33,8 +33,12 @@ class item_table {
         int clear(void);
         // Display all information from an item matching a key.
         int display(const char * item_name) const;
+        // Display only selected information from an item matching a key.
+        int display(const char * item_name, const item_data data) const;
         // Display the contents of the table.
         int display_all(void) const;
+        // Display diagnostic information about chain sizes.
+        int display_diagnostics(void) const;
 
     private:
         // Hash the name of an item and return its hashed value.

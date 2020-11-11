@@ -7,6 +7,12 @@
 #ifndef ITEM_H
 #define ITEM_H
 
+enum item_data {
+    name,
+    location,
+    hint
+};
+
 class item {
     public:
         item(void);
@@ -17,6 +23,8 @@ class item {
         int copy_from(const item & item_to_copy);
         // Display the content of the item.
         int display(void) const;
+        // Display only a certain element of the item.
+        int display(const item_data data) const;
         // Check if the item has no data.
         int is_empty(void) const;
         // Check if the item is a match to the provided title.

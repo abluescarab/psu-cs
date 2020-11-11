@@ -5,6 +5,7 @@
  * class is one that manages a hash table with a list of items available
  * for a scavenger hunt.
  */
+#include <iomanip>
 #include <iostream>
 #include <limits>
 #include <fstream>
@@ -48,12 +49,12 @@ int item_table::load_items(const char * filename) {
     if(!file.is_open()) return -1;
 
     while(!file.eof()) {
-        file.get(name, stream_size, '|');
+        file.get(name, MAX_STREAM_SIZE, '|');
         file.ignore(stream_size, '|');
-        file.get(location, stream_size, '|');
+        file.get(location, MAX_STREAM_SIZE, '|');
         file.ignore(stream_size, '|');
         // get the rest of the line as the hint, throwing away newline character
-        file.getline(hint, stream_size);
+        file.getline(hint, MAX_STREAM_SIZE);
 
         if(add(name, location, hint))
             ++count;
@@ -185,40 +186,94 @@ int item_table::display(const char * item_name) const {
 
 
 
+// Display only selected information from an item matching a key.
+// INPUT: 
+//  item_name: The item name to display
+//  item_data: The data to display from the item
+// OUTPUT:
+//  0 if the invalid input or item is empty
+//  1 if the item displayed correctly
+int item_table::display(const char * item_name, const item_data data) const {
+    table_node * node = nullptr;
+
+    if(!find(item_name, node))
+        return 0;
+
+    return node->this_item.display(data);
+}
+
+
+
 // Display the contents of the table.
 // OUTPUT:
 //  Returns the number of items displayed
 int item_table::display_all(void) const {
     int count = 0;
-    int chains = 0;
-    int chain_elements = 0;
-    int largest_chain = 0;
 
     for(int i = 0; i < SIZE; ++i) {
-        chain_elements = 0;
         table_node * temp = table[i];
-    
-        if(temp) {
-            cout << "CHAIN " << i << ": " << endl;
-            ++chains;
-        }
 
         while(temp) {
             count += temp->this_item.display();
             cout << endl;
             temp = temp->next;
+        }
+    }
+
+    return count;
+}
+
+
+
+// Display diagnostic information about table chains.
+// OUTPUT:
+//  0 if the table is empty
+//  1 if the data was displayed successfully
+int item_table::display_diagnostics(void) const {
+    if(!table) return 0;
+
+    int chains = 0;
+    int chain_elements = 0;
+    int largest_chain = 0;
+    int average_chain = 0;
+    int chains_with_multiple = 0;
+
+    cout << "Elements in each chain:";
+
+    for(int i = 0; i < SIZE; ++i) {
+        chain_elements = 0;
+        table_node * temp = table[i];
+
+        if(temp)
+            ++chains;
+
+        while(temp) {
+            temp = temp->next;
             ++chain_elements;
         }
+
+        average_chain += chain_elements;
+
+        if(chain_elements > 1)
+            ++chains_with_multiple;
+
+        if(i % 15 == 0)
+            cout << endl;
+
+        cout << setw(3) << i + 1 << ":" << chain_elements << " ";
 
         if(chain_elements > largest_chain)
             largest_chain = chain_elements;
     }
 
-    cout << "Number of chains with data: " << chains << endl;
-    cout << "Largest chain was: " << largest_chain << endl;
-    return count;
+    cout << endl << endl;
+    cout << "Chains with data: " << chains << endl;
+    cout << "Empty indices: " << SIZE - chains << endl;
+    cout << "Chains with more than one node: " << chains_with_multiple << endl;
+    cout << "Average nodes in chains with data: " << (average_chain / chains) << endl;
+    cout << "Size of largest chain: " << largest_chain << endl;
+    return 1;
 }
-
 
 
 // Hash the name of an item and return its hashed value.
