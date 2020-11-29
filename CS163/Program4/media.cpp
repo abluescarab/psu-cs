@@ -1,4 +1,11 @@
+/* Alana Gilston - 11/16/2020 - CS163 - Program 4
+ * media.cpp
+ *
+ * This is the implementation file for the "media" class. It manages a media
+ * item (such as a video) for a college course.
+ */
 #include <iostream>
+#include <cstring>
 #include "media.h"
 #include "utils.h"
 
@@ -15,15 +22,26 @@ media::media(void) {
 
 
 
-~media::media(void) {
-    delete [] title;
-    title = nullptr;
-    delete [] description;
-    description = nullptr;
-    delete [] course;
-    course = nullptr;
-    delete [] next_media;
-    next_media = nullptr;
+media::~media(void) {
+    if(title) {
+        delete [] title;
+        title = nullptr;
+    }
+
+    if(description) {
+        delete [] description;
+        description = nullptr;
+    }
+
+    if(course) {
+        delete [] course;
+        course = nullptr;
+    }
+
+    if(next_media) {
+        delete [] next_media;
+        next_media = nullptr;
+    }
 }
 
 
@@ -41,8 +59,7 @@ int media::copy(const char * new_title, const char * new_description,
         const char * new_course, const char * new_next) {
     if(char_array_empty(new_title) ||
        char_array_empty(new_description) ||
-       char_array_empty(new_course) ||
-       char_array_empty(new_next))
+       char_array_empty(new_course))
         return 0;
 
     copy_char_array(title, new_title);
@@ -60,7 +77,7 @@ int media::copy(const char * new_title, const char * new_description,
 // OUTPUT:
 //  0 if the copy is missing data
 //  1 if the copy succeeds
-int media::copy(const & media to_copy) {
+int media::copy(const media & to_copy) {
     if(to_copy.is_empty()) return 0;
 
     copy_char_array(title, to_copy.title);
@@ -80,9 +97,14 @@ int media::display(void) const {
     if(is_empty()) return 0;
 
     cout << "\"" << title << "\"" << endl;
-    cout << description << endl;
-    cout << "Class: " << course << endl;
-    cout << "Next media: " << next_media << endl;
+    cout << "Description: " << description << endl;
+    cout << "Course: " << course << endl;
+
+    if(char_array_empty(next_media))
+        cout << "Next media: N/A" << endl;
+    else
+        cout << "Next media: " << next_media << endl;
+
     return 1;
 }
 
@@ -95,18 +117,43 @@ int media::display(void) const {
 int media::is_empty(void) const {
     return char_array_empty(title) ||
            char_array_empty(description) ||
-           char_array_empty(course) ||
-           char_array_empty(next_media);
+           char_array_empty(course);
 }
 
 
 
-// Check if the media name matches a provided title.
+// Check if the item is in a provided course.
 // INPUT:
-//  media_title: The media title to compare
+//  check_course: The course to check for
 // OUTPUT:
-//  0 if the title is not a match
-//  1 if the title is a match
-int media::is_match(const char * media_title) const {
-    return strcmp(title, media_title) == 0;
+//  0 if the data is not a match
+//  1 if the data matches
+int media::in_course(const char * check_course) const {
+    if(char_array_empty(course) ||
+       char_array_empty(check_course))
+           return 0;
+
+    return strcmp(course, check_course) == 0;
+}
+
+
+
+// Compare media title against provided title.
+// INPUT:
+//  to_compare: The title to compare against
+// OUTPUT:
+//  Returns the result of strcmp with the original title on the right
+int media::compare_title(const char * to_compare) const {
+    return strcmp(to_compare, title);
+}
+
+
+
+// Compare media title against another media item.
+// INPUT:
+//  to_compare: The media item to compare against
+// OUTPUT:
+//  Returns the value of strcmp with the original title on the right
+int media::compare_title(const media & to_compare) const {
+    return compare_title(to_compare.title);
 }

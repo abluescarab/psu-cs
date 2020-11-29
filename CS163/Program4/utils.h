@@ -1,4 +1,4 @@
-/* Alana Gilston - 10/15/2020 - CS163 - Program 2
+/* Alana Gilston - 11/16/2020 - CS163 - Program 4
  * utils.h
  *
  * This is the header file for basic utility function(s).
@@ -12,6 +12,8 @@ int char_array_empty(const char * array);
 int copy_char_array(char * & destination, const char * source); 
 // Validate numeric user input.
 int validate_input(const int min_input, const int max_input);
+// Validate yes/no user input.
+int validate_yes(void);
 // Count number of digits in an integer.
 int count_digits(const int number);
 

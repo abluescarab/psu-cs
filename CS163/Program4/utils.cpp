@@ -1,4 +1,4 @@
-/* Alana Gilston - 10/15/2020 - CS163 - Program 2
+/* Alana Gilston - 11/16/2020 - CS163 - Program 4
  * utils.cpp
  *
  * This is the implementation file for basic utility function(s).
@@ -41,8 +41,8 @@ int char_array_empty(const char * array) {
 //  Returns 0 if the copy failed due to a missing source and 1 if it succeeded.
 int copy_char_array(char * & destination, const char * source) {
     if(!source) return 0;
-    
-    if(destination && !char_array_empty(destination))
+
+    if(destination)
         delete [] destination;
 
     destination = new char[strlen(source) + 1];
@@ -77,6 +77,26 @@ int validate_input(const int min_input, const int max_input) {
 
     cout << endl;
     return input;
+}
+
+
+
+// Get yes/no user input.
+// OUTPUT:
+//  0 if the input was anything other than "y" or "yes"
+//  1 if the input was "y" or "yes"
+int validate_yes(void) {
+    char input[4] = ""; // long enough for "yes" and null character
+
+    cin.getline(input, 4);
+
+    for(int i = 0; i < 4; ++i) {
+        input[i] = tolower(input[i]);
+    }
+
+    // check if input was invalid and whether input was equal to "y" or "yes"
+    return !cin.fail() &&
+        (strcmp(input, "y") == 0 || strcmp(input, "yes") == 0);
 }
 
 
