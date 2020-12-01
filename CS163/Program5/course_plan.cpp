@@ -62,30 +62,6 @@ int course_plan::add(const course & to_add) {
 
 
 
-// Remove course.
-// INPUT:
-//  code: The course code to remove
-// OUTPUT:
-//  -1 if the course code is invalid
-//  0 if the course was not found
-//  1 if the removal was successful
-int course_plan::remove(const char * code) {
-    if(char_array_empty(code))
-        return -1;
-
-    int index = find_index(code);
-    
-    if(index == -1)
-        return 0;
-
-    delete courses[index].this_course;
-    courses[index].this_course = nullptr;
-    courses[index].head = nullptr;
-    return 1;
-}
-
-
-
 // Connect an edge from the start course to the end course.
 // INPUT:
 //  start_code: The course to connect from
@@ -198,21 +174,13 @@ int course_plan::display_adjacent(const char * code) const {
     if(char_array_empty(code))
         return -1;
 
-    edge * temp = nullptr;
     int index = find_index(code);
-    int count = 0;
 
     if(index == -1)
         return -1;
-    
-    temp = courses[index].head;
 
-    while(temp) {
-        count += temp->adjacent->this_course->display();
-        temp = temp->next;
-    }
-
-    return count;
+    courses[index].this_course->display();
+    return display_adjacent(courses[index].head);
 }
 
 
@@ -234,6 +202,16 @@ int course_plan::clear(void) {
     }
 
     return count;
+}
+
+
+
+// Display the adjacent vertices for the chosen vertex recursively.
+int course_plan::display_adjacent(const edge * course_edge) const {
+    if(!course_edge)
+        return 0;
+
+    return course_edge->adjacent->this_course->display() + display_adjacent(course_edge->next);
 }
 
 

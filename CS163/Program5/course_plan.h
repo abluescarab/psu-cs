@@ -25,8 +25,6 @@ class course_plan {
         ~course_plan(void);
         // Add a new vertex by course.
         int add(const course & to_add);
-        // Remove course.
-        int remove(const char * code);
         // Connect an edge from the start course to the end course.
         int connect(const char * start_code, const char * end_code);
         // Display all courses.
@@ -43,6 +41,8 @@ class course_plan {
     private:
         vertex * courses; // the adjacency list of courses
 
+        // Display the adjacent vertices for the chosen vertex recursively.
+        int display_adjacent(const edge * course_edge) const;
         // Find the index of a selected vertex.
         int find_index(const char * code) const;
         // Add a new edge to the selected vertex.

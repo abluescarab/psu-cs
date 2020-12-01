@@ -8,7 +8,7 @@
 #include "course.h"
 #include "course_plan.h"
 #include "utils.h"
-#define MAX_MENU_OPTION 7
+#define MAX_MENU_OPTION 6
 #define MAX_INPUT 256
 
 using namespace std;
@@ -29,12 +29,11 @@ int main(void) {
         cout << "Course Planner" << endl;
         cout << "---------------------------" << endl;
         cout << "1) Add a course" << endl;
-        cout << "2) Remove a course" << endl;
-        cout << "3) Connect existing courses" << endl;
-        cout << "4) Display all courses" << endl;
-        cout << "5) Display courses by department" << endl;
-        cout << "6) Display connected courses" << endl;
-        cout << "7) Quit" << endl;
+        cout << "2) Connect existing courses" << endl;
+        cout << "3) Display all courses" << endl;
+        cout << "4) Display courses by department" << endl;
+        cout << "5) Display connected courses" << endl;
+        cout << "6) Quit" << endl;
 
         option = validate_input(1, MAX_MENU_OPTION);
 
@@ -59,32 +58,13 @@ int main(void) {
 
                 cout << endl;
 
-                if(planner->add(new_course))
+                if(planner->add(new_course) == 1)
                     cout << "Added " << code << " to course plan." << endl;
                 else
                     cout << "Couldn't add " << code << " to course plan." << endl;
 
                 break;
-            case 2: // remove a course
-                cout << "Course code (e.g., CS163): ";
-                cin.getline(code, MAX_INPUT);
-
-                return_value = planner->remove(code);
-
-                if(return_value == -1) {
-                    cout << "Invalid course code." << endl;
-                    break;
-                }
-
-                cout << endl;
-
-                if(return_value)
-                    cout << "Removed " << code << " from course plan." << endl;
-                else
-                    cout << "Couldn't remove " << code << " from course plan." << endl;
-
-                break;
-            case 3: // connect existing courses
+            case 2: // connect existing courses
                 cout << "First course code (e.g., CS163): ";
                 cin.getline(code, MAX_INPUT);
 
@@ -97,13 +77,13 @@ int main(void) {
                 cin.getline(end_code, MAX_INPUT);
                 cout << endl;
 
-                if(planner->connect(code, end_code))
+                if(planner->connect(code, end_code) == 1)
                     cout << "Connected " << code << " to " << end_code << "." << endl;
                 else
                     cout << "Couldn't connect " << code << " to " << end_code << "." << endl;
 
                 break;
-            case 4: // display all courses
+            case 3: // display all courses
                 return_value = planner->display();
                 cout << endl;
 
@@ -112,7 +92,7 @@ int main(void) {
                 else
                     cout << "Found " << return_value << " courses." << endl;
                 break;
-            case 5: // display courses by department
+            case 4: // display courses by department
                 cout << "Course department (e.g., CS): ";
                 cin.getline(code, MAX_INPUT);
 
@@ -131,7 +111,7 @@ int main(void) {
                     cout << "Found " << return_value << " courses in that department." << endl;
 
                 break;
-            case 6: // display connected courses
+            case 5: // display connected courses
                 cout << "Course code: ";
                 cin.getline(code, MAX_INPUT);
 
@@ -150,7 +130,7 @@ int main(void) {
                     cout << "Found " << return_value << " connected courses." << endl;
 
                 break;
-            case 7: // quit
+            case 6: // quit
                 quit = true;
                 break;
             default:
