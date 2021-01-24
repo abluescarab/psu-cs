@@ -5,17 +5,16 @@
  * inventory class manages a product inventory in a supply chain while the
  * warehouse class manages a warehouse where products are stored. */
 #include "inventory.h"
+#include "utils.h"
 
 
 
-inventory::inventory(void) {
-    products = new product*[3];
-}
+inventory::inventory(void) : products(new product*[3]) {}
 
 
 
 inventory::inventory(const inventory & other_inventory) {
-
+    // todo: copy inventory
 }
 
 
@@ -28,7 +27,8 @@ inventory::~inventory(void) {
 
 // Add a new product to the inventory by name.
 int inventory::add_product(const char * product_name, 
-        const priority_type priority, const int amount) {
+        const priority_type priority, 
+        const int amount) {
     return 1;
 }
 
@@ -70,27 +70,35 @@ int inventory::get_next(product * & next_product) const {
 
 
 
-warehouse::warehouse(void) {
-
-}
+warehouse::warehouse(void) :
+    company(nullptr),
+    distribution(distribution_type::manufacturer),
+    left(nullptr),
+    right(nullptr) {
+    }
 
 
 
 warehouse::~warehouse(void) {
-
+    delete [] company;
+    distribution = distribution_type::manufacturer;
+    // disconnect, but do not delete children
+    left = nullptr;
+    right = nullptr;
 }
 
 
 
 // Change the company.
 int warehouse::change_company(const char * new_company) {
-    return 1;
+    return copy_char_array(company, new_company);
 }
 
 
 
 // Change the distribution type.
-int warehouse::change_distribution(const distribution_type distribution) {
+int warehouse::change_distribution(const distribution_type new_distribution) {
+    distribution = new_distribution;
     return 1;
 }
 
@@ -122,6 +130,10 @@ int warehouse::order_product(const priority_type priority,
 
 // Create a product by name.
 int warehouse::fabricate(const char * product_name, const int amount) {
+    // only a manufacturer should be able to fabricate
+    if(distribution != distribution_type::manufacturer)
+        return 0;
+
     return 1;
 }
 

@@ -23,13 +23,15 @@ enum priority_type {
 class path_node {
     public:
         path_node(void);
-        path_node(const char * new_company, 
+        path_node(char * new_company, 
                 const distribution_type new_distribution);
         path_node(const path_node & other_node);
         ~path_node(void);
+        // Set the next node in the list.
+        int set_next(path_node * & next_node);
         // Get the next node in the list.
-        int get_next(path_node & next_node) const;
-        // Display the contents of the list.
+        int get_next(path_node * & next_node) const;
+        // Display the contents of the path node.
         int display(void) const;
 
     private:
@@ -41,14 +43,14 @@ class path_node {
 class product {
     public:
         product(void);
-        product(const char * new_name, const priority_type new_priority,
+        product(char * new_name, const priority_type new_priority,
                 const int new_amount);
         product(const product & other_product);
         ~product(void);
         // Change the amount.
         int change_amount(const bool increment, const int new_amount);
         // Update the path.
-        int update_path(const char * company, distribution_type distribution);
+        int update_path(char * company, distribution_type distribution);
         // Get the next product in the list.
         int get_next(product * & next_product) const;
         // Display the product.

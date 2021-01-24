@@ -37,7 +37,7 @@ class warehouse : public inventory {
         // Change the company.
         int change_company(const char * new_company);
         // Change the distribution type.
-        int change_distribution(const distribution_type distribution);
+        int change_distribution(const distribution_type new_distribution);
         // Ship a product to another warehouse.
         int ship_to(const warehouse & other_warehouse,
                 const char * product_name, const int amount);
