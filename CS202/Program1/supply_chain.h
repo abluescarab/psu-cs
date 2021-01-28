@@ -11,6 +11,7 @@
 class supply_chain {
     public:
         supply_chain(void);
+        supply_chain(const supply_chain & other_chain);
         ~supply_chain(void);
         // Add a warehouse to the chain by company.
         int add(const char * warehouse_company, const distribution_type distribution);
@@ -28,8 +29,19 @@ class supply_chain {
         int new_order(const char * product_name, const int amount) const;
         // Create a new product order.
         int new_order(const product & order_product, const int amount) const;
+        // Display the whole supply chain.
+        int display(void) const;
 
     private:
+        // Add a new warehouse recursively.
+        int add(warehouse * & current, const warehouse & to_add);
+        // Remove a warehouse recursively.
+        int remove(warehouse * & current, const warehouse & to_remove);
+        // Clear all warehouses from the supply chain recursively.
+        int clear(warehouse * & current);
+        // Display the whole supply chain recursively.
+        int display(warehouse * & current) const;
+
         warehouse * first_warehouse; // first warehouse in the chain
 };
 

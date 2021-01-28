@@ -14,12 +14,6 @@ enum distribution_type {
     manufacturer
 };
 
-enum priority_type {
-    standard,
-    two_day,
-    one_day
-};
-
 class path_node {
     public:
         path_node(void);
@@ -43,22 +37,35 @@ class path_node {
 class product {
     public:
         product(void);
-        product(char * new_name, const priority_type new_priority,
+        product(const char * new_name);
+        product(const char * new_name, 
                 const int new_amount);
         product(const product & other_product);
         ~product(void);
         // Change the amount.
-        int change_amount(const bool increment, const int new_amount);
+        int change_amount(const int new_amount);
+        // Increment the amount.
+        int increment_amount(const int new_amount, 
+                const bool subtract = false);
+        // Increment the amount by another product.
+        int increment_amount(const product & other_product, 
+                const bool subtract = false);
         // Update the path.
         int update_path(char * company, distribution_type distribution);
         // Get the next product in the list.
         int get_next(product * & next_product) const;
+        // Check if the name matches the provided name.
+        int name_matches(const char * other_name) const;
+        // Check if the name matches the provided product.
+        int name_matches(const product & other_product) const;
         // Display the product.
         int display(void) const;
         
     private:
+        // Update the path recursively.
+        int update_path(path_node * & node, char * company, distribution_type distribution);
+
         char * name; // name of the product
-        priority_type priority; // shipping priority
         int amount; // amount in inventory
         product * next; // next product in list
         path_node * path; // path node list

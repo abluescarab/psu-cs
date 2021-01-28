@@ -9,6 +9,12 @@
 
 
 supply_chain::supply_chain(void) {
+    first_warehouse = nullptr;
+}
+
+
+
+supply_chain::supply_chain(const supply_chain & other_chain) {
 
 }
 
@@ -34,6 +40,13 @@ int supply_chain::add(const warehouse & add_warehouse) {
 
 
 
+// Add a new warehouse recursively.
+int supply_chain::add(warehouse * & current, const warehouse & to_add) {
+    return 1;
+}
+
+
+
 // Remove a warehouse by company.
 int supply_chain::remove(const char * warehouse_company) {
     return 1;
@@ -43,6 +56,13 @@ int supply_chain::remove(const char * warehouse_company) {
 
 // Remove a warehouse.
 int supply_chain::remove(const warehouse & remove_warehouse) {
+    return 1;
+}
+
+
+
+// Remove a warehouse recursively.
+int supply_chain::remove(warehouse * & current, const warehouse & to_remove) {
     return 1;
 }
 
@@ -71,5 +91,18 @@ int supply_chain::new_order(const char * product_name, const int amount) const {
 
 // Create a new product order.
 int supply_chain::new_order(const product & order_product, const int amount) const {
+    return 1;
+}
+
+
+// Display the whole supply chain.
+int supply_chain::display(void) const {
+    return 1;
+}
+
+
+
+// Display the whole supply chain recursively.
+int supply_chain::display(warehouse * & current) const {
     return 1;
 }

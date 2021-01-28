@@ -4,9 +4,14 @@
  * This is the implementation file to test the supply chain class.
  */
 #include "supply_chain.h"
+#include "utils.h"
 
 
 
 int main() {
     supply_chain chain;
+
+
+
+    return 0;
 }
