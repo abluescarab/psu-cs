@@ -40,13 +40,14 @@ int char_array_empty(const char * array) {
 // OUTPUT:
 //  Returns 0 if the copy failed due to a missing source and 1 if it succeeded.
 int copy_char_array(char * & destination, const char * source) {
-    if(!source) return 0;
+    if(!source || char_array_empty(source))
+        return 0;
 
     if(destination)
         delete [] destination;
 
     destination = new char[strlen(source) + 1];
-    strcpy(destination, source);
+     strcpy(destination, source);
     return 1;
 }
 

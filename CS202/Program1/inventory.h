@@ -8,6 +8,12 @@
 #define INVENTORY_H
 #include "product.h"
 
+enum distribution_type {
+    local,
+    regional,
+    national
+};
+
 enum priority_type {
     standard,
     two_day,
@@ -25,8 +31,7 @@ class inventory {
                 const priority_type priority, 
                 const int amount);
         // Add a new product to the inventory.
-        int add_product(const product & to_add, 
-                const priority_type priority);
+        int add_product(product & to_add, const priority_type priority);
         // Remove a product from the inventory by name.
         int remove_product(const char * product_name, 
                 const priority_type priority, 
@@ -34,30 +39,25 @@ class inventory {
         // Remove a product from the inventory.
         int remove_product(const product & to_remove, 
                 const priority_type priority);
-        // Remove all of a product.
-        int remove_all(const product & remove_product,
-                const priority_type priority);
-        // Remove all of a product by name.
-        int remove_all(const char * product_name,
-                const priority_type priority);
         // Clear the inventory.
         int clear(void);
         // Display the contents of the inventory.
         int display(void) const;
 
+    protected:
+        product ** products; // products in the inventory
+
     private:
         // Add a product recursively.
-        int add_product(product * & current, const product & to_add);
+        int add_product(product * & current, product & to_add);
         // Remove a product recursively.
-        int remove_product(product * & current, 
-                const product & to_remove);
-        // Remove all of a product recursively.
-        int remove_all(product * & current,
-                const product & to_remove);
+        int remove_product(product * & current, const product & to_remove);
+        // Clear the inventory recursively.
+        int clear(product * & current);
         // Display products recursively.
         int display(product * & current) const;
-
-        product ** products; // products in the inventory
+        // Copy another inventory category recursively.
+        int copy(product & copy_from, product * & copy_to);
 };
 
 class warehouse : public inventory {
@@ -68,34 +68,29 @@ class warehouse : public inventory {
                 const distribution_type new_distribution);
         warehouse(const warehouse & other_warehouse);
         ~warehouse(void);
-        // Change the company.
-        int change_company(const char * new_company);
-        // Change the distribution type.
-        int change_distribution(const distribution_type new_distribution);
-        // Ship a product to another warehouse.
-        int ship_to(const warehouse & other_warehouse,
-                const char * product_name, 
-                const int amount);
-        // Order a product from up the chain by name.
-        int order_product(const priority_type priority,
-                const char * product_name, 
-                const int amount);
-        // Order a product from up the chain.
-        int order_product(const priority_type priority,
-                const product & order_product, 
-                const int amount);
-        // Create a product by name.
-        int fabricate(const char * product_name, const int amount);
-        // Create a product.
-        int fabricate(const product & fab_product, const int amount);
+        // Check if company matches.
+        int company_matches(const char * to_compare);
+        // Check if company matches.
+        int company_matches(const warehouse & other_warehouse);
         // Get the left warehouse from the tree.
-        int get_left(warehouse * & left_warehouse) const;
+        warehouse * & get_left(void);
         // Get the right warehouse from the tree.
-        int get_right(warehouse * & right_warehouse) const;
-        // Display the warhouse.
-        int display(void) const;
+        warehouse * & get_right(void);
+        // Display the warehouse.
+        int display(bool show_inventory) const;
+        // Check if the warehouse has no data.
+        int is_empty(void) const;
+        // Check if the warehouse has the specified amount of product.
+        int has_product(const char * product_name, const int amount);
+        // Check if the warehouse has the specified amount of product.
+        int has_product(const product & to_check);
+        // Get the name of the warehouse.
+        const char * get_company(void) const;
 
     private:
+        // Check if the warehouse has the specified amount of product recursively.
+        int has_product(product * & current, const product & to_check);
+
         char * company; // company name
         distribution_type distribution; // distribution type
         warehouse * left; // left warehouse under this one
