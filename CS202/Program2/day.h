@@ -11,6 +11,7 @@
 class day {
     public:
         day(void);
+        day(const char * new_name);
         day(const day & other_day);
         ~day(void);
 
@@ -19,7 +20,7 @@ class day {
         // Get the previous day.
         day * & get_prev(void);
         // Display the contents of the day.
-        int display(void) const;
+        int display(void);
         // Add a reminder.
         int add(const reminder & to_add);
         // Remove a reminder.
@@ -36,6 +37,8 @@ class day {
         int remove(reminder * & current, const reminder & to_remove);
         // Clear reminders recursively.
         int clear(reminder * & current);
+        // Copy reminders from another day.
+        int copy_reminders(reminder * & current, reminder & other_reminder);
 
         char * name; // name of the day, e.g. Sunday
         reminder * reminders; // list of reminders
