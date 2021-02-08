@@ -27,6 +27,8 @@ class day {
         int remove(const reminder & to_remove);
         // Clear the reminders.
         int clear(void);
+        // Check if the name matches provided input.
+        int name_matches(const char * other_name);
 
     private:
         // Display the contents of the day recursively.

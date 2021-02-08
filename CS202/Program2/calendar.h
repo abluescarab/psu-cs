@@ -11,27 +11,54 @@
 class calendar {
     public:
         calendar(void);
+        calendar(const int weeks_to_add);
         calendar(const calendar & other_calendar);
         ~calendar(void);
 
         // Display the week with its reminders.
         int display(void);
+        // Add a new week.
+        int add_week(void);
+        // Remove a week by week number.
+        int remove_week(const int week_number);
         // Add a reminder to a specific day.
-        int add(const int day, const reminder & to_add);
+        int add_reminder(const int day, const reminder & to_add);
         // Remove a reminder from a specific day.
-        int remove(const int day, const reminder & to_remove);
+        int remove_reminder(const int day, const reminder & to_remove);
         // Clear all reminders.
+        int clear_reminders(void);
+        // Clear the whole calendar.
         int clear(void);
 
     private:
+        const char days_of_week[] = {
+            "Sunday",
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday"
+        };
+
         // Display the week recursively.
         int display(day * & current);
+        // Add a week recursively.
+        int add_week(day * & current, int current_day);
+        // Remove a week by week number recursively.
+        int remove_week(day * & current, int current_day);
         // Add a reminder recursively.
-        int add(int current, const int day, const reminder & to_add);
+        int add_reminder(int current, const int day, const reminder & to_add);
         // Remove a reminder recursively.
-        int remove(int current, const int day, const reminder & to_remove);
+        int remove_reminder(int current, const int day, const reminder & to_remove);
         // Clear reminders recursively.
+        int clear_reminders(day * & current);
+        // Clear the whole calendar.
         int clear(day * & current);
+        // Copy days and reminders from another calendar recursively.
+        int copy_days(day * & current, day & other_day);
+        // Get the last day of a week.
+        day * & get_last_day_of_week(day * & current, int week_number);
 
         day * days; // days of the week
 };

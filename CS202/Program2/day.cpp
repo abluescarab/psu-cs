@@ -147,6 +147,13 @@ int day::clear(reminder * & current) {
 
 
 
+// Check if the name matches provided input.
+int day::name_matches(const char * other_name) {
+    return strcmp(other_name, name) == 0;
+}
+
+
+
 // Copy reminders from another day.
 int day::copy_reminders(reminder * & current, reminder & other_reminder) {
     if(other_reminder.is_empty())

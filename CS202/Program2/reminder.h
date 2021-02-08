@@ -11,19 +11,19 @@
 class note {
     public:
         note(void);
-        note(const note & other_note);
+        note(note & other_note);
         ~note(void);
 
         // Get the next note.
         note * & get_next(void);
         // Set the next node.
-        int set_next(const note & new_next);
+        int set_next(note & new_next);
         // Display the contents of the note.
         int display(void) const;
         // Check if note is empty.
         int is_empty(void) const;
         // Checks if the note is a match.
-        int matches(const note & other_note);
+        int matches(note & other_note);
 
     private:
         char * text; // text of the note
@@ -35,7 +35,7 @@ class note {
 class reminder {
     public:
         reminder(void);
-        reminder(const char * new_time, const note & new_notes);
+        reminder(const char * new_time, note & new_notes);
         reminder(const reminder & other_reminder);
         virtual ~reminder(void);
 
@@ -52,17 +52,17 @@ class reminder {
         // Check if the reminder matches another reminder.
         virtual int matches(const reminder & other_reminder);
         // Add a note.
-        int add_note(const note & to_add);
+        int add_note(note & to_add);
         // Remove a note.
-        int remove_note(const note & to_remove);
+        int remove_note(note & to_remove);
 
     private:
         // Add a note recursively.
-        int add_note(note * & current, const note & to_add);
+        int add_note(note * & current, note & to_add);
         // Remove a note recursively.
-        int remove_note(note * & current, const note & to_remove);
+        int remove_note(note * & current, note & to_remove);
         // Copy notes from another object recursively.
-        int copy_notes(note * & current, const note & other_note);
+        int copy_notes(note * & current, note & other_note);
         // Clear notes recursively.
         int clear_notes(note * & current);
 
@@ -75,9 +75,9 @@ class reminder {
 
 
 class appointment : public reminder {
-    public:
+     public:
         appointment(void);
-        appointment(const char * new_time, const char * new_location, const note & new_notes);
+        appointment(const char * new_time, const char * new_location, note & new_notes);
         appointment(const appointment & other_appointment);
         ~appointment(void);
 
@@ -93,7 +93,7 @@ class appointment : public reminder {
 class class_session : public reminder {
     public:
         class_session(void);
-        class_session(const char * new_time, const char * new_location, const char * new_instructor, const note & new_notes);
+        class_session(const char * new_time, const char * new_location, const char * new_instructor, note & new_notes);
         class_session(const class_session & other_session);
         ~class_session(void);
 
@@ -110,7 +110,7 @@ class class_session : public reminder {
 class task : public reminder {
     public:
         task(void);
-        task(const char * new_time, const int new_priority, const note & new_notes);
+        task(const char * new_time, const int new_priority, note & new_notes);
         task(const task & other_task);
         ~task(void);
 
@@ -119,7 +119,7 @@ class task : public reminder {
         // Change the priority.
         int change_priority(const int new_priority);
         // Get the next task.
-        task * & get_next(void);
+        //task * & get_next(void);
 
     private:
         // Clear subtasks recursively.
