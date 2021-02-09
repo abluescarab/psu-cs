@@ -50,7 +50,7 @@ class reminder {
         // Check if the reminder is missing required data.
         int is_empty(void) const;
         // Check if the reminder matches another reminder.
-        virtual int matches(const reminder & other_reminder);
+        virtual int matches(reminder & other_reminder);
         // Add a note.
         int add_note(note & to_add);
         // Remove a note.
@@ -83,6 +83,8 @@ class appointment : public reminder {
 
         // Display the appointment.
         int display(void) const;
+        // Check if the reminder matches another reminder.
+        int matches(reminder & other_reminder);
 
     private:
         char * location; // location of the appointment
@@ -99,6 +101,8 @@ class class_session : public reminder {
 
         // Display the session.
         int display(void) const;
+        // Check if the reminder matches another reminder.
+        int matches(reminder & other_reminder);
 
     private:
         char * instructor; // instructor for the class
@@ -118,8 +122,8 @@ class task : public reminder {
         int display(void) const;
         // Change the priority.
         int change_priority(const int new_priority);
-        // Get the next task.
-        //task * & get_next(void);
+        // Check if the reminder matches another reminder.
+        int matches(reminder * & other_reminder);
 
     private:
         // Clear subtasks recursively.

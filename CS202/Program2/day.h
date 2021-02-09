@@ -11,7 +11,7 @@
 class day {
     public:
         day(void);
-        day(const char * new_name);
+        day(const char * new_date);
         day(const day & other_day);
         ~day(void);
 
@@ -24,11 +24,13 @@ class day {
         // Add a reminder.
         int add(const reminder & to_add);
         // Remove a reminder.
-        int remove(const reminder & to_remove);
+        int remove(reminder & to_remove);
         // Clear the reminders.
         int clear(void);
-        // Check if the name matches provided input.
-        int name_matches(const char * other_name);
+        // Check if the date matches provided input.
+        int date_matches(const char * other_date);
+        // Check if day is empty.
+        int is_empty(void) const;
 
     private:
         // Display the contents of the day recursively.
@@ -36,13 +38,13 @@ class day {
         // Add a reminder recursively.
         int add(reminder * & current, const reminder & to_add);
         // Remove a reminder recursively.
-        int remove(reminder * & current, const reminder & to_remove);
+        int remove(reminder * & current, reminder & to_remove);
         // Clear reminders recursively.
         int clear(reminder * & current);
         // Copy reminders from another day.
         int copy_reminders(reminder * & current, reminder & other_reminder);
 
-        char * name; // name of the day, e.g. Sunday
+        char * date; // date of the current day
         reminder * reminders; // list of reminders
         day * next; // next day
         day * prev; // previous day

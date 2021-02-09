@@ -5,6 +5,7 @@
  * day in a calendar week with all its corresponding todos.
  */
 #include <iostream>
+#include <cstring>
 #include "day.h"
 #include "utils.h"
 
@@ -12,26 +13,26 @@ using namespace std;
 
 
 
-day::day(void) : name(nullptr), reminders(nullptr), next(nullptr), prev(nullptr) {}
+day::day(void) : date(nullptr), reminders(nullptr), next(nullptr), prev(nullptr) {}
 
 
 
-day::day(const char * new_name) : 
-    name(nullptr), 
+day::day(const char * new_date) : 
+    date(nullptr), 
     reminders(nullptr), 
     next(nullptr), 
     prev(nullptr) {
-    copy_char_array(name, new_name);
+    copy_char_array(date, new_date);
 }
 
 
 
 day::day(const day & other_day) : 
-    name(nullptr), 
+    date(nullptr), 
     reminders(nullptr), 
     next(other_day.next), 
     prev(other_day.prev) {
-    copy_char_array(name, other_day.name);
+    copy_char_array(date, other_day.date);
     copy_reminders(reminders, *other_day.reminders);
 }
 
@@ -39,8 +40,8 @@ day::day(const day & other_day) :
 
 day::~day(void) {
     clear();
-    delete [] name;
-    name = nullptr;
+    delete [] date;
+    date= nullptr;
     next = nullptr;
     prev = nullptr;
 }
@@ -63,7 +64,7 @@ day * & day::get_prev(void) {
 
 // Display the contents of the day.
 int day::display(void) {
-    cout << name << ":" << endl;
+    cout << date << ":" << endl;
     return display(reminders);
 }
 
@@ -99,7 +100,7 @@ int day::add(reminder * & current, const reminder & to_add) {
 
 
 // Remove a reminder.
-int day::remove(const reminder & to_remove) {
+int day::remove(reminder & to_remove) {
     if(to_remove.is_empty())
         return 0;
 
@@ -109,7 +110,7 @@ int day::remove(const reminder & to_remove) {
 
 
 // Remove a reminder recursively.
-int day::remove(reminder * & current, const reminder & to_remove) {
+int day::remove(reminder * & current, reminder & to_remove) {
     if(!current)
         return 0;
 
@@ -147,9 +148,9 @@ int day::clear(reminder * & current) {
 
 
 
-// Check if the name matches provided input.
-int day::name_matches(const char * other_name) {
-    return strcmp(other_name, name) == 0;
+// Check if the date matches provided input.
+int day::date_matches(const char * other_date) {
+    return strcmp(other_date, date) == 0;
 }
 
 
@@ -161,4 +162,11 @@ int day::copy_reminders(reminder * & current, reminder & other_reminder) {
 
     current = new reminder(other_reminder);
     return copy_reminders(current->get_next(), *other_reminder.get_next()) + 1;
+}
+        
+
+
+// Check if day is empty.
+int day::is_empty(void) const {
+    return char_array_empty(date);
 }

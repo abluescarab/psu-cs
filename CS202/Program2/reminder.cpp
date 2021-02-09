@@ -149,7 +149,7 @@ int reminder::is_empty(void) const {
 
 
 // Check if the reminder matches another reminder.
-int reminder::matches(const reminder & other_reminder) {
+int reminder::matches(reminder & other_reminder) {
     return 1;
 }
 
@@ -264,6 +264,13 @@ int appointment::display(void) const {
 
 
 
+// Check if the reminder matches another reminder.
+int appointment::matches(reminder & other_reminder) {
+    return 1;
+}
+
+
+
 class_session::class_session(void) : instructor(nullptr), location(nullptr) {}
 
 
@@ -302,6 +309,13 @@ class_session::~class_session(void) {
 
 // Display the session.
 int class_session::display(void) const {
+    return 1;
+}
+
+
+
+// Check if the reminder matches another reminder.
+int class_session::matches(reminder & other_reminder) {
     return 1;
 }
 
@@ -350,10 +364,15 @@ int task::change_priority(const int new_priority) {
 
 
 
-// Get the next task.
-/*task * & task::get_next(void) {
-    return &dynamic_cast<task*>(reminder::get_next());
-}*/
+// Check if the reminder matches another reminder.
+int task::matches(reminder * & other_reminder) {
+    if(!other_reminder)
+        return 0;
+
+    task * other_task = dynamic_cast<task*>(other_reminder);
+
+    return reminder::matches(*other_reminder) && (priority == other_task->priority);
+}
 
 
 
