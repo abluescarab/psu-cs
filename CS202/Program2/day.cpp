@@ -41,7 +41,7 @@ day::day(const day & other_day) :
 day::~day(void) {
     clear();
     delete [] date;
-    date= nullptr;
+    date = nullptr;
     next = nullptr;
     prev = nullptr;
 }
@@ -72,6 +72,9 @@ int day::display(void) {
 
 // Display the contents of the day recursively.
 int day::display(reminder * & current) {
+    if(!current)
+        return 0;
+
     return current->display() + display(current->get_next());
 }
 

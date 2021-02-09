@@ -18,6 +18,12 @@ note::note(void) : text(nullptr), next(nullptr) {}
 
 
 
+note::note(const char * new_text) : text(nullptr), next(nullptr) {
+    copy_char_array(text, new_text);
+}
+
+
+
 note::note(note & other_note) : text(nullptr), next(other_note.next) {
     copy_char_array(text, other_note.text);
 }
@@ -115,19 +121,9 @@ reminder * & reminder::get_next(void) {
 
 
 
-// Set the next reminder in the LLL.
-int reminder::set_next(const reminder & new_reminder) {
-    if(new_reminder.is_empty())
-        return 0;
-
-    next = new reminder(new_reminder);
-    return 1;
-}
-
-
-
 // Display the reminder.
 int reminder::display(void) const {
+    // todo
     return 1;
 }
 
@@ -150,6 +146,7 @@ int reminder::is_empty(void) const {
 
 // Check if the reminder matches another reminder.
 int reminder::matches(reminder & other_reminder) {
+    // todo
     return 1;
 }
 
@@ -259,6 +256,7 @@ appointment::~appointment(void) {
 
 // Display the appointment.
 int appointment::display(void) const {
+    // todo
     return 1;
 }
 
@@ -266,6 +264,7 @@ int appointment::display(void) const {
 
 // Check if the reminder matches another reminder.
 int appointment::matches(reminder & other_reminder) {
+    // todo
     return 1;
 }
 
@@ -309,6 +308,7 @@ class_session::~class_session(void) {
 
 // Display the session.
 int class_session::display(void) const {
+    // todo
     return 1;
 }
 
@@ -316,6 +316,7 @@ int class_session::display(void) const {
 
 // Check if the reminder matches another reminder.
 int class_session::matches(reminder & other_reminder) {
+    // todo
     return 1;
 }
 
@@ -351,6 +352,7 @@ task::~task(void) {
 
 // Display the task.
 int task::display(void) const {
+    // todo
     return 1;
 }
 

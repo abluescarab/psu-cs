@@ -27,7 +27,7 @@ calendar::~calendar(void) {
 
 
 
-// Display the week with its reminders.
+// Display the calendar with its reminders.
 int calendar::display(void) {
     cout << "Calendar:" << endl;
     return display(days);
@@ -37,7 +37,30 @@ int calendar::display(void) {
 
 // Display the calendar recursively.
 int calendar::display(day * & current) {
-    return 1;
+    if(!current)
+        return 0;
+
+    return current->display() + display(current->get_next());
+}
+
+
+
+// Display a day.
+int calendar::display_day(const char * date) {
+    return display_day(days, date);
+}
+
+
+
+// Display a day recursively.
+int calendar::display_day(day * & current, const char * date) {
+    if(!current)
+        return 0;
+
+    if(current->date_matches(date))
+        return current->display();
+
+    return display_day(current->get_next(), date);
 }
 
 
@@ -51,6 +74,10 @@ int calendar::add_day(const char * date) {
 
 // Add a day recursively.
 int calendar::add_day(day * & current, const char * date) {
+    // do not allow duplicates
+    if(current && current->date_matches(date))
+        return 0;
+
     if(!current) {
         current = new day(date);
         return 1;
@@ -87,14 +114,14 @@ int calendar::remove_day(day * & current, const char * date) {
 
 
 // Add a reminder to a specific day.
-int calendar::add_reminder(const char * date, const reminder & to_add) {
+int calendar::add_reminder(const char * date, reminder & to_add) {
     return add_reminder(days, date, to_add);
 }
 
 
 
 // Add a reminder recursively.
-int calendar::add_reminder(day * & current, const char * date, const reminder & to_add) {
+int calendar::add_reminder(day * & current, const char * date, reminder & to_add) {
     if(!current)
         return 0;
 
@@ -162,6 +189,26 @@ int calendar::clear(day * & current) {
     delete current;
     current = nullptr;
     return clear(temp) + 1;
+}
+
+
+
+// Check if a day exists.
+int calendar::has_day(char * date) {
+    return has_day(days, date);
+}
+
+
+
+// Check if a day exists recursively.
+int calendar::has_day(day * & current, char * date) {
+    if(!current)
+        return 0;
+
+    if(current->date_matches(date))
+        return 1;
+
+    return has_day(current->get_next(), date);
 }
 
 

@@ -58,13 +58,17 @@ int copy_char_array(char * & destination, const char * source) {
 //  max_input: The maximum number allowed
 // OUTPUT:
 //  Returns the valid input
-int validate_input(const int min_input, const int max_input) {
+int validate_input(const int min_input, 
+        const int max_input, 
+        const bool show_prompt) {
     int input;
     int min_width = count_digits(min_input) + (min_input < 0);
     int max_width = count_digits(max_input) + (max_input < 0);
     int width = max(min_width, max_width);
 
-    cout << "> ";
+    if(show_prompt)
+        cout << "> ";
+
     cin.width(width);
     cin >> input;
 
@@ -73,7 +77,7 @@ int validate_input(const int min_input, const int max_input) {
 
     if(cin.fail() || input < min_input || input > max_input) {
         cout << "Invalid input. Please try again." << endl;
-        return validate_input(min_input, max_input);
+        return validate_input(min_input, max_input, show_prompt);
     }
 
     cout << endl;

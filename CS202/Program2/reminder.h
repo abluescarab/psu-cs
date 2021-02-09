@@ -11,6 +11,7 @@
 class note {
     public:
         note(void);
+        note(const char * new_text);
         note(note & other_note);
         ~note(void);
 
@@ -41,8 +42,6 @@ class reminder {
 
         // Get the next reminder in the LLL.
         reminder * & get_next(void);
-        // Set the next reminder in the LLL.
-        int set_next(const reminder & new_reminder);
         // Display the reminder.
         virtual int display(void) const;
         // Mark the reminder as complete.
