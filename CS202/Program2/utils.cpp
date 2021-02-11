@@ -47,7 +47,7 @@ int copy_char_array(char * & destination, const char * source) {
         delete [] destination;
 
     destination = new char[strlen(source) + 1];
-     strcpy(destination, source);
+    strcpy(destination, source);
     return 1;
 }
 

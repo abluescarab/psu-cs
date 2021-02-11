@@ -23,8 +23,8 @@ class day {
         int display(void);
         // Add a reminder.
         int add(const reminder & to_add);
-        // Remove a reminder.
-        int remove(reminder & to_remove);
+        // Remove the last reminder.
+        int remove_last(void);
         // Clear the reminders.
         int clear(void);
         // Check if the date matches provided input.
@@ -37,8 +37,8 @@ class day {
         int display(reminder * & current);
         // Add a reminder recursively.
         int add(reminder * & current, const reminder & to_add);
-        // Remove a reminder recursively.
-        int remove(reminder * & current, reminder & to_remove);
+        // Remove the last reminder recursively.
+        int remove_last(reminder * & current);
         // Clear reminders recursively.
         int clear(reminder * & current);
         // Copy reminders from another day.

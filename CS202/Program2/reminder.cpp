@@ -14,93 +14,33 @@ using namespace std;
 
 
 
-note::note(void) : text(nullptr), next(nullptr) {}
-
-
-
-note::note(const char * new_text) : text(nullptr), next(nullptr) {
-    copy_char_array(text, new_text);
-}
-
-
-
-note::note(note & other_note) : text(nullptr), next(other_note.next) {
-    copy_char_array(text, other_note.text);
-}
-
-
-
-note::~note(void) {
-    delete [] text;
-    text = nullptr;
-    next = nullptr;
-}
-
-
-
-// Get the next note.
-note * & note::get_next(void) {
-    return next;
-}
-
-
-
-// Set the next node.
-int note::set_next(note & new_next) {
-    if(new_next.is_empty())
-        return 0;
-
-    next = new note(new_next);
-    return 1;
-}
-
-
-
-// Display the contents of the note.
-int note::display(void) const {
-    cout << text << endl;
-    return 1;
-}
-
-
-
-// Check if note is empty.
-int note::is_empty(void) const {
-    return char_array_empty(text);
-}
-
-
-
-// Checks if the note is a match.
-int note::matches(note & other_note) {
-    return strcmp(text, other_note.text) == 0;
-}
-
-
-
 reminder::reminder(void) : 
     complete(false),
     time(nullptr),
-    notes(nullptr),
+    text(nullptr),
     next(nullptr) {
     }
 
 
 
-reminder::reminder(const char * new_time, note & new_notes) : reminder() {
-    copy_char_array(time, new_time);
-    copy_notes(notes, new_notes);
-}
+reminder::reminder(const char * new_time, const char * new_text) : 
+    complete(false),
+    time(nullptr),
+    text(nullptr),
+    next(nullptr) {
+        copy_char_array(time, new_time);
+        copy_char_array(text, new_text);
+    }
 
 
 
 reminder::reminder(const reminder & other_reminder) : 
     complete(other_reminder.complete),
     time(nullptr),
-    notes(nullptr),
+    text(nullptr),
     next(other_reminder.next) {
         copy_char_array(time, other_reminder.time);
-        copy_notes(notes, *other_reminder.notes);
+        copy_char_array(text, other_reminder.text);
     }
 
 
@@ -108,13 +48,17 @@ reminder::reminder(const reminder & other_reminder) :
 reminder::~reminder(void) {
     complete = false;
     delete [] time;
+    time = nullptr;
+    delete [] text;
+    text = nullptr;
     next = nullptr;
-    clear_notes(notes);
 }
 
 
 
 // Get the next reminder in the LLL.
+// OUTPUT:
+//  Returns the next pointer.
 reminder * & reminder::get_next(void) {
     return next;
 }
@@ -122,14 +66,23 @@ reminder * & reminder::get_next(void) {
 
 
 // Display the reminder.
-int reminder::display(void) const {
-    // todo
+// OUTPUT:
+//  1 when the reminder is displayed.
+int reminder::display(void) {
+    if(complete)
+        cout << "(Completed) ";
+    else
+        cout << "(Not completed) ";
+
+    cout <<  time << ": " << text << endl;
     return 1;
 }
 
 
 
 // Mark the reminder as complete.
+// OUTPUT:
+//  1 when the reminder is marked complete.
 int reminder::mark_complete(void) {
     complete = true;
     return 1;
@@ -138,6 +91,8 @@ int reminder::mark_complete(void) {
 
 
 // Check if the reminder is missing required data.
+// OUTPUT:
+//  Returns the result of char_array_empty.
 int reminder::is_empty(void) const {
     return char_array_empty(time);
 }
@@ -145,82 +100,15 @@ int reminder::is_empty(void) const {
 
 
 // Check if the reminder matches another reminder.
+// INPUT:
+//  other_reminder: other reminder to compare against
+// OUTPUT:
+//  0 if the reminders do not match.
+//  1 if the reminders match.
 int reminder::matches(reminder & other_reminder) {
-    // todo
-    return 1;
-}
-
-
-
-// Add a note.
-int reminder::add_note(note & to_add) {
-    if(to_add.is_empty())
-        return 0;
-
-    return add_note(notes, to_add);
-}
-
-
-
-// Add a note recursively.
-int reminder::add_note(note * & current, note & to_add) {
-    if(!current) {
-        current = new note(to_add);
-        return 1;
-    }
-
-    return add_note(current->get_next(), to_add);
-}
-
-
-
-// Remove a note.
-int reminder::remove_note(note & to_remove) {
-    if(to_remove.is_empty())
-        return 0;
-
-    return remove_note(notes, to_remove);
-}
-
-
-
-// Copy notes from another object recursively.
-int reminder::copy_notes(note * & current, note & other_note) {
-    if(other_note.is_empty())
-        return 0;
-
-    current = new note(other_note);
-    return copy_notes(current->get_next(), *other_note.get_next()) + 1;
-}
-
-
-
-// Clear notes recursively.
-int reminder::clear_notes(note * & current) {
-    if(!current)
-        return 0;
-
-    note * temp = current->get_next();
-    delete current;
-    return clear_notes(temp) + 1;
-}
-
-
-
-// Remove a note recursively.
-int reminder::remove_note(note * & current, note & to_remove) {
-    if(!current)
-        return 0;
-
-    note * temp = current->get_next();
-
-    if(current->matches(to_remove)) {
-        delete current;
-        current = temp;
-        return 1;
-    }
-
-    return remove_note(temp, to_remove);
+    return strcmp(other_reminder.text, text) == 0 && 
+        strcmp(other_reminder.time, time) == 0 &&
+        complete == other_reminder.complete;
 }
 
 
@@ -230,9 +118,9 @@ appointment::appointment(void) : location(nullptr) {}
 
 
 appointment::appointment(const char * new_time, 
-        const char * new_location, 
-        note & new_notes) :
-    reminder(new_time, new_notes), 
+        const char * new_text,
+        const char * new_location) :
+    reminder(new_time, new_text),
     location(nullptr) {
         copy_char_array(location, new_location);
     }
@@ -255,17 +143,30 @@ appointment::~appointment(void) {
 
 
 // Display the appointment.
-int appointment::display(void) const {
-    // todo
+// OUTPUT:
+//  1 when the appointment is displayed.
+int appointment::display(void) {
+    reminder::display();
+    cout << "Appointment at: " << location << endl;
     return 1;
 }
 
 
 
 // Check if the reminder matches another reminder.
+// INPUT:
+//  other_reminder: reminder to check against
+// OUTPUT:
+//  0 if the appointments do not match.
+//  1 if the appointments match.
 int appointment::matches(reminder & other_reminder) {
-    // todo
-    return 1;
+    appointment * other_appointment = dynamic_cast<appointment*>(&other_reminder);
+
+    if(!other_appointment)
+        return 0;
+
+    return reminder::matches(other_reminder) && 
+        strcmp(other_appointment->location, location) == 0;
 }
 
 
@@ -275,10 +176,10 @@ class_session::class_session(void) : instructor(nullptr), location(nullptr) {}
 
 
 class_session::class_session(const char * new_time, 
+        const char * new_text,
         const char * new_location, 
-        const char * new_instructor, 
-        note & new_notes) :
-    reminder(new_time, new_notes),
+        const char * new_instructor) :
+    reminder(new_time, new_text),
     instructor(nullptr),
     location(nullptr) {
         copy_char_array(instructor, new_instructor);
@@ -307,17 +208,31 @@ class_session::~class_session(void) {
 
 
 // Display the session.
-int class_session::display(void) const {
-    // todo
+//  1 when the session is displayed.
+int class_session::display(void) {
+    reminder::display();
+    cout << "Instructor: " << instructor << endl;
+    cout << "Class location: " << location << endl;
     return 1;
 }
 
 
 
 // Check if the reminder matches another reminder.
+// INPUT:
+//  other_reminder: the reminder to compare against
+// OUTPUT:
+//  0 if the sessions do not match.
+//  1 if the sessions match.
 int class_session::matches(reminder & other_reminder) {
-    // todo
-    return 1;
+    class_session * other_session = dynamic_cast<class_session*>(&other_reminder);
+
+    if(!other_session)
+        return 0;
+
+    return reminder::matches(other_reminder) && 
+        strcmp(other_session->instructor, instructor) == 0 &&
+        strcmp(other_session->location, location) == 0;
 }
 
 
@@ -326,8 +241,8 @@ task::task(void) : priority(0), subtasks(nullptr) {}
 
 
 
-task::task(const char * new_time, const int new_priority, note & new_notes) :
-    reminder(new_time, new_notes),
+task::task(const char * new_time, const char * new_text, const int new_priority) :
+    reminder(new_time, new_text),
     priority(new_priority),
     subtasks(nullptr) {
 }
@@ -351,14 +266,37 @@ task::~task(void) {
 
 
 // Display the task.
-int task::display(void) const {
-    // todo
-    return 1;
+// OUTPUT:
+//  Returns the result of the recursive function + 1 (number of tasks displayed).
+int task::display(void) {
+    reminder::display();
+    cout << "Priority: " << priority << endl;
+    return display(subtasks) + 1;
+}
+
+
+
+// Display with subtasks recursively.
+// INPUT: 
+//  current: the current task
+// OUTPUT:
+//  Returns the number of subtasks displayed.
+int task::display(task * & current) {
+    if(!current)
+        return 0;
+
+    task * next = dynamic_cast<task*>(current->get_next());
+    current->display();
+    return display(next);
 }
 
 
 
 // Change the priority.
+// INPUT:
+//  new_priority: the priority to change to
+// OUTPUT:
+//  1 when the priority is changed.
 int task::change_priority(const int new_priority) {
     priority = new_priority;
     return 1;
@@ -367,18 +305,27 @@ int task::change_priority(const int new_priority) {
 
 
 // Check if the reminder matches another reminder.
-int task::matches(reminder * & other_reminder) {
-    if(!other_reminder)
+// INPUT:
+//  other_reminder: the reminder to match against
+// OUTPUT:
+//  0 if the tasks do not match.
+//  1 if the tasks match.
+int task::matches(reminder & other_reminder) {
+    task * other_task = dynamic_cast<task*>(&other_reminder);
+
+    if(!other_task)
         return 0;
 
-    task * other_task = dynamic_cast<task*>(other_reminder);
-
-    return reminder::matches(*other_reminder) && (priority == other_task->priority);
+    return reminder::matches(other_reminder) && (priority == other_task->priority);
 }
 
 
 
 // Clear subtasks recursively.
+// INPUT:
+//  current: the current subtask
+// OUTPUT:
+//  Returns the number of subtasks cleared.
 int task::clear_subtasks(task * & current) {
     if(!current)
         return 0;
@@ -391,6 +338,11 @@ int task::clear_subtasks(task * & current) {
 
 
 // Copy subtasks from another task.
+// INPUT:
+//  current: the current subtask
+//  other_subtask: the task to copy from
+// OUPUT:
+//  Returns the number of tasks copied.
 int task::copy_subtasks(task * & current, task & other_subtask) {
     if(other_subtask.is_empty())
         return 0;

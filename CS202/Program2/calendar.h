@@ -24,8 +24,8 @@ class calendar {
         int remove_day(const char * date);
         // Add a reminder to a specific day.
         int add_reminder(const char * date, reminder & to_add);
-        // Remove a reminder from a specific day.
-        int remove_reminder(const char * date, reminder & to_remove);
+        // Remove the last reminder from a specific day.
+        int remove_last_reminder(const char * date);
         // Clear all reminders in a day.
         int clear_reminders(const char * date);
         // Clear the whole calendar.
@@ -44,8 +44,8 @@ class calendar {
         int remove_day(day * & current, const char * date);
         // Add a reminder recursively.
         int add_reminder(day * & current, const char * date, reminder & to_add);
-        // Remove a reminder recursively.
-        int remove_reminder(day * & current, const char * date, reminder & to_remove);
+        // Remove the last reminder recursively.
+        int remove_last_reminder(day * & current, const char * date);
         // Clear reminders in a day recursively.
         int clear_reminders(day * & current, const char * date);
         // Clear the whole calendar.

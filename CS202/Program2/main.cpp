@@ -59,10 +59,6 @@ int main(void) {
     int menu = 0;
     
     // individual reminders
-    /*char text[INPUT_MAX] = "";
-    char time[INPUT_MAX] = "";
-    char location[INPUT_MAX] = "";
-    char instructor[INPUT_MAX] = "";*/
     char * text = nullptr;
     char * time = nullptr;
     char * location = nullptr;
@@ -72,13 +68,19 @@ int main(void) {
 
     // calendar-specific
     calendar * todo = new calendar();
-    note * new_note = nullptr;
     char * current_day = nullptr;
-
-    cout << "Calendar" << endl;
-    cout << "--------" << endl;
+    reminder * new_reminder = nullptr;
 
     do {
+        if(menu == 0) {
+            cout << "Calendar" << endl;
+            cout << "------------------------------" << endl;
+        }
+        else if(menu == 1) {
+            cout << "Current day: " << current_day << endl;
+            cout << "------------------------------" << endl;
+        }
+
         option = display_menu(menu);
 
         if(menu == 0) { // main menu
@@ -143,6 +145,7 @@ int main(void) {
             switch(option) {
                 case 1: // display reminders
                     return_value = todo->display_day(current_day);
+                    cout << endl;
                     cout << "Found " << return_value << " reminder(s)." << endl;
                     break;
                 case 2: // add reminder
@@ -157,8 +160,6 @@ int main(void) {
                     cin.getline(input, INPUT_MAX);
                     copy_char_array(text, input);
 
-                    new_note = new note(text);
-
                     cout << "Reminder time: ";
                     cin.getline(input, INPUT_MAX);
                     copy_char_array(time, input);
@@ -168,10 +169,9 @@ int main(void) {
                         cin.getline(input, INPUT_MAX);
                         copy_char_array(location, input);
 
-                        todo->add_reminder(current_day, 
-                                *(reminder *)new appointment(time, 
-                                    location, 
-                                    *new_note));
+                        new_reminder = new appointment(time, text, location);
+
+                        todo->add_reminder(current_day, *new_reminder);
                         cout << "Successfully added new appointment to " 
                             << current_day << "." << endl;
                     }
@@ -184,11 +184,12 @@ int main(void) {
                         cin.getline(input, INPUT_MAX);
                         copy_char_array(location, input);
 
-                        todo->add_reminder(current_day, 
-                                *(reminder *)new class_session(time, 
-                                    location, 
-                                    instructor, 
-                                    *new_note));
+                        new_reminder = new class_session(time, 
+                                text, 
+                                location, 
+                                instructor);
+
+                        todo->add_reminder(current_day, *new_reminder);
                         cout << "Successfully added new class session to " 
                             << current_day << "." << endl;
                         
@@ -197,19 +198,26 @@ int main(void) {
                         cout << "Task priority (#): ";
 
                         priority = validate_input(1, INT_MAX, false);
+                        new_reminder = new task(time, text, priority);
 
-                        todo->add_reminder(current_day, 
-                                *(reminder *)new task(time, 
-                                    priority, 
-                                    *new_note));
+                        todo->add_reminder(current_day, *new_reminder);
                         cout << "Successfully added new task to " 
                             << current_day << "." << endl;
                     }
 
+                    delete new_reminder;
                     break;
                 case 3: // remove reminder
+                    return_value = todo->remove_last_reminder(current_day);
+                    
+                    if(return_value)
+                        cout << "Successfully removed last reminder." << endl;
+                    else
+                        cout << "Could not remove last reminder." << endl;
                     break;
                 case 4: // clear reminders
+                    return_value = todo->clear_reminders(current_day);
+                    cout << "Cleared " << return_value << " reminders." << endl;
                     break;
                 case 5: // back
                     menu = 0;
@@ -226,13 +234,11 @@ int main(void) {
         cout << endl;
     } while(!quit);
 
-    delete current_day;
     delete todo;
+    delete [] current_day;
     delete [] text;
     delete [] time;
     delete [] location;
     delete [] instructor;
-    delete new_note;
-    delete [] current_day;
     return 0;
 }
