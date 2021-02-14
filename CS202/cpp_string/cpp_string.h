@@ -97,12 +97,12 @@ class cpp_string {
         int index_of(const char * index_of_chars, const int start_index, char * & result);
         // Get the index of a string and return the remaining string.
         int index_of(const cpp_string index_of_string, const int start_index, char * & result);
-        // Append another string to the string.
-        static int append(cpp_string & destination, const cpp_string & source);
         // Append a character to the string.
         static int append(cpp_string & destination, const char source);
         // Append a character array to the string.
         static int append(cpp_string & destination, const char * source);
+        // Append another string to the string.
+        static int append(cpp_string & destination, const cpp_string & source);
 
         char * value; // the backing character array
 };

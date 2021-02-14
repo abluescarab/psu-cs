@@ -561,28 +561,6 @@ int cpp_string::count_instances(char * current, const char * to_find) {
 
 
 
-// Append another string to the string.
-int cpp_string::append(cpp_string & destination, const cpp_string & source) {
-    if(source.is_empty())
-        return 0;
-
-    if(destination.length() == 0) {
-        destination = source;
-        return 1;
-    }
-
-    char * temp = new char[strlen(destination.value) + strlen(source.value) + 1];
-
-    strcpy(temp, destination.value);
-    strcat(temp, source.value);
-    copy_char_array(destination.value, temp);
-    delete [] temp;
-
-    return 1;
-}
-
-
-
 // Append a character to the string.
 int cpp_string::append(cpp_string & destination, const char source) {
     int len = destination.length();
@@ -623,4 +601,11 @@ int cpp_string::append(cpp_string & destination, const char * source) {
     delete [] temp;
 
     return 1;
+}
+
+
+
+// Append another string to the string.
+int cpp_string::append(cpp_string & destination, const cpp_string & source) {
+    return append(destination, source.value);
 }
