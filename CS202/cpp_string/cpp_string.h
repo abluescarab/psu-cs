@@ -38,27 +38,43 @@ class cpp_string {
         // Return the string in lowercase.
         cpp_string to_lower(void);
         // Check if the string contains a character.
-        int contains(const char contains_char) const;
+        int contains(const char contains_char);
         // Check if the string contains a character array.
-        int contains(const char * contains_chars) const;
+        int contains(const char * contains_chars);
         // Check if the string contains another string.
-        int contains(const cpp_string & contains_string) const;
+        int contains(const cpp_string & contains_string);
+        // Find the first index of a character.
+        int index_of(const char index_of_char);
+        // Find the first index of a character array.
+        int index_of(const char * index_of_chars);
+        // Find the first index of a string.
+        int index_of(const cpp_string & index_of_string);
+        // Find an index of a char beginning from another index.
+        int index_of(const char index_of_char, const int start_index);
+        // Find an index of a character array beginning from another index.
+        int index_of(const char * index_of_chars, const int start_index);
+        // Find an index of a string beginning from another index.
+        int index_of(const cpp_string index_of_string, const int start_index);
+        // Get a substring of the string.
+        cpp_string substring(const int start_index) const;
+        // Get a substring of the string.
+        cpp_string substring(const int start_index, const int substring_length) const;
         // Insert a character at an index.
-        int insert(const int index, const char insert_char);
+        cpp_string insert(const int index, const char insert_char);
         // Insert a character array at an index.
-        int insert(const int index, const char * insert_chars);
+        cpp_string insert(const int index, const char * insert_chars);
         // Insert another string at an index.
-        int insert(const int index, const cpp_string & insert_string);
+        cpp_string insert(const int index, const cpp_string & insert_string);
         // Replace some character with another character.
-        int replace(const char old_char, const char new_char);
+        cpp_string replace(const char old_char, const char new_char);
         // Replace some character array with another character array.
-        int replace(const char * old_chars, const char * new_chars);
+        cpp_string replace(const char * old_chars, const char * new_chars);
         // Replace some substring with another string.
-        int replace(const cpp_string & old_string, const cpp_string & new_string);
+        cpp_string replace(const cpp_string & old_string, const cpp_string & new_string);
         // Remove part of the string from some index to the end.
-        int remove(const int start_index);
+        cpp_string remove(const int start_index);
         // Remove part of the string from some index to another index.
-        int remove(const int start_index, const int end_index);
+        cpp_string remove(const int start_index, const int end_index);
         // Check if the value matches another string.
         int equals(const cpp_string & compare) const;
         // Check if the value matches another character array.
@@ -73,6 +89,14 @@ class cpp_string {
     private:
         // Return the string with a different case.
         cpp_string change_case(bool uppercase);
+        // Count the number of instances of a specified char array.
+        int count_instances(char * current, const char * to_find);
+        // Get the index of a character and return the remaining string.
+        int index_of(const char index_of_char, const int start_index, char * & result);
+        // Get the index of a character array and return the remaining string.
+        int index_of(const char * index_of_chars, const int start_index, char * & result);
+        // Get the index of a string and return the remaining string.
+        int index_of(const cpp_string index_of_string, const int start_index, char * & result);
         // Append another string to the string.
         static int append(cpp_string & destination, const cpp_string & source);
         // Append a character to the string.
