@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstring>
+#include <climits>
 #include "cpp_string.h"
-#define DEBUG
 
 using namespace std;
 
@@ -17,22 +17,18 @@ int main() {
     cpp_string lower;
 
     while(!quit) {
-        cout << "1) upper/lower" << endl;
-        cout << "2) ==" << endl;
-        cout << "3) contains" << endl;
-        cout << "4) +" << endl;
-        cout << "5) insert" << endl;
-        cout << "6) replace" << endl;
-        cout << "7) index of" << endl;
-        cout << "8) substring" << endl;
-        cout << "9) +=" << endl;
+        cout << "1)  upper/lower" << endl;
+        cout << "2)  ==" << endl;
+        cout << "3)  contains" << endl;
+        cout << "4)  +" << endl;
+        cout << "5)  insert" << endl;
+        cout << "6)  replace" << endl;
+        cout << "7)  index of" << endl;
+        cout << "8)  substring" << endl;
+        cout << "9)  +=" << endl;
+        cout << "10) remove" << endl;
 
-#ifndef DEBUG
         cin >> option;
-#else
-        option = 6;
-        quit = true;
-#endif
         cout << endl;
 
         switch(option) {
@@ -54,6 +50,7 @@ int main() {
                 cout << "S:    " << test_string.contains('S') << endl;
                 cout << "This: " << test_string.contains("This") << endl;
                 cout << "THIS: " << test_string.contains("THIS") << endl;
+                cout << "str:  " << test_string.contains(cpp_string("This")) << endl;
                 break;
             case 4:
                 cout << test_string + '1' << endl;
@@ -103,12 +100,18 @@ int main() {
                 cout << (test_string += '0') << endl;
                 cout << (test_string += "1") << endl;
                 cout << (test_string += cpp_string("2")) << endl;
+                break;
+            case 10:
+                cout << test_string.remove(4) << endl;
+                cout << test_string.remove(4, 10) << endl;
+                break;
             default:
                 quit = true;
                 break;
         }
 
         cout << endl;
+        cin.clear();
     }
 
     return 0;

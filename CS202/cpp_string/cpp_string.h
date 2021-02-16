@@ -1,4 +1,4 @@
-/* Alana Gilston - 2/12/2021 - CS202 - Program 3
+/* Alana Gilston
  * cpp_string.h
  *
  * This is the header file for the cpp_string class. The cpp_string class 
@@ -24,13 +24,14 @@ class cpp_string {
         cpp_string & operator+=(const char * source);
         // equality
         bool operator==(const cpp_string & compare) const;
+        bool operator==(const char compare) const;
         bool operator==(const char * compare) const;
         // addition
         friend cpp_string operator+(cpp_string & destination, const cpp_string & source);
         friend cpp_string operator+(cpp_string & destination, const char source);
         friend cpp_string operator+(cpp_string & destination, const char * source);
         // input/output
-        friend std::istream & operator>>(std::istream & in, const cpp_string & in_string);
+        friend std::istream & operator>>(std::istream & in, cpp_string & in_string);
         friend std::ostream & operator<<(std::ostream & out, const cpp_string & out_string);
 
         // Return the string in uppercase.
@@ -75,10 +76,6 @@ class cpp_string {
         cpp_string remove(const int start_index);
         // Remove part of the string from some index to another index.
         cpp_string remove(const int start_index, const int end_index);
-        // Check if the value matches another string.
-        int equals(const cpp_string & compare) const;
-        // Check if the value matches another character array.
-        int equals(const char * compare) const;
         // Check if the string is empty.
         int is_empty(void) const;
         // Return the length of the string.
@@ -103,6 +100,10 @@ class cpp_string {
         static int append(cpp_string & destination, const char * source);
         // Append another string to the string.
         static int append(cpp_string & destination, const cpp_string & source);
+        // Check if the string is empty without modifying the value.
+        static int char_array_empty(const char * array);
+        // Copy a char array into another char array.
+        static int copy_char_array(char * & destination, const char * source);
 
         char * value; // the backing character array
 };
