@@ -1,4 +1,4 @@
-/* Alana Gilston - 2/12/2021 - CS202 - Program 3
+/* Alana Gilston
  * cpp_string.h
  *
  * This is the header file for the cpp_string class. The cpp_string class 
@@ -75,7 +75,7 @@ class cpp_string {
         // Remove part of the string from some index to the end.
         cpp_string remove(const int start_index);
         // Remove part of the string from some index to another index.
-        cpp_string remove(const int start_index, const int end_index);
+        cpp_string remove(const int start_index, const int removal_length);
         // Check if the string is empty.
         int is_empty(void) const;
         // Return the length of the string.

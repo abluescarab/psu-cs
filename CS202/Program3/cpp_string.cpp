@@ -1,4 +1,4 @@
-/* Alana Gilston - 2/12/2021 - CS202 - Program 3
+/* Alana Gilston
  * cpp_string.cpp
  *
  * This is the implementation file for the cpp_string class. The cpp_string 
@@ -637,8 +637,8 @@ cpp_string cpp_string::replace(const cpp_string & old_string, const cpp_string &
 //  Returns the new string without the removed text.
 cpp_string cpp_string::remove(const int start_index) {
     cpp_string result;
-
     char * temp = new char[strlen(value) - start_index + 1];
+
     strcpy(temp, "");
     strncat(temp, value, start_index);
 
@@ -655,13 +655,22 @@ cpp_string cpp_string::remove(const int start_index) {
 //  end_index: the index to stop removing at
 // OUTPUT:
 //  Returns the new string without the removed text.
-cpp_string cpp_string::remove(const int start_index, const int end_index) {
+cpp_string cpp_string::remove(const int start_index, const int removal_length) {
+    int len = length();
     cpp_string result;
-    char * temp = new char[strlen(value) - (end_index - start_index)+ 1];
+    char * temp = nullptr;
+
+    if(start_index > len)
+        return *this;
+
+    if((start_index + removal_length) > len)
+        return remove(start_index);
+
+    temp = new char[strlen(value) - (start_index + removal_length)+ 1];
 
     strcpy(temp, "");
     strncat(temp, value, start_index);
-    strcat(temp, value + end_index);
+    strcat(temp, value + start_index + removal_length);
 
     result = temp;
     delete [] temp;

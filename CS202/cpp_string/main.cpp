@@ -103,7 +103,7 @@ int main() {
                 break;
             case 10:
                 cout << test_string.remove(4) << endl;
-                cout << test_string.remove(4, 10) << endl;
+                cout << test_string.remove(4, 6) << endl;
                 break;
             default:
                 quit = true;
