@@ -91,14 +91,6 @@ program * & program::get_next(void) {
 
 
 
-// Change the username.
-int program::change_username(const cpp_string & new_username) {
-    username = new_username;
-    return 1;
-}
-
-
-
 // Check if the program is empty.
 int program::is_empty(void) const {
     return program_name.is_empty();
@@ -122,13 +114,23 @@ int program::display(void) const {
 
 
 
-device::device(void) : name(""), price(0.0), next(nullptr) {}
+device::device(void) : 
+    name(""), 
+    price(0.0), 
+    max_messages(0), 
+    messages(nullptr), 
+    next(nullptr) {
+    }
 
 
 
-device::device(const cpp_string & new_name, const float new_price) :
+device::device(const cpp_string & new_name, 
+        const float new_price, 
+        const int new_max_messages) :
     name(new_name),
     price(new_price),
+    max_messages(new_max_messages),
+    messages(new cpp_string[new_max_messages]),
     next(nullptr) {
     }
 
@@ -137,7 +139,10 @@ device::device(const cpp_string & new_name, const float new_price) :
 device::device(const device & other_device) :
     name(other_device.name),
     price(other_device.price),
+    max_messages(other_device.max_messages),
+    messages(new cpp_string[other_device.max_messages]),
     next(other_device.next) {
+        copy_messages(other_device.messages);
     }
 
 
@@ -146,6 +151,9 @@ device::~device(void) {
     name = "";
     price = 0.0;
     next = nullptr;
+    max_messages = 0;
+    delete [] messages;
+    messages = nullptr;
 }
 
         
@@ -157,13 +165,18 @@ device & device::operator=(const device & source) {
     name = source.name;
     price = source.price;
     next = source.next;
+    max_messages = source.max_messages;
+    messages = new cpp_string[source.max_messages];
+    copy_messages(source.messages);
     return *this;
 }
         
 
 
 bool device::operator==(const device & compare) const {
-    return name == compare.name && price == compare.price;
+    return name == compare.name && 
+        price == compare.price && 
+        max_messages == compare.max_messages;
 }
         
 
@@ -206,19 +219,68 @@ int device::change_price(const float new_price) {
     return 1;
 }
 
+        
+
+// Send a new message to the device.
+int device::send_message(const cpp_string & to_send) {
+    if(!messages || to_send.is_empty())
+        return 0;
+
+    int index = 0;
+
+    while(!messages[index].is_empty())
+        ++index;
+
+    if(index >= max_messages)
+        return 0;
+
+    messages[index] = to_send;
+    return 1;
+}
+        
+        
+
+// Display all messages sent to this device.
+int device::display_messages(void) const {
+    if(!messages)
+        return 0;
+
+    int filled = 0;
+
+    for(int i = 0; i < max_messages; ++i) {
+        if(!messages[i].is_empty()) {
+            cout << messages[i] << endl;
+            ++filled;
+        }
+    }
+
+    return filled;
+}
+
+
+
+// Clear all messages from the device.
+int device::clear_messages(void) {
+    if(!messages)
+        return 0;
+
+    int filled = 0;
+
+    for(int i = 0; i < max_messages; ++i) {
+        if(!messages[i].is_empty()) {
+            messages[i] = "";
+            ++filled;
+        }
+    }
+
+    return filled;
+}
+
 
 
 // Check if the device is empty.
 int device::is_empty(void) const {
     return name.is_empty();
-}
-
-
-
-// Check if the device matches another.
-int device::matches(const device & other_device) const {
-    return name == other_device.name &&
-        price == other_device.price;
 }
 
 
@@ -230,14 +292,29 @@ int device::display(void) const {
     return 1;
 }
 
+        
+
+// Copy messages.
+int device::copy_messages(const cpp_string * other_messages) {
+    for(int i = 0; i < max_messages; ++i)
+        messages[i] = other_messages[i];
+
+    return 1;
+}
+
 
 
 pager::pager(void) : pager_number(""), supports_text(false), two_way(false) {}
 
 
 
-pager::pager(const cpp_string & new_number, const bool new_supports_text,
+pager::pager(const cpp_string & new_name,
+        const float new_price,
+        const int new_max_messages, 
+        const cpp_string & new_number, 
+        const bool new_supports_text,
         const bool new_two_way) :
+    device(new_name, new_price, new_max_messages),
     pager_number(new_number),
     supports_text(new_supports_text),
     two_way(new_two_way) {
@@ -328,9 +405,13 @@ cell_phone::cell_phone(void) :
 
 
 
-cell_phone::cell_phone(const cpp_string & new_network, 
+cell_phone::cell_phone(const cpp_string & new_name,
+        const float new_price,
+        const int new_max_messages,
+        const cpp_string & new_network, 
         const cpp_string & new_number,
         const os_type new_type) :
+    device(new_name, new_price, new_max_messages),
     network(new_network),
     phone_number(new_number),
     phone_type(new_type) {

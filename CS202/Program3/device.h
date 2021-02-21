@@ -33,8 +33,6 @@ class program {
         int set_next(const program & new_program);
         // Get the next program.
         program * & get_next(void);
-        // Change the username.
-        int change_username(const cpp_string & new_username);
         // Check if the program is empty.
         int is_empty(void) const;
         // Check if the program name matches another program.
@@ -51,7 +49,9 @@ class program {
 class device {
     public:
         device(void);
-        device(const cpp_string & new_name, const float new_price);
+        device(const cpp_string & new_name, 
+                const float new_price, 
+                const int new_max_messages);
         device(const device & other_device);
         virtual ~device(void);
 
@@ -67,23 +67,36 @@ class device {
         device * & get_next(void);
         // Change the device's subscription price.
         int change_price(const float new_price);
+        // Send a new message to the device.
+        int send_message(const cpp_string & to_send);
+        // Display all messages sent to this device.
+        int display_messages(void) const;
+        // Clear all messages from the device.
+        int clear_messages(void);
         // Check if the device is empty.
         int is_empty(void) const;
-        // Check if the device matches another.
-        virtual int matches(const device & other_device) const;
         // Display the device.
         virtual int display(void) const;
 
     private:
+        // Copy messages.
+        int copy_messages(const cpp_string * other_messages);
+
         cpp_string name; // name of the device
         float price; // subscription price for the device
+        int max_messages; // maximum number of messages this device can hold
+        cpp_string * messages; // messages sent to this device
         device * next; // next device in the list
 };
 
 class pager : public device {
     public:
         pager(void);
-        pager(const cpp_string & new_number, const bool new_supports_text,
+        pager(const cpp_string & new_name,
+                const float new_price,
+                const int new_max_messages, 
+                const cpp_string & new_number, 
+                const bool new_supports_text,
                 const bool new_two_way);
         pager(const pager & other_pager);
         ~pager(void);
@@ -110,7 +123,11 @@ class pager : public device {
 class cell_phone : public device {
     public:
         cell_phone(void);
-        cell_phone(const cpp_string & new_network, const cpp_string & new_number,
+        cell_phone(const cpp_string & new_name,
+                const float new_price,
+                const int new_max_messages,
+                const cpp_string & new_network, 
+                const cpp_string & new_number,
                 const os_type new_type);
         cell_phone(const cell_phone & other_phone);
         ~cell_phone(void);
@@ -137,6 +154,7 @@ class cell_phone : public device {
 class computer : public device {
     public:
         computer(void);
+        computer(const cpp_string & new_name);
         computer(const computer & other_computer);
         ~computer(void);
 
