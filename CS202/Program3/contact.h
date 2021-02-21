@@ -5,6 +5,7 @@
  */
 #ifndef CONTACT_H
 #define CONTACT_H
+#include "device.h"
 
 class contact {
     public:
@@ -24,9 +25,9 @@ class contact {
         // Set the right contact.
         int set_right(const contact & new_right);
         // Get the left contact.
-        contact * & get_left(void) const;
+        contact * & get_left(void);
         // Get the right contact.
-        contact * & get_right(void) const;
+        contact * & get_right(void);
         // Change the contact's name.
         int change_name(const cpp_string & new_name);
         // Change the contact's address.
@@ -45,6 +46,17 @@ class contact {
         int display(void);
 
     private:
+        // Add a device recursively.
+        int add_device(device * & current, const device & to_add);
+        // Remove a device recursively.
+        int remove_device(device * & current, const device & to_remove);
+        // Clear devices recursively.
+        int clear_devices(device * & current);
+        // Copy devices recursively.
+        int copy_devices(device * & current, device & other_current);
+        // Display devices recursively.
+        int display_devices(device * & current);
+
         cpp_string name; // contact name
         cpp_string address; // contact home address
         device * devices; // devices the contact owns
