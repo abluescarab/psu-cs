@@ -1,7 +1,7 @@
 /* Alana Gilston - 2/16/2021 - CS202 - Program 3
  * main.cpp
  *
- *
+ * This is the implementation file to test the contact_list class.
  */
 #include <iostream>
 #include <climits>
@@ -32,11 +32,11 @@ int display_menu(int menu, const device & current_device, device_type * & submen
     switch(menu) {
         case 1: // contact menu
             cout << "1) Display contact info" << endl;
-            cout << "2) Change contact name" << endl;
-            cout << "3) Change contact address" << endl;
-            cout << "4) Add device" << endl;
-            cout << "5) Remove device" << endl;
-            cout << "6) Clear devices" << endl;
+            cout << "2) Add device" << endl;
+            cout << "3) Remove device" << endl;
+            cout << "4) Clear devices" << endl;
+            cout << "5) Change contact name" << endl;
+            cout << "6) Change contact address" << endl;
             cout << "7) Back" << endl;
             break;
         case 2: // device menu
@@ -73,7 +73,7 @@ int display_menu(int menu, const device & current_device, device_type * & submen
             cout << "3) Add contact" << endl;
             cout << "4) Remove contact" << endl;
             cout << "5) Clear contacts" << endl;
-            cout << "6) Exit" << endl;
+            cout << "6) Quit" << endl;
         default:
             break;
     }
