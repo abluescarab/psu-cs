@@ -46,7 +46,7 @@ int display_menu(int menu, const device & current_device, device_type * & submen
             cout << "4) Clear sent messages" << endl;
             cout << "5) Change device subscription price" << endl;
 
-            if(dynamic_cast<pager *>(current_device) != nullptr) {
+            /*if(dynamic_cast<pager *>(current_device) != nullptr) {
                 submenu = device_type::pager;
                 cout << "6) Change pager number" << endl;
                 cout << "7) Change if pager supports text messages" << endl;
@@ -63,7 +63,7 @@ int display_menu(int menu, const device & current_device, device_type * & submen
                 cout << "6) Add a program" << endl;
                 cout << "7) Remove a program" << endl;
                 cout << "8) Clear all programs" << endl;
-            }
+            }*/
 
             cout << "9) Back" << endl;
             break;

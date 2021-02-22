@@ -5,7 +5,7 @@
  */
 #ifndef DEVICE_H
 #define DEVICE_H
-#include "cpp_string.h"
+#include "message_list.h"
 
 enum class os_type {
     iphone,
@@ -79,13 +79,9 @@ class device {
         virtual int display(void) const;
 
     private:
-        // Copy messages.
-        int copy_messages(const cpp_string * other_messages);
-
         cpp_string name; // name of the device
         float price; // subscription price for the device
-        int max_messages; // maximum number of messages this device can hold
-        cpp_string * messages; // messages sent to this device
+        message_list * messages; // messages sent to this device
         device * next; // next device in the list
 };
 
