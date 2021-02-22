@@ -1,7 +1,8 @@
 /* Alana Gilston - 2/21/2021 - CS202 - Program 3
  * message_list.h
  *
- *
+ * This is the header file for the message_list class. The message_list manages 
+ * a list of messages that a device receives.
  */
 #ifndef MESSAGE_LIST_H
 #define MESSAGE_LIST_H
@@ -46,8 +47,8 @@ class message_list {
         // Copy messages.
         int copy_messages(const cpp_string * other_messages);
 
-        size_t max_messages;
-        cpp_string * messages;
+        size_t max_messages; // maximum number of messages the list can hold
+        cpp_string * messages; // array of messages in the list
 };
 
 #endif

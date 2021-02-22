@@ -1,7 +1,8 @@
 /* Alana Gilston - 2/16/2021 - CS202 - Program 3
  * contact_list.h
  *
- *
+ * This is the header file for the contact_list class. The contact_list class 
+ * manages a list of contacts and their corresponding devices.
  */
 #ifndef CONTACT_LIST_H
 #define CONTACT_LIST_H

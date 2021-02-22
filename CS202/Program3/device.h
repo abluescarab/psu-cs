@@ -1,7 +1,8 @@
 /* Alana Gilston - 2/16/2021 - CS202 - Program 3
  * device.h
  *
- *
+ * This is the header file for the device class. The device class is one that 
+ * manages a contact's device and its corresponding data.
  */
 #ifndef DEVICE_H
 #define DEVICE_H
