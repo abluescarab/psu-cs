@@ -95,7 +95,7 @@ class cpp_string {
         // Check if the string is empty.
         int is_empty(void) const;
         // Return the length of the string.
-        size_ length(void) const;
+        size_t length(void) const;
         // Display the string.
         int display(void) const;
 
