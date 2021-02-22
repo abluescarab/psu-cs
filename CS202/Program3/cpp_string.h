@@ -14,6 +14,9 @@ class cpp_string {
         cpp_string(const cpp_string & source);
         ~cpp_string(void);
 
+        // subscript
+        const char & operator[](size_t index) const;
+        char & operator[](size_t index);
         // assignment operators
         cpp_string & operator=(const cpp_string & source);
         cpp_string & operator=(const char source);
@@ -23,13 +26,26 @@ class cpp_string {
         cpp_string & operator+=(const char source);
         cpp_string & operator+=(const char * source);
         // equality
-        bool operator==(const cpp_string & compare) const;
-        bool operator==(const char compare) const;
-        bool operator==(const char * compare) const;
+        friend bool operator==(const cpp_string & original, const cpp_string & compare);
+        friend bool operator==(const cpp_string & original, const char compare);
+        friend bool operator==(const cpp_string & original, const char * compare);
         // addition
         friend cpp_string operator+(cpp_string & destination, const cpp_string & source);
         friend cpp_string operator+(cpp_string & destination, const char source);
         friend cpp_string operator+(cpp_string & destination, const char * source);
+        // relational
+        friend bool operator<(const cpp_string & original, const cpp_string & compare);
+        friend bool operator<(const cpp_string & original, const char compare);
+        friend bool operator<(const cpp_string & original, const char * compare);
+        friend bool operator<=(const cpp_string & original, const cpp_string & compare);
+        friend bool operator<=(const cpp_string & original, const char compare);
+        friend bool operator<=(const cpp_string & original, const char * compare);
+        friend bool operator>(const cpp_string & original, const cpp_string & compare);
+        friend bool operator>(const cpp_string & original, const char compare);
+        friend bool operator>(const cpp_string & original, const char * compare);
+        friend bool operator>=(const cpp_string & original, const cpp_string & compare);
+        friend bool operator>=(const cpp_string & original, const char compare);
+        friend bool operator>=(const cpp_string & original, const char * compare);
         // input/output
         friend std::istream & operator>>(std::istream & in, cpp_string & in_string);
         friend std::ostream & operator<<(std::ostream & out, const cpp_string & out_string);
@@ -79,7 +95,7 @@ class cpp_string {
         // Check if the string is empty.
         int is_empty(void) const;
         // Return the length of the string.
-        int length(void) const;
+        size_ length(void) const;
         // Display the string.
         int display(void) const;
 

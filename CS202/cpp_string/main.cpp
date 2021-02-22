@@ -41,6 +41,9 @@ int main() {
                 cout << lower << endl;
                 break;
             case 2:
+                cout << "char* ==: " << ("This Is A Test" == test_string) << endl;
+                cout << "same ==: " << (test2 == test_string) << endl;
+                cout << "diff ==: " << (test3 == test_string) << endl;
                 cout << "== char*: " << (test_string == "This Is A Test") << endl;
                 cout << "== same:  " << (test_string == test2) << endl;
                 cout << "== diff:  " << (test_string == test3) << endl;

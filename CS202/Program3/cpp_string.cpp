@@ -48,6 +48,28 @@ cpp_string::~cpp_string(void) {
 
 
 
+// Subscript operator.
+// INPUT:
+//  index: the index to access
+// OUTPUT:
+//  Returns the character at that index.
+const char & cpp_string::operator[](size_t index) const {
+    return value[index];
+}
+        
+
+
+// Subscript operator.
+// INPUT:
+//  index: the index to change
+// OUTPUT:
+//  Returns the character at that index.
+char & cpp_string::operator[](size_t index) {
+    return value[index];
+}
+
+
+
 // Assignment operator.
 // INPUT:
 //  source: the cpp_string to copy from
@@ -124,8 +146,8 @@ cpp_string & cpp_string::operator+=(const char * source) {
 // Equality operator.
 // INPUT:
 //  compare: cpp_string to compare to
-bool cpp_string::operator==(const cpp_string & compare) const {
-    return strcmp(value, compare.value) == 0;
+bool operator==(const cpp_string & original, const cpp_string & compare) {
+    return strcmp(original.value, compare.value) == 0;
 }
 
 
@@ -133,8 +155,8 @@ bool cpp_string::operator==(const cpp_string & compare) const {
 // Equality operator.
 // INPUT:
 //  compare: char to compare to
-bool cpp_string::operator==(const char compare) const {
-    return strlen(value) == 1 && value[0] == compare;
+bool operator==(const cpp_string & original, const char compare) {
+    return strlen(original.value) == 1 && original.value[0] == compare;
 }
 
 
@@ -142,8 +164,8 @@ bool cpp_string::operator==(const char compare) const {
 // Equality operator.
 // INPUT:
 //  compare: char array to compare to
-bool cpp_string::operator==(const char * compare) const {
-    return strcmp(value, compare) == 0;
+bool operator==(const cpp_string & original, const char * compare) {
+    return strcmp(original.value, compare) == 0;
 }
 
 
@@ -180,6 +202,154 @@ cpp_string operator+(cpp_string & destination, const char * source) {
     cpp_string result = destination;
     cpp_string::append(result, source);
     return result;
+}
+
+
+
+// Less than operator.
+// INPUT:
+//  original: the original cpp_string
+//  compare: the cpp_string to compare to the original
+// OUTPUT:
+//  Returns the result of strcmp.
+bool operator<(const cpp_string & original, const cpp_string & compare) {
+    return strcmp(original.value, compare.value) < 0;
+}
+
+
+
+// Less than operator.
+// INPUT:
+//  original: the original cpp_string
+//  compare: the character to compare against
+// OUTPUT:
+//   0 if the strings do not match.
+//   1 if they match.
+bool operator<(const cpp_string & original, const char compare) {
+    return strlen(original.value) == 1 && original.value[0] < compare;
+}
+
+
+
+// Less than operator.
+// INPUT:
+//  original: the original cpp_string
+//  compare: the char array to compare to
+// OUTPUT:
+//  Returns the result of strcmp.
+bool operator<(const cpp_string & original, const char * compare) {
+    return strcmp(original.value, compare) < 0;
+}
+
+
+
+// Less than or equal to operator.
+// INPUT:
+//  original: the original cpp_string
+//  compare: the cpp_string to compare to
+// OUTPUT:
+//  Returns the result of strcmp.
+bool operator<=(const cpp_string & original, const cpp_string & compare) {
+    return strcmp(original.value, compare.value) <= 0;
+}
+
+
+
+// Less than operator.
+// INPUT:
+//  original: the original cpp_string
+//  compare: the character to compare against
+// OUTPUT:
+//   0 if the strings do not match.
+//   1 if they match.
+bool operator<=(const cpp_string & original, const char compare) {
+    return strlen(original.value) == 1 && original.value[0] <= compare;
+}
+
+
+
+// Less than or equal to operator.
+// INPUT:
+//  original: the original cpp_string
+//  compare: the cpp_string to compare to
+// OUTPUT:
+//  Returns the result of strcmp.
+bool operator<=(const cpp_string & original, const char * compare) {
+    return strcmp(original.value, compare) <= 0;
+}
+
+
+
+// More than to operator.
+// INPUT:
+//  original: the original cpp_string
+//  compare: the cpp_string to compare to
+// OUTPUT:
+//  Returns the result of strcmp.
+bool operator>(const cpp_string & original, const cpp_string & compare) {
+    return strcmp(original.value, compare.value) > 0;
+}
+
+
+
+// More than operator.
+// INPUT:
+//  original: the original cpp_string
+//  compare: the character to compare against
+// OUTPUT:
+//   0 if the strings do not match.
+//   1 if they match.
+bool operator>(const cpp_string & original, const char compare) {
+    return strlen(original.value) == 1 && original.value[0] > compare;
+}
+
+
+
+// More than operator.
+// INPUT:
+//  original: the original cpp_string
+//  compare: the char array to compare to
+// OUTPUT:
+//  Returns the result of strcmp.
+bool operator>(const cpp_string & original, const char * compare) {
+    return strcmp(original.value, compare) > 0;
+}
+
+
+
+// More than or equal to operator.
+// INPUT:
+//  original: the original cpp_string
+//  compare: the cpp_string to compare to
+// OUTPUT:
+//  Returns the result of strcmp.
+bool operator>=(const cpp_string & original, const cpp_string & compare) {
+    return strcmp(original.value, compare.value) >= 0;
+}
+
+
+
+// More than or equal to operator.
+// INPUT:
+//  original: the original cpp_string
+//  compare: the character to compare against
+// OUTPUT:
+//   0 if the strings do not match.
+//   1 if they match.
+bool operator>=(const cpp_string & original, const char compare) {
+    return strlen(original.value) == 1 && original[0] >= compare;
+}
+
+
+
+// More than or equal to operator.
+// INPUT:
+//  original: the original cpp_string
+//  compare: the char array to compare to
+// OUTPUT:
+//  Returns the result of strcmp.
+bool operator>=(const cpp_string & original, const char * compare) {
+    return strcmp(original.value, compare) >= 0;
 }
 
 
@@ -317,7 +487,7 @@ int cpp_string::index_of(const cpp_string index_of_string, const int start_index
 //  -1 if the char was not found.
 //  Otherwise returns the index of the found character.
 int cpp_string::index_of(const char index_of_char, const int start_index, char * & result) {
-    int index = start_index;
+    size_t index = start_index;
     bool found = false;
 
     if(index < 0)
@@ -692,7 +862,7 @@ int cpp_string::is_empty(void) const {
 // OUTPUT:
 //  0 if the string does not exist.
 //  Otherwise returns the result of strlen.
-int cpp_string::length(void) const {
+size_t cpp_string::length(void) const {
     if(!value)
         return 0;
 
