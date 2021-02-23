@@ -20,6 +20,16 @@ cpp_string::cpp_string(void) : value(nullptr) {}
 
 // Create a new cpp_string.
 // INPUT:
+//  source: char to copy
+cpp_string::cpp_string(const char source) : value(new char[2]) {
+    value[0] = source;
+    value[1] = '\0';
+}
+
+
+
+// Create a new cpp_string.
+// INPUT:
 //  source: char array to copy from
 cpp_string::cpp_string(const char * source) : 
     value(nullptr) {
@@ -561,8 +571,19 @@ int cpp_string::index_of(const cpp_string index_of_string, const int start_index
 // INPUT:
 //  start_index: the start index of the substring
 // OUTPUT:
-//  Returns the result of the recursive function.
+//  Returns the substring.
 cpp_string cpp_string::substring(const int start_index) const {
+    int index = start_index;
+    int len = length();
+
+    if(!value || len == 0)
+        return cpp_string();
+
+    if(index < 0)
+        index = 0;
+    else if(index > len)
+        return cpp_string();
+
     return cpp_string(value + start_index);
 }
 
@@ -888,7 +909,7 @@ int cpp_string::display(void) const {
 //  Returns the new string in either uppercase or lowercase.
 cpp_string cpp_string::change_case(bool uppercase) {
     if(is_empty())
-        return 0;
+        return cpp_string();
 
     int len = length();
     char * temp = new char[len + 1];

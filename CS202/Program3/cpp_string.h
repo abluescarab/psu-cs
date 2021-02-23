@@ -10,6 +10,7 @@
 class cpp_string {
     public:
         cpp_string(void);
+        cpp_string(const char source);
         cpp_string(const char * source);
         cpp_string(const cpp_string & source);
         ~cpp_string(void);

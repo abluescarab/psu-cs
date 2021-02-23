@@ -11,11 +11,13 @@ int main() {
     cpp_string test_string = "This Is A Test";
     cpp_string test2 = "This Is A Test";
     cpp_string test3 = "This is a test";
+    cpp_string test4 = 'T';
     cpp_string add_string = " added!";
     cpp_string replace_string = "This this this is a test";
     cpp_string upper;
     cpp_string lower;
 
+    cout << test4 << endl;
     while(!quit) {
         cout << "1)  upper/lower" << endl;
         cout << "2)  ==" << endl;
