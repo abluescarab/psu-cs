@@ -84,7 +84,40 @@ int display_menu(int menu, const device & current_device, device_type * & submen
 
 
 int main() {
-    
+    contact_list * my_contacts = new contact_list();
+#define CONTACT_COUNT 9
+    contact ** contacts = new contact*[CONTACT_COUNT] {
+        new contact("Alana", "N 3rd St."),//0
+        new contact("Adrienne", "Oxbow Loop"),//1
+        new contact("Griselda", "Barr Av."),//2
+        new contact("Philip", "N 3rd St."),//3
+        new contact("Maggie", "that apartment complex"),//5
+        new contact("Jake", "test"),//7
+        new contact("Oscar", "test"),//8
+        new contact("Karen", "test"),//9
+        new contact("Agamemnon", "test")
+    };
 
+    for(int i = 0; i < CONTACT_COUNT; ++i)
+        my_contacts->add(*contacts[i]);
+
+    my_contacts->display();
+    cout << endl;
+
+    for(int i = 0; i < CONTACT_COUNT; ++i) {
+        cout << "Removing ";
+        contacts[i]->display();
+        cout << endl;
+        my_contacts->remove(*contacts[i]);
+        my_contacts->display();
+        cout << endl;
+        cin.get();
+    }
+
+    for(int i = 0; i < CONTACT_COUNT; ++i)
+        delete contacts[i];
+
+    delete [] contacts;
+    delete my_contacts;
     return 0;
 }
