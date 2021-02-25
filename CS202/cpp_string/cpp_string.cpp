@@ -383,7 +383,9 @@ istream & operator>>(istream & in, cpp_string & in_string) {
 //  out: the ostream to output to
 //  out_string: the cpp_string to output
 ostream & operator<<(ostream & out, const cpp_string & out_string) {
-    out << out_string.value;
+    if(!out_string.is_empty())
+        out << out_string.value;
+
     return out;
 }
 
