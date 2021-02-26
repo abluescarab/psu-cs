@@ -58,7 +58,7 @@ bool program::operator==(const program & compare) const {
         username == compare.username;
 }
 
-        
+
 
 std::istream & operator>>(std::istream & in, program & in_program) {
     char temp[MAX_INPUT];
@@ -116,19 +116,18 @@ int program::display(void) const {
 
 device::device(void) : 
     name(""), 
-    price(0.0), 
-    messages(nullptr), 
+    price(0), 
+    messages(new message_list(10)),
     next(nullptr) {
     }
 
 
 
 device::device(const cpp_string & new_name, 
-        const float new_price, 
-        const int new_max_messages) :
+        const int new_price) :
     name(new_name),
     price(new_price),
-    messages(new message_list(new_max_messages)),
+    messages(new message_list(10)),
     next(nullptr) {
     }
 
@@ -137,7 +136,7 @@ device::device(const cpp_string & new_name,
 device::device(const device & other_device) :
     name(other_device.name),
     price(other_device.price),
-    messages(new message_list(*other_device.messages)),
+    messages(other_device.messages),
     next(other_device.next) {
     }
 
@@ -145,13 +144,12 @@ device::device(const device & other_device) :
 
 device::~device(void) {
     name = "";
-    price = 0.0;
+    price = 0;
+    delete messages;
     next = nullptr;
-    delete [] messages;
-    messages = nullptr;
 }
 
-        
+
 
 device & device::operator=(const device & source) {
     if(this == &source)
@@ -160,17 +158,16 @@ device & device::operator=(const device & source) {
     name = source.name;
     price = source.price;
     next = source.next;
-    messages = new message_list(*source.messages);
     return *this;
 }
-        
+
 
 
 bool device::operator==(const device & compare) const {
     return name == compare.name && 
         price == compare.price;
 }
-        
+
 
 
 std::istream & operator>>(std::istream & in, device & in_device) {
@@ -180,7 +177,7 @@ std::istream & operator>>(std::istream & in, device & in_device) {
     in_device.name = temp;
     return in;
 }
-        
+
 
 
 std::ostream & operator<<(std::ostream & out, const device & out_device) {
@@ -205,29 +202,21 @@ device * & device::get_next(void) {
 
 
 
-// Change the device's subscription price.
-int device::change_price(const float new_price) {
-    price = new_price;
-    return 1;
-}
-
-        
-
-// Send a new message to the device.
+// Send a new message.
 int device::send_message(const cpp_string & to_send) {
     return messages->send(to_send);
 }
-        
-        
 
-// Display all messages sent to this device.
+
+
+// Display all sent messages.
 int device::display_messages(void) const {
     return messages->display();
 }
 
 
 
-// Clear all messages from the device.
+// Clear all messages.
 int device::clear_messages(void) {
     return messages->clear();
 }
@@ -244,7 +233,15 @@ int device::is_empty(void) const {
 // Display the device.
 int device::display(void) const {
     cout << name << endl;
-    cout << "Price: " << fixed << setprecision(2) << price;
+    cout << "Price: " << price << endl;
+    return 1;
+}
+
+
+
+// Display the device name.
+int device::display_name(void) const {
+    cout << name << endl;
     return 1;
 }
 
@@ -253,16 +250,14 @@ int device::display(void) const {
 pager::pager(void) : pager_number(""), supports_text(false), two_way(false) {}
 
 
-
-pager::pager(const cpp_string & new_name,
-        const float new_price,
-        const int new_max_messages, 
+pager::pager(const cpp_string & new_name, 
+        const int new_price, 
         const cpp_string & new_number, 
-        const bool new_supports_text,
+        const bool new_supports_text, 
         const bool new_two_way) :
-    device(new_name, new_price, new_max_messages),
-    pager_number(new_number),
-    supports_text(new_supports_text),
+    device(new_name, new_price), 
+    pager_number(new_number), 
+    supports_text(new_supports_text), 
     two_way(new_two_way) {
     }
 
@@ -284,7 +279,7 @@ pager::~pager(void) {
 }
 
 
-        
+
 pager & pager::operator=(const pager & source) {
     if(this == &source)
         return *this;
@@ -295,7 +290,7 @@ pager & pager::operator=(const pager & source) {
     two_way = source.two_way;
     return *this;
 }
-        
+
 
 
 bool pager::operator==(const pager & compare) const {
@@ -352,12 +347,11 @@ cell_phone::cell_phone(void) :
 
 
 cell_phone::cell_phone(const cpp_string & new_name,
-        const float new_price,
-        const int new_max_messages,
+        const int new_price,
         const cpp_string & new_network, 
         const cpp_string & new_number,
         const os_type new_type) :
-    device(new_name, new_price, new_max_messages),
+    device(new_name, new_price),
     network(new_network),
     phone_number(new_number),
     phone_type(new_type) {
@@ -463,6 +457,12 @@ int cell_phone::display(void) const {
 
 
 computer::computer(void) : programs(nullptr) {}
+
+
+
+computer::computer(const cpp_string & new_name) : 
+    device(new_name, 0) {
+    }
 
 
 

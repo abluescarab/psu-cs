@@ -48,7 +48,7 @@ class message_list {
         int copy_messages(const cpp_string * other_messages);
 
         size_t max_messages; // maximum number of messages the list can hold
-        cpp_string * messages; // array of messages in the list
+        cpp_string * sent_messages; // array of sent messages
 };
 
 #endif

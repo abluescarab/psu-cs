@@ -14,7 +14,9 @@ using namespace std;
 
 
 // Create a new cpp_string.
-cpp_string::cpp_string(void) : value(nullptr) {}
+cpp_string::cpp_string(void) : value(nullptr) {
+    clear();
+}
 
 
 
@@ -31,29 +33,29 @@ cpp_string::cpp_string(const char source) : value(new char[2]) {
 // Create a new cpp_string.
 // INPUT:
 //  source: char array to copy from
-cpp_string::cpp_string(const char * source) : 
-    value(nullptr) {
-        copy_char_array(value, source);
+cpp_string::cpp_string(const char * source) : value(nullptr) {
+    if(!copy_char_array(value, source)) {
+        clear();
     }
+}
 
 
 
 // Create a new cpp_string.
 // INPUT:
 //  source: another cpp_string to copy from
-cpp_string::cpp_string(const cpp_string & source) :
-    value(nullptr) {
-        copy_char_array(value, source.value);
+cpp_string::cpp_string(const cpp_string & source) : value(nullptr) {
+    if(!copy_char_array(value, source.value)) {
+        clear();
     }
+}
 
 
 
 // Destroy the cpp_string.
 cpp_string::~cpp_string(void) {
-    if(value) {
-        delete [] value;
-        value = nullptr;
-    }
+    delete [] value;
+    value = nullptr;
 }
 
 
@@ -66,7 +68,7 @@ cpp_string::~cpp_string(void) {
 const char & cpp_string::operator[](size_t index) const {
     return value[index];
 }
-        
+
 
 
 // Subscript operator.
@@ -87,11 +89,14 @@ cpp_string & cpp_string::operator=(const cpp_string & source) {
     if(this == &source)
         return *this;
 
-    if(value)
+    if(source.value[0] == '\0') {
+        clear();
+    }
+    else {
         delete [] value;
-
-    value = new char[strlen(source.value) + 1];
-    strcpy(value, source.value);
+        value = new char[strlen(source.value) + 1];
+        strcpy(value, source.value);
+    }
 
     return *this; 
 }
@@ -102,12 +107,16 @@ cpp_string & cpp_string::operator=(const cpp_string & source) {
 // INPUT:
 //  source: single character to copy
 cpp_string & cpp_string::operator=(const char source) {
-    if(value)
+    if(source == '\0') {
+        clear();
+    }
+    else {
         delete [] value;
-    
-    value = new char[2];
-    value[0] = source;
-    value[1] = '\0';
+        value = new char[2];
+        value[0] = source;
+        value[1] = '\0';
+    }
+
     return *this;
 }
 
@@ -117,11 +126,14 @@ cpp_string & cpp_string::operator=(const char source) {
 // INPUT:
 //  source: char array to copy from
 cpp_string & cpp_string::operator=(const char * source) {
-    copy_char_array(value, source);
+    if(!copy_char_array(value, source) && source[0] == '\0') {
+        clear();
+    }
+
     return *this;
 }
 
-        
+
 
 // Compound addition.
 // INPUT:
@@ -157,7 +169,8 @@ cpp_string & cpp_string::operator+=(const char * source) {
 // INPUT:
 //  compare: cpp_string to compare to
 bool operator==(const cpp_string & original, const cpp_string & compare) {
-    return strcmp(original.value, compare.value) == 0;
+    return (original.value[0] == '\0' && compare.value[0] == '\0') ||
+            strcmp(original.value, compare.value) == 0;
 }
 
 
@@ -175,7 +188,9 @@ bool operator==(const cpp_string & original, const char compare) {
 // INPUT:
 //  compare: char array to compare to
 bool operator==(const cpp_string & original, const char * compare) {
-    return strcmp(original.value, compare) == 0;
+    return (!compare && original.value[0] == '\0') || 
+        (original.value[0] == '\0' && compare[0] == '\0') ||
+        strcmp(original.value, compare) == 0;
 }
 
 
@@ -383,7 +398,9 @@ istream & operator>>(istream & in, cpp_string & in_string) {
 //  out: the ostream to output to
 //  out_string: the cpp_string to output
 ostream & operator<<(ostream & out, const cpp_string & out_string) {
-    out << out_string.value;
+    if(!out_string.is_empty())
+        out << out_string.value;
+
     return out;
 }
 
@@ -449,7 +466,7 @@ int cpp_string::index_of(const cpp_string & index_of_string) {
 int cpp_string::index_of(const char index_of_char, const int start_index) {
     char * result = nullptr;
     int index = index_of(index_of_char, start_index, result);
-    
+
     if(result)
         delete [] result;
 
@@ -741,7 +758,7 @@ cpp_string cpp_string::replace(const char old_char, const char new_char) {
     cpp_string result;
     int len = length();
     char * temp = new char[len + 1];
-    
+
     for(int i = 0; i < len; ++i) {
         if(value[i] == old_char)
             temp[i] = new_char;
@@ -775,7 +792,7 @@ cpp_string cpp_string::replace(const char * old_chars, const char * new_chars) {
         result = value;
         return result;
     }
-    
+
     // get the difference between the old length and the new length
     temp = new char[strlen(value) + (count * strlen(new_chars)) - (count * strlen(old_chars)) + 1];
     strcpy(temp, "");
@@ -870,6 +887,18 @@ cpp_string cpp_string::remove(const int start_index, const int removal_length) {
 
 
 
+// Clear the string.
+// OUTPUT:
+//  1 when the string is cleared.
+int cpp_string::clear(void) {
+    delete [] value;
+    value = new char[1];
+    value[0] = '\0';
+    return 1;
+}
+
+
+
 // Check if the string is empty.
 // OUTPUT:
 //  Returns the result of char_array_empty.
@@ -927,7 +956,7 @@ cpp_string cpp_string::change_case(bool uppercase) {
     delete [] temp;
     return result;
 }
-        
+
 
 
 // Count the number of instances of a specified char array.
@@ -991,7 +1020,7 @@ int cpp_string::append(cpp_string & destination, const char * source) {
     }
 
     char * temp = new char[strlen(destination.value) + strlen(source) + 1];
-    
+
     strcpy(temp, destination.value);
     strcat(temp, source);
     copy_char_array(destination.value, temp);

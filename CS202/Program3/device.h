@@ -51,8 +51,7 @@ class device {
     public:
         device(void);
         device(const cpp_string & new_name, 
-                const float new_price, 
-                const int new_max_messages);
+                const int new_price);
         device(const device & other_device);
         virtual ~device(void);
 
@@ -66,23 +65,23 @@ class device {
         int set_next(const device & new_device);
         // Get next device.
         device * & get_next(void);
-        // Change the device's subscription price.
-        int change_price(const float new_price);
-        // Send a new message to the device.
+        // Send a new message.
         int send_message(const cpp_string & to_send);
-        // Display all messages sent to this device.
+        // Display all sent messages.
         int display_messages(void) const;
-        // Clear all messages from the device.
+        // Clear all messages.
         int clear_messages(void);
         // Check if the device is empty.
         int is_empty(void) const;
         // Display the device.
         virtual int display(void) const;
+        // Display the device name.
+        int display_name(void) const;
 
     private:
         cpp_string name; // name of the device
-        float price; // subscription price for the device
-        message_list * messages; // messages sent to this device
+        int price; // subscription price for the device
+        message_list * messages;
         device * next; // next device in the list
 };
 
@@ -90,8 +89,7 @@ class pager : public device {
     public:
         pager(void);
         pager(const cpp_string & new_name,
-                const float new_price,
-                const int new_max_messages, 
+                const int new_price,
                 const cpp_string & new_number, 
                 const bool new_supports_text,
                 const bool new_two_way);
@@ -121,8 +119,7 @@ class cell_phone : public device {
     public:
         cell_phone(void);
         cell_phone(const cpp_string & new_name,
-                const float new_price,
-                const int new_max_messages,
+                const int new_price,
                 const cpp_string & new_network, 
                 const cpp_string & new_number,
                 const os_type new_type);

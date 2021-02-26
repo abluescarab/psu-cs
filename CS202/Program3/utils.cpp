@@ -41,7 +41,6 @@ int validate_input(const int min_input,
         return validate_input(min_input, max_input, show_prompt);
     }
 
-    cout << endl;
     return input;
 }
 

@@ -11,26 +11,27 @@
 class contact {
     public:
         contact(void);
-        contact(const cpp_string & new_name, const cpp_string & new_address);
+        contact(const cpp_string & new_name);
         contact(const contact & other_contact);
         ~contact(void);
 
-        // operators
-        contact & operator=(const contact & source);
-        bool operator==(const contact & source) const;
-        // relational
+        // relational operators
         friend bool operator<(const contact & original, const contact & compare);
         friend bool operator<=(const contact & original, const contact & compare);
         friend bool operator>(const contact & original, const contact & compare);
         friend bool operator>=(const contact & original, const contact & compare);
-        // i/o
+        // i/o operators
         friend std::istream & operator>>(std::istream & in, contact & in_contact);
         friend std::ostream & operator<<(std::ostream & out, const contact & out_contact);
 
         // Set the left contact.
-        int set_left(contact & new_left);
+        int set_left(contact * & new_left);
         // Set the right contact.
-        int set_right(contact & new_right);
+        int set_right(contact * & new_right);
+        // Clear the left contact.
+        int clear_left(void);
+        // Clear the right contact.
+        int clear_right(void);
         // Get the left contact.
         contact * & get_left(void);
         // Get the right contact.
@@ -39,8 +40,6 @@ class contact {
         int copy(const contact & copy_from);
         // Change the contact's name.
         int change_name(const cpp_string & new_name);
-        // Change the contact's address.
-        int change_address(const cpp_string & new_address);
         // Add a device.
         int add_device(const device & to_add);
         // Remove a device.
@@ -49,8 +48,14 @@ class contact {
         int clear_devices(void);
         // Check if the contact has data.
         int is_empty(void) const;
+        // Check if a contact matches another contact.
+        int matches(const cpp_string & compare) const;
+        // Check if a contact matches another contact.
+        int matches(const contact & compare) const;
         // Display the contact information.
         int display(void);
+        // Display only the contact name.
+        int display_name(void);
 
     private:
         // Add a device recursively.
@@ -65,7 +70,6 @@ class contact {
         int display_devices(device * & current);
 
         cpp_string name; // contact name
-        cpp_string address; // contact home address
         device * devices; // devices the contact owns
         contact * left; // left contact in the tree
         contact * right; // right contact in the tree
@@ -83,32 +87,34 @@ class contact_list {
         contact_list & operator+=(const contact_list & source);
         friend contact_list operator+(contact_list & destination, 
                 const contact_list & source);
-        
 
         // Add contact.
         int add(const contact & to_add);
         // Remove contact.
-        int remove(const contact & to_remove);
+        int remove(const cpp_string & to_remove);
         // Clear contacts.
         int clear(void);
         // Display entire contact list.
         int display(void);
+        // Find a contact.
+        int find(const cpp_string & to_find, contact * & result);
 
     private:
         // Add contact recursively.
         int add(contact * & current, const contact & to_add);
+        int remove(contact * & root, const contact & to_remove);
         // Remove contact recursively.
-        int remove(contact * & current, const contact & to_remove);
+        int remove(contact * & current, contact * & parent, const contact & to_remove);
         // Clear contacts recursively.
         int clear(contact * & current);
         // Display entire contact list recursively.
         int display(contact * & current);
-        // Find a contact.
-        int find(contact * & current, const contact & to_find, contact * & result);
+        // Find a contact recursively.
+        int find(contact * & current, const cpp_string & to_find, contact * & result);
         // Copy contacts from another list recursively.
         int copy_contacts(contact * & current, contact & other_current);
         // Get the inorder successor of the current contact.
-        int inorder_successor(contact * & current, contact * & result);
+        int inorder_successor(contact * & current, contact * & parent, contact * & result);
 
         contact * contacts; // lll of contacts
 };

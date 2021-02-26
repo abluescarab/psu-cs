@@ -10,42 +10,60 @@ using namespace std;
 
 
 
-message_list::message_list(void) : max_messages(0), messages(nullptr) {}
+message_list::message_list(void) : max_messages(10), sent_messages(new cpp_string[10]) { 
+    clear();
+}
 
 
 
 message_list::message_list(const size_t new_max_messages) :
-    max_messages(new_max_messages),
-    messages(new cpp_string[new_max_messages]) {
+    sent_messages(nullptr) {
+        if(new_max_messages <= 0)
+            max_messages = 1;
+        else
+            max_messages = new_max_messages;
+
+        sent_messages = new cpp_string[max_messages];
+        clear();
 }
 
 
 
 message_list::message_list(const message_list & other_list) :
     max_messages(other_list.max_messages),
-    messages(new cpp_string[other_list.max_messages]) {
-    copy_messages(other_list.messages);
+    sent_messages(new cpp_string[other_list.max_messages]) {
+        if(other_list.sent_messages)
+            copy_messages(other_list.sent_messages);
+        else
+            clear();
 }
 
 
 
+// invalid write error
+// to reproduce:
+// create new contact
+// delete contact
 message_list::~message_list(void) {
     max_messages = 0;
-    delete [] messages;
-    messages = nullptr;
+
+    if(sent_messages)
+        delete [] sent_messages;
+
+    sent_messages = nullptr;
 }
 
 
 
 // subscript
 const cpp_string & message_list::operator[](size_t index) const {
-    return messages[index];
+    return sent_messages[index];
 }
 
 
 
 cpp_string & message_list::operator[](size_t index) {
-    return messages[index];
+    return sent_messages[index];
 }
 
 
@@ -139,52 +157,47 @@ std::ostream & operator<<(std::ostream & out, const message_list & out_list) {
 
 // Send a new message.
 int message_list::send(const cpp_string & to_send) {
-    if(!messages || to_send.is_empty())
+    if(!sent_messages || to_send.is_empty())
         return 0;
 
     size_t index = 0;
 
-    while(!messages[index].is_empty())
+    while(!sent_messages[index].is_empty())
         ++index;
 
     if(index >= max_messages)
         return 0;
 
-    messages[index] = to_send;
+    sent_messages[index] = to_send;
     return 1;
 }
 
 
 
-// Clear all messages.
+// Clear all sent_messages.
 int message_list::clear(void) {
-    if(!messages)
+    if(!sent_messages)
         return 0;
 
-    int filled = 0;
-
     for(size_t i = 0; i < max_messages; ++i) {
-        if(!messages[i].is_empty()) {
-            messages[i] = "";
-            ++filled;
-        }
+        sent_messages[i] = "";
     }
-
-    return filled;
+    
+    return 1;
 }
 
 
 
-// Display all messages.
+// Display all sent_messages.
 int message_list::display(void) const {
-    if(!messages)
+    if(!sent_messages)
         return 0;
 
     int filled = 0;
 
     for(size_t i = 0; i < max_messages; ++i) {
-        if(!messages[i].is_empty()) {
-            cout << messages[i] << endl;
+        if(!sent_messages[i].is_empty()) {
+            cout << sent_messages[i] << endl;
             ++filled;
         }
     }
@@ -194,17 +207,17 @@ int message_list::display(void) const {
 
 
 
-// Get the number of messages allowed.
+// Get the number of sent_messages allowed.
 size_t message_list::count(void) const {
     return max_messages;
 }
 
 
 
-// Copy messages.
+// Copy sent_messages.
 int message_list::copy_messages(const cpp_string * other_messages) {
     for(size_t i = 0; i < max_messages; ++i)
-        messages[i] = other_messages[i];
+        sent_messages[i] = other_messages[i];
 
     return 1;
 }

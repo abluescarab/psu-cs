@@ -13,7 +13,6 @@ using namespace std;
 
 contact::contact(void) : 
     name(""), 
-    address(""), 
     devices(nullptr), 
     left(nullptr), 
     right(nullptr) {
@@ -21,9 +20,8 @@ contact::contact(void) :
 
 
 
-contact::contact(const cpp_string & new_name, const cpp_string & new_address) : 
+contact::contact(const cpp_string & new_name) : 
     name(new_name), 
-    address(new_address), 
     devices(nullptr), 
     left(nullptr), 
     right(nullptr) {
@@ -33,7 +31,6 @@ contact::contact(const cpp_string & new_name, const cpp_string & new_address) :
 
 contact::contact(const contact & other_contact) :
     name(other_contact.name),
-    address(other_contact.address),
     devices(nullptr),
     left(other_contact.left),
     right(other_contact.right) {
@@ -45,33 +42,9 @@ contact::contact(const contact & other_contact) :
 
 contact::~contact(void) {
     name = "";
-    address = "";
     clear_devices();
     left = nullptr;
     right = nullptr;
-}
-
-
-
-contact & contact::operator=(const contact & source) {
-    if(this == &source)
-        return *this;
-
-    name = source.name;
-    address = source.address;
-
-    if(source.devices)
-        copy_devices(devices, *source.devices);
-
-    left = source.left;
-    right = source.right;
-    return *this;
-}
-
-
-
-bool contact::operator==(const contact & source) const {
-    return name == source.name && address == source.address;
 }
 
 
@@ -118,22 +91,48 @@ std::ostream & operator<<(std::ostream & out, const contact & out_contact) {
 
 
 // Set the left contact.
-int contact::set_left(contact & new_left) {
-    if(new_left.is_empty())
+int contact::set_left(contact * & new_left) {
+    if(!new_left)
         return 0;
 
-    left = &new_left;
+    delete left;
+    left = new_left;
     return 1;
 }
 
 
 
 // Set the right contact.
-int contact::set_right(contact & new_right) {
-    if(new_right.is_empty())
+int contact::set_right(contact * & new_right) {
+    if(!new_right)
         return 0;
 
-    right = &new_right;
+    delete right;
+    right = new_right;
+    return 1;
+}
+
+
+
+// Clear the left contact.
+int contact::clear_left(void) {
+    if(!left)
+        return 0;
+
+    delete left;
+    left = nullptr;
+    return 1;
+}
+
+
+
+// Clear the right contact.
+int contact::clear_right(void) {
+    if(!right)
+        return 0;
+
+    delete right;
+    right = nullptr;
     return 1;
 }
 
@@ -159,7 +158,6 @@ int contact::copy(const contact & copy_from) {
         return 0;
 
     name = copy_from.name;
-    address = copy_from.address;
     clear_devices();
 
     if(copy_from.devices)
@@ -173,14 +171,6 @@ int contact::copy(const contact & copy_from) {
 // Change the contact's name.
 int contact::change_name(const cpp_string & new_name) {
     name = new_name;
-    return 1;
-}
-
-
-
-// Change the contact's address.
-int contact::change_address(const cpp_string & new_address) {
-    address = new_address;
     return 1;
 }
 
@@ -261,6 +251,20 @@ int contact::is_empty(void) const {
     return name.is_empty();
 }
 
+        
+
+// Check if a contact matches another contact.
+int contact::matches(const cpp_string & compare) const {
+    return name == compare;
+}
+
+
+
+// Check if a contact matches another contact.
+int contact::matches(const contact & compare) const {
+    return name == compare.name;
+}
+
 
 
 // Display the contact information.
@@ -268,8 +272,10 @@ int contact::display(void) {
     if(is_empty())
         return 0;
 
-    cout << name << ": " << address << endl;
-    return display_devices(devices);
+    cout << name << endl;
+    display_devices(devices);
+    cout << endl;
+    return 1;
 }
 
 
@@ -285,13 +291,25 @@ int contact::display_devices(device * & current) {
 
 
 
-// Copy devices recursively.
-int contact::copy_devices(device * & current, device & other_current) {
-    if(other_current.is_empty())
+// Display only the contact name.
+int contact::display_name(void) {
+    if(is_empty())
         return 0;
 
+    cout << name << endl;
+    return 1;
+}
+
+
+
+// Copy devices recursively.
+int contact::copy_devices(device * & current, device & other_current) {
     current = new device(other_current);
-    return copy_devices(current->get_next(), *other_current.get_next()) + 1;
+
+    if(other_current.get_next())
+        return copy_devices(current->get_next(), *other_current.get_next()) + 1;
+    else
+        return 1;
 }
 
 
@@ -339,17 +357,22 @@ int contact_list::add(contact * & current, const contact & to_add) {
 
 
 // Remove contact.
-int contact_list::remove(const contact & to_remove) {
+int contact_list::remove(const cpp_string & to_remove) {
     if(to_remove.is_empty())
         return 0;
-    
-    return remove(contacts, to_remove);
+
+    int result = 0;
+    contact * parent = nullptr;
+    contact * contact_obj = new contact(to_remove);
+
+    result = remove(contacts, parent, *contact_obj);
+    delete contact_obj;
+    return result;
 }
 
 
-
 // Remove contact recursively.
-int contact_list::remove(contact * & current, const contact & to_remove) {
+int contact_list::remove(contact * & current, contact * & parent, const contact & to_remove) {
     if(!current)
         return 0;
 
@@ -358,123 +381,59 @@ int contact_list::remove(contact * & current, const contact & to_remove) {
     contact * child = nullptr;
 
     if(to_remove < *current)
-        return remove(left, to_remove);
+        return remove(left, current, to_remove);
     else if(to_remove > *current)
-        return remove(right, to_remove);
+        return remove(right, current, to_remove);
 
     if(left && right) { // two children
-        inorder_successor(right, child);
+        child = right;
+
+        if(child->get_left())
+            inorder_successor(right, parent, child);
+
         current->copy(*child);
-        return remove(child, *child);
+
+        if(parent)
+            return remove(child, parent, *child);
+        else
+            return remove(child, current, *child);
     }
-    else if(left) {
-        current->copy(*left);
+    else if(left && !right)  { // left child
+        if(!parent)
+            current = left;
+        else {
+            if(parent->get_left() == current)
+                parent->set_left(left);
+            else
+                parent->set_right(left);
+        }
     }
-    else if(right) {
-        current->copy(*right);
+    else if(right && !left) { // right child
+        if(!parent)
+            current = right;
+        else {
+            if(parent->get_left() == current)
+                parent->set_left(right);
+            else
+                parent->set_right(right);
+        }
     }
-    else {
-        delete current;
-        current = nullptr;
+    else { // no children
+        if(!parent) {
+            delete current;
+            current = nullptr;
+        }
+        else { // if the current node's parent exists
+            if(parent->get_left() == current) {
+                parent->clear_left();
+            }
+            else if(parent->get_right() == current) {
+                parent->clear_right();
+            }
+        }
     }
 
     return 1;
-   
-    /*// xor to see if only one child exists
-    else if(!left != !right) {
-        // start with the left
-        child = left;
-
-        if(right)
-            child = right;
-    }
-    else {
-
-    }
-
-    delete current;
-    current = nullptr;
-
-    if(child) {
-        current = new contact(*child);
-        
-        if(left)
-            current->set_left(*left);
-
-        if(right)
-            current->set_right(*right);
-
-        return remove(child, *child);
-    }
-
-    return 1;*/
-/*    if(!current)
-        return 0;
-    
-    contact * child = nullptr;
-    contact * left = current->get_left();
-    contact * right = current->get_right();
-
-    if(to_remove < *current)
-        return remove(left, to_remove);
-    else if(to_remove > *current)
-        return remove(right, to_remove);
-    else {
-        if(!left)
-            child = right;
-        else if(!right)
-            child = left;
-
-        delete current;
-        inorder_successor(right, current);
-    }*/
-
-    /*if(!current)
-        return 0;
-
-    contact * child = nullptr;
-    contact * left = current->get_left();
-    contact * right = current->get_right();
-
-    if(left && right) { // two children
-        inorder_successor(right, child);
-    }
-    // xor to see if only one contact exists
-    else if(!left != !right) { // only one child
-        // start with the left
-        child = left;
-
-        if(right)
-            child = right;
-    }
-    
-    delete current;
-    current = nullptr;
-
-    if(child) {
-        current = new contact(*child);
-
-        contact * left_child = child->get_left();
-        contact * right_child = child->get_right();
-
-
-        //current = new contact(*child);
-        //delete child;
-        //child = 
-        //current->set_left(*left);
-        //current->set_right(*right);
-        //current = new contact(*child);
-        //current = child;
-
-
-        //current = new contact(*child);
-        //current->set_left(*left);
-        //current->set_right(*child->get_right());
-        //delete child;
-        //child = nullptr;
-    }
-    
-    return 1;*/
 }
 
 
@@ -491,8 +450,7 @@ int contact_list::clear(contact * & current) {
     if(!current)
         return 0;
 
-    int count = clear(current->get_left()) + 
-        clear(current->get_right());
+    int count = clear(current->get_left()) + clear(current->get_right());
 
     delete current;
     current = nullptr;
@@ -523,13 +481,20 @@ int contact_list::display(contact * & current) {
 
 
 // Find a contact.
+int contact_list::find(const cpp_string & to_find, contact * & result) {
+    return find(contacts, to_find, result);
+}
+
+
+
+// Find a contact recursively.
 int contact_list::find(contact * & current, 
-        const contact & to_find, 
+        const cpp_string & to_find, 
         contact * & result) {
     if(!current)
         return 0;
 
-    if(current == &to_find) {
+    if(current->matches(to_find)) {
         result = new contact(*current);
         return 1;
     }
@@ -542,22 +507,38 @@ int contact_list::find(contact * & current,
 
 // Copy contacts from another list recursively.
 int contact_list::copy_contacts(contact * & current, contact & other_current) {
-    return 1;
+    if(other_current.is_empty())
+        return 0;
+
+    int count = 1;
+    current = new contact(other_current);
+
+    if(other_current.get_left())
+        count += copy_contacts(current->get_left(), *other_current.get_left());
+
+    if(other_current.get_right())
+        count += copy_contacts(current->get_right(), *other_current.get_right());
+
+    return count;
 }
 
 
 
 // Get the inorder successor of the current contact.
-int contact_list::inorder_successor(contact * & current, contact * & result) {
+int contact_list::inorder_successor(contact * & current, 
+        contact * & parent, 
+        contact * & result) {
     if(!current)
         return 0;
 
     contact * left = current->get_left();
 
-    if(!left) {
+    if(left)
+        parent = current;
+    else {
         result = current;
         return 1;
     }
 
-    return inorder_successor(left, result);
+    return inorder_successor(left, parent, result);
 }
