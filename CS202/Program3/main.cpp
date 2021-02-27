@@ -13,25 +13,13 @@ using namespace std;
 
 
 
-enum class device_type {
-    pager,
-    cell_phone,
-    computer,
-    none
-};
-
-
-
 // Display the main menu.
 // INPUT:
 //  menu: the menu to display
 // OUTPUT:
 //  Returns the user-selected option.
-int display_menu(int menu, device * & current_device, device_type & submenu) {
+int display_menu(const int menu, const device_type submenu) {
     int max_option = -1;
-    pager * current_pager = nullptr;
-    cell_phone * current_phone = nullptr;
-    computer * current_computer = nullptr;
 
     switch(menu) {
         case 1: // contact menu
@@ -51,24 +39,17 @@ int display_menu(int menu, device * & current_device, device_type & submenu) {
             cout << "3) Display sent messages" << endl;
             cout << "4) Clear sent messages" << endl;
 
-            current_pager = dynamic_cast<pager*>(current_device);
-            current_phone = dynamic_cast<cell_phone*>(current_device);
-            current_computer = dynamic_cast<computer*>(current_device);
-
-            if(current_pager) {
-                submenu = device_type::pager;
+            if(submenu == device_type::pager) {
                 cout << "5) Change pager number" << endl;
                 cout << "6) Change if pager supports text messages" << endl;
                 cout << "7) Change if pager supports two-way messages" << endl;
             }
-            else if(current_phone) {
-                submenu = device_type::cell_phone;
+            else if(submenu == device_type::cell_phone) {
                 cout << "5) Change cell network" << endl;
                 cout << "6) Change phone number" << endl;
                 cout << "7) Change phone type" << endl;
             }
-            else if(current_computer) {
-                submenu = device_type::computer;
+            else if(submenu == device_type::computer) {
                 cout << "5) Add a program" << endl;
                 cout << "6) Remove a program" << endl;
                 cout << "7) Clear all programs" << endl;
@@ -96,20 +77,6 @@ int display_menu(int menu, device * & current_device, device_type & submenu) {
 
 
 
-// Display the main menu.
-// INPUT:
-//  menu: the menu to display
-// OUTPUT:
-//  Returns the user-selected option.
-int display_menu(int menu) {
-    device * current = nullptr;
-    device_type submenu = device_type::none;
-
-    return display_menu(menu, current, submenu);
-}
-
-
-
 // Add a device.
 // INPUT:
 //  new_contact: contact to add devices to
@@ -127,7 +94,6 @@ int add_device(device * & result) {
     computer * new_computer = nullptr;
     // all device info
     cpp_string name;
-    int price = 0;
     // pager info
     cpp_string number;
     bool supports_text;
@@ -159,9 +125,6 @@ int add_device(device * & result) {
     }
 
     if(option == 1) { // pager
-        cout << "Device subscription price: ";
-        price = validate_input(0, INT_MAX, false);
-
         while(number.is_empty()) {
             cout << "Pager number: ";
             cin.getline(input, INPUT_MAX);
@@ -174,12 +137,9 @@ int add_device(device * & result) {
         cout << "Does the pager support two-way messaging? (y/n) ";
         two_way = validate_yes();
 
-        new_pager = new pager(name, price, number, supports_text, two_way);
+        new_pager = new pager(name, number, supports_text, two_way);
     }
     else if(option == 2) { // cell phone
-        cout << "Device subscription price: ";
-        price = validate_input(0, INT_MAX, false);
-
         while(network.is_empty()) {
             cout << "Cell phone network: ";
             cin.getline(input, INPUT_MAX);
@@ -200,8 +160,8 @@ int add_device(device * & result) {
         cout << "5) Feature phone (not smartphone)" << endl;
 
         option = validate_input(1, 5);
-        phone_type = static_cast<os_type>(option);
-        new_phone = new cell_phone(name, price, network, number, phone_type);
+        phone_type = static_cast<os_type>(option - 1);
+        new_phone = new cell_phone(name, network, number, phone_type);
     }
     else { // computer
         new_computer = new computer(name);
@@ -233,13 +193,16 @@ int add_device(device * & result) {
     }
 
     if(new_pager) {
-        result = dynamic_cast<device*>(new_pager);
+        //result = dynamic_cast<device*>(new_pager);
+        result = new_pager;
     }
     else if(new_phone) {
-        result = dynamic_cast<device*>(new_phone);
+        //result = dynamic_cast<device*>(new_phone);
+        result = new_phone;
     }
     else {
-        result = dynamic_cast<device*>(new_computer);
+        //result = dynamic_cast<device*>(new_computer);
+        result = new_computer;
     }
 
     return 1;
@@ -252,8 +215,8 @@ int main() {
     char input[INPUT_MAX] = "";
     int option = -1;
     int menu = 0;
-    int submenu = 0;
     int result = 0;
+    device_type submenu = device_type::none;
 
     // current vars
     cpp_string current_contact;
@@ -280,7 +243,8 @@ int main() {
             cout << "------------------------------------------------" << endl;
         }
 
-        option = display_menu(menu);
+        option = display_menu(menu, submenu);
+
         cout << endl;
 
         if(menu == 0) { // main menu 
@@ -325,12 +289,15 @@ int main() {
                     if(validate_yes()) {
                         if(!add_device(new_device))
                             cout << "Cancelled adding a new device." << endl;
-                        else
-                            new_contact->add_device(*new_device);
                     }
 
                     contacts->add_contact(*new_contact);
-                    delete new_device;
+
+                    if(new_device) {
+                        contacts->add_device(name, *new_device);
+                        delete new_device;
+                    }
+
                     delete new_contact;
 
                     cout << "Successfully added " << name << "." << endl;
@@ -370,7 +337,7 @@ int main() {
                     quit = true;
                     break;
                 default:
-                    option = display_menu(menu);
+                    option = display_menu(menu, submenu);
                     break;
             }
         }
@@ -389,7 +356,9 @@ int main() {
                         break;
                     }
 
-                    if(!contacts->has_device(current_contact, name)) {
+                    submenu = contacts->has_device(current_contact, name);
+
+                    if(submenu == device_type::none) {
                         cout << "Device not found." << endl;
                         break;
                     }
@@ -444,17 +413,17 @@ int main() {
                     cout << "Changed name to " << name << "." << endl;
                     break;
                 case 7: // back
+                    current_contact = "";
                     menu = 0;
                     break;
                 default:
-                    option = display_menu(menu);
+                    option = display_menu(menu, submenu);
                     break;
             }
         }
         else if(menu == 2) { // device menu
             switch(option) {
                 case 1: // display device info
-                    // TODO: cast to right device type
                     if(!contacts->display_device(current_contact, current_device))
                         cout << "Device is empty." << endl;
 
@@ -486,11 +455,45 @@ int main() {
                     contacts->clear_messages(current_contact, current_device);
                     cout << "Cleared sent messages." << endl;
                     break;
+                case 5: // pager number/cell network/add program
+                    if(submenu == device_type::pager) {
+
+                    }
+                    else if(submenu == device_type::cell_phone) {
+
+                    }
+                    else {
+                        
+                    }
+                    break;
+                case 6: // supports text/phone number/remove program
+                    if(submenu == device_type::pager) {
+
+                    }
+                    else if(submenu == device_type::cell_phone) {
+
+                    }
+                    else {
+                        
+                    }
+                    break;
+                case 7: // supports two-way/phone type/clear programs
+                    if(submenu == device_type::pager) {
+
+                    }
+                    else if(submenu == device_type::cell_phone) {
+
+                    }
+                    else {
+                        
+                    }
+                    break;
                 case 8: // back
+                    current_device = "";
                     menu = 1;
                     break;
                 default:
-                    option = display_menu(menu);
+                    option = display_menu(menu, submenu);
                     break;
             }
         }

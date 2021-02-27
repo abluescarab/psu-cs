@@ -257,7 +257,7 @@ int contact::change_name(const cpp_string & new_name) {
 // OUTPUT:
 //  0 if the device to add is empty.
 //  Otherwise returns the result of the recursive function.
-int contact::add_device(const device & to_add) {
+int contact::add_device(device & to_add) {
     if(to_add.is_empty())
         return 0;
 
@@ -272,9 +272,19 @@ int contact::add_device(const device & to_add) {
 //  to_add: the device to add
 // OUTPUT:
 //  1 when the device is added.
-int contact::add_device(device * & current, const device & to_add) {
+int contact::add_device(device * & current, device & to_add) {
+    pager * new_pager = dynamic_cast<pager*>(&to_add);
+    cell_phone * new_phone = dynamic_cast<cell_phone*>(&to_add);
+    computer * new_computer = dynamic_cast<computer*>(&to_add);
+
     if(!current) {
-        current = new device(to_add);
+        if(new_pager)
+            current = new pager(*new_pager);
+        else if(new_phone)
+            current = new cell_phone(*new_phone);
+        else
+            current = new computer(*new_computer);
+
         return 1;
     }
 
@@ -365,15 +375,25 @@ int contact::display_device(const cpp_string & to_display) {
 
 
 
-// Check if a device exists.
+// Check if a device exists and returns its type.
 // INPUT:
 //  to_find: device name to find
 // OUTPUT:
-//  0 if the device does not exist.
-//  1 if the device exists.
-int contact::has_device(const cpp_string & to_find) {
+//  Returns the type of the device.
+device_type contact::has_device(const cpp_string & to_find) {
     device * current_device = nullptr;
-    return find_device(devices, to_find, current_device);
+    device_type current_type = device_type::none;
+
+    if(find_device(devices, to_find, current_device)) {
+        if(dynamic_cast<pager*>(current_device))
+            current_type = device_type::pager;
+        else if(dynamic_cast<cell_phone*>(current_device))
+            current_type = device_type::cell_phone;
+        else if(dynamic_cast<computer*>(current_device))
+            current_type = device_type::computer;
+    }
+    
+    return current_type;
 }
 
 
@@ -805,7 +825,7 @@ int contact_list::change_contact_name(const cpp_string & old_name,
 // OUTPUT:
 //  0 if the device fails to add.
 //  1 if the device adds.
-int contact_list::add_device(const cpp_string & to_contact, const device & to_add) {
+int contact_list::add_device(const cpp_string & to_contact, device & to_add) {
     contact * current_contact = nullptr;
 
     if(find_contact(contacts, to_contact, current_contact))
@@ -998,20 +1018,19 @@ int contact_list::has_contact(const cpp_string & to_find) {
 
         
 
-// Check if a contact has a device.
+// Check if a contact has a device and returns its type.
 // INPUT:
 //  in_contact: contact device is in
 //  to_find: device to find
 // OUTPUT:
-//  0 if the device is not found.
-//  1 if the device is found.
-int contact_list::has_device(const cpp_string & in_contact, const cpp_string & to_find) {
+//  Returns the device type.
+device_type contact_list::has_device(const cpp_string & in_contact, const cpp_string & to_find) {
     contact * current_contact = nullptr;
     
     if(find_contact(contacts, in_contact, current_contact))
         return current_contact->has_device(to_find);
 
-    return 0;
+    return device_type::none;
 }
 
 

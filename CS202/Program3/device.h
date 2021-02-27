@@ -8,6 +8,13 @@
 #define DEVICE_H
 #include "message_list.h"
 
+enum class device_type {
+    none,
+    pager,
+    cell_phone,
+    computer
+};
+
 enum class os_type {
     iphone,
     android,
@@ -52,8 +59,7 @@ class program {
 class device {
     public:
         device(void);
-        device(const cpp_string & new_name, 
-                const int new_price);
+        device(const cpp_string & new_name);
         device(const device & other_device);
         virtual ~device(void);
 
@@ -84,7 +90,6 @@ class device {
 
     private:
         cpp_string name; // name of the device
-        int price; // subscription price for the device
         message_list * messages;
         device * next; // next device in the list
 };
@@ -93,7 +98,6 @@ class pager : public device {
     public:
         pager(void);
         pager(const cpp_string & new_name,
-                const int new_price,
                 const cpp_string & new_number, 
                 const bool new_supports_text,
                 const bool new_two_way);
@@ -123,7 +127,6 @@ class cell_phone : public device {
     public:
         cell_phone(void);
         cell_phone(const cpp_string & new_name,
-                const int new_price,
                 const cpp_string & new_network, 
                 const cpp_string & new_number,
                 const os_type new_type);

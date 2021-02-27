@@ -175,7 +175,6 @@ int program::display(void) const {
 // Create a new device.
 device::device(void) : 
     name(""), 
-    price(0), 
     messages(new message_list(10)),
     next(nullptr) {
     }
@@ -185,11 +184,8 @@ device::device(void) :
 // Create a new device.
 // INPUT:
 //  new_name: the device name
-//  new_price: the device price
-device::device(const cpp_string & new_name, 
-        const int new_price) :
+device::device(const cpp_string & new_name) : 
     name(new_name),
-    price(new_price),
     messages(new message_list(10)),
     next(nullptr) {
     }
@@ -201,7 +197,6 @@ device::device(const cpp_string & new_name,
 //  other_device: the device to copy
 device::device(const device & other_device) :
     name(other_device.name),
-    price(other_device.price),
     messages(new message_list(*other_device.messages)),
     next(other_device.next) {
     }
@@ -211,7 +206,6 @@ device::device(const device & other_device) :
 // Delete the device.
 device::~device(void) {
     name = "";
-    price = 0;
     delete messages;
     messages = nullptr;
     next = nullptr;
@@ -229,7 +223,6 @@ device & device::operator=(const device & source) {
         return *this;
 
     name = source.name;
-    price = source.price;
     next = source.next;
     return *this;
 }
@@ -240,10 +233,9 @@ device & device::operator=(const device & source) {
 // INPUT:
 //  compare: the device to compare to
 // OUTPUT:
-//  Returns if the device names and prices match.
+//  Returns if the device names match.
 bool device::operator==(const device & compare) const {
-    return name == compare.name && 
-        price == compare.price;
+    return name == compare.name;
 }
 
 
@@ -348,7 +340,6 @@ int device::name_matches(const cpp_string & compare) const {
 //  1 when the device is displayed.
 int device::display(void) const {
     cout << "Device: " << name << endl;
-    cout << "Price: " << price << endl;
     return 1;
 }
 
@@ -372,16 +363,14 @@ pager::pager(void) : pager_number(""), supports_text(false), two_way(false) {}
 // Create a new pager.
 // INPUT:
 //  new_name: the name of the pager
-//  new_price: the price of the pager subscription
 //  new_number: the pager number
 //  new_supports_text: whether the pager supports text messages
 //  new_two_way: whether the pager supports two-way messaging
 pager::pager(const cpp_string & new_name, 
-        const int new_price, 
         const cpp_string & new_number, 
         const bool new_supports_text, 
         const bool new_two_way) :
-    device(new_name, new_price), 
+    device(new_name), 
     pager_number(new_number), 
     supports_text(new_supports_text), 
     two_way(new_two_way) {
@@ -504,16 +493,14 @@ cell_phone::cell_phone(void) :
 // Create a new cell phone.
 // INPUT:
 //  new_name: the cell phone name
-//  new_price: the cell phone subscription price
 //  new_network: the cell phone network
 //  new_number: the cell phone number
 //  new_type: the cell phone OS
 cell_phone::cell_phone(const cpp_string & new_name,
-        const int new_price,
         const cpp_string & new_network, 
         const cpp_string & new_number,
         const os_type new_type) :
-    device(new_name, new_price),
+    device(new_name),
     network(new_network),
     phone_number(new_number),
     phone_type(new_type) {
@@ -527,7 +514,8 @@ cell_phone::cell_phone(const cpp_string & new_name,
 cell_phone::cell_phone(const cell_phone & other_phone) :
     device(other_phone),
     network(other_phone.network),
-    phone_number(other_phone.phone_number) {
+    phone_number(other_phone.phone_number),
+    phone_type(other_phone.phone_type) {
     }
 
 
@@ -654,9 +642,7 @@ computer::computer(void) : programs(nullptr) {}
 // Create a new computer.
 // INPUT:
 //  new_name: computer name
-computer::computer(const cpp_string & new_name) : 
-    device(new_name, 0) {
-    }
+computer::computer(const cpp_string & new_name) : device(new_name) {}
 
 
 
