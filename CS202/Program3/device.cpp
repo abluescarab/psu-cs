@@ -347,7 +347,7 @@ int device::name_matches(const cpp_string & compare) const {
 // OUTPUT:
 //  1 when the device is displayed.
 int device::display(void) const {
-    cout << name << endl;
+    cout << "Device: " << name << endl;
     cout << "Price: " << price << endl;
     return 1;
 }

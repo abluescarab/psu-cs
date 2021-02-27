@@ -113,10 +113,11 @@ int display_menu(int menu) {
 // Add a device.
 // INPUT:
 //  new_contact: contact to add devices to
+//  result: the new device
 // OUTPUT:
 //  0 if unsuccessful.
 //  1 if successful.
-int add_device(contact & new_contact) {
+int add_device(device * & result) {
     int option = 0;
     bool quit = false;
     char input[INPUT_MAX] = "";
@@ -174,8 +175,6 @@ int add_device(contact & new_contact) {
         two_way = validate_yes();
 
         new_pager = new pager(name, price, number, supports_text, two_way);
-        new_contact.add_device(*new_pager);
-        delete new_pager;
     }
     else if(option == 2) { // cell phone
         cout << "Device subscription price: ";
@@ -203,8 +202,6 @@ int add_device(contact & new_contact) {
         option = validate_input(1, 5);
         phone_type = static_cast<os_type>(option);
         new_phone = new cell_phone(name, price, network, number, phone_type);
-        new_contact.add_device(*new_phone);
-        delete new_phone;
     }
     else { // computer
         new_computer = new computer(name);
@@ -233,14 +230,18 @@ int add_device(contact & new_contact) {
             else 
                 quit = true;
         }
-
-        new_contact.add_device(*new_computer);
-        delete new_computer;
     }
 
-    cout << "Successfully added " << name << " to ";
-    new_contact.display_name();
-    cout << endl;
+    if(new_pager) {
+        result = dynamic_cast<device*>(new_pager);
+    }
+    else if(new_phone) {
+        result = dynamic_cast<device*>(new_phone);
+    }
+    else {
+        result = dynamic_cast<device*>(new_computer);
+    }
+
     return 1;
 }
 
@@ -263,6 +264,7 @@ int main() {
 
     contact_list * contacts = new contact_list();
     contact * new_contact = nullptr;
+    device * new_device = nullptr;
 
     do {
         if(menu == 0) { // main menu
@@ -321,13 +323,20 @@ int main() {
                     cout << "Do you want to add a device to this contact? (y/n) ";
 
                     if(validate_yes()) {
-                        add_device(*new_contact);
+                        if(!add_device(new_device))
+                            cout << "Cancelled adding a new device." << endl;
+                        else
+                            new_contact->add_device(*new_device);
                     }
 
                     contacts->add_contact(*new_contact);
+                    delete new_device;
                     delete new_contact;
-                    current_contact = name;
+
                     cout << "Successfully added " << name << "." << endl;
+                    
+                    current_contact = name;
+                    menu = 1;
                     break;
                 case 4: // remove contact
                     cout << "Contact name: ";
@@ -389,8 +398,13 @@ int main() {
                     menu = 2;
                     break;
                 case 3: // add device
-                    // TODO: fix this call for just a name
-                    add_device(*new_contact);
+                    if(!add_device(new_device)) {
+                        cout << "Cancelled adding new device." << endl;
+                        break;
+                    }
+
+                    contacts->add_device(current_contact, *new_device);
+                    cout << "Successfully added " << new_device << "." << endl;
                     break;
                 case 4: // remove device
                     cout << "Device name: ";
@@ -440,7 +454,8 @@ int main() {
         else if(menu == 2) { // device menu
             switch(option) {
                 case 1: // display device info
-                    if(!contacts->display_device(current_device))
+                    // TODO: cast to right device type
+                    if(!contacts->display_device(current_contact, current_device))
                         cout << "Device is empty." << endl;
 
                     break;
@@ -454,11 +469,13 @@ int main() {
                         break;
                     }
 
-                    current_device->send_message(message);
-                    cout << "Successfully sent message." << endl;
+                    if(contacts->send_message(current_contact, current_device, message))
+                        cout << "Successfully sent message." << endl;
+                    else 
+                        cout << "Failed to send message." << endl;
                     break;
                 case 3: // display sent messages
-                    result = current_device->display_messages();
+                    result = contacts->display_messages(current_contact, current_device);
 
                     if(result == 0)
                         cout << "No messages found." << endl;
@@ -466,7 +483,7 @@ int main() {
                         cout << "Displayed " << result << " messages." << endl;
                     break;
                 case 4: // clear sent messages
-                    current_device->clear_messages();
+                    contacts->clear_messages(current_contact, current_device);
                     cout << "Cleared sent messages." << endl;
                     break;
                 case 8: // back

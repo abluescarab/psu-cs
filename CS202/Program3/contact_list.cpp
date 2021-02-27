@@ -365,6 +365,19 @@ int contact::display_device(const cpp_string & to_display) {
 
 
 
+// Check if a device exists.
+// INPUT:
+//  to_find: device name to find
+// OUTPUT:
+//  0 if the device does not exist.
+//  1 if the device exists.
+int contact::has_device(const cpp_string & to_find) {
+    device * current_device = nullptr;
+    return find_device(devices, to_find, current_device);
+}
+
+
+
 // Add a program to a device.
 // INPUT:
 //  to_device: name of the device to add to
@@ -426,6 +439,58 @@ int contact::clear_programs(const cpp_string from_device) {
         if(current_computer)
             return current_computer->clear_programs();
     }
+
+    return 0;
+}
+
+
+
+// Send a message to a device.
+// INPUT:
+//  to_device: device to send message to
+//  message: message to send
+// OUTPUT:
+//  0 if the message was not sent.
+//  1 if the message was sent.
+int contact::send_message(const cpp_string & to_device, const cpp_string & message) {
+    device * current_device = nullptr;
+
+    if(find_device(devices, to_device, current_device))
+        return current_device->send_message(message);
+
+    return 0;
+}
+
+
+
+// Clear messages from a device.
+// INPUT:
+//  from_device: device to clear messages from
+// OUTPUT:
+//  0 if the messages were not cleared.
+//  1 if the messages were cleared.
+int contact::clear_messages(const cpp_string & from_device) {
+    device * current_device = nullptr;
+
+    if(find_device(devices, from_device, current_device))
+        return current_device->clear_messages();
+
+    return 0;
+}
+
+
+
+// Display messages from a device.
+// INPUT:
+//  from_device: device to display messages from
+// OUTPUT:
+//  0 if the messages were not displayed.
+//  1 if the messages were displayed.
+int contact::display_messages(const cpp_string & from_device) {
+    device * current_device = nullptr;
+
+    if(find_device(devices, from_device, current_device))
+        return current_device->display_messages();
 
     return 0;
 }
@@ -874,7 +939,12 @@ int contact_list::clear_programs(const cpp_string & from_contact,
 int contact_list::send_message(const cpp_string & to_contact, 
         const cpp_string & to_device, 
         const cpp_string & message) {
-    // TODO
+    contact * current_contact = nullptr;
+
+    if(find_contact(contacts, to_contact, current_contact))
+        return current_contact->send_message(to_device, message);
+
+    return 0;
 }
 
 
@@ -888,7 +958,12 @@ int contact_list::send_message(const cpp_string & to_contact,
 //  1 if the messages were cleared.
 int contact_list::clear_messages(const cpp_string & from_contact, 
         const cpp_string & from_device) {
-    // TODO
+    contact * current_contact = nullptr;
+
+    if(find_contact(contacts, from_contact, current_contact))
+        return current_contact->clear_messages(from_device);
+
+    return 0;
 }
 
 
@@ -901,7 +976,12 @@ int contact_list::clear_messages(const cpp_string & from_contact,
 //  Return result of display function.
 int contact_list::display_messages(const cpp_string & from_contact, 
         const cpp_string & from_device) {
-    // TODO
+    contact * current_contact = nullptr;
+
+    if(find_contact(contacts, from_contact, current_contact))
+        return current_contact->display_messages(from_device);
+
+    return 0;
 }
 
 
@@ -926,10 +1006,10 @@ int contact_list::has_contact(const cpp_string & to_find) {
 //  0 if the device is not found.
 //  1 if the device is found.
 int contact_list::has_device(const cpp_string & in_contact, const cpp_string & to_find) {
-    contact * result = nullptr;
+    contact * current_contact = nullptr;
     
-    if(find_contact(contacts, in_contact, result))
-        return result->has_device(to_find);
+    if(find_contact(contacts, in_contact, current_contact))
+        return current_contact->has_device(to_find);
 
     return 0;
 }
@@ -1005,7 +1085,7 @@ int contact_list::find_contact(contact * & current,
         return 0;
 
     if(current->matches(to_find)) {
-        result = new contact(*current);
+        result = current;
         return 1;
     }
 

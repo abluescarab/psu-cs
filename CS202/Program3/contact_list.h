@@ -56,6 +56,12 @@ class contact {
         int remove_program(const cpp_string from_device, const cpp_string & to_remove);
         // Clear programs from a device.
         int clear_programs(const cpp_string from_device);
+        // Send a message to a device.
+        int send_message(const cpp_string & to_device, const cpp_string & message);
+        // Clear messages from a device.
+        int clear_messages(const cpp_string & from_device);
+        // Display messages from a device.
+        int display_messages(const cpp_string & from_device);
         // Check if the contact has data.
         int is_empty(void) const;
         // Check if a contact matches another contact.
