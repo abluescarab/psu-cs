@@ -1,8 +1,8 @@
-/* Alana Gilston
+/* Alana Gilston - 2/16/2021 - CS202 - Program 3
  * cpp_string.cpp
  *
  * This is the implementation file for the cpp_string class. The cpp_string 
- * class manages a resizeable string object.
+ * class manages a resizeable string object backed by character arrays.
  */
 #include <cstring>
 #include <iostream>

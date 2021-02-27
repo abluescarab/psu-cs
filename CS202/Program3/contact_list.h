@@ -43,9 +43,19 @@ class contact {
         // Add a device.
         int add_device(const device & to_add);
         // Remove a device.
-        int remove_device(const device & to_remove);
+        int remove_device(const cpp_string & to_remove);
         // Clear all devices.
         int clear_devices(void);
+        // Display a device.
+        int display_device(const cpp_string & to_display);
+        // Check if a device exists.
+        int has_device(const cpp_string & to_find);
+        // Add a program to a device.
+        int add_program(const cpp_string to_device, const program & to_add);
+        // Remove a program from a device.
+        int remove_program(const cpp_string from_device, const cpp_string & to_remove);
+        // Clear programs from a device.
+        int clear_programs(const cpp_string from_device);
         // Check if the contact has data.
         int is_empty(void) const;
         // Check if a contact matches another contact.
@@ -61,9 +71,11 @@ class contact {
         // Add a device recursively.
         int add_device(device * & current, const device & to_add);
         // Remove a device recursively.
-        int remove_device(device * & current, const device & to_remove);
+        int remove_device(device * & current, const cpp_string & to_remove);
         // Clear devices recursively.
         int clear_devices(device * & current);
+        // Find and return a device recursively.
+        int find_device(device * & current, const cpp_string & to_find, device * & result);
         // Copy devices recursively.
         int copy_devices(device * & current, device & other_current);
         // Display devices recursively.
@@ -89,28 +101,59 @@ class contact_list {
                 const contact_list & source);
 
         // Add contact.
-        int add(const contact & to_add);
+        int add_contact(const contact & to_add);
         // Remove contact.
-        int remove(const cpp_string & to_remove);
+        int remove_contact(const cpp_string & to_remove);
+        // Display a contact.
+        int display_contact(const cpp_string & to_display);
+        // Change the contact's name.
+        int change_contact_name(const cpp_string & old_name, const cpp_string & new_name);
+        // Add a device to a contact.
+        int add_device(const cpp_string & to_contact, const device & to_add);
+        // Remove a device from a contact.
+        int remove_device(const cpp_string & from_contact, const cpp_string & to_remove);
+        // Clear devices from a contact.
+        int clear_devices(const cpp_string & from_contact);
+        // Display a device.
+        int display_device(const cpp_string & from_contact, const cpp_string & to_display);
+        // Add a program to a device.
+        int add_program(const cpp_string & to_contact, 
+                const cpp_string & to_device, 
+                const program & to_add);
+        // Remove a program from a device.
+        int remove_program(const cpp_string & from_contact,
+                const cpp_string & from_device,
+                const cpp_string & to_remove);
+        // Clear programs from a device.
+        int clear_programs(const cpp_string & from_contact, const cpp_string & from_device);
+        // Send a message to a device.
+        int send_message(const cpp_string & to_contact, 
+                const cpp_string & to_device, 
+                const cpp_string & message);
+        // Clear messages from a device.
+        int clear_messages(const cpp_string & from_contact, const cpp_string & from_device);
+        // Display messages from a device.
+        int display_messages(const cpp_string & from_contact, const cpp_string & from_device);
+        // Check if the list contains a contact.
+        int has_contact(const cpp_string & to_find);
+        // Check if a contact has a device.
+        int has_device(const cpp_string & in_contact, const cpp_string & to_find);
         // Clear contacts.
-        int clear(void);
+        int clear_contacts(void);
         // Display entire contact list.
         int display(void);
-        // Find a contact.
-        int find(const cpp_string & to_find, contact * & result);
 
     private:
         // Add contact recursively.
-        int add(contact * & current, const contact & to_add);
-        int remove(contact * & root, const contact & to_remove);
+        int add_contact(contact * & current, const contact & to_add);
         // Remove contact recursively.
-        int remove(contact * & current, contact * & parent, const contact & to_remove);
+        int remove_contact(contact * & current, contact * & parent, const contact & to_remove);
         // Clear contacts recursively.
-        int clear(contact * & current);
+        int clear_contacts(contact * & current);
         // Display entire contact list recursively.
         int display(contact * & current);
         // Find a contact recursively.
-        int find(contact * & current, const cpp_string & to_find, contact * & result);
+        int find_contact(contact * & current, const cpp_string & to_find, contact * & result);
         // Copy contacts from another list recursively.
         int copy_contacts(contact * & current, contact & other_current);
         // Get the inorder successor of the current contact.

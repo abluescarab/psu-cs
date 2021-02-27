@@ -37,7 +37,9 @@ class program {
         // Check if the program is empty.
         int is_empty(void) const;
         // Check if the program name matches another program.
-        int name_matches(const program & other_program);
+        int program_matches(const program & other_program);
+        // Check if the program name matches another name.
+        int program_matches(const cpp_string & other_name);
         // Display the program.
         int display(void) const;
 
@@ -73,6 +75,8 @@ class device {
         int clear_messages(void);
         // Check if the device is empty.
         int is_empty(void) const;
+        // Check if name matches another.
+        int name_matches(const cpp_string & compare) const;
         // Display the device.
         virtual int display(void) const;
         // Display the device name.
@@ -155,7 +159,7 @@ class computer : public device {
         // Add a program to the computer.
         int add_program(const program & to_add);
         // Remove a program from the computer.
-        int remove_program(const program & to_remove);
+        int remove_program(const cpp_string & to_remove);
         // Clear all programs from the computer.
         int clear_programs(void);
         // Display the computer.
@@ -165,7 +169,7 @@ class computer : public device {
         // Add a program recursively.
         int add_program(program * & current, const program & to_add);
         // Remove a program recursively.
-        int remove_program(program * & current, const program & to_remove);
+        int remove_program(program * & current, const cpp_string & to_remove);
         // Clear all programs recursively.
         int clear_programs(program * & current);
         // Display programs recursively.

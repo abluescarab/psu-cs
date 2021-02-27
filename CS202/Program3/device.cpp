@@ -1,7 +1,8 @@
 /* Alana Gilston - 2/16/2021 - CS202 - Program 3
  * device.cpp
  *
- *
+ * This is the implementation file for the device class. The device class is 
+ * one that manages a contact's device and its corresponding data.
  */
 #include <iostream>
 #include <iomanip>
@@ -12,10 +13,15 @@ using namespace std;
 
 
 
+// Create a new program.
 program::program(void) : program_name(""), username(""), next(nullptr) {}
 
 
 
+// Create a new program.
+// INPUT:
+//  new_program_name: the program name
+//  new_username: the program username
 program::program(const cpp_string & new_program_name, 
         const cpp_string & new_username) :
     program_name(new_program_name),
@@ -25,6 +31,9 @@ program::program(const cpp_string & new_program_name,
 
 
 
+// Create a new program.
+// INPUT:
+//  other_program: the program to copy from
 program::program(const program & other_program) :
     program_name(other_program.program_name),
     username(other_program.username),
@@ -33,6 +42,7 @@ program::program(const program & other_program) :
 
 
 
+// Delete the program.
 program::~program(void) {
     program_name = "";
     username = "";
@@ -41,6 +51,11 @@ program::~program(void) {
 
 
 
+// Assignment operator.
+// INPUT:
+//  source: the program to copy
+// OUTPUT:
+//  Returns the current program.
 program & program::operator=(const program & source) {
     if(this == &source)
         return *this;
@@ -53,6 +68,11 @@ program & program::operator=(const program & source) {
 
 
 
+// Equality operator.
+// INPUT: 
+//  compare: the program to compare to
+// OUTPUT:
+//  Returns if the program names and usernames match.
 bool program::operator==(const program & compare) const {
     return program_name == compare.program_name &&
         username == compare.username;
@@ -60,6 +80,12 @@ bool program::operator==(const program & compare) const {
 
 
 
+// Input operator.
+// INPUT:
+//  in: the istream object
+//  in_program: the program to input
+// OUTPUT:
+//  Returns the istream object.
 std::istream & operator>>(std::istream & in, program & in_program) {
     char temp[MAX_INPUT];
 
@@ -69,6 +95,13 @@ std::istream & operator>>(std::istream & in, program & in_program) {
 }
 
 
+
+// Output operator.
+// INPUT:
+//  out: the ostream object
+//  out_program: the program to output
+// OUTPUT:
+//  Returns the ostream object.
 std::ostream & operator<<(std::ostream & out, const program & out_program) {
     out << out_program.program_name;
     return out;
@@ -77,6 +110,10 @@ std::ostream & operator<<(std::ostream & out, const program & out_program) {
 
 
 // Set the next program.
+// INPUT:
+//  new_program: the program to set in the next node
+// OUTPUT:
+//  1 when the program is set.
 int program::set_next(const program & new_program) {
     next = new program(new_program);
     return 1;
@@ -85,6 +122,8 @@ int program::set_next(const program & new_program) {
 
 
 // Get the next program.
+// OUTPUT:
+//  Returns the next program.
 program * & program::get_next(void) {
     return next;
 }
@@ -92,6 +131,8 @@ program * & program::get_next(void) {
 
 
 // Check if the program is empty.
+// OUTPUT:
+//  Returns if the program name is empty.
 int program::is_empty(void) const {
     return program_name.is_empty();
 }
@@ -99,13 +140,30 @@ int program::is_empty(void) const {
 
 
 // Check if the program name matches another program.
-int program::name_matches(const program & other_program) {
+// INPUT:
+//  other_program: the other program to compare to
+// OUTPUT:
+//  Returns if the program names match.
+int program::program_matches(const program & other_program) {
     return program_name == other_program.program_name;
 }
 
 
 
+// Check if the program name matches another name.
+// INPUT:
+//  other_name: name to compare to
+// OUTPUT:
+//  Returns if the names match.
+int program::program_matches(const cpp_string & other_name) {
+    return program_name == other_name;
+}
+
+
+
 // Display the program.
+// OUTPUT:
+//  1 when the program is displayed.
 int program::display(void) const {
     cout << "Program: " << program_name << endl;
     cout << "Username: " << username << endl;
@@ -114,6 +172,7 @@ int program::display(void) const {
 
 
 
+// Create a new device.
 device::device(void) : 
     name(""), 
     price(0), 
@@ -123,6 +182,10 @@ device::device(void) :
 
 
 
+// Create a new device.
+// INPUT:
+//  new_name: the device name
+//  new_price: the device price
 device::device(const cpp_string & new_name, 
         const int new_price) :
     name(new_name),
@@ -133,24 +196,34 @@ device::device(const cpp_string & new_name,
 
 
 
+// Create a new device.
+// INPUT:
+//  other_device: the device to copy
 device::device(const device & other_device) :
     name(other_device.name),
     price(other_device.price),
-    messages(other_device.messages),
+    messages(new message_list(*other_device.messages)),
     next(other_device.next) {
     }
 
 
 
+// Delete the device.
 device::~device(void) {
     name = "";
     price = 0;
     delete messages;
+    messages = nullptr;
     next = nullptr;
 }
 
 
 
+// Assignment operator.
+// INPUT:
+//  source: the device to copy
+// OUTPUT:
+//  Returns the current device.
 device & device::operator=(const device & source) {
     if(this == &source)
         return *this;
@@ -163,6 +236,11 @@ device & device::operator=(const device & source) {
 
 
 
+// Equality operator.
+// INPUT:
+//  compare: the device to compare to
+// OUTPUT:
+//  Returns if the device names and prices match.
 bool device::operator==(const device & compare) const {
     return name == compare.name && 
         price == compare.price;
@@ -170,6 +248,12 @@ bool device::operator==(const device & compare) const {
 
 
 
+// Input operator.
+// INPUT:
+//  in: the istream object
+//  in_device: the device to input
+// OUTPUT:
+//  Returns the istream object.
 std::istream & operator>>(std::istream & in, device & in_device) {
     char temp[MAX_INPUT];
 
@@ -180,6 +264,12 @@ std::istream & operator>>(std::istream & in, device & in_device) {
 
 
 
+// Output operator.
+// INPUT:
+//  out: the ostream object
+//  out_device: the device to output
+// OUTPUT:
+//  Returns the ostream object.
 std::ostream & operator<<(std::ostream & out, const device & out_device) {
     out << out_device.name;
     return out;
@@ -188,6 +278,10 @@ std::ostream & operator<<(std::ostream & out, const device & out_device) {
 
 
 // Set next device.
+// INPUT:
+//  new_device: the device to add
+// OUTPUT:
+//  1 when the device is added.
 int device::set_next(const device & new_device) {
     next = new device(new_device);
     return 1;
@@ -196,6 +290,8 @@ int device::set_next(const device & new_device) {
 
 
 // Get next device.
+// OUTPUT:
+//  Returns the next device.
 device * & device::get_next(void) {
     return next;
 }
@@ -203,6 +299,10 @@ device * & device::get_next(void) {
 
 
 // Send a new message.
+// INPUT:
+//  to_send: the message to send
+// OUTPUT:
+//  Returns the result of the send function.
 int device::send_message(const cpp_string & to_send) {
     return messages->send(to_send);
 }
@@ -210,6 +310,8 @@ int device::send_message(const cpp_string & to_send) {
 
 
 // Display all sent messages.
+// OUTPUT:
+//  Returns the result of the display function.
 int device::display_messages(void) const {
     return messages->display();
 }
@@ -217,6 +319,8 @@ int device::display_messages(void) const {
 
 
 // Clear all messages.
+// OUTPUT:
+//  Returns the result of the clear function.
 int device::clear_messages(void) {
     return messages->clear();
 }
@@ -224,13 +328,24 @@ int device::clear_messages(void) {
 
 
 // Check if the device is empty.
+// OUTPUT:
+//  Returns if the name is empty.
 int device::is_empty(void) const {
     return name.is_empty();
 }
 
 
 
+// Check if name matches another.
+int device::name_matches(const cpp_string & compare) const {
+    return name == compare;
+}
+
+
+
 // Display the device.
+// OUTPUT:
+//  1 when the device is displayed.
 int device::display(void) const {
     cout << name << endl;
     cout << "Price: " << price << endl;
@@ -240,6 +355,8 @@ int device::display(void) const {
 
 
 // Display the device name.
+// OUTPUT:
+//  1 when the device name is displayed.
 int device::display_name(void) const {
     cout << name << endl;
     return 1;
@@ -247,9 +364,18 @@ int device::display_name(void) const {
 
 
 
+// Create a new pager.
 pager::pager(void) : pager_number(""), supports_text(false), two_way(false) {}
 
 
+
+// Create a new pager.
+// INPUT:
+//  new_name: the name of the pager
+//  new_price: the price of the pager subscription
+//  new_number: the pager number
+//  new_supports_text: whether the pager supports text messages
+//  new_two_way: whether the pager supports two-way messaging
 pager::pager(const cpp_string & new_name, 
         const int new_price, 
         const cpp_string & new_number, 
@@ -263,6 +389,9 @@ pager::pager(const cpp_string & new_name,
 
 
 
+// Create a new pager.
+// INPUT:
+//  other_pager: pager to copy
 pager::pager(const pager & other_pager) :
     device(other_pager),
     pager_number(other_pager.pager_number),
@@ -272,6 +401,7 @@ pager::pager(const pager & other_pager) :
 
 
 
+// Delete the pager.
 pager::~pager(void) {
     pager_number = "";
     supports_text = false;
@@ -280,6 +410,11 @@ pager::~pager(void) {
 
 
 
+// Assignment operator.
+// INPUT:
+//  source: the pager to copy
+// OUTPUT:
+//  Returns the current pager.
 pager & pager::operator=(const pager & source) {
     if(this == &source)
         return *this;
@@ -293,6 +428,11 @@ pager & pager::operator=(const pager & source) {
 
 
 
+// Equality operator.
+// INPUT:
+//  compare: the pager to compare to
+// OUTPUT:
+//  Returns if the pagers match.
 bool pager::operator==(const pager & compare) const {
     return device::operator==(compare) && 
         pager_number == compare.pager_number && 
@@ -303,6 +443,10 @@ bool pager::operator==(const pager & compare) const {
 
 
 // Change the pager number.
+// INPUT:
+//  new_number: the number to change to
+// OUTPUT:
+//  1 when the number is changed.
 int pager::change_number(const cpp_string & new_number) {
     pager_number = new_number;
     return 1;
@@ -311,6 +455,10 @@ int pager::change_number(const cpp_string & new_number) {
 
 
 // Change if the pager supports text messages.
+// INPUT:
+//  new_supports_text: whether the pager supports text messages
+// OUTPUT:
+//  1 when the value is changed.
 int pager::change_supports_text(const bool new_supports_text) {
     supports_text = new_supports_text;
     return 1;
@@ -319,6 +467,10 @@ int pager::change_supports_text(const bool new_supports_text) {
 
 
 // Change if the pager is two-way.
+// INPUT:
+//  new_two_way: whether the pager supports two-way messaging
+// OUTPUT:
+//  1 when the value is changed.
 int pager::change_two_way(const bool new_two_way) {
     two_way = new_two_way;
     return 1;
@@ -327,6 +479,8 @@ int pager::change_two_way(const bool new_two_way) {
 
 
 // Display the pager.
+// OUTPUT:
+//  1 when the pager is displayed.
 int pager::display(void) const {
     device::display();
 
@@ -338,6 +492,7 @@ int pager::display(void) const {
 
 
 
+// Create a new cell phone.
 cell_phone::cell_phone(void) : 
     network(""), 
     phone_number(""), 
@@ -346,6 +501,13 @@ cell_phone::cell_phone(void) :
 
 
 
+// Create a new cell phone.
+// INPUT:
+//  new_name: the cell phone name
+//  new_price: the cell phone subscription price
+//  new_network: the cell phone network
+//  new_number: the cell phone number
+//  new_type: the cell phone OS
 cell_phone::cell_phone(const cpp_string & new_name,
         const int new_price,
         const cpp_string & new_network, 
@@ -359,6 +521,9 @@ cell_phone::cell_phone(const cpp_string & new_name,
 
 
 
+// Create a new cell phone.
+// INPUT:
+//  other_phone: the phone to copy from
 cell_phone::cell_phone(const cell_phone & other_phone) :
     device(other_phone),
     network(other_phone.network),
@@ -367,6 +532,7 @@ cell_phone::cell_phone(const cell_phone & other_phone) :
 
 
 
+// Delete the cell phone.
 cell_phone::~cell_phone(void) {
     network = "";
     phone_number = "";
@@ -375,6 +541,11 @@ cell_phone::~cell_phone(void) {
 
 
 
+// Assignment operator.
+// INPUT:
+//  source: the cell phone to copy
+// OUTPUT:
+//  Returns the current cell phone.
 cell_phone & cell_phone::operator=(const cell_phone & source) {
     if(this == &source)
         return *this;
@@ -388,6 +559,11 @@ cell_phone & cell_phone::operator=(const cell_phone & source) {
 
 
 
+// Equality operator.
+// INPUT:
+//  compare: the cell phone to compare to
+// OUTPUT:
+//  Whether the cell phones match.
 bool cell_phone::operator==(const cell_phone & compare) const {
     return device::operator==(compare) &&
         network == compare.network &&
@@ -398,6 +574,10 @@ bool cell_phone::operator==(const cell_phone & compare) const {
 
 
 // Change the phone network.
+// INPUT:
+//  new_network: the cell phone network
+// OUTPUT:
+//  1 when the network is changed.
 int cell_phone::change_network(const cpp_string & new_network) {
     network = new_network;
     return 1;
@@ -406,6 +586,10 @@ int cell_phone::change_network(const cpp_string & new_network) {
 
 
 // Change the phone number.
+// INPUT:
+//  new_number: the cell phone number
+// OUTPUT:
+//  1 when the number is changed.
 int cell_phone::change_number(const cpp_string & new_number) {
     phone_number = new_number;
     return 1;
@@ -414,6 +598,10 @@ int cell_phone::change_number(const cpp_string & new_number) {
 
 
 // Change the phone's OS.
+// INPUT:
+//  new_type: the phone OS
+// OUTPUT:
+//  1 when the OS is changed.
 int cell_phone::change_type(const os_type new_type) {
     phone_type = new_type;
     return 1;
@@ -422,6 +610,8 @@ int cell_phone::change_type(const os_type new_type) {
 
 
 // Display the phone.
+// OUTPUT:
+//  1 when the cell phone is displayed.
 int cell_phone::display(void) const {
     device::display();
 
@@ -456,16 +646,23 @@ int cell_phone::display(void) const {
 
 
 
+// Create a new computer.
 computer::computer(void) : programs(nullptr) {}
 
 
 
+// Create a new computer.
+// INPUT:
+//  new_name: computer name
 computer::computer(const cpp_string & new_name) : 
     device(new_name, 0) {
     }
 
 
 
+// Create a new computer.
+// INPUT:
+//  other_computer: the computer to copy
 computer::computer(const computer & other_computer) :
     device(other_computer),
     programs(nullptr) {
@@ -474,6 +671,7 @@ computer::computer(const computer & other_computer) :
 
 
 
+// Delete the computer.
 computer::~computer(void) {
     clear_programs();
 }
@@ -481,6 +679,11 @@ computer::~computer(void) {
 
 
 // Add a program to the computer.
+// INPUT:
+//  to_add: the program to add
+// OUTPUT:
+//  0 if the program to add is empty.
+//  Otherwise returns the result of the recursive function.
 int computer::add_program(const program & to_add) {
     if(to_add.is_empty())
         return 0;
@@ -491,6 +694,11 @@ int computer::add_program(const program & to_add) {
 
 
 // Add a program recursively.
+// INPUT:
+//  current: the current program
+//  to_add: the program to add
+// OUTPUT:
+//  1 when the program is added.
 int computer::add_program(program * & current, const program & to_add) {
     if(!current) {
         current = new program(to_add);
@@ -503,7 +711,12 @@ int computer::add_program(program * & current, const program & to_add) {
 
 
 // Remove a program from the computer.
-int computer::remove_program(const program & to_remove) {
+// INPUT:
+//  to_remove: the program to remove
+// OUTPUT:
+//  0 if the program to remove does not exist.
+//  Otherwise returns the result of the recursive function.
+int computer::remove_program(const cpp_string & to_remove) {
     if(to_remove.is_empty())
         return 0;
 
@@ -513,13 +726,19 @@ int computer::remove_program(const program & to_remove) {
 
 
 // Remove a program recursively.
-int computer::remove_program(program * & current, const program & to_remove) {
+// INPUT:
+//  current: the current program
+//  to_remove: the program to remove
+// OUTPUT:
+//  0 if the program to remove does not exist.
+//  1 if the program is deleted.
+int computer::remove_program(program * & current, const cpp_string & to_remove) {
     if(!current)
         return 0;
 
     program * temp = current->get_next();
 
-    if(current->name_matches(to_remove)) {
+    if(current->program_matches(to_remove)) {
         delete current;
         current = temp;
         return 1;
@@ -531,6 +750,9 @@ int computer::remove_program(program * & current, const program & to_remove) {
 
 
 // Clear all programs from the computer.
+// OUTPUT:
+//  0 if there are no programs.
+//  Otherwise returns the result of the recursive function.
 int computer::clear_programs(void) {
     if(!programs)
         return 0;
@@ -541,6 +763,10 @@ int computer::clear_programs(void) {
 
 
 // Clear all programs recursively.
+// INPUT:
+//  current: the current program
+// OUTPUT:
+//  Returns the number of programs removed.
 int computer::clear_programs(program * & current) {
     if(!current)
         return 0;
@@ -554,6 +780,9 @@ int computer::clear_programs(program * & current) {
 
 
 // Display the computer.
+// OUTPUT:
+//  0 if the computer is empty.
+//  Otherwise returns the result of the recursive function.
 int computer::display(void) {
     if(is_empty())
         return 0;
@@ -565,6 +794,10 @@ int computer::display(void) {
 
 
 // Display programs recursively.
+// INPUT:
+//  current: the current program
+// OUTPUT:
+//  Returns the number of programs displayed.
 int computer::display(program * & current) {
     if(!current)
         return 0;
@@ -576,6 +809,11 @@ int computer::display(program * & current) {
 
 
 // Copy programs from another computer.
+// INPUT:
+//  current: the current program
+//  other_current: the other current program
+// OUTPUT:
+//  Returns the number of programs copied.
 int computer::copy_programs(program * & current, program & other_current) {
     current = new program(other_current);
     return copy_programs(current->get_next(), *other_current.get_next()) +  1;

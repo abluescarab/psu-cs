@@ -36,13 +36,14 @@ int display_menu(int menu, device * & current_device, device_type & submenu) {
     switch(menu) {
         case 1: // contact menu
             cout << "1) Display contact info" << endl;
-            cout << "2) Add device" << endl;
-            cout << "3) Remove device" << endl;
-            cout << "4) Clear devices" << endl;
-            cout << "5) Change contact name" << endl;
-            cout << "6) Back" << endl;
+            cout << "2) Manage device" << endl;
+            cout << "3) Add device" << endl;
+            cout << "4) Remove device" << endl;
+            cout << "5) Clear devices" << endl;
+            cout << "6) Change contact name" << endl;
+            cout << "7) Back" << endl;
 
-            max_option = 6;
+            max_option = 7;
             break;
         case 2: // device menu
             cout << "1) Display device info" << endl;
@@ -111,11 +112,11 @@ int display_menu(int menu) {
 
 // Add a device.
 // INPUT:
-//  current_contact: contact to add devices to
+//  new_contact: contact to add devices to
 // OUTPUT:
 //  0 if unsuccessful.
 //  1 if successful.
-int add_device(contact & current_contact) {
+int add_device(contact & new_contact) {
     int option = 0;
     bool quit = false;
     char input[INPUT_MAX] = "";
@@ -173,7 +174,7 @@ int add_device(contact & current_contact) {
         two_way = validate_yes();
 
         new_pager = new pager(name, price, number, supports_text, two_way);
-        current_contact.add_device(*new_pager);
+        new_contact.add_device(*new_pager);
         delete new_pager;
     }
     else if(option == 2) { // cell phone
@@ -202,7 +203,7 @@ int add_device(contact & current_contact) {
         option = validate_input(1, 5);
         phone_type = static_cast<os_type>(option);
         new_phone = new cell_phone(name, price, network, number, phone_type);
-        current_contact.add_device(*new_phone);
+        new_contact.add_device(*new_phone);
         delete new_phone;
     }
     else { // computer
@@ -233,12 +234,12 @@ int add_device(contact & current_contact) {
                 quit = true;
         }
 
-        current_contact.add_device(*new_computer);
+        new_contact.add_device(*new_computer);
         delete new_computer;
     }
 
     cout << "Successfully added " << name << " to ";
-    current_contact.display_name();
+    new_contact.display_name();
     cout << endl;
     return 1;
 }
@@ -253,28 +254,28 @@ int main() {
     int submenu = 0;
     int result = 0;
 
+    // current vars
+    cpp_string current_contact;
+    cpp_string current_device;
     // individual details
     cpp_string name;
     cpp_string message;
 
     contact_list * contacts = new contact_list();
-    contact * current_contact = nullptr;
-    device * current_device = nullptr;
+    contact * new_contact = nullptr;
 
     do {
         if(menu == 0) { // main menu
             cout << "Contact Device List" << endl;
-            cout << "-------------------" << endl;
+            cout << "------------------------------------------------" << endl;
         }
         else if(menu == 1) { // contact menu
-            cout << "Current contact: ";
-            current_contact->display_name();
-            cout << "------------------" << endl;
+            cout << "Current contact: " << current_contact << endl;
+            cout << "------------------------------------------------" << endl;
         }
         else if(menu == 2) { // device menu
-            cout << "Current device: ";
-            current_device->display_name();
-            cout << "-----------------" << endl;
+            cout << "Current device: " << current_device << endl;
+            cout << "------------------------------------------------" << endl;
         }
 
         option = display_menu(menu);
@@ -291,14 +292,14 @@ int main() {
                         cout << "Invalid name." << endl;
                         break;
                     }
-                    
-                    if(contacts->find(name, current_contact)) {
-                        menu = 1;
-                    }
-                    else {
+
+                    if(!contacts->has_contact(name)) {
                         cout << "Contact not found." << endl;
+                        break;
                     }
 
+                    current_contact = name;
+                    menu = 1;
                     break;
                 case 2: // display contacts
                     result = contacts->display();
@@ -311,20 +312,21 @@ int main() {
                     name = input;
 
                     if(name.is_empty()) {
-                        cout << "Invalid name." << endl;
+                        cout << "Cancelled adding new contact." << endl;
                         break;
                     }
 
-                    delete current_contact;
-                    current_contact = new contact(name);
+                    new_contact = new contact(name);
 
                     cout << "Do you want to add a device to this contact? (y/n) ";
 
                     if(validate_yes()) {
-                        add_device(*current_contact);
+                        add_device(*new_contact);
                     }
 
-                    contacts->add(*current_contact);
+                    contacts->add_contact(*new_contact);
+                    delete new_contact;
+                    current_contact = name;
                     cout << "Successfully added " << name << "." << endl;
                     break;
                 case 4: // remove contact
@@ -333,11 +335,11 @@ int main() {
                     name = input;
 
                     if(name.is_empty()) {
-                        cout << "Invalid name." << endl;
+                        cout << "Cancelled removing contact." << endl;
                         break;
                     }
 
-                    if(contacts->remove(name))
+                    if(contacts->remove_contact(name))
                         cout << "Successfully removed " << name << "." << endl;
                     else
                         cout << name << " not found." << endl;
@@ -346,7 +348,7 @@ int main() {
                     cout << "Are you sure you want to clear all contacts? (y/n) " << endl;
 
                     if(validate_yes()) {
-                        result = contacts->clear();
+                        result = contacts->clear_contacts();
 
                         if(result > 0)
                             cout << "Successfully deleted " << result << " contacts." << endl;
@@ -366,16 +368,68 @@ int main() {
         else if(menu == 1) { // contact menu
             switch(option) {
                 case 1: // display contact info
+                    contacts->display_contact(current_contact);
                     break;
-                case 2: // add device
+                case 2: // manage device
+                    cout << "Device name: ";
+                    cin.getline(input, INPUT_MAX);
+                    name = input;
+
+                    if(name.is_empty()) {
+                        cout << "Invalid name." << endl;
+                        break;
+                    }
+
+                    if(!contacts->has_device(current_contact, name)) {
+                        cout << "Device not found." << endl;
+                        break;
+                    }
+
+                    current_device = name;
+                    menu = 2;
                     break;
-                case 3: // remove device
+                case 3: // add device
+                    // TODO: fix this call for just a name
+                    add_device(*new_contact);
                     break;
-                case 4: // clear devices
+                case 4: // remove device
+                    cout << "Device name: ";
+                    cin.getline(input, INPUT_MAX);
+                    name = input;
+
+                    if(name.is_empty()) {
+                        cout << "Cancelled removing device." << endl;
+                        break;
+                    }
+
+                    if(contacts->remove_device(current_contact, name))
+                        cout << "Successfully removed " << name << "." << endl;
+                    else
+                        cout << "Could not find " << name << "." << endl;
                     break;
-                case 5: // change contact name
+                case 5: // clear devices
+                    result = contacts->clear_devices(current_contact);
+
+                    if(result == 0)
+                        cout << "No devices to remove." << endl;
+                    else
+                        cout << "Removed " << result << " devices." << endl;
                     break;
-                case 6: // back
+                case 6: // change contact name
+                    cout << "Contact name: ";
+                    cin.getline(input, INPUT_MAX);
+                    name = input;
+
+                    if(name.is_empty()) {
+                        cout << "Cancelled changing contact name." << endl;
+                        break;
+                    }
+                            
+                    contacts->change_contact_name(current_contact, name);
+                    current_contact = name;
+                    cout << "Changed name to " << name << "." << endl;
+                    break;
+                case 7: // back
                     menu = 0;
                     break;
                 default:
@@ -386,8 +440,9 @@ int main() {
         else if(menu == 2) { // device menu
             switch(option) {
                 case 1: // display device info
-                    if(!current_device || !current_device->display())
+                    if(!contacts->display_device(current_device))
                         cout << "Device is empty." << endl;
+
                     break;
                 case 2: // send message
                     cout << "Message to send: ";
@@ -412,6 +467,7 @@ int main() {
                     break;
                 case 4: // clear sent messages
                     current_device->clear_messages();
+                    cout << "Cleared sent messages." << endl;
                     break;
                 case 8: // back
                     menu = 1;
@@ -426,11 +482,5 @@ int main() {
     } while(!quit);
 
     delete contacts;
-
-    if(current_contact)
-        delete current_contact;
-
-    if(current_device)
-        delete current_device;
     return 0;
 }

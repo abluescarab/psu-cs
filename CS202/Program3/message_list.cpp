@@ -1,7 +1,8 @@
 /* Alana Gilston - 2/21/2021 - CS202 - Program 3
  * message_list.cpp
  *
- *
+ * This is the implementation file for the message_list class. The message_list
+ * manages a list of messages that a device receives.
  */
 #include <iostream>
 #include "message_list.h"
@@ -10,12 +11,16 @@ using namespace std;
 
 
 
+// Create a new message list.
 message_list::message_list(void) : max_messages(10), sent_messages(new cpp_string[10]) { 
     clear();
 }
 
 
 
+// Create a new message list.
+// INPUT:
+//  new_max_messages: the number of messages supported by the list
 message_list::message_list(const size_t new_max_messages) :
     sent_messages(nullptr) {
         if(new_max_messages <= 0)
@@ -29,21 +34,21 @@ message_list::message_list(const size_t new_max_messages) :
 
 
 
+// Create a new message list.
+// INPUT:
+//  other_list: the other message list to copy
 message_list::message_list(const message_list & other_list) :
     max_messages(other_list.max_messages),
     sent_messages(new cpp_string[other_list.max_messages]) {
         if(other_list.sent_messages)
-            copy_messages(other_list.sent_messages);
+            copy_messages(0, other_list);
         else
             clear();
 }
 
 
 
-// invalid write error
-// to reproduce:
-// create new contact
-// delete contact
+// Delete the message list.
 message_list::~message_list(void) {
     max_messages = 0;
 
@@ -55,107 +60,152 @@ message_list::~message_list(void) {
 
 
 
-// subscript
+// Subscript operator.
+// INPUT:
+//  index: the index of the object to return
+// OUTPUT:
+//  Returns the message at the index.
 const cpp_string & message_list::operator[](size_t index) const {
     return sent_messages[index];
 }
 
 
 
+// Subscript operator.
+// INPUT:
+//  index: the index of the object to return
+// OUTPUT:
+//  Returns the message at the index.
 cpp_string & message_list::operator[](size_t index) {
     return sent_messages[index];
 }
 
 
 
-// assignment operators
+// Assignment operator.
+// INPUT:
+//  source: the message list to copy from
+// OUTPUT:
+//  Returns this list.
 message_list & message_list::operator=(const message_list & source) {
     if(this == &source)
         return *this;
 
-    // todo
+    delete [] sent_messages;
+    max_messages = source.max_messages;
+    sent_messages = new cpp_string[max_messages];
+    copy_messages(0, source);
     return *this;
 }
 
 
 
-message_list & message_list::operator=(const cpp_string & source) {
-    // todo
-    return *this;
-}
-
-
-
-message_list & message_list::operator=(const char * source) {
-    // todo
-    return *this;
-}
-
-
-
-// addition
+// Addition operator.
+// INPUT:
+//  destination: the list to add to
+//  source: the list to add from
+// OUTPUT:
+//  Returns the result of the addition.
 message_list operator+(message_list & destination, const message_list & source) {
+    size_t total = destination.max_messages + source.max_messages;
     message_list result;
-    // todo
+
+    result.max_messages = total;
+    result.sent_messages = new cpp_string[total];
+
+    for(size_t i = 0; i < destination.max_messages; ++i)
+        result.sent_messages[i] = destination.sent_messages[i];
+
+    for(size_t i = destination.max_messages; i < total; ++i)
+        result.sent_messages[i] = source.sent_messages[i];
+
     return result;
 }
 
 
 
+// Addition operator.
+// INPUT:
+//  destination: the list to add to
+//  source: the cpp_string to add
+// OUTPUT:
+//  Returns the result of the addition.
 message_list operator+(message_list & destination, const cpp_string & source) {
     message_list result;
-    // todo
+    result.max_messages = destination.max_messages + 1;
+
+    for(size_t i = 0; i < destination.max_messages; ++i)
+        result.sent_messages[i] = destination.sent_messages[i];
+
+    result.sent_messages[result.max_messages - 1] = source;
     return result;
 }
 
 
 
+// Addition operator.
+// INPUT:
+//  destination: the list to add to
+//  source: the char array to add
+// OUTPUT:
+//  Returns the result of the addition.
 message_list operator+(message_list & destination, const char * source) {
-    message_list result;
-    // todo
-    return result;
+    return operator+(destination, cpp_string(source));
 }
 
 
 
-// compound additions
+// Compound addition.
+// INPUT:
+//  source: the list to add
+// OUTPUT:
+//  Returns the new message list.
 message_list & message_list::operator+=(const message_list & source) {
-    // todo
+    message_list * temp = new message_list(*this);
+    int old_max = max_messages;
+
+    delete [] sent_messages;
+    max_messages += source.max_messages;
+    copy_messages(0, *temp);
+    copy_messages(old_max, source);
     return *this;
 }
 
 
 
+// Compound addition.
+// INPUT:
+//  source: the string to add
+// OUTPUT:
+//  Returns the new message list.
 message_list & message_list::operator+=(const cpp_string & source) {
-    // todo
+    message_list * temp = new message_list(*this);
+    delete [] sent_messages;
+    max_messages += 1;
+    copy_messages(0, *temp);
+    sent_messages[max_messages - 1] = source;
     return *this;
 }
 
 
 
+// Compound addition.
+// INPUT:
+//  source: the char array to add
+// OUTPUT:
+//  Returns the new message list.
 message_list & message_list::operator+=(const char * source) {
-    // todo
-    return *this;
-}
-
-
-
-// input/output
-std::istream & operator>>(std::istream & in, message_list & in_list) {
-    // todo
-    return in;
-}
-
-
-
-std::ostream & operator<<(std::ostream & out, const message_list & out_list) {
-    // todo
-    return out;
+    return operator+=(cpp_string(source));
 }
 
 
 
 // Send a new message.
+// INPUT:
+//  to_send: the message to send
+// OUTPUT:
+//  0 if the message is empty or the messages do not exist.
+//  1 if the message is sent.
 int message_list::send(const cpp_string & to_send) {
     if(!sent_messages || to_send.is_empty())
         return 0;
@@ -175,6 +225,9 @@ int message_list::send(const cpp_string & to_send) {
 
 
 // Clear all sent_messages.
+// OUTPUT:
+//  0 if the sent messages do not exist.
+//  1 if the messages are cleared.
 int message_list::clear(void) {
     if(!sent_messages)
         return 0;
@@ -189,6 +242,8 @@ int message_list::clear(void) {
 
 
 // Display all sent_messages.
+// OUTPUT:
+//  Returns the number of messages displayed.
 int message_list::display(void) const {
     if(!sent_messages)
         return 0;
@@ -207,17 +262,23 @@ int message_list::display(void) const {
 
 
 
-// Get the number of sent_messages allowed.
+// Get the number of sent messages allowed.
+// OUTPUT:
+//  Returns the max messages allowed.
 size_t message_list::count(void) const {
     return max_messages;
 }
 
 
 
-// Copy sent_messages.
-int message_list::copy_messages(const cpp_string * other_messages) {
-    for(size_t i = 0; i < max_messages; ++i)
-        sent_messages[i] = other_messages[i];
+// Copy sent messages.
+// INPUT:
+//  other_list: the other message list to copy
+// OUTPUT:
+//  1 when the messages are copied.
+int message_list::copy_messages(int first_index, const message_list & other_list) {
+    for(size_t i = first_index; i < (first_index + other_list.max_messages); ++i)
+        sent_messages[i] = other_list.sent_messages[i];
 
     return 1;
 }

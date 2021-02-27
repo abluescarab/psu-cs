@@ -20,8 +20,6 @@ class message_list {
         cpp_string & operator[](size_t index);
         // assignment operators
         message_list & operator=(const message_list & source);
-        message_list & operator=(const cpp_string & source);
-        message_list & operator=(const char * source);
         // addition
         friend message_list operator+(message_list & destination, const message_list & source);
         friend message_list operator+(message_list & destination, const cpp_string & source);
@@ -30,9 +28,6 @@ class message_list {
         message_list & operator+=(const message_list & source);
         message_list & operator+=(const cpp_string & source);
         message_list & operator+=(const char * source);
-        // input/output
-        friend std::istream & operator>>(std::istream & in, message_list & in_list);
-        friend std::ostream & operator<<(std::ostream & out, const message_list & out_list);
 
         // Send a new message.
         int send(const cpp_string & to_send);
@@ -45,7 +40,7 @@ class message_list {
 
     private:
         // Copy messages.
-        int copy_messages(const cpp_string * other_messages);
+        int copy_messages(int first_index, const message_list & other_list);
 
         size_t max_messages; // maximum number of messages the list can hold
         cpp_string * sent_messages; // array of sent messages

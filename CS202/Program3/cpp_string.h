@@ -1,4 +1,4 @@
-/* Alana Gilston
+/* Alana Gilston - 2/16/2021 - CS202 - Program 3
  * cpp_string.h
  *
  * This is the header file for the cpp_string class. The cpp_string class 
