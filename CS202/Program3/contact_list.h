@@ -36,6 +36,8 @@ class contact {
         contact * & get_left(void);
         // Get the right contact.
         contact * & get_right(void);
+        // Get the contact's name.
+        const cpp_string get_name(void) const;
         // Copy the data from another contact, minus left and right.
         int copy(const contact & copy_from);
         // Change the contact's name.
@@ -50,18 +52,36 @@ class contact {
         int display_device(const cpp_string & to_display);
         // Check if a device exists.
         device_type has_device(const cpp_string & to_find);
-        // Add a program to a device.
-        int add_program(const cpp_string to_device, const program & to_add);
-        // Remove a program from a device.
-        int remove_program(const cpp_string from_device, const cpp_string & to_remove);
-        // Clear programs from a device.
-        int clear_programs(const cpp_string from_device);
         // Send a message to a device.
-        int send_message(const cpp_string & to_device, const cpp_string & message);
-        // Clear messages from a device.
-        int clear_messages(const cpp_string & from_device);
-        // Display messages from a device.
-        int display_messages(const cpp_string & from_device);
+        int send_message(const cpp_string & device_name,
+                const cpp_string & message);
+        // Display messages sent to a device.
+        int display_messages(const cpp_string & device_name);
+        // Clear messages sent to a device.
+        int clear_messages(const cpp_string & device_name);
+        // Add a program to a device.
+        int add_program(const cpp_string & device_name,
+                const program & to_add);
+        // Remove a program from a device.
+        int remove_program(const cpp_string & device_name,
+                const cpp_string & to_remove);
+        // Clear programs from a device.
+        int clear_programs(const cpp_string & device_name);
+        // Change phone or pager number.
+        int change_number(const cpp_string & device_name,
+                const cpp_string & new_number);
+        // Change if a pager supports text messages.
+        int change_supports_text(const cpp_string & device_name,
+                const bool new_supports_text);
+        // Change if a pager supports two-way messaging.
+        int change_two_way(const cpp_string & device_name,
+                const bool new_two_way);
+        // Change a phone network.
+        int change_network(const cpp_string & device_name,
+                const cpp_string & new_network);
+        // Change a phone type.
+        int change_phone_type(const cpp_string & device_name,
+                const os_type new_type);
         // Check if the contact has data.
         int is_empty(void) const;
         // Check if a contact matches another contact.
@@ -112,42 +132,69 @@ class contact_list {
         int remove_contact(const cpp_string & to_remove);
         // Display a contact.
         int display_contact(const cpp_string & to_display);
-        // Change the contact's name.
-        int change_contact_name(const cpp_string & old_name, const cpp_string & new_name);
-        // Add a device to a contact.
-        int add_device(const cpp_string & to_contact, device & to_add);
-        // Remove a device from a contact.
-        int remove_device(const cpp_string & from_contact, const cpp_string & to_remove);
-        // Clear devices from a contact.
-        int clear_devices(const cpp_string & from_contact);
-        // Display a device.
-        int display_device(const cpp_string & from_contact, const cpp_string & to_display);
-        // Add a program to a device.
-        int add_program(const cpp_string & to_contact, 
-                const cpp_string & to_device, 
-                const program & to_add);
-        // Remove a program from a device.
-        int remove_program(const cpp_string & from_contact,
-                const cpp_string & from_device,
-                const cpp_string & to_remove);
-        // Clear programs from a device.
-        int clear_programs(const cpp_string & from_contact, const cpp_string & from_device);
-        // Send a message to a device.
-        int send_message(const cpp_string & to_contact, 
-                const cpp_string & to_device, 
-                const cpp_string & message);
-        // Clear messages from a device.
-        int clear_messages(const cpp_string & from_contact, const cpp_string & from_device);
-        // Display messages from a device.
-        int display_messages(const cpp_string & from_contact, const cpp_string & from_device);
         // Check if the list contains a contact.
         int has_contact(const cpp_string & to_find);
         // Check if a contact has a device.
-        device_type has_device(const cpp_string & in_contact, const cpp_string & to_find);
+        device_type has_device(const cpp_string & contact_name, const cpp_string & to_find);
         // Clear contacts.
         int clear_contacts(void);
         // Display entire contact list.
         int display(void);
+        // Display a contact.
+        int display_contact(const cpp_string & contact_name, 
+                const bool include_devices);
+        // Display a device.
+        int display_device(const cpp_string & contact_name, 
+                const cpp_string & device_name);
+        // Add a device to a contact.
+        int add_device(const cpp_string & contact_name, device & to_add);
+        // Remove a device from a contact.
+        int remove_device(const cpp_string & contact_name, const cpp_string & to_remove);
+        // Clear devices from a contact.
+        int clear_devices(const cpp_string & contact_name);
+        // Send a message to a device.
+        int send_message(const cpp_string & contact_name, const cpp_string & device_name,
+                const cpp_string & message);
+        // Display messages sent to a device.
+        int display_messages(const cpp_string & contact_name, 
+                const cpp_string & device_name);
+        // Clear messages sent to a device.
+        int clear_messages(const cpp_string & contact_name, 
+                const cpp_string & device_name);
+        // Change a contact name.
+        int change_contact_name(const cpp_string & contact_name, 
+                const cpp_string & new_name);
+        // Add a program to a device.
+        int add_program(const cpp_string & contact_name,
+                const cpp_string & device_name,
+                const program & to_add);
+        // Remove a program from a device.
+        int remove_program(const cpp_string & contact_name,
+                const cpp_string & device_name,
+                const cpp_string & to_remove);
+        // Clear programs from a device.
+        int clear_programs(const cpp_string & contact_name,
+                const cpp_string & device_name);
+        // Change phone or pager number.
+        int change_number(const cpp_string & contact_name,
+                const cpp_string & device_name,
+                const cpp_string & new_number);
+        // Change if a pager supports text messages.
+        int change_supports_text(const cpp_string & contact_name,
+                const cpp_string & device_name,
+                const bool new_supports_text);
+        // Change if a pager supports two-way messaging.
+        int change_two_way(const cpp_string & contact_name,
+                const cpp_string & device_name,
+                const bool new_two_way);
+        // Change a phone network.
+        int change_network(const cpp_string & contact_name,
+                const cpp_string & device_name,
+                const cpp_string & new_network);
+        // Change a phone type.
+        int change_phone_type(const cpp_string & contact_name,
+                const cpp_string & device_name,
+                const os_type new_type);
 
     private:
         // Add contact recursively.

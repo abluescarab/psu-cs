@@ -218,6 +218,15 @@ contact * & contact::get_right(void) {
 
         
 
+// Get the contact's name.
+// OUTPUT:
+//  Returns a copy of the contact's name.
+const cpp_string contact::get_name(void) const {
+    return name;
+}
+
+
+
 // Copy the data from another contact, minus left and right.
 // INPUT:
 //  copy_from: the contact to copy
@@ -381,39 +390,100 @@ int contact::display_device(const cpp_string & to_display) {
 // OUTPUT:
 //  Returns the type of the device.
 device_type contact::has_device(const cpp_string & to_find) {
-    device * current_device = nullptr;
-    device_type current_type = device_type::none;
+    device * found = nullptr;
+    pager * found_pager = nullptr;
+    cell_phone * found_phone = nullptr;
+    device_type found_type = device_type::none;
 
-    if(find_device(devices, to_find, current_device)) {
-        if(dynamic_cast<pager*>(current_device))
-            current_type = device_type::pager;
-        else if(dynamic_cast<cell_phone*>(current_device))
-            current_type = device_type::cell_phone;
-        else if(dynamic_cast<computer*>(current_device))
-            current_type = device_type::computer;
+    if(find_device(devices, to_find, found)) {
+        found_pager = dynamic_cast<pager*>(found);
+        found_phone = dynamic_cast<cell_phone*>(found);
+
+        if(found_pager)
+            found_type = device_type::pager;
+        else if(found_phone)
+            found_type = device_type::cell_phone;
+        else
+            found_type = device_type::computer;
     }
     
-    return current_type;
+    return found_type;
+}
+
+
+
+// Send a message to a device.
+// INPUT:
+//  device_name: the device to sent to
+//  message: message to send
+// OUTPUT:
+//  0 if the device was not found.
+//  Otherwise returns the result of the other function.
+int contact::send_message(const cpp_string & device_name,
+        const cpp_string & message) {
+    device * found = nullptr;
+
+    if(find_device(devices, device_name, found))
+        return found->send_message(message);
+
+    return 0;
+}
+
+
+
+// Display messages sent to a device.
+// INPUT:
+//  device_name: the device to display messages from
+// OUTPUT:
+//  0 if the device was not found.
+//  Otherwise returns the result of the other function.
+int contact::display_messages(const cpp_string & device_name) {
+    device * found = nullptr;
+
+    if(find_device(devices, device_name, found))
+        return found->display_messages();
+
+    return 0;
+}
+
+
+
+// Clear messages sent to a device.
+// INPUT:
+//  device_name: device to clear messages from
+// OUTPUT:
+//  0 if the device was not found.
+//  Otherwise returns the result of the other function.
+int contact::clear_messages(const cpp_string & device_name) {
+    device * found = nullptr;
+
+    if(find_device(devices, device_name, found))
+        return found->clear_messages();
+
+    return 0;
 }
 
 
 
 // Add a program to a device.
 // INPUT:
-//  to_device: name of the device to add to
+//  device_name: device to add program to
 //  to_add: program to add
 // OUTPUT:
-//  0 if the program fails to add.
-//  1 if the program adds.
-int contact::add_program(const cpp_string to_device, const program & to_add) {
-    device * current_device = nullptr;
-    computer * current_computer = nullptr;
+//  0 if the device was not found or is an invalid type.
+//  Otherwise returns the result of the other function. 
+int contact::add_program(const cpp_string & device_name,
+        const program & to_add) {
+    device * found = nullptr;
+    computer * found_computer = nullptr;
 
-    if(find_device(devices, to_device, current_device)) {
-        current_computer = dynamic_cast<computer*>(current_device);
+    if(find_device(devices, device_name, found)) {
+        found_computer = dynamic_cast<computer*>(found);
 
-        if(current_computer)
-            return current_computer->add_program(to_add);
+        if(!found_computer)
+            return 0;
+
+        return found_computer->add_program(to_add);
     }
 
     return 0;
@@ -423,20 +493,23 @@ int contact::add_program(const cpp_string to_device, const program & to_add) {
 
 // Remove a program from a device.
 // INPUT:
-//  from_device: name of the device to remove from
-//  to_remove: name of the program to remove
+//  device_name: device to remove program from
+//  to_remove: program to remove
 // OUTPUT:
-//  0 if the program fails to remove.
-//  1 if the program removes.
-int contact::remove_program(const cpp_string from_device, const cpp_string & to_remove) {
-    device * current_device = nullptr;
-    computer * current_computer = nullptr;
+//  0 if the device was not found or was an invalid type.
+//  Otherwise returns the result of the other function.
+int contact::remove_program(const cpp_string & device_name,
+        const cpp_string & to_remove) {
+    device * found = nullptr;
+    computer * found_computer = nullptr;
 
-    if(find_device(devices, from_device, current_device)) {
-        current_computer = dynamic_cast<computer*>(current_device);
+    if(find_device(devices, device_name, found)) {
+        found_computer = dynamic_cast<computer*>(found);
 
-        if(current_computer)
-            return current_computer->remove_program(to_remove);
+        if(!found_computer)
+            return 0;
+
+        return found_computer->remove_program(to_remove);
     }
 
     return 0;
@@ -446,18 +519,19 @@ int contact::remove_program(const cpp_string from_device, const cpp_string & to_
 
 // Clear programs from a device.
 // INPUT:
-//  from_device: device name to remove programs from
+//  device_name: device to clear programs from
 // OUTPUT:
-//  Returns the number of programs removed.
-int contact::clear_programs(const cpp_string from_device) {
-    device * current_device = nullptr;
-    computer * current_computer = nullptr;
+//  0 if the device was not found or was an invalid type.
+//  Otherwise returns the result of the other function.
+int contact::clear_programs(const cpp_string & device_name) {
+    device * found = nullptr;
+    computer * found_computer = nullptr;
 
-    if(find_device(devices, from_device, current_device)) {
-        current_computer = dynamic_cast<computer*>(current_device);
+    if(find_device(devices, device_name, found)) {
+        found_computer = dynamic_cast<computer*>(found);
 
-        if(current_computer)
-            return current_computer->clear_programs();
+        if(found_computer)
+            return found_computer->clear_programs();
     }
 
     return 0;
@@ -465,52 +539,124 @@ int contact::clear_programs(const cpp_string from_device) {
 
 
 
-// Send a message to a device.
+// Change phone or pager number.
 // INPUT:
-//  to_device: device to send message to
-//  message: message to send
+//  device_name: device to change number for
+//  new_number: number to change to
 // OUTPUT:
-//  0 if the message was not sent.
-//  1 if the message was sent.
-int contact::send_message(const cpp_string & to_device, const cpp_string & message) {
-    device * current_device = nullptr;
+//  0 if the device was not found or is an invalid type.
+//  Otherwise returns the result of the other function.
+int contact::change_number(const cpp_string & device_name,
+        const cpp_string & new_number) {
+    device * found = nullptr;
+    pager * found_pager = nullptr;
+    cell_phone * found_phone = nullptr;
 
-    if(find_device(devices, to_device, current_device))
-        return current_device->send_message(message);
+    if(find_device(devices, device_name, found)) {
+        found_pager = dynamic_cast<pager*>(found);
+        found_phone = dynamic_cast<cell_phone*>(found);
+
+        if(found_pager)
+            return found_pager->change_number(new_number);
+        else if(found_phone)
+            return found_phone->change_number(new_number);
+    }
 
     return 0;
 }
 
 
 
-// Clear messages from a device.
+// Change if a pager supports text messages.
 // INPUT:
-//  from_device: device to clear messages from
+//  device_name: device to change support for text messaging
+//  new_supports_text: whether to support text messaging
 // OUTPUT:
-//  0 if the messages were not cleared.
-//  1 if the messages were cleared.
-int contact::clear_messages(const cpp_string & from_device) {
-    device * current_device = nullptr;
+//  0 if the device was not found or was an invalid type.
+//  Otherwise returns the result of the other function.
+int contact::change_supports_text(const cpp_string & device_name,
+        const bool new_supports_text) {
+    device * found = nullptr;
+    pager * found_pager = nullptr;
 
-    if(find_device(devices, from_device, current_device))
-        return current_device->clear_messages();
+    if(find_device(devices, device_name, found)) {
+        found_pager = dynamic_cast<pager*>(found);
+
+        if(found_pager)
+            return found_pager->change_supports_text(new_supports_text);
+    }
 
     return 0;
 }
 
 
 
-// Display messages from a device.
+// Change if a pager supports two-way messaging.
 // INPUT:
-//  from_device: device to display messages from
+//  device_name: device to change support for two way messaging
+//  new_two_way: whether to support two way messaging
 // OUTPUT:
-//  0 if the messages were not displayed.
-//  1 if the messages were displayed.
-int contact::display_messages(const cpp_string & from_device) {
-    device * current_device = nullptr;
+//  0 if the device was not found or was an invalid type.
+//  Otherwise returns the result of the other function.
+int contact::change_two_way(const cpp_string & device_name,
+        const bool new_two_way) {
+    device * found = nullptr;
+    pager * found_pager = nullptr;
 
-    if(find_device(devices, from_device, current_device))
-        return current_device->display_messages();
+    if(find_device(devices, device_name, found)) {
+        found_pager = dynamic_cast<pager*>(found);
+
+        if(found_pager)
+            return found_pager->change_two_way(new_two_way);
+    }
+
+    return 0;
+}
+
+
+
+// Change a phone network.
+// INPUT:
+//  device_name: device to change network on
+//  new_network: new network to change to
+// OUTPUT:
+//  0 if the device was not found or is an invalid type.
+//  Otherwise returns the result of the other function.
+int contact::change_network(const cpp_string & device_name,
+        const cpp_string & new_network) {
+    device * found = nullptr;
+    cell_phone * found_phone = nullptr;
+
+    if(find_device(devices, device_name, found)) {
+        found_phone = dynamic_cast<cell_phone*>(found);
+
+        if(found_phone)
+            return found_phone->change_network(new_network);
+    }
+
+    return 0;
+}
+
+
+
+// Change a phone type.
+// INPUT:
+//  device_name: device to change phone type of
+//  new_type: new phone os
+// OUTPUT:
+//  0 if the device was not found or is an invalid type.
+//  Otherwise returns the result of the other function.
+int contact::change_phone_type(const cpp_string & device_name,
+        const os_type new_type) {
+    device * found = nullptr;
+    cell_phone * found_phone = nullptr;
+
+    if(find_device(devices, device_name, found)) {
+        found_phone = dynamic_cast<cell_phone*>(found);
+
+        if(found_phone)
+            return found_phone->change_type(new_type);
+    }
 
     return 0;
 }
@@ -578,9 +724,8 @@ int contact::display(void) {
     if(is_empty())
         return 0;
 
-    cout << name << endl;
+    cout << name << endl << endl;
     display_devices(devices);
-    cout << endl;
     return 1;
 }
 
@@ -595,7 +740,10 @@ int contact::display_devices(device * & current) {
     if(!current)
         return 0;
 
-    return current->display() + display_devices(current->get_next());
+    int count = current->display();
+    cout << endl;
+
+    return count + display_devices(current->get_next());
 }
 
 
@@ -621,7 +769,16 @@ int contact::display_name(void) {
 // OUTPUT:
 //  Returns the number of devices copied.
 int contact::copy_devices(device * & current, device & other_current) {
-    current = new device(other_current);
+    pager * new_pager = dynamic_cast<pager*>(&other_current);
+    cell_phone * new_phone = dynamic_cast<cell_phone*>(&other_current);
+    computer * new_computer = dynamic_cast<computer*>(&other_current);
+
+    if(new_pager)
+        current = new pager(*new_pager);
+    else if(new_phone)
+        current = new cell_phone(*new_phone);
+    else
+        current = new computer(*new_computer);
 
     if(!other_current.get_next())
         return 1;
@@ -799,236 +956,29 @@ int contact_list::display_contact(const cpp_string & to_display) {
 
 
         
-// Change the contact's name.
-// INPUT:
-//  old_name: contact to find
-//  new_name: name to change to
-// OUTPUT:
-//  0 if the contact was not found.
-//  1 if the name was changed.
-int contact_list::change_contact_name(const cpp_string & old_name, 
-        const cpp_string & new_name) {
-    contact * current_contact = nullptr;
-
-    if(find_contact(contacts, old_name, current_contact))
-        return current_contact->change_name(new_name);
-
-    return 0;
-}
-
-
-
-// Add a device to a contact.
-// INPUT:
-//  to_contact: contact name to add to
-//  to_add: device to add
-// OUTPUT:
-//  0 if the device fails to add.
-//  1 if the device adds.
-int contact_list::add_device(const cpp_string & to_contact, device & to_add) {
-    contact * current_contact = nullptr;
-
-    if(find_contact(contacts, to_contact, current_contact))
-        return current_contact->add_device(to_add);
-        
-    return 0;
-}
-
-
-
-// Remove a device from a contact.
-// INPUT:
-//  from_contact: contact name to remove from
-//  to_remove: device name to remove
-// OUTPUT:
-//  0 if the device fails to remove.
-//  1 if the device removes.
-int contact_list::remove_device(const cpp_string & from_contact, const cpp_string & to_remove) {
-    contact * current_contact = nullptr;
-
-    if(find_contact(contacts, from_contact, current_contact))
-        return current_contact->remove_device(to_remove);
-        
-    return 0;
-}
-
-
-
-// Clear devices from a contact.
-// INPUT:
-//  from_contact: contact name to clear devices from
-// OUTPUT:
-//  Returns the number of devices cleared.
-int contact_list::clear_devices(const cpp_string & from_contact) {
-    contact * current_contact = nullptr;
-
-    if(find_contact(contacts, from_contact, current_contact))
-        return current_contact->clear_devices();
-
-    return 0;
-}
-
-
-
-// Display a device.
-// INPUT:
-//  from_contact: contact which device is in
-//  to_display: device to display
-// OUTPUT:
-//  0 if the device does not display.
-//  1 if the device displays.
-int contact_list::display_device(const cpp_string & from_contact, const cpp_string & to_display) {
-    contact * current_contact = nullptr;
-
-    if(find_contact(contacts, from_contact, current_contact))
-        return current_contact->display_device(to_display);
-
-    return 0;
-}
-
-
-        
-// Add a program to a device.
-// INPUT:
-//  to_contact: contact name to add program to
-//  to_device: device name to add to
-//  to_add: program to add
-// OUTPUT:
-//  0 if the program fails to add.
-//  1 if the program adds.
-int contact_list::add_program(const cpp_string & to_contact, 
-        const cpp_string & to_device, 
-        const program & to_add) {
-    contact * current_contact = nullptr;
-
-    if(find_contact(contacts, to_contact, current_contact))
-        return current_contact->add_program(to_device, to_add);
-
-    return 0;
-}
-
-
-
-// Remove a program from a device.
-// INPUT:
-//  from_contact: contact name to remove from
-//  from_device: device name to remove from
-//  to_remove: program to remove
-// OUTPUT:
-//  0 if the program fails to remove.
-//  1 if the program removes.
-int contact_list::remove_program(const cpp_string & from_contact,
-        const cpp_string & from_device,
-        const cpp_string & to_remove) {
-    contact * current_contact = nullptr;
-
-    if(find_contact(contacts, from_contact, current_contact))
-        return contacts->remove_program(from_device, to_remove);
-
-    return 0;
-}
-
-
-
-// Clear programs from a device.
-// INPUT:
-//  from_contact: contact to clear programs from
-//  from_device: device to clear programs from
-// OUTPUT:
-//  Returns the number of programs cleared.
-int contact_list::clear_programs(const cpp_string & from_contact, 
-        const cpp_string & from_device) {
-    contact * current_contact = nullptr;
-
-    if(find_contact(contacts, from_contact, current_contact))
-        return current_contact->clear_programs(from_device);
-
-    return 0;
-}
-
-
-
-// Send a message to a device.
-// INPUT:
-//  to_contact: contact to message
-//  to_device: contact device to message
-//  message: message to send
-// OUTPUT:
-//  0 if the message was not sent.
-//  1 if the message was sent.
-int contact_list::send_message(const cpp_string & to_contact, 
-        const cpp_string & to_device, 
-        const cpp_string & message) {
-    contact * current_contact = nullptr;
-
-    if(find_contact(contacts, to_contact, current_contact))
-        return current_contact->send_message(to_device, message);
-
-    return 0;
-}
-
-
-
-// Clear messages from a device.
-// INPUT:
-//  from_contact: contact to clear messages from
-//  from_device: device to clear messages from
-// OUTPUT:
-//  0 if the messages were not cleared.
-//  1 if the messages were cleared.
-int contact_list::clear_messages(const cpp_string & from_contact, 
-        const cpp_string & from_device) {
-    contact * current_contact = nullptr;
-
-    if(find_contact(contacts, from_contact, current_contact))
-        return current_contact->clear_messages(from_device);
-
-    return 0;
-}
-
-
-
-// Display messages from a device.
-// INPUT:
-//  from_contact: contact to display messages from
-//  from_device: device to display messages from
-// OUTPUT:
-//  Return result of display function.
-int contact_list::display_messages(const cpp_string & from_contact, 
-        const cpp_string & from_device) {
-    contact * current_contact = nullptr;
-
-    if(find_contact(contacts, from_contact, current_contact))
-        return current_contact->display_messages(from_device);
-
-    return 0;
-}
-
-
-
 // Check if the list contains a contact.
 // INPUT:
 //  to_find: contact to find
 // OUTPUT:
 //  Returns the result of the recursive function.
 int contact_list::has_contact(const cpp_string & to_find) {
-    contact * result = nullptr;
-    return find_contact(contacts, to_find, result);
+    contact * found = nullptr;
+    return find_contact(contacts, to_find, found);
 }
 
-        
 
-// Check if a contact has a device and returns its type.
+
+// Check if a contact has a device.
 // INPUT:
-//  in_contact: contact device is in
+//  contact_name: contact with device
 //  to_find: device to find
 // OUTPUT:
-//  Returns the device type.
-device_type contact_list::has_device(const cpp_string & in_contact, const cpp_string & to_find) {
-    contact * current_contact = nullptr;
-    
-    if(find_contact(contacts, in_contact, current_contact))
-        return current_contact->has_device(to_find);
+//  Returns device type.
+device_type contact_list::has_device(const cpp_string & contact_name, const cpp_string & to_find) {
+    contact * found = nullptr;
+
+    if(find_contact(contacts, contact_name, found))
+        return found->has_device(to_find);
 
     return device_type::none;
 }
@@ -1080,11 +1030,348 @@ int contact_list::display(contact * & current) {
     if(!current)
         return 0;
 
-    int count = display(current->get_left());
-    count += current->display();
-    count += display(current->get_right());
+    return display(current->get_left()) + current->display_name() + 
+        display(current->get_right());
+}
 
-    return count;
+
+
+// Display a contact.
+// INPUT:
+//  contact_name: contact to display
+//  include_devices: whether to include devices in display
+// OUTPUT:
+//  0 if the contact was not found.
+//  Otherwise returns the result of the other function.
+int contact_list::display_contact(const cpp_string & contact_name, 
+        const bool include_devices) {
+    contact * found = nullptr;
+
+    if(find_contact(contacts, contact_name, found)) {
+        if(include_devices)
+            return found->display();
+        else 
+            return found->display_name();
+    }
+
+    return 0;
+}
+
+
+
+// Display a device.
+// INPUT:
+//  contact_name: contact with device
+//  device_name: device to find
+// OUTPUT:
+//  0 if the contact was not found.
+//  Otherwise returns the result of the other function.
+int contact_list::display_device(const cpp_string & contact_name, 
+        const cpp_string & device_name) {
+    contact * found = nullptr;
+
+    if(find_contact(contacts, contact_name, found))
+        return found->display_device(device_name);
+
+    return 0;
+}
+
+
+
+// Add a device to a contact.
+// INPUT:
+//  contact_name: contact with device
+//  to_add: device to add
+// OUTPUT:
+//  0 if the contact was not found.
+//  Otherwise returns the result of the other function.
+int contact_list::add_device(const cpp_string & contact_name, device & to_add) {
+    contact * found = nullptr;
+
+    if(find_contact(contacts, contact_name, found))
+        return found->add_device(to_add);
+
+    return 0;
+}
+
+
+
+// Remove a device from a contact.
+// INPUT:
+//  contact_name: contact with device
+//  to_remove: device to remove
+// OUTPUT:
+//  0 if the contact was not found.
+//  Otherwise returns the result of the other function.
+int contact_list::remove_device(const cpp_string & contact_name, 
+        const cpp_string & to_remove) {
+    contact * found = nullptr;
+
+    if(find_contact(contacts, contact_name, found))
+        return found->remove_device(to_remove);
+
+    return 0;
+}
+
+
+
+// Clear devices from a contact.
+// INPUT:
+//  contact_name: contact to clear devices from
+// OUTPUT:
+//  0 if the contact was not found.
+//  Otherwise returns the result of the other function.
+int contact_list::clear_devices(const cpp_string & contact_name) {
+    contact * found = nullptr;
+
+    if(find_contact(contacts, contact_name, found))
+        return found->clear_devices();
+
+    return 0;
+}
+
+
+
+// Send a message to a device.
+// INPUT:
+//  contact_name: contact with devices
+//  device_name: device to find
+//  message: message to send
+// OUTPUT:
+//  0 if the contact was not found.
+//  Otherwise returns the result of the other function.
+int contact_list::send_message(const cpp_string & contact_name, 
+        const cpp_string & device_name,
+        const cpp_string & message) {
+    contact * found = nullptr;
+
+    if(find_contact(contacts, contact_name, found))
+        return found->send_message(device_name, message);
+
+    return 0;
+}
+
+
+
+// Display messages sent to a device.
+// INPUT:
+//  contact_name: contact with devices
+//  device_name: device to find
+// OUTPUT:
+//  0 if the contact was not found.
+//  Otherwise returns the result of the other function.
+int contact_list::display_messages(const cpp_string & contact_name, 
+        const cpp_string & device_name) {
+    contact * found = nullptr;
+
+    if(find_contact(contacts, contact_name, found))
+        return found->display_messages(device_name);
+
+    return 0;
+}
+
+
+
+// Clear messages sent to a device.
+// INPUT:
+//  contact_name: contact with devices
+//  device_name: device to find
+// OUTPUT:
+//  0 if the contact was not found.
+//  Otherwise returns the result of the other function.
+int contact_list::clear_messages(const cpp_string & contact_name, 
+        const cpp_string & device_name) {
+    contact * found = nullptr;
+
+    if(find_contact(contacts, contact_name, found))
+        return found->clear_messages(device_name);
+
+    return 0;
+}
+
+
+
+// Change a contact name.
+// INPUT:
+//  contact_name: contact to find
+//  new_name: new contact name
+// OUTPUT:
+//  0 if the contact was not found.
+//  Otherwise returns the result of the other function.
+int contact_list::change_contact_name(const cpp_string & contact_name, 
+        const cpp_string & new_name) {
+    contact * found = nullptr;
+
+    if(find_contact(contacts, contact_name, found))
+        return found->change_name(new_name);
+
+    return 0;
+}
+
+
+
+// Add a program to a device.
+// INPUT:
+//  contact_name: contact with devices
+//  device_name: device to find
+//  to_add: program to add
+// OUTPUT:
+//  0 if the contact was not found.
+//  Otherwise returns the result of the other function.
+int contact_list::add_program(const cpp_string & contact_name,
+        const cpp_string & device_name,
+        const program & to_add) {
+    contact * found = nullptr;
+
+    if(find_contact(contacts, contact_name, found))
+        return found->add_program(device_name, to_add);
+
+    return 0;
+}
+
+
+
+// Remove a program from a device.
+// INPUT:
+//  contact_name: contact with devices
+//  device_name: device to find
+//  to_remove: program to remove
+// OUTPUT:
+//  0 if the contact was not found.
+//  Otherwise returns the result of the other function.
+int contact_list::remove_program(const cpp_string & contact_name,
+        const cpp_string & device_name,
+        const cpp_string & to_remove) {
+    contact * found = nullptr;
+
+    if(find_contact(contacts, contact_name, found))
+        return found->remove_program(device_name, to_remove);
+
+    return 0;
+}
+
+
+
+// Clear programs from a device.
+// INPUT:
+//  contact_name: contact with devices
+//  device_name: device to find
+// OUTPUT:
+//  0 if the contact was not found.
+//  Otherwise returns the result of the other function.
+int contact_list::clear_programs(const cpp_string & contact_name,
+        const cpp_string & device_name) {
+    contact * found = nullptr;
+
+    if(find_contact(contacts, contact_name, found))
+        return found->clear_programs(device_name);
+
+    return 0;
+}
+
+
+
+// Change phone or pager number.
+// INPUT:
+//  contact_name: contact with devices
+//  device_name: device to find
+//  new_number: number to change to
+// OUTPUT:
+//  0 if the contact was not found.
+//  Otherwise returns the result of the other function.
+int contact_list::change_number(const cpp_string & contact_name,
+        const cpp_string & device_name,
+        const cpp_string & new_number) {
+    contact * found = nullptr;
+
+    if(find_contact(contacts, contact_name, found))
+        return found->change_number(device_name, new_number);
+    
+    return 0;
+}
+
+
+
+// Change if a pager supports text messages.
+// INPUT:
+//  contact_name: contact with devices
+//  device_name: device to find
+//  new_supports_text: whether the device supports text messaging
+// OUTPUT:
+//  0 if the contact was not found.
+//  Otherwise returns the result of the other function.
+int contact_list::change_supports_text(const cpp_string & contact_name,
+        const cpp_string & device_name,
+        const bool new_supports_text) {
+    contact * found = nullptr;
+
+    if(find_contact(contacts, contact_name, found))
+        return found->change_supports_text(device_name, new_supports_text);
+    
+    return 0;
+}
+
+
+
+// Change if a pager supports two-way messaging.
+// INPUT:
+//  contact_name: contact with devices
+//  device_name: device to find
+//  new_two_way: whether the device supports two-way messaging
+// OUTPUT:
+//  0 if the contact was not found.
+//  Otherwise returns the result of the other function.
+int contact_list::change_two_way(const cpp_string & contact_name,
+        const cpp_string & device_name,
+        const bool new_two_way) {
+    contact * found = nullptr;
+
+    if(find_contact(contacts, contact_name, found))
+        return found->change_two_way(device_name, new_two_way);
+    
+    return 0;
+}
+
+
+
+// Change a phone network.
+// INPUT:
+//  contact_name: contact with devices
+//  device_name: device to find
+//  new_network: new phone network
+// OUTPUT:
+//  0 if the contact was not found.
+//  Otherwise returns the result of the other function.
+int contact_list::change_network(const cpp_string & contact_name,
+        const cpp_string & device_name,
+        const cpp_string & new_network) {
+    contact * found = nullptr;
+
+    if(find_contact(contacts, contact_name, found))
+        return found->change_network(device_name, new_network);
+    
+    return 0;
+}
+
+
+
+// Change a phone type.
+// INPUT:
+//  contact_name: contact with devices
+//  device_name: device to find
+//  new_type: new phone os
+// OUTPUT:
+//  0 if the contact was not found.
+//  Otherwise returns the result of the other function.
+int contact_list::change_phone_type(const cpp_string & contact_name,
+        const cpp_string & device_name,
+        const os_type new_type) {
+    contact * found = nullptr;
+
+    if(find_contact(contacts, contact_name, found))
+        return found->change_phone_type(device_name, new_type);
+    
+    return 0;
 }
 
 

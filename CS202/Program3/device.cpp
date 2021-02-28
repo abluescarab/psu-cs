@@ -130,6 +130,15 @@ program * & program::get_next(void) {
 
 
 
+// Get the program name.
+// OUTPUT:
+//  Returns the program name.
+const cpp_string program::get_name(void) const {
+    return program_name;
+}
+
+
+
 // Check if the program is empty.
 // OUTPUT:
 //  Returns if the program name is empty.
@@ -290,6 +299,15 @@ device * & device::get_next(void) {
 
 
 
+// Get the device's name.
+// OUTPUT:
+//  Returns the device's name.
+const cpp_string device::get_name(void) const {
+    return name;
+}
+
+
+
 // Send a new message.
 // INPUT:
 //  to_send: the message to send
@@ -329,6 +347,10 @@ int device::is_empty(void) const {
 
 
 // Check if name matches another.
+// INPUT:
+//  compare: name to compare to
+// OUTPUT:
+//  Returns whether the names match.
 int device::name_matches(const cpp_string & compare) const {
     return name == compare;
 }
@@ -474,8 +496,22 @@ int pager::display(void) const {
     device::display();
 
     cout << "Number: " << pager_number << endl;
-    cout << "Supports text: " << supports_text << endl;
-    cout << "Two way: " << two_way << endl;
+    cout << "Supports text: ";
+
+    if(supports_text)
+        cout << "Yes";
+    else
+        cout << "No";
+   
+    cout << endl;
+    cout << "Two way: ";
+
+    if(two_way)
+        cout << "Yes";
+    else
+        cout << "No";
+
+    cout << endl;
     return 1;
 }
 
@@ -642,7 +678,7 @@ computer::computer(void) : programs(nullptr) {}
 // Create a new computer.
 // INPUT:
 //  new_name: computer name
-computer::computer(const cpp_string & new_name) : device(new_name) {}
+computer::computer(const cpp_string & new_name) : device(new_name), programs(nullptr) {}
 
 
 
@@ -652,7 +688,8 @@ computer::computer(const cpp_string & new_name) : device(new_name) {}
 computer::computer(const computer & other_computer) :
     device(other_computer),
     programs(nullptr) {
-        copy_programs(programs, *other_computer.programs);
+        if(other_computer.programs)
+            copy_programs(programs, *other_computer.programs);
     }
 
 
@@ -802,5 +839,9 @@ int computer::display(program * & current) {
 //  Returns the number of programs copied.
 int computer::copy_programs(program * & current, program & other_current) {
     current = new program(other_current);
+
+    if(!other_current.get_next())
+        return 1;
+
     return copy_programs(current->get_next(), *other_current.get_next()) +  1;
 }

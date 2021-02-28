@@ -77,6 +77,36 @@ int display_menu(const int menu, const device_type submenu) {
 
 
 
+// Add a program.
+// INPUT:
+//  result: the new program
+// OUTPUT:
+//  1 when successful.
+int add_program(program * & result) {
+    char input[INPUT_MAX] = "";
+    cpp_string program_name;
+    cpp_string username;
+    program * new_program = nullptr;
+
+    while(program_name.is_empty()) {
+        cout << "Program name: ";
+        cin.getline(input, INPUT_MAX);
+        program_name = input;
+    }
+
+    while(username.is_empty()) {
+        cout << "Username: ";
+        cin.getline(input, INPUT_MAX);
+        username = input;
+    }
+
+    new_program = new program(program_name, username);
+    result = new_program;
+    return 1;
+}
+
+
+
 // Add a device.
 // INPUT:
 //  new_contact: contact to add devices to
@@ -102,8 +132,6 @@ int add_device(device * & result) {
     cpp_string network;
     os_type phone_type;
     // computer info
-    cpp_string program_name;
-    cpp_string username;
     program * new_program = nullptr;
 
     cout << "What kind of device do you want to add?" << endl;
@@ -170,40 +198,23 @@ int add_device(device * & result) {
             cout << "Do you want to add a program to the computer? (y/n) ";
 
             if(validate_yes()) {
-                while(program_name.is_empty()) {
-                    cout << "Program name: ";
-                    cin.getline(input, INPUT_MAX);
-                    program_name = input;
-                }
-
-                while(username.is_empty()) {
-                    cout << "Username: ";
-                    cin.getline(input, INPUT_MAX);
-                    username = input;
-                }
-
-                new_program = new program(program_name, username);
+                add_program(new_program);
                 new_computer->add_program(*new_program);
                 delete new_program;
-                cout << "Added " << program_name << " to " << name << "." << endl;
+                cout << "Added " << new_program->get_name() << " to " << name << 
+                    "." << endl;
             }
             else 
                 quit = true;
         }
     }
 
-    if(new_pager) {
-        //result = dynamic_cast<device*>(new_pager);
+    if(new_pager) 
         result = new_pager;
-    }
-    else if(new_phone) {
-        //result = dynamic_cast<device*>(new_phone);
+    else if(new_phone)
         result = new_phone;
-    }
-    else {
-        //result = dynamic_cast<device*>(new_computer);
+    else 
         result = new_computer;
-    }
 
     return 1;
 }
@@ -223,11 +234,15 @@ int main() {
     cpp_string current_device;
     // individual details
     cpp_string name;
+    cpp_string old_name;
     cpp_string message;
+    cpp_string number;
+    os_type phone_type = os_type::feature_phone;
 
     contact_list * contacts = new contact_list();
     contact * new_contact = nullptr;
     device * new_device = nullptr;
+    program * new_program = nullptr;
 
     do {
         if(menu == 0) { // main menu
@@ -289,19 +304,17 @@ int main() {
                     if(validate_yes()) {
                         if(!add_device(new_device))
                             cout << "Cancelled adding a new device." << endl;
+
+                        new_contact->add_device(*new_device);
+                        delete new_device;
+                        new_device = nullptr;
                     }
 
                     contacts->add_contact(*new_contact);
-
-                    if(new_device) {
-                        contacts->add_device(name, *new_device);
-                        delete new_device;
-                    }
-
-                    delete new_contact;
-
                     cout << "Successfully added " << name << "." << endl;
-                    
+                    delete new_contact;
+                    new_contact = nullptr;
+
                     current_contact = name;
                     menu = 1;
                     break;
@@ -374,6 +387,9 @@ int main() {
 
                     contacts->add_device(current_contact, *new_device);
                     cout << "Successfully added " << new_device << "." << endl;
+
+                    delete new_device;
+                    new_device = nullptr;
                     break;
                 case 4: // remove device
                     cout << "Device name: ";
@@ -385,18 +401,28 @@ int main() {
                         break;
                     }
 
-                    if(contacts->remove_device(current_contact, name))
-                        cout << "Successfully removed " << name << "." << endl;
+                    if(contacts->remove_device(current_contact, name)) 
+                        cout << "Sucessfully removed " << name << "." << endl;
                     else
                         cout << "Could not find " << name << "." << endl;
+
                     break;
                 case 5: // clear devices
+                    cout << "Are you sure you want to clear all devices from " << 
+                        current_contact << "? (y/n) ";
+
+                    if(!validate_yes()) {
+                        cout << "Cancelled clearing all devices." << endl;
+                        break;
+                    }
+
                     result = contacts->clear_devices(current_contact);
 
                     if(result == 0)
                         cout << "No devices to remove." << endl;
                     else
                         cout << "Removed " << result << " devices." << endl;
+
                     break;
                 case 6: // change contact name
                     cout << "Contact name: ";
@@ -407,10 +433,10 @@ int main() {
                         cout << "Cancelled changing contact name." << endl;
                         break;
                     }
-                            
+                    
                     contacts->change_contact_name(current_contact, name);
-                    current_contact = name;
                     cout << "Changed name to " << name << "." << endl;
+                    current_contact = name;
                     break;
                 case 7: // back
                     current_contact = "";
@@ -440,8 +466,9 @@ int main() {
 
                     if(contacts->send_message(current_contact, current_device, message))
                         cout << "Successfully sent message." << endl;
-                    else 
+                    else
                         cout << "Failed to send message." << endl;
+
                     break;
                 case 3: // display sent messages
                     result = contacts->display_messages(current_contact, current_device);
@@ -452,40 +479,151 @@ int main() {
                         cout << "Displayed " << result << " messages." << endl;
                     break;
                 case 4: // clear sent messages
-                    contacts->clear_messages(current_contact, current_device);
-                    cout << "Cleared sent messages." << endl;
+                    cout << "Are you sure you want to clear all sent messages from " <<
+                        current_device << "? (y/n) ";
+
+                    if(!validate_yes()) {
+                        cout << "Cancelled clearing all messages." << endl;
+                        break;
+                    }
+
+                    if(contacts->clear_messages(current_contact, current_device))
+                        cout << "Cleared sent messages." << endl;
+                    else
+                        cout << "No messages to clear." << endl;
+
                     break;
-                case 5: // pager number/cell network/add program
-                    if(submenu == device_type::pager) {
+                case 5: // change pager number/change cell network/add program
+                    if(submenu == device_type::pager) { // change pager number
+                        cout << "Pager number: ";
+                        cin.getline(input, INPUT_MAX);
+                        number = input;
 
-                    }
-                    else if(submenu == device_type::cell_phone) {
+                        if(number.is_empty()) {
+                            cout << "Cancelled changing pager number." << endl;
+                            break;
+                        }
 
+                        contacts->change_number(current_contact, current_device,
+                                number);
+                        cout << "Successfully changed pager number to " << 
+                            number << endl;
                     }
-                    else {
-                        
+                    else if(submenu == device_type::cell_phone) { // change phone network
+                        cout << "Cell phone network: ";
+                        cin.getline(input, INPUT_MAX);
+                        name = input;
+
+                        if(name.is_empty()) {
+                            cout << "Cancelled changing cell phone network." << endl;
+                            break;
+                        }
+
+                        contacts->change_network(current_contact, current_device,
+                                name);
+                        cout << "Successfully changed cell phone network to " <<
+                            name << "." << endl;
+                    }
+                    else { // add program
+                        if(!add_program(new_program)) {
+                            cout << "Cancelled adding a new program." << endl;
+                            break;
+                        }
+
+                        contacts->add_program(current_contact, current_device,
+                                *new_program);
+                        cout << "Successfully added a new program." << endl;
                     }
                     break;
-                case 6: // supports text/phone number/remove program
-                    if(submenu == device_type::pager) {
+                case 6: // change supports text/change phone number/remove program
+                    if(submenu == device_type::pager) { // change supports text
+                        cout << "Does this pager support text messages? (y/n) ";
 
-                    }
-                    else if(submenu == device_type::cell_phone) {
+                        if(!validate_yes()) {
+                            cout << "Cancelled changing text message support." << endl;
+                            break;
+                        }
 
+                        contacts->change_supports_text(current_contact, 
+                                current_device, true);
+                        cout << "Successfully changed text message support." << endl;
                     }
-                    else {
-                        
+                    else if(submenu == device_type::cell_phone) { // change phone number
+                        cout << "Phone number: ";
+                        cin.getline(input, INPUT_MAX);
+                        number = input;
+
+                        if(number.is_empty()) {
+                            cout << "Cancelled changing phone number." << endl;
+                            break;
+                        }
+
+                        contacts->change_number(current_contact, current_device,
+                                number);
+                        cout << "Successfully changed phone number." << endl;
+                    }
+                    else { // remove program
+                        cout << "Program name: ";
+                        cin.getline(input, INPUT_MAX);
+                        name = input;
+
+                        if(name.is_empty()) {
+                            cout << "Cancelled removing a program." << endl;
+                            break;
+                        }
+
+                        if(!contacts->remove_program(current_contact, current_device,
+                                    name))
+                            cout << "Could not remove " << name << "." << endl;
+                        else
+                            cout << "Successfully removed " << name << "." << endl;
                     }
                     break;
-                case 7: // supports two-way/phone type/clear programs
-                    if(submenu == device_type::pager) {
+                case 7: // change supports two-way/change phone type/clear programs
+                    if(submenu == device_type::pager) { // change two-way
+                        cout << "Does the pager support two-way messaging? (y/n) " << endl;
 
-                    }
-                    else if(submenu == device_type::cell_phone) {
+                        if(!validate_yes()) {
+                            cout << "Cancelled changing two-way messaging support." << endl;
+                            break;
+                        }
 
+                        contacts->change_two_way(current_contact, current_device,
+                                true);
+                        cout << "Successfully changed two-way messaging support." << endl;
                     }
-                    else {
-                        
+                    else if(submenu == device_type::cell_phone) { // change phone type
+                        cout << "What type of phone is it?" << endl;
+                        cout << "1) iPhone" << endl;
+                        cout << "2) Android" << endl;
+                        cout << "3) Windows Phone" << endl;
+                        cout << "4) Other OS" << endl;
+                        cout << "5) Feature phone (not smartphone)" << endl;
+
+                        option = validate_input(1, 5);
+                        phone_type = static_cast<os_type>(option - 1);
+
+                        contacts->change_phone_type(current_contact, current_device,
+                                phone_type);
+                        cout << "Successfully changed phone type." << endl;
+                    }
+                    else { // clear programs
+                        cout << "Are you sure you want to clear all programs from " << 
+                            current_device << "? (y/n) ";
+
+                        if(!validate_yes()) {
+                            cout << "Cancelled clearing all programs." << endl;
+                            break;
+                        }
+
+                        result = contacts->clear_programs(current_contact,
+                                current_device);
+
+                        if(result == 0)
+                            cout << "No programs to clear." << endl;
+                        else
+                            cout << "Successfully cleared " << result << 
+                                " programs." << endl;
                     }
                     break;
                 case 8: // back

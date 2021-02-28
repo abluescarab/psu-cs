@@ -41,6 +41,8 @@ class program {
         int set_next(const program & new_program);
         // Get the next program.
         program * & get_next(void);
+        // Get the program name.
+        const cpp_string get_name(void) const;
         // Check if the program is empty.
         int is_empty(void) const;
         // Check if the program name matches another program.
@@ -73,6 +75,8 @@ class device {
         int set_next(const device & new_device);
         // Get next device.
         device * & get_next(void);
+        // Get the device's name.
+        const cpp_string get_name(void) const;
         // Send a new message.
         int send_message(const cpp_string & to_send);
         // Display all sent messages.
