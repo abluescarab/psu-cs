@@ -3,6 +3,7 @@ package activities.collections;
 public class CollectionObject {
     private String name;
     private double price;
+    private CollectionObject next;
 
     public CollectionObject() {
         name = "";

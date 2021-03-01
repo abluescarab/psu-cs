@@ -10,14 +10,20 @@ public class FountainPen extends CollectionObject {
     }
 
     private String nibSize;
-    private String ink;
     private FillingType fillingSystem;
-    private boolean isItalic;
+    private String ink;
 
     public FountainPen() {
         nibSize = "";
-        ink = "";
         fillingSystem = FillingType.CARTRIDGE;
-        isItalic = false;
+        ink = "";
+    }
+
+    public FountainPen(String name, double price, String nibSize,
+                       FillingType fillingSystem, String ink) {
+        super(name, price);
+        this.nibSize = nibSize;
+        this.fillingSystem = fillingSystem;
+        this.ink = ink;
     }
 }
