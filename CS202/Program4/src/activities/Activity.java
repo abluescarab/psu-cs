@@ -28,4 +28,8 @@ public abstract class Activity {
     public void changeExperienceLevel(ExperienceLevel experienceLevel) {
         this.experienceLevel = experienceLevel;
     }
+
+    public String toString() {
+        // TODO
+    }
 }
