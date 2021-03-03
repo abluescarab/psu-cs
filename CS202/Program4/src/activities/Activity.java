@@ -8,28 +8,17 @@ public abstract class Activity {
         EXPERT
     }
 
-    private String name;
     private ExperienceLevel experienceLevel;
 
     public Activity() {
-        name = "";
         experienceLevel = ExperienceLevel.NOVICE;
     }
 
-    public Activity(String name, ExperienceLevel experienceLevel) {
-        this.name = name;
+    public Activity(ExperienceLevel experienceLevel) {
         this.experienceLevel = experienceLevel;
-    }
-
-    public void changeName(String name) {
-        this.name = name;
     }
 
     public void changeExperienceLevel(ExperienceLevel experienceLevel) {
         this.experienceLevel = experienceLevel;
-    }
-
-    public String toString() {
-        // TODO
     }
 }

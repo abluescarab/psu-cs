@@ -3,13 +3,14 @@ package activities.crafts;
 import activities.Activity;
 
 public class Craft extends Activity {
-    public CraftProject[] projects;
+    public CraftProject projects;
 
     public Craft() {
-        // TODO
+        projects = null;
     }
 
-    public String toString() {
-        // TODO
+    public Craft(String name, ExperienceLevel experienceLevel) {
+        super(experienceLevel);
+        this.projects = null;
     }
 }

@@ -13,7 +13,7 @@ public class Collection extends Activity {
     }
 
     public Collection(String name, ExperienceLevel experienceLevel) {
-        super(name, experienceLevel);
+        super(experienceLevel);
         collected = new ArrayList<>();
     }
 
@@ -53,7 +53,7 @@ public class Collection extends Activity {
         return count;
     }
 
-    public int display() {
+    /*public int display() {
         // TODO
-    }
+    }*/
 }

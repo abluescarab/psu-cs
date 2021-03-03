@@ -3,7 +3,6 @@ package activities.collections;
 public abstract class CollectionObject {
     private String name;
     private double price;
-    private CollectionObject next;
 
     public CollectionObject() {
         name = "";
@@ -23,7 +22,7 @@ public abstract class CollectionObject {
         return this.name.equals(name) && this.price == price;
     }
 
-    public String toString() {
+    /*public String toString() {
         // TODO
-    }
+    }*/
 }
