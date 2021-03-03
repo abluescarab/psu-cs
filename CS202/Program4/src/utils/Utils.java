@@ -1,7 +1,13 @@
+package utils;
+
 import java.util.Scanner;
 
 public abstract class Utils {
     private static final Scanner scanner = new Scanner(System.in);
+
+    protected static int validateInput(int maxInput) {
+        return validateInput(1, maxInput, true);
+    }
 
     protected static int validateInput(int minInput, int maxInput) {
         return validateInput(minInput, maxInput, true);
@@ -25,8 +31,12 @@ public abstract class Utils {
         return input;
     }
 
-    protected static boolean validateYes() {
-        String input = scanner.nextLine().toLowerCase();
+    protected static boolean validateYes(String prompt) {
+        String input = "";
+
+        System.out.print(prompt + " (y/n) ");
+        input = scanner.nextLine().toLowerCase();
+
         return input.equals("y") || input.equals("yes");
     }
 }

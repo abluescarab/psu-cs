@@ -1,6 +1,6 @@
 package activities.collections;
 
-public class FountainPen extends CollectionObject {
+public class FountainPen extends CollectionItem {
     public enum FillingType {
         CARTRIDGE,
         CONVERTER,
@@ -25,5 +25,9 @@ public class FountainPen extends CollectionObject {
         this.nibSize = nibSize;
         this.fillingSystem = fillingSystem;
         this.ink = ink;
+    }
+
+    public void display() {
+        // TODO
     }
 }

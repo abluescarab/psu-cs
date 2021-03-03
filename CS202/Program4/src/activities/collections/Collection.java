@@ -1,18 +1,17 @@
 package activities.collections;
 
 import activities.Activity;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Collection extends Activity {
-    private final ArrayList<CollectionObject> collected;
+    private final ArrayList<CollectionItem> collected;
 
     public Collection() {
         collected = new ArrayList<>();
     }
 
-    public Collection(String name, ExperienceLevel experienceLevel) {
+    public Collection(ExperienceLevel experienceLevel) {
         super(experienceLevel);
         collected = new ArrayList<>();
     }
@@ -20,7 +19,7 @@ public class Collection extends Activity {
     public boolean contains(String collectedObject) {
         boolean contains = false;
 
-        for(CollectionObject obj : collected) {
+        for(CollectionItem obj : collected) {
             if(obj.matches(collectedObject)) {
                 return true;
             }
@@ -29,13 +28,13 @@ public class Collection extends Activity {
         return false;
     }
 
-    public boolean add(CollectionObject collectedObject) {
+    public boolean add(CollectionItem collectedObject) {
         return collected.add(collectedObject);
     }
 
     public boolean remove(String collectedObject) {
         int index = 0;
-        Iterator<CollectionObject> iterator = collected.iterator();
+        Iterator<CollectionItem> iterator = collected.iterator();
 
         while(iterator.hasNext()) {
             if(iterator.next().matches(collectedObject)) {
@@ -53,7 +52,7 @@ public class Collection extends Activity {
         return count;
     }
 
-    /*public int display() {
+    public void display() {
         // TODO
-    }*/
+    }
 }

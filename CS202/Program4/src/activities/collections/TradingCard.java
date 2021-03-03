@@ -1,6 +1,6 @@
 package activities.collections;
 
-public class TradingCard extends CollectionObject {
+public class TradingCard extends CollectionItem {
     public String rarity;
     public String series;
     public String condition;
@@ -17,5 +17,9 @@ public class TradingCard extends CollectionObject {
         this.rarity = rarity;
         this.series = series;
         this.condition = condition;
+    }
+
+    public void display() {
+        // TODO
     }
 }

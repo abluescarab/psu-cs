@@ -1,15 +1,15 @@
 package activities.collections;
 
-public abstract class CollectionObject {
+public abstract class CollectionItem {
     private String name;
     private double price;
 
-    public CollectionObject() {
+    public CollectionItem() {
         name = "";
         price = 0.0;
     }
 
-    public CollectionObject(String name, double price) {
+    public CollectionItem(String name, double price) {
         this.name = name;
         this.price = price;
     }
@@ -22,7 +22,11 @@ public abstract class CollectionObject {
         return this.name.equals(name) && this.price == price;
     }
 
-    /*public String toString() {
+    public void display() {
         // TODO
-    }*/
+    }
+
+    public String toString() {
+        return name;
+    }
 }

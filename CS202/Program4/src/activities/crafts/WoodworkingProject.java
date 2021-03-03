@@ -1,7 +1,5 @@
 package activities.crafts;
 
-import java.util.ArrayList;
-
 public class WoodworkingProject extends CraftProject {
     private String woodUsed;
     private String dimensions;
@@ -11,8 +9,8 @@ public class WoodworkingProject extends CraftProject {
         dimensions = "";
     }
 
-    public WoodworkingProject(String name, boolean forSale, String woodUsed, String dimensions) {
-        super(name, forSale);
+    public WoodworkingProject(String name, String description, boolean forSale, String woodUsed, String dimensions) {
+        super(name, description);
         this.woodUsed = woodUsed;
         this.dimensions = dimensions;
     }

@@ -2,20 +2,20 @@ package activities.crafts;
 
 public class CraftProject {
     private String name;
-    private boolean forSale;
+    private String description;
     private boolean complete;
     private CraftProject next;
 
     public CraftProject() {
         name = "";
-        forSale = false;
+        description = "";
         complete = false;
         next = null;
     }
 
-    public CraftProject(String name, boolean forSale) {
+    public CraftProject(String name, String description) {
         this.name = name;
-        this.forSale = forSale;
+        this.description = description;
         complete = false;
         next = null;
     }

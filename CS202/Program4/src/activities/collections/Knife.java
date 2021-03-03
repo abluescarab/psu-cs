@@ -1,6 +1,6 @@
 package activities.collections;
 
-public class Knife extends CollectionObject {
+public class Knife extends CollectionItem {
     private double bladeLength;
     private String bladeMaterial;
 
@@ -13,5 +13,9 @@ public class Knife extends CollectionObject {
         super(name, price);
         this.bladeLength = bladeLength;
         this.bladeMaterial = bladeMaterial;
+    }
+
+    public void display() {
+        // TODO
     }
 }
