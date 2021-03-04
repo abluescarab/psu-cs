@@ -1,5 +1,7 @@
-import activities.ActivityManager;
+import activities.*;
 import utils.Utils;
+
+import java.util.*;
 
 public class Main extends Utils {
     private enum MenuType {
@@ -11,6 +13,48 @@ public class Main extends Utils {
     }
 
     private static MenuType menu = MenuType.MAIN;
+    private static CollectionType currentCollection = CollectionType.NONE;
+    private static CraftType currentCraft = CraftType.NONE;
+
+    private static String changeCollection(CollectionType collectionType) {
+        String menuText = "";
+        currentCollection = collectionType;
+
+        if(collectionType == CollectionType.NONE)
+            menu = MenuType.ALL_COLLECTIONS;
+        else {
+            menu = MenuType.SINGLE_COLLECTION;
+
+            if(collectionType == CollectionType.FOUNTAIN_PEN)
+                menuText = "Fountain Pen Collection";
+            else if(collectionType == CollectionType.KNIFE)
+                menuText = "Knife Collection";
+            else
+                menuText = "Trading Card Collection";
+        }
+
+        return menuText;
+    }
+
+    private static String changeCraft(CraftType craftType) {
+        String menuText = "";
+        currentCraft = craftType;
+
+        if(craftType == CraftType.NONE)
+            menu = MenuType.ALL_CRAFTS;
+        else {
+            menu = MenuType.SINGLE_CRAFT;
+
+            if(craftType == CraftType.PAINTING)
+                menuText = "Painting Projects";
+            else if(craftType == CraftType.SCULPTURE)
+                menuText = "Sculpture Projects";
+            else
+                menuText = "Woodworking Projects";
+        }
+
+        return menuText;
+    }
 
     private static int displayMenu(String menuText) {
         int maxOption = 0;
@@ -75,13 +119,16 @@ public class Main extends Utils {
                 break;
         }
 
-        return validateInput(maxOption);
+        return getNumericInput(maxOption);
     }
 
     public static void main(String[] args) {
         int option = 0;
         String input = "";
         String menuText = "";
+        CollectionType currentCollection = CollectionType.NONE;
+        CraftType currentCraft = CraftType.NONE;
+
         boolean quit = false;
         ActivityManager manager = new ActivityManager();
 
@@ -92,19 +139,18 @@ public class Main extends Utils {
                 case ALL_COLLECTIONS:
                     switch(option) {
                         case 1: // manage fountain pen collection
-                            menuText = "Fountain Pen Collection";
-                            menu = MenuType.SINGLE_COLLECTION;
+                            menuText = changeCollection(CollectionType.FOUNTAIN_PEN);
                             break;
                         case 2: // manage knife collection
-                            menuText = "Knife Collection";
-                            menu = MenuType.SINGLE_COLLECTION;
+                            menuText = changeCollection(CollectionType.KNIFE);
                             break;
                         case 3: // manage trading card collection
-                            menuText = "Trading Card Collection";
-                            menu = MenuType.SINGLE_COLLECTION;
+                            menuText = changeCollection(CollectionType.TRADING_CARD);
                             break;
                         case 4: // clear all collections
-                            if(!validateYes("Are you sure you want to clear all collections?")) {
+                            System.out.println("Are you sure you want to clear all collections? (y/n) ");
+
+                            if(getConfirmation()) {
                                 System.out.println("Cancelled clearing all collections.");
                                 break;
                             }
@@ -123,8 +169,25 @@ public class Main extends Utils {
                 case SINGLE_COLLECTION:
                     switch(option) {
                         case 1: // display collection
+                            manager.display(currentCollection);
                             break;
                         case 2: // add item
+                            System.out.println("Item name: ");
+                            input = getStringInput();
+
+                            if(input.isBlank()) {
+                                System.out.println("Cancelled adding new item.");
+                                break;
+                            }
+
+                            if(currentCollection == CollectionType.FOUNTAIN_PEN) {
+                            }
+                            else if(currentCollection == CollectionType.KNIFE) {
+
+                            }
+                            else if(currentCollection == CollectionType.TRADING_CARD) {
+
+                            }
                             break;
                         case 3: // remove item
                             break;
@@ -133,8 +196,7 @@ public class Main extends Utils {
                         case 5: // update knowledge level
                             break;
                         case 6: // back
-                            menuText = "";
-                            menu = MenuType.ALL_COLLECTIONS;
+                            menuText = changeCollection(CollectionType.NONE);
                             break;
                         default:
                             option = displayMenu(menuText);
@@ -144,19 +206,18 @@ public class Main extends Utils {
                 case ALL_CRAFTS:
                     switch(option) {
                         case 1: // manage paintings
-                            menuText = "Painting Projects";
-                            menu = MenuType.SINGLE_CRAFT;
+                            menuText = changeCraft(CraftType.PAINTING);
                             break;
                         case 2: // manage sculptures
-                            menuText = "Sculpture Projects";
-                            menu = MenuType.SINGLE_CRAFT;
+                            menuText = changeCraft(CraftType.SCULPTURE);
                             break;
                         case 3: // manage woodworking projects
-                            menuText = "Woodworking Projects";
-                            menu = MenuType.SINGLE_CRAFT;
+                            menuText = changeCraft(CraftType.WOODWORKING);
                             break;
                         case 4: // clear all projects
-                            if(!validateYes("Are you sure you want to clear all projects?")) {
+                            System.out.println("Are you sure you want to clear all projects? (y/n) ");
+
+                            if(!getConfirmation()) {
                                 System.out.println("Cancelled clearing all projects.");
                                 break;
                             }
@@ -175,6 +236,7 @@ public class Main extends Utils {
                 case SINGLE_CRAFT:
                     switch(option) {
                         case 1: // display projects
+                            manager.display(currentCraft);
                             break;
                         case 2: // mark project complete
                             break;
@@ -187,8 +249,7 @@ public class Main extends Utils {
                         case 6: // update experience level
                             break;
                         case 7: // back
-                            menuText = "";
-                            menu = MenuType.ALL_CRAFTS;
+                            menuText = changeCraft(CraftType.NONE);
                             break;
                         default:
                             option = displayMenu(menuText);

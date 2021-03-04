@@ -4,18 +4,6 @@ import activities.collections.*;
 import activities.crafts.*;
 
 public class ActivityManager {
-    public enum CollectionType {
-        FOUNTAIN_PEN,
-        KNIFE,
-        TRADING_CARD
-    }
-
-    public enum CraftType {
-        PAINTING,
-        SCULPTURE,
-        WOODWORKING
-    }
-
     private final Collection fountainPenCollection;
     private final Collection knifeCollection;
     private final Collection tradingCardCollection;
@@ -44,12 +32,12 @@ public class ActivityManager {
         return tradingCardCollection.add(tradingCard);
     }
 
-    public boolean add(Painting painting) {
-        return paintingSkill.add(painting);
+    public boolean add(PaintingProject paintingProject) {
+        return paintingSkill.add(paintingProject);
     }
 
-    public boolean add(Sculpture sculpture) {
-        return sculptureSkill.add(sculpture);
+    public boolean add(SculptureProject sculptureProject) {
+        return sculptureSkill.add(sculptureProject);
     }
 
     public boolean add(WoodworkingProject woodworkingProject) {

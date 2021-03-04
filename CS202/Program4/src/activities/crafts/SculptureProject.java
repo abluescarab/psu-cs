@@ -1,5 +1,5 @@
 package activities.crafts;
 
-public class Sculpture extends CraftProject {
+public class SculptureProject extends CraftProject {
     private String clayBrand;
 }

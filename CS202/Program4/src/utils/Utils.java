@@ -3,17 +3,17 @@ package utils;
 import java.util.Scanner;
 
 public abstract class Utils {
-    private static final Scanner scanner = new Scanner(System.in);
+    protected static final Scanner scanner = new Scanner(System.in);
 
-    protected static int validateInput(int maxInput) {
-        return validateInput(1, maxInput, true);
+    protected static int getNumericInput(int maxInput) {
+        return getNumericInput(1, maxInput, true);
     }
 
-    protected static int validateInput(int minInput, int maxInput) {
-        return validateInput(minInput, maxInput, true);
+    protected static int getNumericInput(int minInput, int maxInput) {
+        return getNumericInput(minInput, maxInput, true);
     }
 
-    protected static int validateInput(int minInput, int maxInput, boolean showPrompt) {
+    protected static int getNumericInput(int minInput, int maxInput, boolean showPrompt) {
         int input = -1;
 
         do {
@@ -31,12 +31,25 @@ public abstract class Utils {
         return input;
     }
 
-    protected static boolean validateYes(String prompt) {
+    protected static String getStringInput() {
+        return getStringInput(false, "");
+    }
+
+    protected static String getStringInput(boolean repeatIfInvalid, String invalidMessage) {
         String input = "";
 
-        System.out.print(prompt + " (y/n) ");
-        input = scanner.nextLine().toLowerCase();
+        do {
+            input = scanner.nextLine();
 
-        return input.equals("y") || input.equals("yes");
+            if(input.isBlank())
+                System.out.println(invalidMessage);
+        } while(repeatIfInvalid && input.equals(""));
+
+        return input;
+    }
+
+    protected static boolean getConfirmation() {
+        String input = scanner.nextLine().toLowerCase();
+        return !input.equals("y") && !input.equals("yes");
     }
 }
