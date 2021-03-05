@@ -1,6 +1,7 @@
 package activities.crafts;
 
 import activities.Activity;
+import activities.crafts.projects.*;
 
 public class Craft extends Activity {
     private CraftProject projects;

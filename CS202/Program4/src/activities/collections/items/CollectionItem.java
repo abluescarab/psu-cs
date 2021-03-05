@@ -1,8 +1,8 @@
-package activities.collections;
+package activities.collections.items;
 
 public abstract class CollectionItem {
-    private String name;
-    private double price;
+    private final String name;
+    private final double price;
 
     public CollectionItem() {
         name = "";

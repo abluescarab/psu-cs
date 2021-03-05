@@ -1,8 +1,8 @@
-package activities.crafts;
+package activities.crafts.projects;
 
 public class WoodworkingProject extends CraftProject {
-    private String woodUsed;
-    private String dimensions;
+    private final String woodUsed;
+    private final String dimensions;
 
     public WoodworkingProject() {
         woodUsed = "";

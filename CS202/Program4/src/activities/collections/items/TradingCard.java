@@ -1,4 +1,4 @@
-package activities.collections;
+package activities.collections.items;
 
 public class TradingCard extends CollectionItem {
     public String rarity;

@@ -1,8 +1,8 @@
-package activities.crafts;
+package activities.crafts.projects;
 
 public class CraftProject {
-    private String name;
-    private String description;
+    private final String name;
+    private final String description;
     private boolean complete;
     private CraftProject next;
 
@@ -26,6 +26,14 @@ public class CraftProject {
 
     public void setNext(CraftProject next) {
         this.next = next;
+    }
+
+    public boolean isComplete() {
+        return complete;
+    }
+
+    public void markCompleted() {
+        complete = true;
     }
 
     public void display() {

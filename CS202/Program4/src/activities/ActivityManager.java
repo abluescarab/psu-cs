@@ -1,7 +1,9 @@
 package activities;
 
 import activities.collections.*;
+import activities.collections.items.*;
 import activities.crafts.*;
+import activities.crafts.projects.*;
 
 public class ActivityManager {
     private final Collection fountainPenCollection;
@@ -12,9 +14,9 @@ public class ActivityManager {
     private final Craft woodworkingSkill;
 
     public ActivityManager() {
-        fountainPenCollection = new Collection();
-        knifeCollection = new Collection();
-        tradingCardCollection = new Collection();
+        fountainPenCollection = new FountainPenCollection();
+        knifeCollection = new KnifeCollection();
+        tradingCardCollection = new TradingCardCollection();
         paintingSkill = new Craft();
         sculptureSkill = new Craft();
         woodworkingSkill = new Craft();

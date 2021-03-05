@@ -1,8 +1,8 @@
-package activities.crafts;
+package activities.crafts.projects;
 
 public class PaintingProject extends CraftProject {
-    private String surfaceType;
-    private String dimensions;
+    private final String surfaceType;
+    private final String dimensions;
 
     public PaintingProject() {
         surfaceType = "";

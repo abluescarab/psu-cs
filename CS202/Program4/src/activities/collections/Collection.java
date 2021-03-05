@@ -1,11 +1,15 @@
 package activities.collections;
 
 import activities.Activity;
+import activities.collections.items.*;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class Collection extends Activity {
+public abstract class Collection extends Activity {
     private final ArrayList<CollectionItem> collected;
+
+    public abstract void create();
 
     public Collection() {
         collected = new ArrayList<>();
@@ -52,7 +56,11 @@ public class Collection extends Activity {
         return count;
     }
 
-    public void display() {
-        // TODO
+    public int display() {
+        for(CollectionItem item : collected) {
+            item.display();
+        }
+
+        return collected.size();
     }
 }

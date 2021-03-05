@@ -1,4 +1,4 @@
-package activities.collections;
+package activities.collections.items;
 
 public class FountainPen extends CollectionItem {
     public enum FillingType {
