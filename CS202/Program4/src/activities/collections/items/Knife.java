@@ -5,8 +5,8 @@ public class Knife extends CollectionItem {
     private String bladeMaterial;
 
     public Knife() {
-        bladeMaterial = "";
         bladeLength = 0.0;
+        bladeMaterial = "";
     }
 
     public Knife(String name, double price, double bladeLength, String bladeMaterial) {

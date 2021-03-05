@@ -1,31 +1,20 @@
-package activities.crafts.projects;
+package activities.crafts.items;
 
-public class CraftProject {
-    private final String name;
+import activities.*;
+
+public class CraftProject extends ActivityItem {
     private final String description;
     private boolean complete;
-    private CraftProject next;
 
     public CraftProject() {
-        name = "";
         description = "";
         complete = false;
-        next = null;
     }
 
     public CraftProject(String name, String description) {
-        this.name = name;
+        super(name);
         this.description = description;
         complete = false;
-        next = null;
-    }
-
-    public CraftProject getNext() {
-        return next;
-    }
-
-    public void setNext(CraftProject next) {
-        this.next = next;
     }
 
     public boolean isComplete() {
@@ -38,9 +27,5 @@ public class CraftProject {
 
     public void display() {
         // TODO
-    }
-
-    public String toString() {
-        return name;
     }
 }

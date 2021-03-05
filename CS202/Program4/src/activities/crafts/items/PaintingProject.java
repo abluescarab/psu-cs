@@ -1,4 +1,4 @@
-package activities.crafts.projects;
+package activities.crafts.items;
 
 public class PaintingProject extends CraftProject {
     private final String surfaceType;
@@ -13,5 +13,9 @@ public class PaintingProject extends CraftProject {
         super(name, description);
         this.surfaceType = surfaceType;
         this.dimensions = dimensions;
+    }
+
+    public void display() {
+        // TODO
     }
 }

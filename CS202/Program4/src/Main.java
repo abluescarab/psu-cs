@@ -1,7 +1,11 @@
+/*
+TODO: array of LLLs (Activity is node)
+TODO: move ArrayList<ActivityItem> to CraftActivity & CollectionActivity & make more specific
+ */
+
+
 import activities.*;
 import utils.Utils;
-
-import java.util.*;
 
 public class Main extends Utils {
     private enum MenuType {

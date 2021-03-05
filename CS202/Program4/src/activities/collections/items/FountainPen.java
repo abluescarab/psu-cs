@@ -19,8 +19,7 @@ public class FountainPen extends CollectionItem {
         ink = "";
     }
 
-    public FountainPen(String name, double price, String nibSize,
-                       FillingType fillingSystem, String ink) {
+    public FountainPen(String name, double price, String nibSize, FillingType fillingSystem, String ink) {
         super(name, price);
         this.nibSize = nibSize;
         this.fillingSystem = fillingSystem;

@@ -1,9 +1,9 @@
 package activities.collections.items;
 
 public class TradingCard extends CollectionItem {
-    public String rarity;
-    public String series;
-    public String condition;
+    private String rarity;
+    private String series;
+    private String condition;
 
     public TradingCard() {
         rarity = "";
@@ -11,8 +11,7 @@ public class TradingCard extends CollectionItem {
         condition = "";
     }
 
-    public TradingCard(String name, double price, String rarity, String series,
-                       String condition) {
+    public TradingCard(String name, double price, String rarity, String series, String condition) {
         super(name, price);
         this.rarity = rarity;
         this.series = series;
