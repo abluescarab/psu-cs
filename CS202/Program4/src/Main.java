@@ -17,7 +17,7 @@ public class Main extends Utils {
     }
 
     private static MenuType menu = MenuType.MAIN;
-    private static CollectionType currentCollection = CollectionType.NONE;
+    /*private static CollectionType currentCollection = CollectionType.NONE;
     private static CraftType currentCraft = CraftType.NONE;
 
     private static String changeCollection(CollectionType collectionType) {
@@ -58,7 +58,7 @@ public class Main extends Utils {
         }
 
         return menuText;
-    }
+    }*/
 
     private static int displayMenu(String menuText) {
         int maxOption = 0;

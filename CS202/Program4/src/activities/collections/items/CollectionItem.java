@@ -1,3 +1,5 @@
+package activities.collections.items;
+
 import activities.*;
 
 public abstract class CollectionItem extends ActivityItem {

@@ -108,4 +108,8 @@ public abstract class Activity {
         items.clear();
         return count;
     }
+
+    public String toString() {
+        return name;
+    }
 }

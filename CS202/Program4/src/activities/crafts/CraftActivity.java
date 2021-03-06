@@ -1,6 +1,9 @@
 package activities.crafts;
 
 import activities.*;
+import activities.crafts.items.*;
+
+import java.util.*;
 
 public class CraftActivity extends Activity {
     public CraftActivity(String name, ExperienceLevel experienceLevel) {
