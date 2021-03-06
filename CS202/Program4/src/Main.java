@@ -1,10 +1,6 @@
-/*
-TODO: array of LLLs (Activity is node)
-TODO: move ArrayList<ActivityItem> to CraftActivity & CollectionActivity & make more specific
- */
-
-
 import activities.*;
+import activities.collections.*;
+import activities.crafts.*;
 import utils.Utils;
 
 public class Main extends Utils {
@@ -16,96 +12,58 @@ public class Main extends Utils {
         SINGLE_CRAFT
     }
 
-    private static MenuType menu = MenuType.MAIN;
-    /*private static CollectionType currentCollection = CollectionType.NONE;
-    private static CraftType currentCraft = CraftType.NONE;
-
-    private static String changeCollection(CollectionType collectionType) {
-        String menuText = "";
-        currentCollection = collectionType;
-
-        if(collectionType == CollectionType.NONE)
-            menu = MenuType.ALL_COLLECTIONS;
-        else {
-            menu = MenuType.SINGLE_COLLECTION;
-
-            if(collectionType == CollectionType.FOUNTAIN_PEN)
-                menuText = "Fountain Pen Collection";
-            else if(collectionType == CollectionType.KNIFE)
-                menuText = "Knife Collection";
-            else
-                menuText = "Trading Card Collection";
-        }
-
-        return menuText;
+    private static int displayMenu(MenuType menu) {
+        return displayMenu(menu, "");
     }
 
-    private static String changeCraft(CraftType craftType) {
-        String menuText = "";
-        currentCraft = craftType;
-
-        if(craftType == CraftType.NONE)
-            menu = MenuType.ALL_CRAFTS;
-        else {
-            menu = MenuType.SINGLE_CRAFT;
-
-            if(craftType == CraftType.PAINTING)
-                menuText = "Painting Projects";
-            else if(craftType == CraftType.SCULPTURE)
-                menuText = "Sculpture Projects";
-            else
-                menuText = "Woodworking Projects";
-        }
-
-        return menuText;
-    }*/
-
-    private static int displayMenu(String menuText) {
+    private static int displayMenu(MenuType menu, String current) {
         int maxOption = 0;
 
         switch(menu) {
             case ALL_COLLECTIONS:
-                System.out.println("Collections");
+                System.out.println("Manage Collections");
                 System.out.println("-------------------------------------");
-                System.out.println("1) View fountain pen collection");
-                System.out.println("1) View knife collection");
-                System.out.println("2) View trading card collection");
-                System.out.println("4) Clear all collections");
-                System.out.println("5) Back");
+                System.out.println("1) Manage collection");
+                System.out.println("2) Add collection");
+                System.out.println("3) Remove collection");
+                System.out.println("4) Remove all collections");
+                System.out.println("5) Remove all items in collections");
+                System.out.println("6) Back");
 
-                maxOption = 5;
+                maxOption = 6;
                 break;
             case SINGLE_COLLECTION:
-                System.out.println(menuText);
+                System.out.println("Collection: " + current);
                 System.out.println("-------------------------------------");
                 System.out.println("1) Display collection");
                 System.out.println("2) Add item");
                 System.out.println("3) Remove item");
-                System.out.println("4) Clear all items");
+                System.out.println("4) Remove all items");
                 System.out.println("5) Update knowledge level");
                 System.out.println("6) Back");
 
                 maxOption = 6;
                 break;
             case ALL_CRAFTS:
-                System.out.println("Craft Projects");
+                System.out.println("Crafts");
                 System.out.println("-------------------------------------");
-                System.out.println("1) Manage paintings");
-                System.out.println("2) Manage sculptures");
-                System.out.println("3) Manage woodworking projects");
-                System.out.println("4) Clear all projects");
-                System.out.println("5) Back");
+                System.out.println("1) Manage project collection");
+                System.out.println("2) Add project collection");
+                System.out.println("3) Remove project collection");
+                System.out.println("4) Remove all project collections");
+                System.out.println("5) Remove all projects in collections");
+                System.out.println("6) Back");
 
-                maxOption = 5;
+                maxOption = 6;
                 break;
             case SINGLE_CRAFT:
-                System.out.println(menuText);
+                System.out.println("Craft: " + current);
                 System.out.println("-------------------------------------");
-                System.out.println("1) Display projects");
+                System.out.println("1) Display all projects");
                 System.out.println("2) Mark a project complete");
                 System.out.println("3) Add project");
                 System.out.println("4) Remove project");
-                System.out.println("5) Clear all projects");
+                System.out.println("5) Remove all projects");
                 System.out.println("6) Update experience level");
                 System.out.println("7) Back");
 
@@ -113,10 +71,8 @@ public class Main extends Utils {
                 break;
             case MAIN:
             default:
-                System.out.println("Activity Manager");
-                System.out.println("-------------------------------------");
-                System.out.println("1) View collections");
-                System.out.println("2) View craft projects");
+                System.out.println("1) Manage collections");
+                System.out.println("2) Manage crafts");
                 System.out.println("3) Quit");
 
                 maxOption = 3;
@@ -127,69 +83,102 @@ public class Main extends Utils {
     }
 
     public static void main(String[] args) {
+        ActivityManager manager = new ActivityManager();
+        // loop variables
+        MenuType menu = MenuType.MAIN;
+        String currentCollection = "";
+        String currentCraft = "";
+        CollectionType collectionType;
+        CraftType craftType;
+        boolean quit = false;
+        // input variables
         int option = 0;
         String input = "";
-        String menuText = "";
-        CollectionType currentCollection = CollectionType.NONE;
-        CraftType currentCraft = CraftType.NONE;
-
-        boolean quit = false;
-        ActivityManager manager = new ActivityManager();
+        CollectionActivity newCollection = null;
+        CraftActivity newCraft = null;
 
         while(!quit) {
-            option = displayMenu(menuText);
+            if(!currentCollection.isBlank())
+                option = displayMenu(menu, currentCollection);
+            else if(!currentCraft.isBlank())
+                option = displayMenu(menu, currentCraft);
+            else
+                option = displayMenu(menu);
 
             switch(menu) {
                 case ALL_COLLECTIONS:
                     switch(option) {
-                        case 1: // manage fountain pen collection
-                            menuText = changeCollection(CollectionType.FOUNTAIN_PEN);
-                            break;
-                        case 2: // manage knife collection
-                            menuText = changeCollection(CollectionType.KNIFE);
-                            break;
-                        case 3: // manage trading card collection
-                            menuText = changeCollection(CollectionType.TRADING_CARD);
-                            break;
-                        case 4: // clear all collections
-                            System.out.println("Are you sure you want to clear all collections? (y/n) ");
+                        case 1: // manage collection
+                            System.out.println("Collection name: ");
+                            input = getStringInput(false, "Invalid collection name.");
 
-                            if(getConfirmation()) {
-                                System.out.println("Cancelled clearing all collections.");
+                            if(input.isBlank())
+                                break;
+
+                            if(!manager.hasCollection(input)) {
+                                System.out.println("Collection does not exist.");
                                 break;
                             }
 
-                            manager.clearAllCollections();
-                            System.out.println("Successfully cleared all collections.");
+                            currentCollection = input;
+                            menu = MenuType.SINGLE_COLLECTION;
                             break;
-                        case 5: // back
+                        case 2: // add collection
+                            newCollection = new CollectionActivity().create();
+
+                            while(!manager.addCollection(newCollection)) {
+                                System.out.println("Collection already exists. Please enter another name.");
+                                newCollection.changeName(getStringInput(true, "Invalid name."));
+                            }
+
+                            System.out.println("Successfully added collection " + newCollection.toString());
+                            break;
+                        case 3: // remove collection
+                            System.out.println("Collection name: ");
+                            input = getStringInput(false, "Invalid collection name.");
+
+                            if(input.isBlank())
+                                break;
+
+                            if(!manager.removeCollection(input))
+                                System.out.println("Collection does not exist.");
+                            else
+                                System.out.println("Successfully removed collection " + input);
+                            break;
+                        case 4: // remove all collections
+                            System.out.println("Removed " + manager.removeAllCollections() + " collection(s).");
+                            break;
+                        case 5: // remove all items in collections
+                            System.out.println("Removed " + manager.removeAllItems() + " item(s) across " +
+                                    manager.collectionCount() + " collection(s).");
+                            break;
+                        case 6: // back
                             menu = MenuType.MAIN;
                             break;
                         default:
-                            option = displayMenu(menuText);
+                            option = displayMenu(menu);
                             break;
                     }
                     break;
                 case SINGLE_COLLECTION:
                     switch(option) {
                         case 1: // display collection
-                            manager.display(currentCollection);
+                            if(!manager.displayCollection(currentCollection))
+                                System.out.println("Collection does not exist.");
                             break;
                         case 2: // add item
-                            System.out.println("Item name: ");
-                            input = getStringInput();
+                            collectionType = manager.collectionType(currentCollection);
 
-                            if(input.isBlank()) {
-                                System.out.println("Cancelled adding new item.");
-                                break;
-                            }
-
-                            if(currentCollection == CollectionType.FOUNTAIN_PEN) {
-                            }
-                            else if(currentCollection == CollectionType.KNIFE) {
+                            if(collectionType == CollectionType.FOUNTAIN_PEN) {
 
                             }
-                            else if(currentCollection == CollectionType.TRADING_CARD) {
+                            else if(collectionType == CollectionType.KNIFE) {
+
+                            }
+                            else if(collectionType == CollectionType.TRADING_CARD) {
+
+                            }
+                            else {
 
                             }
                             break;
@@ -200,63 +189,54 @@ public class Main extends Utils {
                         case 5: // update knowledge level
                             break;
                         case 6: // back
-                            menuText = changeCollection(CollectionType.NONE);
+                            menu = MenuType.ALL_COLLECTIONS;
+                            currentCollection = "";
                             break;
                         default:
-                            option = displayMenu(menuText);
+                            option = displayMenu(menu);
                             break;
                     }
                     break;
                 case ALL_CRAFTS:
                     switch(option) {
-                        case 1: // manage paintings
-                            menuText = changeCraft(CraftType.PAINTING);
+                        case 1: // manage project collection
                             break;
-                        case 2: // manage sculptures
-                            menuText = changeCraft(CraftType.SCULPTURE);
+                        case 2: // add project collection
                             break;
-                        case 3: // manage woodworking projects
-                            menuText = changeCraft(CraftType.WOODWORKING);
+                        case 3: // remove project collection
                             break;
-                        case 4: // clear all projects
-                            System.out.println("Are you sure you want to clear all projects? (y/n) ");
-
-                            if(!getConfirmation()) {
-                                System.out.println("Cancelled clearing all projects.");
-                                break;
-                            }
-
-                            manager.clearAllProjects();
-                            System.out.println("Successfully cleared all projects.");
+                        case 4: // remove all project collections
                             break;
-                        case 5: // back
+                        case 5: // remove all projects in collections
+                            break;
+                        case 6: // back
                             menu = MenuType.MAIN;
                             break;
                         default:
-                            option = displayMenu(menuText);
+                            option = displayMenu(menu);
                             break;
                     }
                     break;
                 case SINGLE_CRAFT:
                     switch(option) {
-                        case 1: // display projects
-                            manager.display(currentCraft);
+                        case 1: // display all projects
                             break;
-                        case 2: // mark project complete
+                        case 2: // mark a project complete
                             break;
                         case 3: // add project
                             break;
                         case 4: // remove project
                             break;
-                        case 5: // clear all projects
+                        case 5: // remove all projects
                             break;
                         case 6: // update experience level
                             break;
                         case 7: // back
-                            menuText = changeCraft(CraftType.NONE);
+                            menu = MenuType.ALL_CRAFTS;
+                            currentCraft = "";
                             break;
                         default:
-                            option = displayMenu(menuText);
+                            option = displayMenu(menu);
                             break;
                     }
                     break;
@@ -264,16 +244,14 @@ public class Main extends Utils {
                 default:
                     switch(option) {
                         case 1: // manage collections
-                            menu = MenuType.ALL_COLLECTIONS;
                             break;
-                        case 2: // manage craft projects
-                            menu = MenuType.ALL_CRAFTS;
+                        case 2: // manage crafts
                             break;
                         case 3: // quit
                             quit = true;
                             break;
                         default:
-                            option = displayMenu(menuText);
+                            option = displayMenu(menu);
                             break;
                     }
                     break;

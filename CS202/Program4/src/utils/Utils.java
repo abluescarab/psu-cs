@@ -31,25 +31,43 @@ public abstract class Utils {
         return input;
     }
 
+    protected static double getDoubleInput() {
+        double input = 0.0;
+        boolean success = false;
+
+        do {
+            if(scanner.hasNextDouble()) {
+                input = scanner.nextDouble();
+                success = true;
+            }
+            else
+                System.out.println("Invalid input. Please try again.");
+
+            scanner.nextLine();
+        } while(!success);
+
+        return input;
+    }
+
     protected static String getStringInput() {
         return getStringInput(false, "");
     }
 
-    protected static String getStringInput(boolean repeatIfInvalid, String invalidMessage) {
+    protected static String getStringInput(boolean repeatIfBlank, String invalidMessage) {
         String input = "";
 
         do {
             input = scanner.nextLine();
 
-            if(input.isBlank())
+            if(repeatIfBlank && input.isBlank())
                 System.out.println(invalidMessage);
-        } while(repeatIfInvalid && input.equals(""));
+        } while(repeatIfBlank && input.isBlank());
 
         return input;
     }
 
     protected static boolean getConfirmation() {
         String input = scanner.nextLine().toLowerCase();
-        return !input.equals("y") && !input.equals("yes");
+        return input.equals("y") || input.equals("yes");
     }
 }

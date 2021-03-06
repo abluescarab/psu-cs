@@ -3,7 +3,7 @@ package activities.crafts.items;
 import activities.*;
 
 public class CraftProject extends ActivityItem {
-    private final String description;
+    private String description;
     private boolean complete;
 
     public CraftProject() {
@@ -15,6 +15,20 @@ public class CraftProject extends ActivityItem {
         super(name);
         this.description = description;
         complete = false;
+    }
+
+    @Override
+    public CraftProject create() {
+        super.create();
+
+        System.out.print("Description: ");
+        description = getStringInput();
+
+        return this;
+    }
+
+    public void changeDescription(String description) {
+        this.description = description;
     }
 
     public boolean isComplete() {

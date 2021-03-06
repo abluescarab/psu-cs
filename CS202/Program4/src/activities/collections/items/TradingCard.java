@@ -18,6 +18,22 @@ public class TradingCard extends CollectionItem {
         this.condition = condition;
     }
 
+    @Override
+    public TradingCard create() {
+        super.create();
+
+        System.out.print("Rarity: ");
+        rarity = getStringInput();
+
+        System.out.print("Series: ");
+        series = getStringInput();
+
+        System.out.print("Condition: ");
+        condition = getStringInput();
+
+        return this;
+    }
+
     public void display() {
         // TODO
     }

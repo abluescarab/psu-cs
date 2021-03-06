@@ -1,8 +1,8 @@
 package activities.crafts.items;
 
 public class WoodworkingProject extends CraftProject {
-    private final String woodType;
-    private final String dimensions;
+    private String woodType;
+    private String dimensions;
 
     public WoodworkingProject() {
         woodType = "";
@@ -13,6 +13,19 @@ public class WoodworkingProject extends CraftProject {
         super(name, description);
         this.woodType = woodType;
         this.dimensions = dimensions;
+    }
+
+    @Override
+    public WoodworkingProject create() {
+        super.create();
+
+        System.out.print("Wood type: ");
+        woodType = getStringInput();
+
+        System.out.print("Dimensions: ");
+        dimensions = getStringInput();
+
+        return this;
     }
 
     public void display() {

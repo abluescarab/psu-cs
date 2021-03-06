@@ -16,6 +16,32 @@ public class ActivityManager {
         crafts = new ArrayList<>();
     }
 
+    public int collectionCount() {
+        return collections.size();
+    }
+
+    public int craftCount() {
+        return crafts.size();
+    }
+
+    public CollectionType collectionType(String name) {
+        CollectionActivity collection = getActivity(collections, name);
+
+        if(collection == null)
+            return CollectionType.NONE;
+
+        return collection.getType();
+    }
+
+    public CraftType craftType(String name) {
+        CraftActivity craft = getActivity(crafts, name);
+
+        if(craft == null)
+            return CraftType.NONE;
+
+        return craft.getType();
+    }
+
     public boolean addCollection(CollectionActivity activity) {
         if(hasCollection(activity.toString()))
             return false;
@@ -200,32 +226,44 @@ public class ActivityManager {
         return false;
     }
 
-    public void displayCollection(String name) {
+    public boolean displayCollection(String name) {
         CollectionActivity activity = getActivity(collections, name);
 
-        if(activity != null)
+        if(activity != null) {
             activity.display();
+            return true;
+        }
+
+        return false;
     }
 
-    public void displayCraft(String name) {
+    public boolean displayCraft(String name) {
         CraftActivity activity = getActivity(crafts, name);
 
-        if(activity != null)
+        if(activity != null) {
             activity.display();
+            return true;
+        }
+
+        return false;
     }
 
-    public void displayItems(String collection) {
+    public int displayItems(String collection) {
         CollectionActivity activity = getActivity(collections, collection);
 
         if(activity != null)
-            activity.displayAll();
+            return activity.displayAll();
+
+        return 0;
     }
 
-    public void displayProjects(String craft) {
+    public int displayProjects(String craft) {
         CraftActivity activity = getActivity(crafts, craft);
 
         if(activity != null)
-            activity.displayAll();
+            return activity.displayAll();
+
+        return 0;
     }
 
     private <T extends Activity> T getActivity(ArrayList<T> list, String name) {

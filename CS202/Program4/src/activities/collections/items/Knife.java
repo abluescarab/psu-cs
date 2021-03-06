@@ -15,6 +15,19 @@ public class Knife extends CollectionItem {
         this.bladeMaterial = bladeMaterial;
     }
 
+    @Override
+    public Knife create() {
+        super.create();
+
+        System.out.print("Blade length: ");
+        bladeLength = getDoubleInput();
+
+        System.out.print("Blade material: ");
+        bladeMaterial = getStringInput();
+
+        return this;
+    }
+
     public void display() {
         // TODO
     }

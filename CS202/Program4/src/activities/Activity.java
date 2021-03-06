@@ -1,8 +1,10 @@
 package activities;
 
+import utils.*;
+
 import java.util.*;
 
-public abstract class Activity {
+public abstract class Activity extends Utils {
     public enum ExperienceLevel {
         NOVICE,
         INTERMEDIATE,
@@ -14,8 +16,6 @@ public abstract class Activity {
     private ExperienceLevel experienceLevel;
     private final ArrayList<ActivityItem> items;
     private Activity next;
-
-    public abstract void create();
 
     public Activity() {
         name = "";
@@ -29,6 +29,37 @@ public abstract class Activity {
         this.experienceLevel = experienceLevel;
         items = new ArrayList<>();
         next = null;
+    }
+
+    public Activity create() {
+        String input = "";
+        int option = 0;
+
+        System.out.println("Name: ");
+        input = getStringInput(false, "Invalid name.");
+
+        if(input.isBlank())
+            return null;
+
+        System.out.println("Experience level:");
+        System.out.println("1) Novice");
+        System.out.println("2) Intermediate");
+        System.out.println("3) Advanced");
+        System.out.println("4) Expert");
+        option = getNumericInput(4);
+
+        changeName(input);
+
+        if(option == 0)
+            changeExperienceLevel(ExperienceLevel.NOVICE);
+        else if(option == 1)
+            changeExperienceLevel(ExperienceLevel.INTERMEDIATE);
+        else if(option == 3)
+            changeExperienceLevel(ExperienceLevel.ADVANCED);
+        else
+            changeExperienceLevel(ExperienceLevel.EXPERT);
+
+        return this;
     }
 
     public void changeName(String name) {
@@ -65,9 +96,11 @@ public abstract class Activity {
             System.out.println("Expert");
     }
 
-    public void displayAll() {
+    public int displayAll() {
         for(ActivityItem item : items)
             item.display();
+
+        return items.size();
     }
 
     public int count() {
