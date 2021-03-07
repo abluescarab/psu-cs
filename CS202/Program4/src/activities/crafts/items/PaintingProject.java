@@ -17,7 +17,8 @@ public class PaintingProject extends CraftProject {
 
     @Override
     public PaintingProject create() {
-        super.create();
+        if(super.create() == null)
+            return null;
 
         System.out.print("Surface type: ");
         surfaceType = getStringInput();

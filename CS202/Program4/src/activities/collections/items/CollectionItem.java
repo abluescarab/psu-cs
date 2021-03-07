@@ -16,9 +16,10 @@ public abstract class CollectionItem extends ActivityItem {
 
     @Override
     public ActivityItem create() {
-        super.create();
+        if(super.create() == null)
+            return null;
 
-        System.out.println("Price paid: ");
+        System.out.print("Price paid: ");
         price = getDoubleInput();
         return this;
     }

@@ -17,7 +17,8 @@ public class WoodworkingProject extends CraftProject {
 
     @Override
     public WoodworkingProject create() {
-        super.create();
+        if(super.create() == null)
+            return null;
 
         System.out.print("Wood type: ");
         woodType = getStringInput();

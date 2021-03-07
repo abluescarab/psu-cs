@@ -28,7 +28,8 @@ public class SculptureProject extends CraftProject {
     public SculptureProject create() {
         int option = 0;
 
-        super.create();
+        if(super.create() == null)
+            return null;
 
         System.out.print("Clay brand: ");
         clayBrand = getStringInput();

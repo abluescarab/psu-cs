@@ -1,17 +1,11 @@
 package activities;
 
+import activities.collections.items.*;
 import utils.*;
 
 import java.util.*;
 
 public abstract class Activity extends Utils {
-    public enum ExperienceLevel {
-        NOVICE,
-        INTERMEDIATE,
-        ADVANCED,
-        EXPERT
-    }
-
     private String name;
     private ExperienceLevel experienceLevel;
     private final ArrayList<ActivityItem> items;
@@ -35,7 +29,7 @@ public abstract class Activity extends Utils {
         String input = "";
         int option = 0;
 
-        System.out.println("Name: ");
+        System.out.print("Name: ");
         input = getStringInput(false, "Invalid name.");
 
         if(input.isBlank())
@@ -82,7 +76,7 @@ public abstract class Activity extends Utils {
         this.next = next;
     }
 
-    public void display() {
+    public void display(boolean displayItems) {
         System.out.println(name);
         System.out.print("Experience level: ");
 
@@ -94,11 +88,16 @@ public abstract class Activity extends Utils {
             System.out.println("Advanced");
         else
             System.out.println("Expert");
+
+        if(displayItems)
+            displayAll();
     }
 
     public int displayAll() {
-        for(ActivityItem item : items)
+        for(ActivityItem item : items) {
+            System.out.println();
             item.display();
+        }
 
         return items.size();
     }
@@ -116,14 +115,32 @@ public abstract class Activity extends Utils {
         return false;
     }
 
+    public int containsCount(String name) {
+        int count = 0;
+
+        for(ActivityItem item : items) {
+            if(item.matches(name))
+                ++count;
+        }
+
+        return count;
+    }
+
     public boolean add(ActivityItem item) {
-        if(contains(item.toString()))
+        if(item == null)
             return false;
 
         return items.add(item);
     }
 
-    public boolean remove(String name) {
+    public boolean remove(ActivityItem item) {
+        if(items.contains(item))
+            return items.remove(item);
+
+        return false;
+    }
+
+    public boolean removeFirst(String name) {
         Iterator<ActivityItem> iterator = items.iterator();
 
         while(iterator.hasNext()) {
@@ -136,6 +153,20 @@ public abstract class Activity extends Utils {
         return false;
     }
 
+    public int removeAll(String name) {
+        int removed = 0;
+        Iterator<ActivityItem> iterator = items.iterator();
+
+        while(iterator.hasNext()) {
+            if(iterator.next().matches(name)) {
+                iterator.remove();
+                ++removed;
+            }
+        }
+
+        return removed;
+    }
+
     public int removeAll() {
         int count = count();
         items.clear();
@@ -144,5 +175,21 @@ public abstract class Activity extends Utils {
 
     public String toString() {
         return name;
+    }
+
+    ArrayList<ActivityItem> displayItemsWithName(String name) {
+        int count = 0;
+        ArrayList<ActivityItem> foundItems = new ArrayList<>();
+
+        for(ActivityItem item : items) {
+            if(item.matches(name)) {
+                foundItems.add(item);
+                System.out.print(++count + ") ");
+                item.display();
+                System.out.println();
+            }
+        }
+
+        return foundItems;
     }
 }

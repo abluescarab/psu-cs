@@ -16,7 +16,8 @@ public class CollectionActivity extends Activity {
     public CollectionActivity create() {
         int option = 0;
 
-        super.create();
+        if(super.create() == null)
+            return null;
 
         System.out.println("What type of collection is this?");
         System.out.println("1) Fountain pen");

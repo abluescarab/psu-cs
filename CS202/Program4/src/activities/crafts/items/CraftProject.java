@@ -19,7 +19,8 @@ public class CraftProject extends ActivityItem {
 
     @Override
     public CraftProject create() {
-        super.create();
+        if(super.create() == null)
+            return null;
 
         System.out.print("Description: ");
         description = getStringInput();

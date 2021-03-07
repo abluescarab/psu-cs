@@ -16,7 +16,8 @@ public class CraftActivity extends Activity {
     public CraftActivity create() {
         int option = 0;
 
-        super.create();
+        if(super.create() == null)
+            return null;
 
         System.out.println("What craft projects are you working on?");
         System.out.println("1) Painting");

@@ -1,5 +1,6 @@
 import activities.*;
 import activities.collections.*;
+import activities.collections.items.*;
 import activities.crafts.*;
 import utils.Utils;
 
@@ -23,14 +24,15 @@ public class Main extends Utils {
             case ALL_COLLECTIONS:
                 System.out.println("Manage Collections");
                 System.out.println("-------------------------------------");
-                System.out.println("1) Manage collection");
-                System.out.println("2) Add collection");
-                System.out.println("3) Remove collection");
-                System.out.println("4) Remove all collections");
-                System.out.println("5) Remove all items in collections");
-                System.out.println("6) Back");
+                System.out.println("1) Display all collections");
+                System.out.println("2) Manage collection");
+                System.out.println("3) Add collection");
+                System.out.println("4) Remove collection");
+                System.out.println("5) Remove all collections");
+                System.out.println("6) Remove all items in collections");
+                System.out.println("7) Back");
 
-                maxOption = 6;
+                maxOption = 7;
                 break;
             case SINGLE_COLLECTION:
                 System.out.println("Collection: " + current);
@@ -47,14 +49,15 @@ public class Main extends Utils {
             case ALL_CRAFTS:
                 System.out.println("Crafts");
                 System.out.println("-------------------------------------");
-                System.out.println("1) Manage project collection");
-                System.out.println("2) Add project collection");
-                System.out.println("3) Remove project collection");
-                System.out.println("4) Remove all project collections");
-                System.out.println("5) Remove all projects in collections");
-                System.out.println("6) Back");
+                System.out.println("1) Display all project collections");
+                System.out.println("2) Manage project collection");
+                System.out.println("3) Add project collection");
+                System.out.println("4) Remove project collection");
+                System.out.println("5) Remove all project collections");
+                System.out.println("6) Remove all projects in collections");
+                System.out.println("7) Back");
 
-                maxOption = 6;
+                maxOption = 7;
                 break;
             case SINGLE_CRAFT:
                 System.out.println("Craft: " + current);
@@ -71,6 +74,8 @@ public class Main extends Utils {
                 break;
             case MAIN:
             default:
+                System.out.println("Activity Manager");
+                System.out.println("-------------------------------------");
                 System.out.println("1) Manage collections");
                 System.out.println("2) Manage crafts");
                 System.out.println("3) Quit");
@@ -85,6 +90,7 @@ public class Main extends Utils {
     public static void main(String[] args) {
         ActivityManager manager = new ActivityManager();
         // loop variables
+        int result = 0;
         MenuType menu = MenuType.MAIN;
         String currentCollection = "";
         String currentCraft = "";
@@ -97,6 +103,19 @@ public class Main extends Utils {
         CollectionActivity newCollection = null;
         CraftActivity newCraft = null;
 
+
+        boolean debug = true;
+        if(debug) {
+            newCollection = new CollectionActivity();
+            newCollection.changeName("Test");
+            newCollection.add(new FountainPen("Test FP", 1, "M", FountainPen.FillingType.CARTRIDGE_CONVERTER, "Diamine"));
+            newCollection.add(new FountainPen("Test FP", 2, "F", FountainPen.FillingType.PISTON, "Parker"));
+            manager.addCollection(newCollection);
+            currentCollection = "Test";
+            menu = MenuType.SINGLE_COLLECTION;
+        }
+
+
         while(!quit) {
             if(!currentCollection.isBlank())
                 option = displayMenu(menu, currentCollection);
@@ -105,11 +124,23 @@ public class Main extends Utils {
             else
                 option = displayMenu(menu);
 
+            System.out.println();
+
             switch(menu) {
                 case ALL_COLLECTIONS:
                     switch(option) {
-                        case 1: // manage collection
-                            System.out.println("Collection name: ");
+                        case 1: // display all collections
+                            result = manager.displayAllCollections();
+
+                            if(result == 0)
+                                System.out.println("No collections to display.");
+                            else {
+                                System.out.println();
+                                System.out.println("Displayed " + result + " collection(s).");
+                            }
+                            break;
+                        case 2: // manage collection
+                            System.out.print("Collection name: ");
                             input = getStringInput(false, "Invalid collection name.");
 
                             if(input.isBlank())
@@ -123,18 +154,23 @@ public class Main extends Utils {
                             currentCollection = input;
                             menu = MenuType.SINGLE_COLLECTION;
                             break;
-                        case 2: // add collection
+                        case 3: // add collection
                             newCollection = new CollectionActivity().create();
 
+                            if(newCollection == null) {
+                                System.out.println("Cancelled adding new collection.");
+                                break;
+                            }
+
                             while(!manager.addCollection(newCollection)) {
-                                System.out.println("Collection already exists. Please enter another name.");
-                                newCollection.changeName(getStringInput(true, "Invalid name."));
+                                System.out.println("Collection with that name exists. Enter another name: ");
+                                newCollection.changeName(getStringInput(true, "Invalid name. Try again: "));
                             }
 
                             System.out.println("Successfully added collection " + newCollection.toString());
                             break;
-                        case 3: // remove collection
-                            System.out.println("Collection name: ");
+                        case 4: // remove collection
+                            System.out.print("Collection name: ");
                             input = getStringInput(false, "Invalid collection name.");
 
                             if(input.isBlank())
@@ -143,16 +179,16 @@ public class Main extends Utils {
                             if(!manager.removeCollection(input))
                                 System.out.println("Collection does not exist.");
                             else
-                                System.out.println("Successfully removed collection " + input);
+                                System.out.println("Successfully removed collection " + input + ".");
                             break;
-                        case 4: // remove all collections
+                        case 5: // remove all collections
                             System.out.println("Removed " + manager.removeAllCollections() + " collection(s).");
                             break;
-                        case 5: // remove all items in collections
+                        case 6: // remove all items in collections
                             System.out.println("Removed " + manager.removeAllItems() + " item(s) across " +
                                     manager.collectionCount() + " collection(s).");
                             break;
-                        case 6: // back
+                        case 7: // back
                             menu = MenuType.MAIN;
                             break;
                         default:
@@ -163,30 +199,86 @@ public class Main extends Utils {
                 case SINGLE_COLLECTION:
                     switch(option) {
                         case 1: // display collection
-                            if(!manager.displayCollection(currentCollection))
-                                System.out.println("Collection does not exist.");
+                            manager.displayCollection(currentCollection, true);
                             break;
                         case 2: // add item
-                            collectionType = manager.collectionType(currentCollection);
+                            collectionType = manager.getCollectionType(currentCollection);
 
                             if(collectionType == CollectionType.FOUNTAIN_PEN) {
-
+                                if(!manager.addItem(currentCollection, new FountainPen().create()))
+                                    System.out.println("Could not add new fountain pen.");
+                                else
+                                    System.out.println("Successfully added new fountain pen.");
                             }
                             else if(collectionType == CollectionType.KNIFE) {
-
+                                if(!manager.addItem(currentCollection, new Knife().create()))
+                                    System.out.println("Could not add new knife.");
+                                else
+                                    System.out.println("Successfully added new knife.");
                             }
                             else if(collectionType == CollectionType.TRADING_CARD) {
-
+                                if(!manager.addItem(currentCollection, new TradingCard().create()))
+                                    System.out.println("Could not add new trading card.");
+                                else
+                                    System.out.println("Successfully added new trading card.");
                             }
-                            else {
 
-                            }
                             break;
                         case 3: // remove item
+                            System.out.print("Name: ");
+                            input = getStringInput(false, "Invalid name.");
+
+                            if(input.isBlank())
+                                break;
+
+                            if(manager.countOfItemsWithName(currentCollection, input) > 1) {
+                                if(!manager.chooseItemToRemove(currentCollection, input))
+                                    System.out.println("Cancelled removing an item.");
+                                else
+                                    System.out.println("Successfully removed " + input + ".");
+                            }
+                            else
+                                if(!manager.removeItem(currentCollection, input))
+                                    System.out.println("Could not remove " + input + ".");
+                                else
+                                    System.out.println("Successfully removed " + input + ".");
                             break;
                         case 4: // remove all items
+                            result = manager.removeAllItems(currentCollection);
+
+                            if(result == 0)
+                                System.out.println("No items to remove.");
+                            else {
+                                System.out.println();
+                                System.out.println("Successfully removed " + result + " item(s).");
+                            }
                             break;
                         case 5: // update knowledge level
+                            System.out.println("What experience level do you want to change to?");
+                            System.out.println("1) Novice");
+                            System.out.println("2) Intermediate");
+                            System.out.println("3) Advanced");
+                            System.out.println("4) Expert");
+
+                            option = getNumericInput(4);
+
+                            if(option == 1) {
+                                manager.changeCollectionKnowledgeLevel(currentCollection, ExperienceLevel.NOVICE);
+                                System.out.println("Successfully changed the knowledge level to Novice.");
+                            }
+                            else if(option == 2) {
+                                manager.changeCollectionKnowledgeLevel(currentCollection, ExperienceLevel.INTERMEDIATE);
+                                System.out.println("Successfully changed the knowledge level to Intermediate.");
+                            }
+                            else if(option == 3) {
+                                manager.changeCollectionKnowledgeLevel(currentCollection, ExperienceLevel.ADVANCED);
+                                System.out.println("Successfully changed the knowledge level to Advanced.");
+                            }
+                            else {
+                                manager.changeCollectionKnowledgeLevel(currentCollection, ExperienceLevel.EXPERT);
+                                System.out.println("Successfully changed the knowledge level to Expert.");
+                            }
+
                             break;
                         case 6: // back
                             menu = MenuType.ALL_COLLECTIONS;
@@ -199,17 +291,19 @@ public class Main extends Utils {
                     break;
                 case ALL_CRAFTS:
                     switch(option) {
-                        case 1: // manage project collection
+                        case 1: // display all project collections
                             break;
-                        case 2: // add project collection
+                        case 2: // manage project collection
                             break;
-                        case 3: // remove project collection
+                        case 3: // add project collection
                             break;
-                        case 4: // remove all project collections
+                        case 4: // remove project collection
                             break;
-                        case 5: // remove all projects in collections
+                        case 5: // remove all project collections
                             break;
-                        case 6: // back
+                        case 6: // remove all projects in collections
+                            break;
+                        case 7: // back
                             menu = MenuType.MAIN;
                             break;
                         default:
@@ -244,8 +338,10 @@ public class Main extends Utils {
                 default:
                     switch(option) {
                         case 1: // manage collections
+                            menu = MenuType.ALL_COLLECTIONS;
                             break;
                         case 2: // manage crafts
+                            menu = MenuType.ALL_CRAFTS;
                             break;
                         case 3: // quit
                             quit = true;

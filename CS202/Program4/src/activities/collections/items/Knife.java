@@ -17,7 +17,8 @@ public class Knife extends CollectionItem {
 
     @Override
     public Knife create() {
-        super.create();
+        if(super.create() == null)
+            return null;
 
         System.out.print("Blade length: ");
         bladeLength = getDoubleInput();

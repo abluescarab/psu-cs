@@ -41,7 +41,8 @@ public class FountainPen extends CollectionItem {
     public FountainPen create() {
         int option = 0;
 
-        super.create();
+        if(super.create() == null)
+            return null;
 
         System.out.print("Nib size: ");
         nibSize = getStringInput();
@@ -70,6 +71,19 @@ public class FountainPen extends CollectionItem {
     }
 
     public void display() {
-        // TODO
+        super.display();
+        System.out.println("Nib size: " + nibSize);
+        System.out.print("Filling system: ");
+
+        if(fillingSystem == FillingType.CARTRIDGE_CONVERTER)
+            System.out.println("Cartridge/Converter");
+        else if(fillingSystem == FillingType.PISTON)
+            System.out.println("Piston");
+        else if(fillingSystem == FillingType.VACUUM)
+            System.out.println("Vacuum");
+        else
+            System.out.println("Eyedropper");
+
+        System.out.println("Current ink: " + ink);
     }
 }

@@ -20,7 +20,8 @@ public class TradingCard extends CollectionItem {
 
     @Override
     public TradingCard create() {
-        super.create();
+        if(super.create() == null)
+            return null;
 
         System.out.print("Rarity: ");
         rarity = getStringInput();
