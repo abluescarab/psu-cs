@@ -35,6 +35,15 @@ public class ActivityManager extends Utils {
         activity.changeExperienceLevel(experienceLevel);
     }
 
+    public boolean markCompleted(String craft, String name) {
+        CraftActivity activity = getActivity(crafts, craft);
+
+        if(activity == null)
+            return false;
+
+        return activity.markCompleted(name);
+    }
+
     public int collectionCount() {
         return collections.size();
     }
@@ -75,10 +84,11 @@ public class ActivityManager extends Utils {
         return crafts.add(activity);
     }
 
+    // TODO: update return value to int? -1 = wrong type, 0 = could not add?
     public boolean addItem(String collection, FountainPen fountainPen) {
         CollectionActivity activity = getActivity(collections, collection);
 
-        if(activity == null)
+        if(activity == null || activity.getType() != CollectionType.FOUNTAIN_PEN)
             return false;
 
         return activity.add(fountainPen);
@@ -87,7 +97,7 @@ public class ActivityManager extends Utils {
     public boolean addItem(String collection, Knife knife) {
         CollectionActivity activity = getActivity(collections, collection);
 
-        if(activity == null)
+        if(activity == null || activity.getType() != CollectionType.KNIFE)
             return false;
 
         return activity.add(knife);
@@ -96,7 +106,7 @@ public class ActivityManager extends Utils {
     public boolean addItem(String collection, TradingCard tradingCard) {
         CollectionActivity activity = getActivity(collections, collection);
 
-        if(activity == null)
+        if(activity == null || activity.getType() != CollectionType.TRADING_CARD)
             return false;
 
         return activity.add(tradingCard);
@@ -105,7 +115,7 @@ public class ActivityManager extends Utils {
     public boolean addProject(String craft, PaintingProject paintingProject) {
         CraftActivity activity = getActivity(crafts, craft);
 
-        if(activity == null)
+        if(activity == null || activity.getType() != CraftType.PAINTING)
             return false;
 
         return activity.add(paintingProject);
@@ -114,7 +124,7 @@ public class ActivityManager extends Utils {
     public boolean addProject(String craft, SculptureProject sculptureProject) {
         CraftActivity activity = getActivity(crafts, craft);
 
-        if(activity == null)
+        if(activity == null || activity.getType() != CraftType.SCULPTURE)
             return false;
 
         return activity.add(sculptureProject);
@@ -123,7 +133,7 @@ public class ActivityManager extends Utils {
     public boolean addProject(String craft, WoodworkingProject woodworkingProject) {
         CraftActivity activity = getActivity(crafts, craft);
 
-        if(activity == null)
+        if(activity == null || activity.getType() != CraftType.WOODWORKING)
             return false;
 
         return activity.add(woodworkingProject);

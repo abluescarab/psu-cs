@@ -6,9 +6,9 @@ import utils.*;
 import java.util.*;
 
 public abstract class Activity extends Utils {
+    protected final ArrayList<ActivityItem> items;
     private String name;
     private ExperienceLevel experienceLevel;
-    private final ArrayList<ActivityItem> items;
     private Activity next;
 
     public Activity() {

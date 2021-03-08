@@ -46,6 +46,17 @@ public class CraftActivity extends Activity {
         return craftType;
     }
 
+    public boolean markCompleted(String name) {
+        for(ActivityItem item : items) {
+            if(item.matches(name)) {
+                ((CraftProject)item).markCompleted();
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private void addPaintingProject() {
         boolean quit = false;
 

@@ -2,6 +2,7 @@ import activities.*;
 import activities.collections.*;
 import activities.collections.items.*;
 import activities.crafts.*;
+import activities.crafts.items.*;
 import utils.Utils;
 
 public class Main extends Utils {
@@ -254,7 +255,7 @@ public class Main extends Utils {
                             }
                             break;
                         case 5: // update knowledge level
-                            System.out.println("What experience level do you want to change to?");
+                            System.out.println("What knowledge level do you want to change to?");
                             System.out.println("1) Novice");
                             System.out.println("2) Intermediate");
                             System.out.println("3) Advanced");
@@ -289,6 +290,7 @@ public class Main extends Utils {
                             break;
                     }
                     break;
+                // TODO: all crafts
                 case ALL_CRAFTS:
                     switch(option) {
                         case 1: // display all project collections
@@ -314,16 +316,99 @@ public class Main extends Utils {
                 case SINGLE_CRAFT:
                     switch(option) {
                         case 1: // display all projects
+                            manager.displayCraft(currentCraft, true);
                             break;
                         case 2: // mark a project complete
+                            System.out.print("Name: ");
+                            input = getStringInput(false, "Invalid name.");
+
+                            if(input.isBlank())
+                                break;
+
+                            if(!manager.markCompleted(currentCraft, input))
+                                System.out.println("Could not mark " + input + " complete.");
+                            else
+                                System.out.println("Successfully marked " + input + " complete.");
                             break;
                         case 3: // add project
+                            craftType = manager.getCraftType(currentCraft);
+
+                            if(craftType == CraftType.PAINTING) {
+                                if(!manager.addProject(currentCraft, new PaintingProject().create()))
+                                    System.out.println("Could not add new painting project.");
+                                else
+                                    System.out.println("Successfully added new painting project.");
+                            }
+                            else if(craftType == CraftType.SCULPTURE) {
+                                if(!manager.addProject(currentCraft, new SculptureProject().create()))
+                                    System.out.println("Could not add new sculpture project.");
+                                else
+                                    System.out.println("Successfully added new sculpture project.");
+                            }
+                            else if(craftType == CraftType.WOODWORKING) {
+                                if(!manager.addProject(currentCraft, new WoodworkingProject().create()))
+                                    System.out.println("Could not add new woodworking project.");
+                                else
+                                    System.out.println("Successfully added new woodworking project.");
+                            }
+
                             break;
                         case 4: // remove project
+                            System.out.print("Name: ");
+                            input = getStringInput(false, "Invalid name.");
+
+                            if(input.isBlank())
+                                break;
+
+                            if(manager.countOfProjectsWithName(currentCraft, input) > 1) {
+                                if(!manager.chooseProjectToRemove(currentCraft, input))
+                                    System.out.println("Cancelled removing a project.");
+                                else
+                                    System.out.println("Successfully removed " + input + ".");
+                            }
+                            else {
+                                if(!manager.removeProject(currentCraft, input))
+                                    System.out.println("Could not remove " + input + ".");
+                                else
+                                    System.out.println("Successfully removed " + input + ".");
+                            }
+
                             break;
                         case 5: // remove all projects
+                            result = manager.removeAllProjects(currentCraft);
+
+                            if(result == 0)
+                                System.out.println("No projects to remove.");
+                            else {
+                                System.out.println();
+                                System.out.println("Successfully removed " + result + " item(s).");
+                            }
                             break;
                         case 6: // update experience level
+                            System.out.println("What experience level do you want to change to?");
+                            System.out.println("1) Novice");
+                            System.out.println("2) Intermediate");
+                            System.out.println("3) Advanced");
+                            System.out.println("4) Expert");
+
+                            option = getNumericInput(4);
+
+                            if(option == 1) {
+                                manager.changeCraftExperienceLevel(currentCraft, ExperienceLevel.NOVICE);
+                                System.out.println("Successfully changed the experience level to Novice.");
+                            }
+                            else if(option == 2) {
+                                manager.changeCraftExperienceLevel(currentCraft, ExperienceLevel.INTERMEDIATE);
+                                System.out.println("Successfully changed the experience level to Intermediate.");
+                            }
+                            else if(option == 3) {
+                                manager.changeCraftExperienceLevel(currentCraft, ExperienceLevel.ADVANCED);
+                                System.out.println("Successfully changed the experience level to Advanced.");
+                            }
+                            else {
+                                manager.changeCraftExperienceLevel(currentCraft, ExperienceLevel.EXPERT);
+                                System.out.println("Successfully changed the experience level to Expert.");
+                            }
                             break;
                         case 7: // back
                             menu = MenuType.ALL_CRAFTS;
