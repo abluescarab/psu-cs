@@ -1,17 +1,31 @@
+/* Alana Gilston - 3/5/21 - CS202 - Program 4
+ * CollectionActivity.java
+ *
+ * The CollectionActivity class manages a collection and its corresponding items.
+ */
 package activities.collections;
 
 import activities.*;
-import activities.collections.*;
 import activities.collections.items.*;
 
 public class CollectionActivity extends Activity {
+    /**
+     * The type of item stored in the collection.
+     */
     private CollectionType collectionType;
 
+    /**
+     * Create a new CollectionActivity.
+     */
     public CollectionActivity() {
         super();
         collectionType = CollectionType.FOUNTAIN_PEN;
     }
 
+    /**
+     * Create a new CollectionActivity from user input.
+     * @return The CollectionActivity created
+     */
     @Override
     public CollectionActivity create() {
         int option = 0;
@@ -42,10 +56,17 @@ public class CollectionActivity extends Activity {
         return this;
     }
 
+    /**
+     * Get the type of item stored in the collection.
+     * @return The type of item stored in the collection
+     */
     public CollectionType getType() {
         return collectionType;
     }
 
+    /**
+     * Add a new FountainPen to the collection from user input.
+     */
     private void addFountainPen() {
         boolean quit = false;
 
@@ -59,6 +80,9 @@ public class CollectionActivity extends Activity {
         } while(!quit);
     }
 
+    /**
+     * Add a new Knife to the collection from user input.
+     */
     private void addKnife() {
         boolean quit = false;
 
@@ -72,6 +96,9 @@ public class CollectionActivity extends Activity {
         } while(!quit);
     }
 
+    /**
+     * Add a new TradingCard to the collection from user input.
+     */
     private void addTradingCard() {
         boolean quit = false;
 

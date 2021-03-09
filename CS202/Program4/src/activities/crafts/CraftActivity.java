@@ -1,17 +1,31 @@
+/* Alana Gilston - 3/5/21 - CS202 - Program 4
+ * CraftActivity.java
+ *
+ * The CraftActivity class manages a crafting skill and its corresponding projects.
+ */
 package activities.crafts;
 
 import activities.*;
-import activities.collections.items.*;
 import activities.crafts.items.*;
 
 public class CraftActivity extends Activity {
+    /**
+     * The type of project stored in the craft.
+     */
     private CraftType craftType;
 
+    /**
+     * Create a new CraftActivity.
+     */
     public CraftActivity() {
         super();
         craftType = CraftType.PAINTING;
     }
 
+    /**
+     * Create a new CraftActivity from user input.
+     * @return The new CraftActivity
+     */
     @Override
     public CraftActivity create() {
         int option = 0;
@@ -42,10 +56,19 @@ public class CraftActivity extends Activity {
         return this;
     }
 
+    /**
+     * Get the type of project stored in the craft.
+     * @return The type of project stored in the craft
+     */
     public CraftType getType() {
         return craftType;
     }
 
+    /**
+     * Mark a project completed.
+     * @param name Name of the project
+     * @return Whether the project was marked complete or not
+     */
     public boolean markCompleted(String name) {
         for(ActivityItem item : items) {
             if(item.matches(name)) {
@@ -57,6 +80,9 @@ public class CraftActivity extends Activity {
         return false;
     }
 
+    /**
+     * Add a new PaintingProject to the craft from user input.
+     */
     private void addPaintingProject() {
         boolean quit = false;
 
@@ -70,6 +96,9 @@ public class CraftActivity extends Activity {
         } while(!quit);
     }
 
+    /**
+     * Add a new SculptureProject to the craft from user input.
+     */
     private void addSculptureProject() {
         boolean quit = false;
 
@@ -83,6 +112,9 @@ public class CraftActivity extends Activity {
         } while(!quit);
     }
 
+    /**
+     * Add a new WoodworkingProject to the craft from user input.
+     */
     private void addWoodworkingProject() {
         boolean quit = false;
 

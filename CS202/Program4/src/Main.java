@@ -1,3 +1,8 @@
+/* Alana Gilston - 2/28/21 - CS202 - Program 4
+ * Main.java
+ *
+ * This is the main file to manage the ActivityManager class.
+ */
 import activities.*;
 import activities.collections.*;
 import activities.collections.items.*;
@@ -14,10 +19,21 @@ public class Main extends Utils {
         SINGLE_CRAFT
     }
 
+    /**
+     * Display a menu.
+     * @param menu Type of menu to display
+     * @return The option entered by the user
+     */
     private static int displayMenu(MenuType menu) {
         return displayMenu(menu, "");
     }
 
+    /**
+     * Display a menu.
+     * @param menu Type of menu to display
+     * @param current Current collection or craft
+     * @return The option entered by the user
+     */
     private static int displayMenu(MenuType menu, String current) {
         int maxOption = 0;
 
@@ -50,12 +66,12 @@ public class Main extends Utils {
             case ALL_CRAFTS:
                 System.out.println("Crafts");
                 System.out.println("-------------------------------------");
-                System.out.println("1) Display all project collections");
-                System.out.println("2) Manage project collection");
-                System.out.println("3) Add project collection");
-                System.out.println("4) Remove project collection");
-                System.out.println("5) Remove all project collections");
-                System.out.println("6) Remove all projects in collections");
+                System.out.println("1) Display all crafts");
+                System.out.println("2) Manage crafts");
+                System.out.println("3) Add craft");
+                System.out.println("4) Remove crafts");
+                System.out.println("5) Remove all crafts");
+                System.out.println("6) Remove all craft projects");
                 System.out.println("7) Back");
 
                 maxOption = 7;
@@ -168,11 +184,11 @@ public class Main extends Utils {
                                 newCollection.changeName(getStringInput(true, "Invalid name. Try again: "));
                             }
 
-                            System.out.println("Successfully added collection " + newCollection.toString());
+                            System.out.println("Successfully added collection " + newCollection.toString() + ".");
                             break;
                         case 4: // remove collection
                             System.out.print("Collection name: ");
-                            input = getStringInput(false, "Invalid collection name.");
+                            input = getStringInput(false, "Invalid name.");
 
                             if(input.isBlank())
                                 break;
@@ -183,11 +199,22 @@ public class Main extends Utils {
                                 System.out.println("Successfully removed collection " + input + ".");
                             break;
                         case 5: // remove all collections
-                            System.out.println("Removed " + manager.removeAllCollections() + " collection(s).");
+                            System.out.println("Are you sure you want to remove all collections? (y/n) ");
+
+                            if(getConfirmation()) {
+                                manager.removeAllCollections();
+                                System.out.println("Removed all collections.");
+                            }
+                            else
+                                System.out.println("Cancelled removing all collections.");
                             break;
                         case 6: // remove all items in collections
-                            System.out.println("Removed " + manager.removeAllItems() + " item(s) across " +
-                                    manager.collectionCount() + " collection(s).");
+                            System.out.println("Are you sure you want to remove all collection items? (y/n) ");
+
+                            if(getConfirmation())
+                                System.out.println("Removed " + manager.removeAllItems() + " item(s).");
+                            else
+                                System.out.println("Cancelled removing all collection items.");
                             break;
                         case 7: // back
                             menu = MenuType.MAIN;
@@ -290,20 +317,78 @@ public class Main extends Utils {
                             break;
                     }
                     break;
-                // TODO: all crafts
                 case ALL_CRAFTS:
                     switch(option) {
-                        case 1: // display all project collections
+                        case 1: // display all crafts
+                            result = manager.displayAllCrafts();
+
+                            if(result == 0)
+                                System.out.println("No crafts to display.");
+                            else {
+                                System.out.println();
+                                System.out.println("Displayed " + result + " craft(s).");
+                            }
                             break;
-                        case 2: // manage project collection
+                        case 2: // manage craft
+                            System.out.println("Craft name: ");
+                            input = getStringInput(false, "Invalid name.");
+
+                            if(input.isBlank())
+                                break;
+
+                            if(!manager.hasCraft(input)) {
+                                System.out.println("Craft does not exist.");
+                                break;
+                            }
+
+                            currentCraft = input;
+                            menu = MenuType.SINGLE_CRAFT;
                             break;
-                        case 3: // add project collection
+                        case 3: // add craft
+                            newCraft = new CraftActivity().create();
+
+                            if(newCraft == null) {
+                                System.out.println("Cancelled adding new craft.");
+                                break;
+                            }
+
+                            while(!manager.addCraft(newCraft)) {
+                                System.out.println("Craft with that name already exists. Enter another name: ");
+                                newCraft.changeName(getStringInput(true, "Invalid name. Try again: "));
+                            }
+
+                            System.out.println("Successfully added craft " + newCraft.toString() + ".");
                             break;
-                        case 4: // remove project collection
+                        case 4: // remove craft
+                            System.out.println("Craft name: ");
+                            input = getStringInput(false, "Invalid name.");
+
+                            if(input.isBlank())
+                                break;
+
+                            if(!manager.removeCraft(input))
+                                System.out.println("Craft does not exist.");
+                            else
+                                System.out.println("Successfully removed craft " + input + ".");
                             break;
-                        case 5: // remove all project collections
+                        case 5: // remove all crafts
+                            System.out.println("Are you sure you want to remove all crafts? (y/n) ");
+
+                            if(getConfirmation()) {
+                                manager.removeAllCrafts();
+                                System.out.println("Removed all crafts.");
+                            }
+                            else
+                                System.out.println("Cancelled removing all crafts.");
                             break;
-                        case 6: // remove all projects in collections
+                        case 6: // remove all craft projects
+                            System.out.println("Are you sure you want to remove all craft projects? (y/n) ");
+
+                            if(getConfirmation())
+                                System.out.println("Removed " + manager.removeAllProjects() + " craft project(s).");
+                            else
+                                System.out.println("Cancelled removing all craft projects.");
+
                             break;
                         case 7: // back
                             menu = MenuType.MAIN;
