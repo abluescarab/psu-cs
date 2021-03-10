@@ -130,17 +130,18 @@ public abstract class Activity extends Utils {
      * @param displayItems Whether to display the items in the Activity
      */
     public void display(boolean displayItems) {
-        System.out.println(name);
-        System.out.print("Experience level: ");
+        System.out.print(name + " (");
 
         if(experienceLevel == ExperienceLevel.NOVICE)
-            System.out.println("Novice");
+            System.out.print("Novice");
         else if(experienceLevel == ExperienceLevel.INTERMEDIATE)
-            System.out.println("Intermediate");
+            System.out.print("Intermediate");
         else if(experienceLevel == ExperienceLevel.ADVANCED)
-            System.out.println("Advanced");
+            System.out.print("Advanced");
         else
-            System.out.println("Expert");
+            System.out.print("Expert");
+
+        System.out.println(")");
 
         if(displayItems)
             displayAll();

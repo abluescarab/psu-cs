@@ -120,19 +120,6 @@ public class Main extends Utils {
         CollectionActivity newCollection = null;
         CraftActivity newCraft = null;
 
-
-        boolean debug = true;
-        if(debug) {
-            newCollection = new CollectionActivity();
-            newCollection.changeName("Test");
-            newCollection.add(new FountainPen("Test FP", 1, "M", FountainPen.FillingType.CARTRIDGE_CONVERTER, "Diamine"));
-            newCollection.add(new FountainPen("Test FP", 2, "F", FountainPen.FillingType.PISTON, "Parker"));
-            manager.addCollection(newCollection);
-            currentCollection = "Test";
-            menu = MenuType.SINGLE_COLLECTION;
-        }
-
-
         while(!quit) {
             if(!currentCollection.isBlank())
                 option = displayMenu(menu, currentCollection);
@@ -330,7 +317,7 @@ public class Main extends Utils {
                             }
                             break;
                         case 2: // manage craft
-                            System.out.println("Craft name: ");
+                            System.out.print("Craft name: ");
                             input = getStringInput(false, "Invalid name.");
 
                             if(input.isBlank())
@@ -360,7 +347,7 @@ public class Main extends Utils {
                             System.out.println("Successfully added craft " + newCraft.toString() + ".");
                             break;
                         case 4: // remove craft
-                            System.out.println("Craft name: ");
+                            System.out.print("Craft name: ");
                             input = getStringInput(false, "Invalid name.");
 
                             if(input.isBlank())
@@ -372,7 +359,7 @@ public class Main extends Utils {
                                 System.out.println("Successfully removed craft " + input + ".");
                             break;
                         case 5: // remove all crafts
-                            System.out.println("Are you sure you want to remove all crafts? (y/n) ");
+                            System.out.print("Are you sure you want to remove all crafts? (y/n) ");
 
                             if(getConfirmation()) {
                                 manager.removeAllCrafts();
@@ -382,7 +369,7 @@ public class Main extends Utils {
                                 System.out.println("Cancelled removing all crafts.");
                             break;
                         case 6: // remove all craft projects
-                            System.out.println("Are you sure you want to remove all craft projects? (y/n) ");
+                            System.out.print("Are you sure you want to remove all craft projects? (y/n) ");
 
                             if(getConfirmation())
                                 System.out.println("Removed " + manager.removeAllProjects() + " craft project(s).");
