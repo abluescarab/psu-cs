@@ -3,11 +3,12 @@ package posts;
 import activities.*;
 import activities.collections.*;
 import activities.crafts.*;
+import utils.*;
 
-public abstract class ActivityPost {
-    private final String person;
-    private final String message;
-    private final Activity activity;
+public class ActivityPost extends Utils {
+    private String person;
+    private String message;
+    private Activity activity;
     private ActivityPost left;
     private ActivityPost right;
 
@@ -65,12 +66,32 @@ public abstract class ActivityPost {
         return ((CraftActivity)activity).getType() == craftType;
     }
 
+    public boolean personMatches(String person) {
+        return this.person.equals(person);
+    }
+
+    public boolean activityMatches(String activity) {
+        if(this.activity == null)
+            return false;
+
+        return this.activity.matches(activity);
+    }
+
     public void display() {
         System.out.println(person + ": " + message);
     }
 
-    public ActivityPost create() {
-        // TODO
-        return null;
+    public ActivityPost create(Activity activity) {
+        System.out.print("Poster: ");
+        person = getStringInput(false, "Invalid name.");
+
+        if(person.isBlank())
+            return null;
+
+        System.out.print("Message: ");
+        message = getStringInput();
+
+        this.activity = activity;
+        return this;
     }
 }

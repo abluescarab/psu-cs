@@ -14,6 +14,10 @@ public class PostManager {
 
     }
 
+    public void removeAll() {
+        posts = null;
+    }
+
     public int display() {
         return display(posts);
     }
@@ -27,23 +31,75 @@ public class PostManager {
         return count + display(current.getRight()) + 1;
     }
 
-    public void display(String post) {
-
+    public int displayByPerson(String person) {
+        return displayByPerson(posts, person);
     }
 
-    public int findPosts(String person) {
+    private int displayByPerson(ActivityPost current, String person) {
+        if(current == null)
+            return 0;
 
+        int count = displayByPerson(current.getLeft(), person);
+
+        if(current.personMatches(person)) {
+            current.display();
+            ++count;
+        }
+
+        return count + displayByPerson(current.getRight(), person);
     }
 
-    public int findPosts(CollectionType collectionType) {
-
+    public int displayByType(CollectionType collectionType) {
+        return displayByType(posts, collectionType);
     }
 
-    public int findPosts(CraftType craftType) {
+    private int displayByType(ActivityPost current, CollectionType collectionType) {
+        if(current == null)
+            return 0;
 
+        int count = displayByType(current.getLeft(), collectionType);
+
+        if(current.isType(collectionType)) {
+            current.display();
+            ++count;
+        }
+
+        return count + displayByType(current.getRight(), collectionType);
     }
 
-    public void removeAll() {
-        posts = null;
+    public int displayByType(CraftType craftType) {
+        return displayByType(posts, craftType);
+    }
+
+    private int displayByType(ActivityPost current, CraftType craftType) {
+        if(current == null)
+            return 0;
+
+        int count = displayByType(current.getLeft(), craftType);
+
+        if(current.isType(craftType)) {
+            current.display();
+            ++count;
+        }
+
+        return count + displayByType(current.getRight(), craftType);
+    }
+
+    public int displayByActivityName(String activity) {
+        return displayByActivityName(posts, activity);
+    }
+
+    private int displayByActivityName(ActivityPost current, String activity) {
+        if(current == null)
+            return 0;
+
+        int count = displayByActivityName(current.getLeft(), activity);
+
+        if(current.activityMatches(activity)) {
+            current.display();
+            ++count;
+        }
+
+        return count + displayByActivityName(current.getRight(), activity);
     }
 }
