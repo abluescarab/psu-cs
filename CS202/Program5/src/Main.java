@@ -154,7 +154,7 @@ public class Main extends Utils {
                             newPost = new ActivityPost().create(manager);
 
                             if(newPost == null) {
-                                System.out.println("Cancelled adding a new post.");
+                                System.out.println("Cancelled adding new post.");
                                 break;
                             }
 

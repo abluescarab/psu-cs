@@ -85,15 +85,6 @@ public class ActivityPost extends Utils {
         int option = 0;
         String activityName = "";
 
-        System.out.print("Author: ");
-        author = getStringInput(false, "Invalid name.");
-
-        if(author.isBlank())
-            return null;
-
-        System.out.print("Message: ");
-        message = getStringInput();
-
         System.out.println("Activity type: ");
         System.out.println("1) Collection");
         System.out.println("2) Craft");
@@ -102,37 +93,21 @@ public class ActivityPost extends Utils {
         System.out.println("Activity name: ");
         activityName = getStringInput();
 
-        if(option == 1) {
+        if(option == 1)
             activity = activities.getCollection(activityName);
-
-            if(activity == null) {
-                System.out.print("Collection does not exist. Do you want to to create it? (y/n) ");
-
-                if(getConfirmation()) {
-                    activity = new CollectionActivity().create();
-
-                    if(activity != null)
-                        activities.addCollection((CollectionActivity)activity);// TODO: does this work byref?
-                }
-            }
-        }
-        else {
+        else
             activity = activities.getCraft(activityName);
 
-            if(activity == null) {
-                System.out.println("Craft does not exist. Do you want to create it? (y/n) ");
-
-                if(getConfirmation()) {
-                    activity = new CraftActivity().create();
-
-                    if(activity != null)
-                        activities.addCraft((CraftActivity)activity);// TODO: does this work byref?
-                }
-            }
+        if(activity == null) {
+            System.out.println("Activity with that name does not exist.");
+            return null;
         }
 
-        if(activity == null)
-            return null;
+        System.out.print("Author: ");
+        author = getStringInput();
+
+        System.out.print("Message: ");
+        message = getStringInput();
 
         return this;
     }
