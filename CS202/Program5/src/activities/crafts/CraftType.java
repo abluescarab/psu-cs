@@ -1,4 +1,4 @@
-/* Alana Gilston - 3/6/21 - CS202 - Program 4
+/* Alana Gilston - 3/6/21 - CS202 - Program 5
  * CraftType.java
  *
  * The CraftType enumeration manages the craft projects stored in an activity.

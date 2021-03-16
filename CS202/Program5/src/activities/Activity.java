@@ -1,4 +1,4 @@
-/* Alana Gilston - 3/5/21 - CS202 - Program 4
+/* Alana Gilston - 3/5/21 - CS202 - Program 5
  * Activity.java
  *
  * The Activity class manages a user-defined activity and its corresponding items.

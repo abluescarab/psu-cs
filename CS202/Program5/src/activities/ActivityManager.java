@@ -1,4 +1,4 @@
-/* Alana Gilston - 3/5/21 - CS202 - Program 4
+/* Alana Gilston - 3/5/21 - CS202 - Program 5
  * ActivityManager.java
  *
  * The ActivityManager class manages user-defined activities and their corresponding item and project collections.

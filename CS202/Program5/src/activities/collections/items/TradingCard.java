@@ -1,4 +1,4 @@
-/* Alana Gilston - 3/5/21 - CS202 - Program 4
+/* Alana Gilston - 3/5/21 - CS202 - Program 5
  * TradingCard.java
  *
  * The TradingCard class manages a trading card in a collection.

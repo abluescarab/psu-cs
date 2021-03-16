@@ -1,4 +1,4 @@
-/* Alana Gilston - 3/5/21 - CS202 - Program 4
+/* Alana Gilston - 3/5/21 - CS202 - Program 5
  * ActivityItem.java
  *
  * The ActivityItem class manages an item stored in an activity, either a collection item or craft project.

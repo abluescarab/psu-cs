@@ -1,4 +1,4 @@
-/* Alana Gilston - 3/5/21 - CS202 - Program 4
+/* Alana Gilston - 3/5/21 - CS202 - Program 5
  * CraftActivity.java
  *
  * The CraftActivity class manages a crafting skill and its corresponding projects.

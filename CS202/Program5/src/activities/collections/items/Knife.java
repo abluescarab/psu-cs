@@ -1,4 +1,4 @@
-/* Alana Gilston - 3/5/21 - CS202 - Program 4
+/* Alana Gilston - 3/5/21 - CS202 - Program 5
  * FountainPen.java
  *
  * The FountainPen class manages a fountain pen in a collection.

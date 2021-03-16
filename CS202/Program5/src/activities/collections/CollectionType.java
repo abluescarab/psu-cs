@@ -1,4 +1,4 @@
-/* Alana Gilston - 3/6/21 - CS202 - Program 4
+/* Alana Gilston - 3/6/21 - CS202 - Program 5
  * CollectionType.java
  *
  * The CollectionType enumeration manages what type of item is in a collection.
