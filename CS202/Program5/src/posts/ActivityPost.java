@@ -6,30 +6,30 @@ import activities.crafts.*;
 import utils.*;
 
 public class ActivityPost extends Utils {
-    private String person;
+    private String author;
     private String message;
     private Activity activity;
     private ActivityPost left;
     private ActivityPost right;
 
     public ActivityPost() {
-        person = "";
+        author = "";
         message = "";
         activity = null;
         left = null;
         right = null;
     }
 
-    public ActivityPost(String person, String message) {
-        this.person = person;
+    public ActivityPost(String author, String message) {
+        this.author = author;
         this.message = message;
         activity = null;
         left = null;
         right = null;
     }
 
-    public ActivityPost(String person, String message, Activity activity) {
-        this.person = person;
+    public ActivityPost(String author, String message, Activity activity) {
+        this.author = author;
         this.message = message;
         this.activity = activity;
         left = null;
@@ -66,8 +66,8 @@ public class ActivityPost extends Utils {
         return ((CraftActivity)activity).getType() == craftType;
     }
 
-    public boolean personMatches(String person) {
-        return this.person.equals(person);
+    public boolean authorMatches(String person) {
+        return this.author.equals(person);
     }
 
     public boolean activityMatches(String activity) {
@@ -78,14 +78,14 @@ public class ActivityPost extends Utils {
     }
 
     public void display() {
-        System.out.println(person + ": " + message);
+        System.out.println(author + ": " + message);
     }
 
     public ActivityPost create(Activity activity) {
-        System.out.print("Poster: ");
-        person = getStringInput(false, "Invalid name.");
+        System.out.print("Author: ");
+        author = getStringInput(false, "Invalid name.");
 
-        if(person.isBlank())
+        if(author.isBlank())
             return null;
 
         System.out.print("Message: ");

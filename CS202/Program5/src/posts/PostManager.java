@@ -31,22 +31,22 @@ public class PostManager {
         return count + display(current.getRight()) + 1;
     }
 
-    public int displayByPerson(String person) {
-        return displayByPerson(posts, person);
+    public int displayByAuthor(String person) {
+        return displayByAuthor(posts, person);
     }
 
-    private int displayByPerson(ActivityPost current, String person) {
+    private int displayByAuthor(ActivityPost current, String person) {
         if(current == null)
             return 0;
 
-        int count = displayByPerson(current.getLeft(), person);
+        int count = displayByAuthor(current.getLeft(), person);
 
-        if(current.personMatches(person)) {
+        if(current.authorMatches(person)) {
             current.display();
             ++count;
         }
 
-        return count + displayByPerson(current.getRight(), person);
+        return count + displayByAuthor(current.getRight(), person);
     }
 
     public int displayByType(CollectionType collectionType) {
@@ -101,5 +101,12 @@ public class PostManager {
         }
 
         return count + displayByActivityName(current.getRight(), activity);
+    }
+
+    private int getHeight(ActivityPost current) {
+        if(current == null)
+            return 0;
+
+        return getHeight(current.getLeft()) - getHeight(current.getRight());
     }
 }
