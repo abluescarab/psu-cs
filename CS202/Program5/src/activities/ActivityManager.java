@@ -609,6 +609,15 @@ public class ActivityManager extends Utils {
     }
 
     /**
+     * Get a collection by name.
+     * @param name Collection to find
+     * @return The found collection
+     */
+    public CollectionActivity getCollection(String name) {
+        return getActivity(collections, name);
+    }
+
+    /**
      * Get an activity by name.
      * @param activity Activity to begin at
      * @param name Name to find
@@ -622,6 +631,15 @@ public class ActivityManager extends Utils {
             return activity;
 
         return getActivity((CollectionActivity)activity.getNext(), name);
+    }
+
+    /**
+     * Get a craft by name.
+     * @param name Craft to find
+     * @return The found craft
+     */
+    public CraftActivity getCraft(String name) {
+        return getActivity(crafts, name);
     }
 
     /**

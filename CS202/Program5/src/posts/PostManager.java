@@ -49,40 +49,40 @@ public class PostManager {
         return count + displayByAuthor(current.getRight(), person);
     }
 
-    public int displayByType(CollectionType collectionType) {
-        return displayByType(posts, collectionType);
+    public int displayByActivityType(CollectionType collectionType) {
+        return displayByActivityType(posts, collectionType);
     }
 
-    private int displayByType(ActivityPost current, CollectionType collectionType) {
+    private int displayByActivityType(ActivityPost current, CollectionType collectionType) {
         if(current == null)
             return 0;
 
-        int count = displayByType(current.getLeft(), collectionType);
+        int count = displayByActivityType(current.getLeft(), collectionType);
 
         if(current.isType(collectionType)) {
             current.display();
             ++count;
         }
 
-        return count + displayByType(current.getRight(), collectionType);
+        return count + displayByActivityType(current.getRight(), collectionType);
     }
 
-    public int displayByType(CraftType craftType) {
-        return displayByType(posts, craftType);
+    public int displayByActivityType(CraftType craftType) {
+        return displayByActivityType(posts, craftType);
     }
 
-    private int displayByType(ActivityPost current, CraftType craftType) {
+    private int displayByActivityType(ActivityPost current, CraftType craftType) {
         if(current == null)
             return 0;
 
-        int count = displayByType(current.getLeft(), craftType);
+        int count = displayByActivityType(current.getLeft(), craftType);
 
         if(current.isType(craftType)) {
             current.display();
             ++count;
         }
 
-        return count + displayByType(current.getRight(), craftType);
+        return count + displayByActivityType(current.getRight(), craftType);
     }
 
     public int displayByActivityName(String activity) {

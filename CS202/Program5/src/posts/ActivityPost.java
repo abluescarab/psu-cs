@@ -81,7 +81,10 @@ public class ActivityPost extends Utils {
         System.out.println(author + ": " + message);
     }
 
-    public ActivityPost create(Activity activity) {
+    public ActivityPost create(ActivityManager activities) {
+        int option = 0;
+        String activityName = "";
+
         System.out.print("Author: ");
         author = getStringInput(false, "Invalid name.");
 
@@ -91,7 +94,48 @@ public class ActivityPost extends Utils {
         System.out.print("Message: ");
         message = getStringInput();
 
-        this.activity = activity;
+        System.out.println("Activity type: ");
+        System.out.println("1) Collection");
+        System.out.println("2) Craft");
+        option = getNumericInput(2);
+
+        System.out.println("Activity name: ");
+        activityName = getStringInput();
+
+        if(option == 1) {
+            activity = activities.getCollection(activityName);
+
+            if(activity == null) {
+                System.out.print("Collection does not exist. Do you want to to create it? (y/n) ");
+
+                if(getConfirmation()) {
+                    activity = new CollectionActivity().create();
+
+                    if(activity != null)
+                        // TODO: does this work byref?
+                        activities.addCollection((CollectionActivity)activity);
+                }
+            }
+        }
+        else {
+            activity = activities.getCraft(activityName);
+
+            if(activity == null) {
+                System.out.println("Craft does not exist. Do you want to create it? (y/n) ");
+
+                if(getConfirmation()) {
+                    activity = new CraftActivity().create();
+
+                    if(activity != null)
+                        // TODO: does this work byref?
+                        activities.addCraft((CraftActivity)activity);
+                }
+            }
+        }
+
+        if(activity == null)
+            return null;
+
         return this;
     }
 }
