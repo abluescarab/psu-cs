@@ -151,7 +151,7 @@ public class Main extends Utils {
                 case POSTS:
                     switch(option) {
                         case 1: // write new post
-                            newPost = new ActivityPost().create();
+                            newPost = new ActivityPost().create(manager);
 
                             if(newPost == null) {
                                 System.out.println("Cancelled adding a new post.");

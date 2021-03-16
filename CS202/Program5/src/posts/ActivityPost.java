@@ -112,8 +112,7 @@ public class ActivityPost extends Utils {
                     activity = new CollectionActivity().create();
 
                     if(activity != null)
-                        // TODO: does this work byref?
-                        activities.addCollection((CollectionActivity)activity);
+                        activities.addCollection((CollectionActivity)activity);// TODO: does this work byref?
                 }
             }
         }
@@ -127,8 +126,7 @@ public class ActivityPost extends Utils {
                     activity = new CraftActivity().create();
 
                     if(activity != null)
-                        // TODO: does this work byref?
-                        activities.addCraft((CraftActivity)activity);
+                        activities.addCraft((CraftActivity)activity);// TODO: does this work byref?
                 }
             }
         }
