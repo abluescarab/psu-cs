@@ -48,9 +48,10 @@ public class Main extends Utils {
                 System.out.println("3) View posts by author");
                 System.out.println("4) View posts by activity type");
                 System.out.println("5) View posts by activity name");
-                System.out.println("6) Back");
+                System.out.println("6) Clear all posts");
+                System.out.println("7) Back");
 
-                maxOption = 6;
+                maxOption = 7;
                 break;
             case ALL_COLLECTIONS:
                 System.out.println("Manage Collections");
@@ -247,7 +248,18 @@ public class Main extends Utils {
                             else
                                 System.out.println("Found " + result + " post(s) for that activity name.");
                             break;
-                        case 6:
+                        case 6: // clear all posts
+                            System.out.println("Are you sure you want to clear all posts? (y/n) ");
+
+                            if(!getConfirmation()) {
+                                System.out.println("Cancelled removing all posts.");
+                                break;
+                            }
+
+                            posts.removeAll();
+                            System.out.println("Successfully removed all posts.");
+                            break;
+                        case 7: // back
                             menu = MenuType.MAIN;
                             break;
                         default:
