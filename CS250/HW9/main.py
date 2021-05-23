@@ -12,7 +12,11 @@ class ListAction(argparse.Action):
 
         for adjacent in values:
             match = re.split(r"\=", adjacent)
-            parsed[match[0]] = sorted(match[1].split(","))
+
+            if len(match) > 1:
+                parsed[match[0]] = sorted(match[1].split(","))
+            else:
+                parsed[match[0]] = []
 
         setattr(namespace, self.dest, parsed)
 
@@ -82,6 +86,15 @@ class GraphBuilder:
 
         return False
 
+    def is_tree(self, vertices, edges, cyclical):
+        if 0 in self.degree_sequence:
+            return False
+
+        if edges == vertices - 1 and not cyclical:
+            return True
+
+        return False
+
     def display_table(self):
         columns = [
             {
@@ -133,17 +146,18 @@ class GraphBuilder:
                     print(" | ", end="")
 
     def display(self):
+        vertices = len(self.all_edges.keys())
+        edges = len(self.unique_edges)
         cyclical = self.has_cycle()
 
-        print()
+        print(f"D=({', '.join(map(str,sorted(self.degree_sequence.values(), reverse=True)))})")
         print(f"V={{{', '.join(self.all_edges.keys())}}}")
         print(f"E={{{{{'}, {'.join([', '.join(e) for e in self.unique_edges])}}}}}")
-        print(f"D=({', '.join(map(str,sorted(self.degree_sequence.values(), reverse=True)))})")
         print()
-        print(f"Vertices:  {len(self.all_edges.keys())}")
-        print(f"Edges:     {len(self.unique_edges)}")
+        print(f"Vertices:  {vertices}")
+        print(f"Edges:     {edges}")
         print(f"Cycle:     {'Yes' if cyclical else 'No'}")
-        print(f"Connected: {'Yes' if 0 not in self.degree_sequence.values() else 'No'}")
+        print(f"Tree:      {'Yes' if self.is_tree(vertices, edges, cyclical) else 'No'}")
 
 
 def main():
@@ -153,12 +167,12 @@ def main():
         action=ListAction)
     parser.add_argument("-t", "--table", action="store_true", help="show full table of vertices")
 
-    # args = parser.parse_args()
-    # builder = GraphBuilder(args.vertices)
-    builder = GraphBuilder({"a": ["c","d"], "b": [], "c": ["d"]})
+    args = parser.parse_args()
+    builder = GraphBuilder(args.vertices)
 
-    # if args.table:
-    builder.display_table()
+    if args.table:
+        builder.display_table()
+        print()
 
     builder.display()
 
