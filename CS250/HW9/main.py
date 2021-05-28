@@ -10,10 +10,12 @@ class ListAction(argparse.Action):
     def __call__(self, parser, namespace, values, option_string=None):
         parsed = {}
 
+        # split the values by equal sign
         for adjacent in values:
             match = re.split(r"\=", adjacent)
 
             if len(match) > 1:
+                # then split each vertex list by comma
                 parsed[match[0]] = sorted(match[1].split(","))
             else:
                 parsed[match[0]] = []
@@ -55,20 +57,22 @@ class GraphBuilder:
         for vertex, adjacency_list in self.all_edges.items():
             self.degree_sequence[vertex] = len(adjacency_list)
 
-        self.all_edges = dict(sorted(self.all_edges.items()))
+    def is_connected(self):
+        return 0 not in self.degree_sequence.values()
 
-        for vertex, adjacent in self.all_edges.items():
-            self.degree_sequence[vertex] = len(adjacent)
+    def is_complete(self):
+        return all(degree == len(self.all_edges.keys()) for degree in self.degree_sequence.values())
 
-        # create a sorted list of unique edges
-        # for key, value in self.all_edges.items():
-        #     self.degree_sequence[key] = len(value)
 
-        #     for adjacent in value:
-        #         to_add = sorted([key, adjacent])
+    # modified from https://www.geeksforgeeks.org/detect-cycle-undirected-graph/
+    def has_cycle(self):
+        visited = {}
 
-        #         if to_add not in self.unique_edges:
-        #             self.unique_edges.append(to_add)
+        for key in self.all_edges.keys():
+            if key not in visited and self.is_cyclic(key, visited, ""):
+                return True
+
+        return False
 
     # modified from https://www.geeksforgeeks.org/detect-cycle-undirected-graph/
     def is_cyclic(self, key, visited, parent):
@@ -83,21 +87,11 @@ class GraphBuilder:
 
         return False
 
-    # modified from https://www.geeksforgeeks.org/detect-cycle-undirected-graph/
-    def has_cycle(self):
-        visited = {}
-
-        for key in self.all_edges.keys():
-            if key not in visited and self.is_cyclic(key, visited, ""):
-                return True
-
-        return False
-
-    def is_tree(self, vertices, edges, cyclical):
-        if 0 in self.degree_sequence:
+    def is_tree(self, vertex_count, edge_count):
+        if not self.is_connected():
             return False
 
-        if edges == vertices - 1 and not cyclical:
+        if edge_count == vertex_count - 1 and not self.has_cycle():
             return True
 
         return False
@@ -152,19 +146,20 @@ class GraphBuilder:
                 if i < len(columns) - 1:
                     print(" | ", end="")
 
-    def display(self):
-        vertices = len(self.all_edges.keys())
-        edges = len(self.unique_edges)
-        cyclical = self.has_cycle()
+    def display_info(self):
+        vertex_count = len(self.all_edges.keys())
+        edge_count = len(self.unique_edges)
 
         print(f"D=({', '.join(map(str,sorted(self.degree_sequence.values(), reverse=True)))})")
         print(f"V={{{', '.join(self.all_edges.keys())}}}")
         print(f"E={{{{{'}, {'.join([', '.join(e) for e in self.unique_edges])}}}}}")
         print()
-        print(f"Vertices:  {vertices}")
-        print(f"Edges:     {edges}")
-        print(f"Cycle:     {'Yes' if cyclical else 'No'}")
-        print(f"Tree:      {'Yes' if self.is_tree(vertices, edges, cyclical) else 'No'}")
+        print(f"Vertices:  {vertex_count}")
+        print(f"Edges:     {edge_count}")
+        print(f"Cycle:     {'Yes' if self.has_cycle() else 'No'}")
+        print(f"Connected: {'Yes' if self.is_connected() else 'No'}")
+        print(f"Complete:  {'Yes' if self.is_complete() else 'No'}")
+        print(f"Tree:      {'Yes' if self.is_tree(vertex_count, edge_count) else 'No'}")
 
 
 def main():
