@@ -29,24 +29,31 @@ class GraphBuilder:
 
         # create a dictionary of all edges including duplicates
         for vertex, adjacency_list in vertices.items():
-            if vertex in self.all_edges:
-                self.all_edges[vertex].extend(adjacency_list)
-            else:
-                self.all_edges[vertex] = adjacency_list
+            adjacency_list = sorted(adjacency_list)
 
-            # loop through the adjacent vertices and add them to the list
+            # add each vertex to the dictionary
+            if vertex not in self.all_edges:
+                self.all_edges[vertex] = adjacency_list
+            else:
+                self.all_edges[vertex].extend(
+                    a for a in adjacency_list if a not in self.all_edges[vertex])
+
+            # loop through adjacent vertices and add to dictionary
             for adjacent in adjacency_list:
+                if adjacent not in self.all_edges:
+                    self.all_edges[adjacent] = [vertex]
+                elif vertex not in self.all_edges[adjacent]:
+                    self.all_edges[adjacent].append(vertex)
+
                 edge = sorted([vertex, adjacent])
 
                 if edge not in self.unique_edges:
                     self.unique_edges.append(edge)
 
-                if adjacent not in self.all_edges.keys():
-                    self.all_edges[adjacent] = [vertex]
-                elif vertex not in self.all_edges[adjacent]:
-                    self.all_edges[adjacent].append(vertex)
+        self.all_edges = dict(sorted(self.all_edges.items()))
 
-            self.all_edges[vertex] = sorted(self.all_edges[vertex])
+        for vertex, adjacency_list in self.all_edges.items():
+            self.degree_sequence[vertex] = len(adjacency_list)
 
         self.all_edges = dict(sorted(self.all_edges.items()))
 
