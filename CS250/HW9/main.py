@@ -165,16 +165,13 @@ def main():
     parser.add_argument("vertices", nargs="+", type=str,
         help="vertices with adjacency list (this_vertex=adjacent_1,adjacent_2,...)",
         action=ListAction)
-    parser.add_argument("-t", "--table", action="store_true", help="show full table of vertices")
 
     args = parser.parse_args()
     builder = GraphBuilder(args.vertices)
-
-    if args.table:
-        builder.display_table()
-        print()
-
-    builder.display()
+    # builder = GraphBuilder({'a': ['b','c'], 'c': ['b','a']})
+    builder.display_table()
+    print()
+    builder.display_info()
 
 
 if __name__ == "__main__":
