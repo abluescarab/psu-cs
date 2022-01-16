@@ -1,3 +1,6 @@
-[submodule "CS300"]
-	path = CS300
+[submodule "CS300/term-project"]
+	path = CS300/term-project
 	url = https://github.com/ChocAn-CS300-Winter2022/term-project.git
+[submodule "CS300/python-crash-course"]
+	path = CS300/python-crash-course
+	url = https://github.com/ChocAn-CS300-Winter2022/python-crash-course.git
