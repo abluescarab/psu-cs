@@ -1,3 +1,7 @@
+'''
+Alana Gilston - CS250 - HW9 - 5/25/21
+'''
+
 import os
 import re
 import argparse
@@ -170,7 +174,6 @@ def main():
 
     args = parser.parse_args()
     builder = GraphBuilder(args.vertices)
-    # builder = GraphBuilder({'a': ['b','c'], 'c': ['b','a']})
     builder.display_table()
     print()
     builder.display_info()
