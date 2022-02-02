@@ -1,10 +1,18 @@
-**/CS162/
+# Block files without extensions
+*
+!*/
+!*.*
+
+# General
 **/.trash/
 **/Labs/*
 **/Practice/*
 *.out
+*.o
 *.tar
 *.zip
+
+# IntelliJ
 **/.idea/*
 *.iml
 *.ipr
