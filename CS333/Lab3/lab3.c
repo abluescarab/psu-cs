@@ -13,7 +13,9 @@ int main() {
     char * result[CHAR_LIMIT];
     int index = 0;
     pid_t pid = -1;
+    int in_background = 0;
     int pid_status;
+    int printed_exit_message = 0;
 
     create_handlers();
 
@@ -29,8 +31,12 @@ int main() {
         input[strlen(input) - 1] = '\0';
         index = convert_to_tokens(input, result);
 
-        if(strcmp(result[0], "exit") == 0) {
-            exit(0);
+        if(*result[index - 1] == '&') {
+            result[index - 1] = NULL;
+            in_background = 1;
+        }
+        else {
+            in_background = 0;
         }
 
         pid = fork();
@@ -40,11 +46,25 @@ int main() {
             return 1;
         }
         else if(pid == 0) {
-            // parse the input, setting in_background to whether the last token was &
-            parse_input(result, *result[index - 1] == '&');
+            execvp(result[0], result);
+            exit(0);
+        }
+        else {
+            if(!in_background) {
+                waitpid(pid, &pid_status, 0);
+            }
         }
 
-        waitpid(pid, &pid_status, 0);
+        if(strcmp(result[0], "exit") == 0) {
+            do {
+                if(!printed_exit_message) {
+                    printf("Waiting for forked processes to end...\n");
+                    printed_exit_message = 1;
+                }
+            } while(waitpid(-1, NULL, 0) > 0);
+
+            exit(0);
+        }
     }
 
     return 0;
@@ -71,15 +91,6 @@ int convert_to_tokens(char * input, char ** result) {
     return index;
 }
 
-int parse_input(char ** input, int in_background) {
-    // TODO
-    if(in_background == 1) {
-        printf("yes");
-    }
-
-    return execvp(input[0], input);
-}
-
 void create_handlers() {
     struct sigaction new_action;
     struct sigaction old_action;
@@ -96,5 +107,5 @@ void create_handlers() {
 }
 
 void handle_sigchld(int signal) {
-    printf("child terminated\n");
+    while(waitpid(-1, 0, WNOHANG) > 0);
 }
