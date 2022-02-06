@@ -1,3 +1,9 @@
+// ********************************************************
+// Name:       Alana Gilston
+// Class:      CS333
+// Assignment: Lab3 (sillyshell)
+// File:       lab3.c
+// ********************************************************
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
@@ -15,7 +21,6 @@ int main() {
     pid_t pid = -1;
     int in_background = 0;
     int pid_status;
-    int printed_exit_message = 0;
 
     create_handlers();
 
@@ -31,6 +36,8 @@ int main() {
         input[strlen(input) - 1] = '\0';
         index = convert_to_tokens(input, result);
 
+        // check if the last element in the result is an ampersand, store that
+        // value, then null it so it doesn't affect execvp
         if(*result[index - 1] == '&') {
             result[index - 1] = NULL;
             in_background = 1;
@@ -56,13 +63,9 @@ int main() {
         }
 
         if(strcmp(result[0], "exit") == 0) {
-            do {
-                if(!printed_exit_message) {
-                    printf("Waiting for forked processes to end...\n");
-                    printed_exit_message = 1;
-                }
-            } while(waitpid(-1, NULL, 0) > 0);
-
+            // print the exiting message before the while loop
+            printf("Exiting...\n");
+            while(waitpid(-1, NULL, 0) > 0);
             exit(0);
         }
     }
@@ -70,7 +73,7 @@ int main() {
     return 0;
 }
 
-// modified from https://stackoverflow.com/a/10349393/567983
+// Modified from https://stackoverflow.com/a/10349393/567983
 int convert_to_tokens(char * input, char ** result) {
     char * token;
     int index = 0;
@@ -91,6 +94,7 @@ int convert_to_tokens(char * input, char ** result) {
     return index;
 }
 
+// Create the signal handlers for SIGCHLD.
 void create_handlers() {
     struct sigaction new_action;
     struct sigaction old_action;
@@ -106,6 +110,7 @@ void create_handlers() {
     }
 }
 
+// Handler for SIGCHLD.
 void handle_sigchld(int signal) {
     while(waitpid(-1, 0, WNOHANG) > 0);
 }
