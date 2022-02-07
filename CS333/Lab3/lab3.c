@@ -54,6 +54,7 @@ int main() {
         }
         else if(pid == 0) {
             execvp(result[0], result);
+            // ensure that invalid commands are closed afterward
             exit(0);
         }
         else {
