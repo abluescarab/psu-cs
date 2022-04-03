@@ -262,55 +262,63 @@ def wordSearch(word,grid):
     True
     >>> wordSearch("lins",h)
     True
+    >>> wordSearch("l",h)
+    True
     """
-    result = word[0]
-    positions = []
-    all_directions = [
+    all_directions = [ # [row, col]
         # Top left, top center, top right
-        [-1, -1], [0, -1], [1, -1],
+        [-1, -1], [-1, 0], [-1, 1],
         # Left, right
-        [-1, 0], [1, 0],
+        [0, -1], [0, 1],
         # Bottom left, bottom center, bottom right
-        [-1, 1], [0, 1], [1, 1]
+        [1, -1], [1, 0], [1, 1]
     ]
-    directions = []
+    result = ""
+    positions = []
+    rows = len(grid)
+    cols = len(grid[0])
 
-    for r in range(len(grid)):
+    # find all positions that first letter occurs
+    for r in range(rows):
         c = grid[r].find(word[0])
 
         if c >= 0:
-            positions.append((c, r))
+            positions.append((r, c))
 
-    for pc, pr in positions:
-        directions.clear()
+    # if there are positions, add first letter to result
+    if len(positions) > 0:
+        result = word[0]
 
-        for dc, dr in all_directions:
-            try:
-                if grid[pr + dr][pc + dc] == word[1]:
-                    directions.append((dc, dr))
-            except IndexError:
-                pass
+    # edge cases
+    if result == word:
+        return True
+    elif result == "":
+        return False
 
-        for dc, dr in directions:
-            c = pc
-            r = pr
+    for pr, pc in positions:
+        for dr, dc in all_directions:
+            r, c = pr, pc
 
             for l in range(1, len(word)):
-                if grid[r + dr][c + dc] == word[l]:
-                    result += word[l]
-                    c += dc
-                    r += dr
-                else:
-                    result = word[0]
+                next_row = r + dr
+                next_col = c + dc
+
+                # python: ask forgiveness, not permission
+                try:
+                    if grid[next_row][next_col] != word[l]:
+                        result = word[0]
+                        break
+
+                    result += grid[next_row][next_col]
+                    r = next_row
+                    c = next_col
+                except IndexError:
                     break
 
-            if result == word:
-                break
+                if result == word:
+                    return True
 
-        if result == word:
-            break
-
-    return result == word
+    return False
 
 ############################################################################
 #
