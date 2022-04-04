@@ -243,7 +243,8 @@ def isqrt(x):
 #      "    s"]
 #
 # What is your input size?
-# Running Time: O(2n^2)
+#       The length of the word and the size of the grid, row * col.
+# Running Time: O(n^3+n)
 ############################################################################
 
 def wordSearch(word,grid):
