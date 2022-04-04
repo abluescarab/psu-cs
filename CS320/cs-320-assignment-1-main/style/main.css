@@ -1,0 +1,14 @@
+body {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+form {
+  padding: 1em;
+  margin: 1em;
+  border: 1px solid black;
+}
+
+.code {
+  font-family: monospace;
+}
