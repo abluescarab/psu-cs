@@ -339,8 +339,48 @@ def convexHull(points):
     """
     >>> convexHull([(1,1), (4,2), (4,5), (7,1)])
     [(1, 1), (4, 5), (7, 1)]
+    >>> convexHull([(1,1), (1,10), (10,10), (10,1), (5,5)])
+    [(1, 1), (1, 10), (10, 1), (10, 10)]
     """
-    pass
+    hull = []
+    left = False
+    right = False
+
+    for p1 in points:
+        x1, y1 = p1
+
+        for p2 in points:
+            if p2 == p1:
+                continue
+
+            x2, y2 = p2
+            a = y2 - y1
+            b = x1 - x2
+            c = x1 * y2 - x2 * y1
+
+            for p3 in points:
+                if p3 == p1 or p3 == p2:
+                    continue
+
+                x3, y3 = p3
+                r = a * x3 + b * y3
+
+                if r > c:
+                    left = True
+                elif r < c:
+                    right = True
+
+            if left != right:
+                if p1 not in hull:
+                    hull.append(p1)
+
+                if p2 not in hull:
+                    hull.append(p2)
+
+            left = False
+            right = False
+
+    return hull
 
 ############################################################################
 #
@@ -350,15 +390,18 @@ def convexHull(points):
 # If the problem is a summation, give a closed form first.
 #
 # 1. f(n) = n^2 + 2n + 1
-# 2. f(n) = sum(i=0, n, sum(j=0, i, 1) )
+#         Answer:      ϴ(n^2)
+# 2. f(n) = sum(i=0, n, sum(j=0, i, 1))
+#         Closed form: ((n + 1)(n + 2))/2
+#         Answer:      ϴ(n^2)
 # 3. f(n) = (n+1)!
+#         Answer:      ϴ(n!)
 # 4. f(n) = sum(i=0, n, log(i))
+#         Closed form:
 # 5. f(n) = log(n!)
+#         Answer:      ϴ(log(n!))
 ############################################################################
 
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
-    # wordSearch("bats", ["abrql", "exayi", "postn", "cbkrs"])
-    # wordSearch("bats", ["cbkrs", "postn", "exayi", "abrql"])
-    # wordSearch("bkrs", ["cbkrs", "postn", "exayi", "abrql"])
