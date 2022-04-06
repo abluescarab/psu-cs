@@ -196,7 +196,7 @@ def popcount(x):
 #
 # What is the input size?
 #       The number of times i is incremented.
-# Running Time: O(n)
+# Running Time: O(1)
 ############################################################################
 
 def isqrt(x):
@@ -210,19 +210,7 @@ def isqrt(x):
     >>> isqrt(20)
     4
     """
-    # edge cases
-    if x == 0 or x == 1:
-        return x
-
-    i = 2
-
-    while i * i < x:
-        i += 1
-
-    if i * i > x:
-        i -= 1
-
-    return i
+    return int(x ** (1/2))
 
 ############################################################################
 #
