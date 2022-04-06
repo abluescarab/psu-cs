@@ -100,7 +100,7 @@ def transpose(m):
 def pointDist(points):
     """
     >>> pointDist([(1,1), (4,5), (13,6)])
-    5
+    5.0
     """
     import math
     smallest = 0
@@ -113,7 +113,7 @@ def pointDist(points):
             x1, y1 = points[i]
             x2, y2 = points[j]
 
-            d = abs(int(math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)))
+            d = abs(math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2))
 
             if smallest == 0 or d < smallest:
                 smallest = d
@@ -396,8 +396,9 @@ def convexHull(points):
 #         Answer:      ϴ(n^2)
 # 3. f(n) = (n+1)!
 #         Answer:      ϴ(n!)
-# 4. f(n) = sum(i=0, n, log(i))
-#         Closed form:
+# 4. f(n) = sum(i=1, n, log(i))
+#         Closed form: log(n!)
+#         Answer:      ϴ(log(n!))
 # 5. f(n) = log(n!)
 #         Answer:      ϴ(log(n!))
 ############################################################################
