@@ -224,7 +224,31 @@ export function doubleEachRecursive(list: List): List {
 // Delete the entire "throw" line below and replace it with your code.
 
 export function reverse(list: List): List {
-  throw new Error("unimplemented - this one is your job");
+  if(list == null) {
+    return null;
+  }
+
+  if(list.rest == null) {
+    return list;
+  }
+
+  let current : List = list;
+  let next : List = null;
+  let prev : List = null;
+
+  while(current != null) {
+    next = current.rest;
+
+    current = {
+      first: current.first,
+      rest: prev
+    };
+
+    prev = current;
+    current = next;
+  }
+
+  return prev;
 }
 
 // **************
