@@ -9,6 +9,15 @@ form {
   border: 1px solid black;
 }
 
+label {
+  min-width: 75px;
+  display: inline-block;
+}
+
+input {
+  margin-bottom: 10px;
+}
+
 .code {
   font-family: monospace;
 }

@@ -5,17 +5,80 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "preLaunchTask": "npm: build",
       "name": "Debug in Chrome",
-      "type": "chrome",
+      "type": "pwa-chrome",
       "request": "launch",
       "reAttach": true,
       "file": "${workspaceFolder}/html/index.html",
+      "outFiles": [
+        "${workspaceFolder}/build/*.js"
+      ],
+      "webRoot": "${workspaceFolder}",
       "suggestPathMappingWizard": true,
       "pathMappings": [
         {
-          "url": "webpack://intro/src",
+          "url": "webpack:///src",
           "path": "${workspaceFolder}/src"
         },
+        {
+          "url": "webpack:///~/",
+          "path": "${webRoot}/node_modules/"
+        },
+        {
+          "url": "webpack:///./~/",
+          "path": "${webRoot}/node_modules/"
+        },
+        {
+          "url": "webpack:///./",
+          "path": "${webRoot}/"
+        },
+        {
+          "url": "webpack:///src/",
+          "path": "${webRoot}/src/"
+        },
+        {
+          "url": "webpack:///node_modules/",
+          "path": "${webRoot}/node_modules/"
+        },
+        {
+          "url": "webpack:///webpack",
+          "path": null
+        },
+        {
+          "url": "webpack:///(webpack)",
+          "path": null
+        },
+        {
+          "url": "webpack:///pages/",
+          "path": "${webRoot}/pages/"
+        },
+        {
+          "url": "webpack://[name]_[chunkhash]/node_modules/",
+          "path": "${webRoot}/node_modules/"
+        },
+        {
+          "url": "webpack://[name]_[chunkhash]/",
+          "path": null
+        },
+        {
+          "url": "webpack:///",
+          "path": ""
+        }
+      ]
+    },
+    {
+      "name": "Debug in Edge",
+      "type": "pwa-msedge",
+      "request": "launch",
+      "reAttach": true,
+      "file": "${workspaceFolder}/html/index.html",
+      "outFiles": [
+        "${workspaceFolder}/build/*.js"
+      ],
+      "webRoot": "${workspaceFolder}",
+      "suggestPathMappingWizard": true,
+      "pathMappings": [
         {
           "url": "webpack:///src",
           "path": "${workspaceFolder}/src"
