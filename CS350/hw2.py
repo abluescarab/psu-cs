@@ -1,4 +1,3 @@
-
 # CS 350: Homework 2
 # Due: Week of 4/11
 # Name: Alana Gilston
@@ -103,9 +102,13 @@ def mode(l):
 #                                ^ front
 #
 # pushFront Running Time:
+#       O(1)
 # pushBack Running Time:
+#       O(1)
 # popFront Running Time:
+#       O(1)
 # popBack Running Time:
+#       O(1)
 #########################################3
 
 def malloc(size):
@@ -147,8 +150,8 @@ class RingBuffer():
     """
 
     def __init__(self):
-        self.size = 5
-        self.body = malloc(self.size)
+        self.size = 0
+        self.body = []
         self.front = 0
         self.back = 0
 
@@ -157,9 +160,15 @@ class RingBuffer():
     # It will help to test this method on it's own.
     # Think carefully about what cases you can have with front and back.
     def resize(self):
-        pass
+        self.body.insert(self.front, None)
+        self.front += 1
+        self.back -= 1
+        self.size += 1
 
     def pushFront(self, x):
+        if None not in self.body:
+            self.resize()
+
         self.front -= 1
 
         if self.front < 0:
@@ -168,6 +177,9 @@ class RingBuffer():
         self.body[self.front] = x
 
     def pushBack(self, x):
+        if None not in self.body:
+            self.resize()
+
         self.body[self.back] = x
         self.back += 1
 
@@ -207,7 +219,9 @@ class RingBuffer():
 #
 #
 # push Running Time:
+#       O(n^2 / 3)
 # pop Running Time:
+#       O(n)
 #########################################3
 
 class Heap():
@@ -232,34 +246,44 @@ class Heap():
     def __init__(self):
         self.heap = []
 
+    def resize(self, count, front):
+        old_len = len(self.heap)
+        new_heap = malloc(old_len + count)
+
+        for i in range(old_len):
+            if front:
+                if i + count < 0:
+                    continue
+
+                new_heap[i + count] = self.heap[i]
+            else:
+                new_heap[i] = self.heap[i]
+
+        self.heap = new_heap
+
     def push(self, x):
-        pass
-        # parent: (i - 1) / 2
-        # left:   (2 * i) + 1
-        # right:  (2 * i) + 2
+        if None not in self.heap:
+            self.resize(3, False)
 
-        # index = len(self.heap) - 1
-        # inserted = False
+        left = len(self.heap) - 2
+        right = len(self.heap) - 1
+        parent = int((left - 1) / 2)
 
-        # while not inserted:
-        #     if index <= 0:
-        #         self.heap.insert(0, x)
-        #         return
+        while self.heap[parent] != None and x < self.heap[parent]:
+            self.resize(1, True)
+
+        if self.heap[parent] == None:
+            self.heap[parent] = x
+        elif self.heap[left] == None:
+            self.heap[left] = x
+        elif self.heap[right] == None:
+            self.heap[right] = x
 
     def pop(self):
-        pass
+        data = self.heap[0]
+        self.resize(-1, True)
+        return data
 
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
-    # h = Heap()
-    # h.push(3)
-    # h.push(2)
-    # h.push(4)
-    # h.push(1)
-    # h.push(5)
-    # h.pop()
-    # h.pop()
-    # h.pop()
-    # h.pop()
-    # h.pop()
