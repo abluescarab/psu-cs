@@ -287,7 +287,18 @@ export function reverse(list: List): List {
 // Delete the entire "throw" line below and replace it with your code.
 
 export function removeZeroes(list: List): List {
-  throw new Error("unimplemented - this one is your job");
+  if(list == null) {
+    return null;
+  }
+
+  if(list.first == 0) {
+    return removeZeroes(list.rest);
+  }
+
+  return {
+    first: list.first,
+    rest: removeZeroes(list.rest)
+  };
 }
 
 // **************
