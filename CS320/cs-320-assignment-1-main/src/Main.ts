@@ -584,7 +584,14 @@ export function evaluate(tree: LogicTree): boolean {
 // Delete the entire "throw" line below and replace it with your code.
 
 export function countLeaves(tree: LogicTree): number {
-  throw new Error("unimplemented - this one is your job");
+  switch(tree.tag) {
+    case "and":
+      return countLeaves(tree.leftSubtree) + countLeaves(tree.rightSubtree);
+    case "not":
+      return countLeaves(tree.subtree);
+    case "bool":
+      return 1;
+  }
 }
 
 // **************
@@ -620,7 +627,18 @@ export function countLeaves(tree: LogicTree): number {
 // Delete the entire "throw" line below and replace it with your code.
 
 export function removeNots(tree: LogicTree): LogicTree {
-  throw new Error("unimplemented - this one is your job");
+  switch(tree.tag) {
+    case "and":
+      return {
+        tag: "and",
+        leftSubtree: removeNots(tree.leftSubtree),
+        rightSubtree: removeNots(tree.rightSubtree)
+      }
+    case "not":
+      return removeNots(tree.subtree);
+    case "bool":
+      return tree;
+  }
 }
 
 // **************
