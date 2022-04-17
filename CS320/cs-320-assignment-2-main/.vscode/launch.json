@@ -5,6 +5,12 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "windows": {
+        "preLaunchTask": "npm: build (wsl)"
+      },
+      "linux": {
+        "preLaunchTask": "npm: build (linux)"
+      },
       "name": "Debug in Chrome",
       "type": "pwa-chrome",
       "request": "launch",
