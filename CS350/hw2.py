@@ -232,6 +232,7 @@ class Heap():
     >>> h.push(4)
     >>> h.push(1)
     >>> h.push(5)
+    >>> h.push(7)
     >>> h.pop()
     1
     >>> h.pop()
@@ -242,46 +243,62 @@ class Heap():
     4
     >>> h.pop()
     5
+    >>> h.pop()
+    7
     """
+    @staticmethod
+    def parent(i):
+        """Get parent of a left or right node."""
+        return (i - 1) // 2
+
+    @staticmethod
+    def left(i):
+        """Get left node of a parent node."""
+        return 2 * i + 1
+
+    @staticmethod
+    def right(i):
+        """Get right node of a parent node."""
+        return 2 * i + 2
+
     def __init__(self):
         self.heap = []
 
-    def resize(self, count, front):
-        old_len = len(self.heap)
-        new_heap = malloc(old_len + count)
-
-        for i in range(old_len):
-            if front:
-                if i + count < 0:
-                    continue
-
-                new_heap[i + count] = self.heap[i]
-            else:
-                new_heap[i] = self.heap[i]
-
-        self.heap = new_heap
-
     def push(self, x):
-        if None not in self.heap:
-            self.resize(3, False)
+        self.heap.append(x)
+        index = len(self.heap) - 1
 
-        left = len(self.heap) - 2
-        right = len(self.heap) - 1
-        parent = int((left - 1) / 2)
-
-        while self.heap[parent] != None and x < self.heap[parent]:
-            self.resize(1, True)
-
-        if self.heap[parent] == None:
-            self.heap[parent] = x
-        elif self.heap[left] == None:
-            self.heap[left] = x
-        elif self.heap[right] == None:
-            self.heap[right] = x
+        while self.parent(index) >= 0 and \
+              self.heap[index] < self.heap[self.parent(index)]:
+            self.heap[self.parent(index)], self.heap[index] = \
+                self.heap[index], self.heap[self.parent(index)]
+            index = self.parent(index)
 
     def pop(self):
         data = self.heap[0]
-        self.resize(-1, True)
+        self.heap[0] = self.heap[-1]
+
+        self.heap.pop()
+
+        i = 0
+        l = self.left(i)
+        r = self.right(i)
+        count = len(self.heap)
+
+        while r < count and self.heap[i] > min(self.heap[l], self.heap[r]):
+            if self.heap[l] < self.heap[r]:
+                self.heap[i], self.heap[l] = self.heap[l], self.heap[i]
+                i = self.left(i)
+            else:
+                self.heap[i], self.heap[r] = self.heap[r], self.heap[i]
+                i = self.right(i)
+
+            l = self.left(i)
+            r = self.right(i)
+
+        if l < count and self.heap[i] > self.heap[l]:
+            self.heap[i], self.heap[l] = self.heap[l], self.heap[i]
+
         return data
 
 if __name__ == "__main__":
