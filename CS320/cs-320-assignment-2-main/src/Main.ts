@@ -281,7 +281,17 @@ export function simplifyNegatedLeaves(tree: AST): AST {
 // Delete the entire "throw" line below and replace it with your code.
 
 export function countNameOccurrences(name: string, tree: AST): number {
-  throw new Error("unimplemented - this one is your job");
+  switch(tree.tag) {
+    case "negate":
+      return countNameOccurrences(name, tree.subtree);
+    case "plus":
+      return countNameOccurrences(name, tree.leftSubtree) +
+             countNameOccurrences(name, tree.rightSubtree);
+    case "num":
+      return 0;
+    case "name":
+      return tree.name == name ? 1 : 0;
+  }
 }
 
 // **************
@@ -317,7 +327,26 @@ export function countNameOccurrences(name: string, tree: AST): number {
 // Delete the entire "throw" line below and replace it with your code.
 
 export function substituteAllNames(scope: Scope, tree: AST): AST {
-  throw new Error("unimplemented - this one is your job");
+  switch(tree.tag) {
+    case "name":
+      return {
+        tag: "num",
+        value: lookup(tree.name, scope)
+      };
+    case "negate":
+      return {
+        tag: tree.tag,
+        subtree: substituteAllNames(scope, tree.subtree)
+      };
+    case "num":
+      return tree;
+    case "plus":
+      return {
+        tag: tree.tag,
+        leftSubtree: substituteAllNames(scope, tree.leftSubtree),
+        rightSubtree: substituteAllNames(scope, tree.rightSubtree)
+      };
+  }
 }
 
 // **************
@@ -365,7 +394,27 @@ export function substituteAllNames(scope: Scope, tree: AST): AST {
 // Delete the entire "throw" line below and replace it with your code.
 
 export function removeDoubleNegations(tree: AST): AST {
-  throw new Error("unimplemented - this one is your job");
+  switch(tree.tag) {
+    case "name":
+      return tree;
+    case "negate":
+      if(tree.subtree.tag == "negate") {
+        return removeDoubleNegations(tree.subtree.subtree);
+      }
+
+      return {
+        tag: tree.tag,
+        subtree: removeDoubleNegations(tree.subtree)
+      };
+    case "num":
+      return tree;
+    case "plus":
+      return {
+        tag: tree.tag,
+        leftSubtree: removeDoubleNegations(tree.leftSubtree),
+        rightSubtree: removeDoubleNegations(tree.rightSubtree)
+      };
+  }
 }
 
 // **************
