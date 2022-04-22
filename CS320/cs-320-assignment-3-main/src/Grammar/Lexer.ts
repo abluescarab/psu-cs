@@ -8,11 +8,13 @@ const lexingRules: Rules = {
   plus: /\+/,
   times: /\*/,
   exponent: /\^/,
+  hex: /-?\$[0-9A-Fa-f]+/,
   dash: /-/,
   parenL: /\(/,
   parenR: /\)/,
   equal: /=/,
   comma: /,/,
+  char: /\'(?:\\['nt\\]|[^'\\])\'$/
 };
 
 export const lexer: Lexer = compileLexer(lexingRules);
