@@ -34,7 +34,23 @@ def quicksort(l):
     >>> quicksort([])
     []
     """
-    pass
+    if len(l) == 0 or len(l) == 1:
+        return l
+
+    pivot = len(l) // 2
+    big = []
+    small = []
+
+    for i in range(len(l)):
+        if i == pivot:
+            continue
+
+        if l[i] <= l[pivot]:
+            small.append(l[i])
+        elif l[i] > l[pivot]:
+            big.append(l[i])
+
+    return quicksort(small) + [l[pivot]] + quicksort(big)
 
 ############################################################################
 # Problem 2: maximum sublist sum
