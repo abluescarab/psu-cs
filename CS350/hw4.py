@@ -91,8 +91,28 @@ def maxSublist(l):
     >>> maxSublist([-1,-4,-10,-93,-19,-45,-2,0])
     [0]
     """
-    pass
+    sum = l[0]
+    max_sum = l[0]
+    start = 0
+    end = 0
+    new_start = 0
 
+    for i in range(len(l)):
+        if sum > 0:
+            sum += l[i]
+        else:
+            sum = l[i]
+            new_start = i
+
+        if sum > max_sum:
+            max_sum = sum
+            start = new_start
+            end = i + 1
+
+    if start == end:
+        return [max(l)]
+
+    return l[start:end]
 
 ############################################################################
 # Problem 3: Parenthesizing matrices.
