@@ -14,7 +14,7 @@ const lexingRules: Rules = {
   parenR: /\)/,
   equal: /=/,
   comma: /,/,
-  char: /\'(?:\\['nt\\]|[^'\\])\'$/
+  char: /'(?:\\['nt\\]|[^'\\])'/
 };
 
 export const lexer: Lexer = compileLexer(lexingRules);
