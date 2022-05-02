@@ -138,18 +138,52 @@ def maxSublist(l):
 # Running time:
 ############################################################################
 
+def sortSizes(l):
+    for i in range(1, len(l)):
+        if l[i][0] == l[i - 1][1]:
+            continue
+
+        index = i
+
+        while index - 1 >= 0 and l[index][0] != l[index - 1][1]:
+            l[index], l[index - 1] = l[index - 1], l[index]
+            index -= 1
+
+    return l
+
 def matrixParens(sizes):
     """
+    >>> matrixParens([(1, 1)])
+    0
     >>> matrixParens([(4,7), (3,5), (5,4)])
     144
     >>> matrixParens([(3,5), (5,4), (4,7)])
     144
-    >>> matrixParens([(9,1), (10,30), (12,16), (6,10), (1,3), (30,12), (16,9)])
-    1074
+    >>> matrixParens([(5,4), (3,5), (4,7)])
+    144
     >>> matrixParens([(9,2), (4,9)])
     72
+    >>> matrixParens([(4,9), (9,2)])
+    72
     """
-    pass
+    if len(sizes) == 0 or len(sizes) == 1:
+        return 0
+
+    if len(sizes) == 2:
+        if sizes[0][1] == sizes[1][0]:
+            return sizes[0][0] * sizes[1][0] * sizes[1][1]
+        else:
+            return sizes[1][0] * sizes[0][0] * sizes[0][1]
+
+    sortSizes(sizes)
+
+    sum1 = sum2 = sizes[0][0]
+
+    for i in range(1, len(sizes)):
+        sum1 *= sizes[i][0]
+        sum2 *= sizes[i][1]
+
+    return sum1 + sum2
 
 ############################################################################
 # Problem 4: Convex Hull again!
