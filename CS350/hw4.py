@@ -199,10 +199,32 @@ def matrixParens(sizes):
 # When does the worst case happen?
 ############################################################################
 
+def calcLine(p1, p2):
+    x1, y1 = p1
+    x2, y2 = p2
+
+    return {
+        "point1": p1,
+        "point2": p2,
+        "a": y2 - y1,
+        "b": x2 - x1,
+        "c": (x1 * y2) - (y1 * x2)
+    }
+
+def calcDist(line, p):
+    x1, y1 = line["point1"]
+    x2, y2 = line["point2"]
+    x3, y3 = p
+
+    t = x1 * y2 + x2 * y3 + x3 * y1 - (x2 * y1 + x3 * y2 + x1 * y3)
+    return 2 * t / (line["a"] * x3 + line["b"] * y3 + line["c"])
+
 def convexHull(l):
     """
     >>> convexHull([(9,1), (7,8), (0,8), (1,2), (12,13), (5,15), (-5,1), (2,0)])
-    [(-5, 1), (5, 15), (9, 1), (2, 0), (12, 13)]
+    [(9, 1), (0, 8), (12, 13), (5, 15), (-5, 1), (2, 0)]
+    >>> convexHull([(9,1), (7,8), (0,8), (1,2), (12,13), (5,15), (2,0)])
+    [(5, 15), (9, 1), (2, 0), (12, 13)]
     >>> convexHull([(1,1), (2,2), (3,3), (4,4), (5,5)])
     [(1, 1), (5, 5)]
     >>> convexHull([(1,1), (4,2), (4,5), (7,1)])
@@ -210,7 +232,23 @@ def convexHull(l):
     >>> convexHull([(1,1), (4,2), (7,1)])
     [(1, 1), (4, 2), (7, 1)]
     """
-    pass
+    left = min(l)
+    right = max(l)
+    center = calcLine(left, right)
+    hull = [left]
+    dists = {}
+
+    for i in range(len(l)):
+        if l[i] == left or l[i] == right:
+            continue
+
+        dist = calcDist(center, l[i])
+        dists[dist] = l[i]
+
+    top = dists[min(dists)]
+    bottom = dists[max(dists)]
+    hull += [top] if top == bottom else [top, bottom]
+    return hull + [right]
 
 ############################################################################
 # Problem 5: Recurrence relations
