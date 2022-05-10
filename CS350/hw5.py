@@ -22,6 +22,18 @@
 #
 ############################################################################
 
+def components_rec(g, i, visited):
+    connected = []
+
+    for v in g[i]:
+        if v in visited:
+            continue
+
+        visited.append(v)
+        connected.extend([v] + components_rec(g, v, visited))
+
+    return connected
+
 def components(g):
     """
     >>> components([[1,2],[0,2],[0,1],[4],[3]])
@@ -31,26 +43,19 @@ def components(g):
     >>> components([[1],[0]])
     [[0, 1]]
     >>> components([[3,4,7],[3,5,6],[4,5,7],[0,1],[0,2],[1,2],[1],[0,2]])
-    [[0, 1, 2, 3, 4, 5, 6, 7]]
+    [[0, 3, 1, 5, 2, 4, 7, 6]]
     """
-    # connections = []
+    visited = []
+    connections = []
 
-    # for i in range(len(g)):                             # O(n)
-    #     current = set(sorted([i] + g[i]))
-    #                                                     # O(n^2)
-    #     for j in range(len(g)):                         # O(n)
-    #         if i == j:
-    #             continue
+    for i in range(len(g)):
+        if i in visited:
+            continue
 
-    #         if any(x in current for x in g[j]):         # O(n)
-    #             current.update(g[j])
+        visited.append(i)
+        connections.append([i] + components_rec(g, i, visited))
 
-    #     l = list(current)                               # O(n)
-    #                                                     # O(2n)
-    #     if l not in connections:                        # O(n)
-    #         connections.append(l)
-
-    # return connections
+    return connections
 
 ############################################################################
 #
