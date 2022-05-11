@@ -166,6 +166,15 @@ def isForrest(g):
 #
 ############################################################################
 
+def topsort_rec(d, v, visited, top_sort):
+    visited.append(v)
+
+    for w in d[v]:
+        if w not in visited:
+            topsort_rec(d, w, visited, top_sort)
+
+    top_sort.append(v)
+
 def topsort(d):
     """
     >>> topsort([[1,2],[3],[3],[]])
@@ -177,7 +186,15 @@ def topsort(d):
     >>> topsort([[1,2,3],[4],[],[4],[5,6,7],[],[],[6]])
     [0, 3, 2, 1, 4, 7, 6, 5]
     """
-    pass
+    visited = []
+    top_sort = []
+
+    for v in range(len(d)):
+        if v not in visited:
+            topsort_rec(d, v, visited, top_sort)
+
+    top_sort.reverse()
+    return top_sort
 
 ############################################################################
 #
@@ -235,3 +252,13 @@ if __name__ == "__main__":
     # utils.asrt(bipartite([[1],[0]]), True)
     # utils.asrt(bipartite([[1,3],[0,2],[1,3,5],[0,2],[5],[2,4]]), True)
     # utils.asrt(bipartite([[1,3],[0,2],[1,3,5,4],[0,2],[5,2],[2,4]]), False)
+    # utils.asrt(isForrest([[1,2],[0,3,4],[0,6],[1],[1,8,9],[6],[5,7],[6],[4],[4]]), True)
+    # utils.asrt(isForrest([[1,2],[0,3,4],[0,6],[1],[1,8,9],[6],[5,7],[6],[4],[4],[11],[10]]), True)
+    # utils.asrt(isForrest([[1,2],[0,3,4],[0,6],[1],[1,8,9],[6],[5,7],[6,8],[4,7],[4]]), False)
+    # utils.asrt(isForrest([[1,2],[0,3,4],[0,6],[1],[1,8,9],[6],[5,7],[6],[4],[4],[11,12],[10,12],[10,11]]), False)
+    # utils.asrt(isForrest([[]]), True)
+    # utils.asrt(isForrest([[1],[0]]), True)
+    # utils.asrt(topsort([[1,2],[3],[3],[]]), [0, 2, 1, 3])
+    # utils.asrt(topsort([[3],[1,2],[3],[]]), [1, 2, 0, 3])
+    # utils.asrt(topsort([[6,5],[0,4],[0,5],[1,2],[6],[6],[]]), [3, 2, 1, 4, 0, 5, 6])
+    # utils.asrt(topsort([[1,2,3],[4],[],[4],[5,6,7],[],[],[6]]), [0, 3, 2, 1, 4, 7, 6, 5])
