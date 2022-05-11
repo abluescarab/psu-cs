@@ -68,6 +68,20 @@ def components(g):
 #
 ############################################################################
 
+def bipartite_rec(g, v, sets, visited):
+    for w in g[v]:
+        if w not in visited:
+            visited.append(w)
+
+            sets[w] = 1 if sets[v] == 0 else 0
+
+            if not bipartite_rec(g, v, sets, visited):
+                return False
+        elif sets[v] == sets[w]:
+            return False
+
+    return True
+
 def bipartite(g):
     """
     >>> bipartite([[3,4,7], [3,5,6], [4,5,7], [0,1], [0,2], [1,2], [1], [0,2]])
@@ -83,15 +97,12 @@ def bipartite(g):
     >>> bipartite([[1,3],[0,2],[1,3,5,4],[0,2],[5,2],[2,4]])
     False
     """
-    if len(g) == 0 or len(g[0]) == 0:
-        return True
+    visited = []
+    sets = [0] * len(g)
 
-    t = set()
-    s = set()
-
-    for v in range(len(g)):
-        for w in g[v]:
-            pass
+    for i in range(len(g)):
+        if not bipartite_rec(g, i, sets, visited):
+            return False
 
     return True
 
@@ -165,7 +176,7 @@ def scc(d):
 
 if __name__ == "__main__":
     import doctest
-    # doctest.testmod()
+    doctest.testmod()
 
     import utils
     # utils.asrt(components([[1,2], [0,2], [0,1], [4], [3]]), [[0, 1, 2], [3, 4]])
@@ -173,7 +184,7 @@ if __name__ == "__main__":
     # utils.asrt(components([[1],[0]]), [[0, 1]])
     # utils.asrt(components([[3,4,7],[3,5,6],[4,5,7],[0,1],[0,2],[1,2],[1],[0,2]]), [[0, 3, 1, 5, 2, 4, 7, 6]])
     # utils.asrt(components([[1,2],[0,3,4],[0,6],[1],[1,8,9],[6],[5,7],[6],[4],[4],[11,12],[10,12],[10,11]]), [[0, 1, 3, 4, 8, 9, 2, 6, 5, 7], [10, 11, 12]])
-    utils.asrt(bipartite([[3,4,7], [3,5,6], [4,5,7], [0,1], [0,2], [1,2], [1], [0,2]]), True)
+    # utils.asrt(bipartite([[3,4,7], [3,5,6], [4,5,7], [0,1], [0,2], [1,2], [1], [0,2]]), True)
     # utils.asrt(bipartite([[1,2],[0,2],[0,1]]), False)
     # utils.asrt(bipartite([[]]), True)
     # utils.asrt(bipartite([[1],[0]]), True)
