@@ -117,6 +117,18 @@ def bipartite(g):
 #
 ############################################################################
 
+def isForest_rec(g, v, parent, visited):
+    for w in g[v]:
+        if w not in visited:
+            visited.append(w)
+
+            if not isForest_rec(g, w, v, visited):
+                return False
+        elif parent != w:
+            return False
+
+    return True
+
 def isForrest(g):
     """
     >>> isForrest([[1,2],[0,3,4],[0,6],[1],[1,8,9],[6],[5,7],[6],[4],[4]])
@@ -132,7 +144,16 @@ def isForrest(g):
     >>> isForrest([[1],[0]])
     True
     """
-    pass
+    visited = []
+
+    for v in range(len(g)):
+        if v not in visited:
+            visited.append(v)
+
+            if not isForest_rec(g, v, None, visited):
+                return False
+
+    return True
 
 ############################################################################
 #
