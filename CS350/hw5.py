@@ -205,22 +205,55 @@ def topsort(d):
 #
 ############################################################################
 
+def scc_rec(d, v, visited, result):
+    visited.append(v)
+
+    for w in d[v]:
+        if w not in visited:
+            scc_rec(d, w, visited, result)
+
+    result.append(v)
+
 def scc(d):
     """
     >>> scc([[1],[2],[0,3],[1,2],[3,5,6],[4],[7],[8],[6]])
-    [[4, 5], [6, 8, 7], [0, 2, 1, 3]]
+    [[5, 4], [7, 8, 6], [3, 1, 2, 0]]
     >>> scc([[1],[2],[0,3],[1,2,4],[3,5,6],[4],[7],[8],[6]])
-    [[0, 2, 1, 3, 4, 5], [6, 8, 7]]
+    [[5, 4, 3, 1, 2, 0], [7, 8, 6]]
     >>> scc([[]])
     [[0]]
     >>> scc([[1],[]])
     [[0], [1]]
     >>> scc([[1],[0]])
-    [[0, 1]]
+    [[1, 0]]
     >>> scc([[1],[0,2,4],[0],[4],[3,5],[],[5,7],[4,9],[3,7],[10],[6,11],[]])
-    [[8], [6, 10, 9, 7], [11], [0, 1, 2], [4, 3], [5]]
+    [[8], [7, 9, 10, 6], [11], [1, 2, 0], [3, 4], [5]]
     """
-    pass
+    dt = [[] for _ in range(len(d))]
+    visited = []
+    visited_t = []
+    dead_ends = []
+    result = []
+
+    # get verts in the order they dead end
+    for v in range(len(d)):
+        if v not in visited:
+            scc_rec(d, v, visited, dead_ends)
+
+    # reverse edges
+    for v, adj in enumerate(d):
+        for w in adj:
+            dt[w].append(v)
+
+    # get strongly connected components
+    while dead_ends:
+        v = dead_ends.pop()
+
+        if v not in visited_t:
+            result.append([])
+            scc_rec(dt, v, visited_t, result[-1])
+
+    return result
 
 ############################################################################
 #
