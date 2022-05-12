@@ -205,15 +205,6 @@ def topsort(d):
 #   Theta(2*(|V|+|E|))
 ############################################################################
 
-def scc_rec(d, v, visited, result):
-    visited.append(v)
-
-    for w in d[v]:
-        if w not in visited:
-            scc_rec(d, w, visited, result)
-
-    result.append(v)
-
 def scc(d):
     """
     >>> scc([[1],[2],[0,3],[1,2],[3,5,6],[4],[7],[8],[6]])
@@ -238,7 +229,7 @@ def scc(d):
     # get verts in the order they dead end
     for v in range(len(d)):
         if v not in visited:
-            scc_rec(d, v, visited, dead_ends)
+            topsort_rec(d, v, visited, dead_ends)
 
     # reverse edges
     for v, adj in enumerate(d):
@@ -251,7 +242,7 @@ def scc(d):
 
         if v not in visited_t:
             result.append([])
-            scc_rec(dt, v, visited_t, result[-1])
+            topsort_rec(dt, v, visited_t, result[-1])
 
     return result
 
