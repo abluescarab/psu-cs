@@ -24,14 +24,14 @@
 ############################################################################
 
 def components_rec(g, v, visited):
-    connected = []
+    result = []
 
     for w in g[v]:
         if w not in visited:
             visited.append(w)
-            connected.extend([w] + components_rec(g, w, visited))
+            result.extend([w] + components_rec(g, w, visited))
 
-    return connected
+    return result
 
 def components(g):
     """
@@ -45,14 +45,14 @@ def components(g):
     [[0, 3, 1, 5, 2, 4, 7, 6]]
     """
     visited = []
-    connected = []
+    result = []
 
     for v in range(len(g)):
         if v not in visited:
             visited.append(v)
-            connected.append([v] + components_rec(g, v, visited))
+            result.append([v] + components_rec(g, v, visited))
 
-    return connected
+    return result
 
 ############################################################################
 #
