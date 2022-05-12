@@ -20,7 +20,7 @@
 # Should return a list of two components [[0,1,2],[3,4]]
 #
 # Running time?
-#
+#   Theta(|V|+|E|)
 ############################################################################
 
 def components_rec(g, v, visited):
@@ -62,7 +62,7 @@ def components(g):
 # g is represented as an adjacency list
 #
 # Running time?
-#
+#   Theta(|V|+|E|)
 ############################################################################
 
 def bipartite_rec(g, v, sets, visited):
@@ -111,7 +111,7 @@ def bipartite(g):
 # g is represented by a adjacency list.
 #
 # Running time?
-#
+#   Theta(|V|+|E|)
 ############################################################################
 
 def isForest_rec(g, v, parent, visited):
@@ -160,7 +160,7 @@ def isForrest(g):
 # Assume d is an adjacency list.
 #
 # Running time?
-#
+#   Theta(|V|+|E|)
 ############################################################################
 
 def topsort_rec(d, v, visited, top_sort):
@@ -202,7 +202,7 @@ def topsort(d):
 # connected components.
 #
 # Running time?
-#
+#   Theta(2*(|V|+|E|))
 ############################################################################
 
 def scc_rec(d, v, visited, result):
@@ -260,11 +260,12 @@ def scc(d):
 # Problem 6
 #
 # a. What doe we need to change about BFS/DFS if we use an adjacency matrix?
-#
+#       You must loop through every vertex to see if an edge exists, rather
+#       than accessing each edge directly.
 # b. What is the running time for BFS/DFS if we use and adjacency matrix?
-#
+#       Theta(|V|^2)
 # c. Give an example of a weighted graph where BFS doesn't return the shortes path.
-#
+#       If a longer path has a lower weight, the longer path will return.
 ############################################################################
 
 if __name__ == "__main__":
