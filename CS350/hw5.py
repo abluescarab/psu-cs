@@ -14,7 +14,8 @@
 # write a function that returns the set of connected components
 # of an undirected graph g.
 # g is represented as an adjacency list
-# you should return a list of components, where each component is a list of vertices.
+# you should return a list of components, where each component is a list of
+# vertices.
 # Example g = [[1,2], [0,2], [0,1], [4], [3]]
 # Should return a list of two components [[0,1,2],[3,4]]
 #
@@ -22,15 +23,13 @@
 #
 ############################################################################
 
-def components_rec(g, i, visited):
+def components_rec(g, v, visited):
     connected = []
 
-    for v in g[i]:
-        if v in visited:
-            continue
-
-        visited.append(v)
-        connected.extend([v] + components_rec(g, v, visited))
+    for w in g[v]:
+        if w not in visited:
+            visited.append(w)
+            connected.extend([w] + components_rec(g, w, visited))
 
     return connected
 
@@ -46,16 +45,14 @@ def components(g):
     [[0, 3, 1, 5, 2, 4, 7, 6]]
     """
     visited = []
-    connections = []
+    connected = []
 
-    for i in range(len(g)):
-        if i in visited:
-            continue
+    for v in range(len(g)):
+        if v not in visited:
+            visited.append(v)
+            connected.append([v] + components_rec(g, v, visited))
 
-        visited.append(i)
-        connections.append([i] + components_rec(g, i, visited))
-
-    return connections
+    return connected
 
 ############################################################################
 #
@@ -100,8 +97,8 @@ def bipartite(g):
     visited = []
     sets = [0] * len(g)
 
-    for i in range(len(g)):
-        if not bipartite_rec(g, i, sets, visited):
+    for v in range(len(g)):
+        if not bipartite_rec(g, v, sets, visited):
             return False
 
     return True
@@ -201,7 +198,8 @@ def topsort(d):
 # Problem 5
 #
 # write a function to determine the strongly connected components of digraph d.
-# Just like the components example, you should return a list of strongly connected components.
+# Just like the components example, you should return a list of strongly
+# connected components.
 #
 # Running time?
 #
@@ -239,26 +237,3 @@ def scc(d):
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
-
-    import utils
-    # utils.asrt(components([[1,2], [0,2], [0,1], [4], [3]]), [[0, 1, 2], [3, 4]])
-    # utils.asrt(components([[]]), [[0]])
-    # utils.asrt(components([[1],[0]]), [[0, 1]])
-    # utils.asrt(components([[3,4,7],[3,5,6],[4,5,7],[0,1],[0,2],[1,2],[1],[0,2]]), [[0, 3, 1, 5, 2, 4, 7, 6]])
-    # utils.asrt(components([[1,2],[0,3,4],[0,6],[1],[1,8,9],[6],[5,7],[6],[4],[4],[11,12],[10,12],[10,11]]), [[0, 1, 3, 4, 8, 9, 2, 6, 5, 7], [10, 11, 12]])
-    # utils.asrt(bipartite([[3,4,7], [3,5,6], [4,5,7], [0,1], [0,2], [1,2], [1], [0,2]]), True)
-    # utils.asrt(bipartite([[1,2],[0,2],[0,1]]), False)
-    # utils.asrt(bipartite([[]]), True)
-    # utils.asrt(bipartite([[1],[0]]), True)
-    # utils.asrt(bipartite([[1,3],[0,2],[1,3,5],[0,2],[5],[2,4]]), True)
-    # utils.asrt(bipartite([[1,3],[0,2],[1,3,5,4],[0,2],[5,2],[2,4]]), False)
-    # utils.asrt(isForrest([[1,2],[0,3,4],[0,6],[1],[1,8,9],[6],[5,7],[6],[4],[4]]), True)
-    # utils.asrt(isForrest([[1,2],[0,3,4],[0,6],[1],[1,8,9],[6],[5,7],[6],[4],[4],[11],[10]]), True)
-    # utils.asrt(isForrest([[1,2],[0,3,4],[0,6],[1],[1,8,9],[6],[5,7],[6,8],[4,7],[4]]), False)
-    # utils.asrt(isForrest([[1,2],[0,3,4],[0,6],[1],[1,8,9],[6],[5,7],[6],[4],[4],[11,12],[10,12],[10,11]]), False)
-    # utils.asrt(isForrest([[]]), True)
-    # utils.asrt(isForrest([[1],[0]]), True)
-    # utils.asrt(topsort([[1,2],[3],[3],[]]), [0, 2, 1, 3])
-    # utils.asrt(topsort([[3],[1,2],[3],[]]), [1, 2, 0, 3])
-    # utils.asrt(topsort([[6,5],[0,4],[0,5],[1,2],[6],[6],[]]), [3, 2, 1, 4, 0, 5, 6])
-    # utils.asrt(topsort([[1,2,3],[4],[],[4],[5,6,7],[],[],[6]]), [0, 3, 2, 1, 4, 7, 6, 5])
