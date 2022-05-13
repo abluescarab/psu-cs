@@ -14,6 +14,7 @@ import { Scope, namesInScope, declare, update, undeclare } from "./Scope";
 
 // Some of our statements contain expressions.
 import { interpretExpr } from "./Expression";
+import { assertBool } from "./TypeAssertions";
 
 // This is the error type for our "assert" statements, represented by the
 // AssertStmt node type.
@@ -52,7 +53,13 @@ export function interpretStmt(
     }
 
     case "assert": {
-      throw new Error("unimplemented");
+      const assertValue: Value = interpretExpr(scope, stmt.condition);
+      assertBool(assertValue); // TODO: use this function?
+
+      if(!assertValue)
+        throw new AssertionError("assertion error: returned false");
+
+      break;
     }
 
     case "block": {
@@ -97,7 +104,20 @@ export function interpretStmt(
     }
 
     case "for": {
-      throw new Error("unimplemented");
+      const initialValue: Value = interpretExpr(scope, stmt.initialExpr);
+      declare(stmt.name, initialValue, scope);
+
+      let conditionValue: Value = interpretExpr(scope, stmt.condition);
+      assertBool(conditionValue);
+
+      while(conditionValue) {
+        interpretStmt(scope, stmt.body);
+        interpretStmt(scope, stmt.update);
+        conditionValue = interpretExpr(scope, stmt.condition);
+      }
+
+      undeclare(stmt.name, scope);
+      break;
     }
   }
 }

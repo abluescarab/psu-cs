@@ -106,7 +106,9 @@ export function interpretExpr(
       return expr.value;
 
     case "conditional": {
-      throw new Error("unimplemented");
+      const conditionValue = interpretExpr(scope, expr.condition);
+      assertBool(conditionValue);
+      return interpretExpr(scope, conditionValue ? expr.trueExpr : expr.falseExpr);
     }
   }
 }
