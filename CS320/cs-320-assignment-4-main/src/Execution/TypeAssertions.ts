@@ -44,7 +44,7 @@ export class DynamicTypeError extends Error { }
 // For example, this code should be fine: this is how we check in TypeScript
 // whether a value is a number or some other type.
 
-//   if (typeof value != "number")
+//   if (typeof x != "number")
 //     throw new DynamicTypeError("oops!");
 //   const numValue: number = x + 1;
 

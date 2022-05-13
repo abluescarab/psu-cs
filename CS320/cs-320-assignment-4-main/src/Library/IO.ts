@@ -250,6 +250,10 @@ export const prettyPrintNode = (tree: Expr | Stmt): HTMLElement => {
       rootElement.setAttribute("data-name", "print");
       rootElement.appendChild(prettyPrintNode(tree.printExpr));
       break;
+    case "assert":
+      rootElement.setAttribute("data-name", "assert");
+      rootElement.appendChild(prettyPrintNode(tree.condition));
+      break;
     case "block":
       rootElement.setAttribute("data-name", "block");
       for (const blockStmt of tree.blockStmts)
