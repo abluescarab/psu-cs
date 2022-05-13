@@ -54,7 +54,7 @@ export function interpretStmt(
 
     case "assert": {
       const assertValue: Value = interpretExpr(scope, stmt.condition);
-      assertBool(assertValue); // TODO: use this function?
+      assertBool(assertValue);
 
       if(!assertValue)
         throw new AssertionError("assertion error: returned false");
