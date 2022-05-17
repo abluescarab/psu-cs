@@ -91,8 +91,7 @@ def largestProgram(data):
 #      [  5,   1,   0,   2],
 #      [  3,  -1,   1,   0] ]
 #
-#
-# Running Time:
+# Running Time: Theta(|V|^3)
 ###########################################################################
 
 def floyd(g):
@@ -108,7 +107,15 @@ def floyd(g):
     >>> floyd([[0,3,math.inf,5],[2,0,math.inf,4],[math.inf,1,0,math.inf],[math.inf,math.inf,2,0]])
     [[0, 3, 7, 5], [2, 0, 6, 4], [3, 1, 0, 5], [5, 3, 2, 0]]
     """
-    pass
+    D = g
+
+    for w in range(len(g)):
+        for u in range(len(g)):
+            for v in range(len(g)):
+                if D[u][w] + D[w][v] < D[u][v]:
+                    D[u][v] = D[u][w] + D[w][v]
+
+    return D
 
 ###########################################################################
 # Problem 3
