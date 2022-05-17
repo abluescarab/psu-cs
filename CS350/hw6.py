@@ -180,8 +180,18 @@ def rods(weights, prices, d):
 
 def matrixParens(sizes):
     """
-    >>> matrixParens([(3,5), (5,4), (4,7)])
+    >>> matrixParens([(3,5),(5,4),(4,7)])
     144
+    >>> matrixParens([(6,10),(10,30),(30,12),(12,16),(16,9),(9,1),(1,3)])
+    1074
+    >>> matrixParens([(4,9),(9,2)])
+    72
+    >>> matrixParens([(10,30),(30,5),(5,60)])
+    4500
+    >>> matrixParens([(40,20),(20,30),(30,10),(10,30)])
+    26000
+    >>> matrixParens([(10,20),(20,30),(30,40),(40,30)])
+    30000
     """
     pass
 
