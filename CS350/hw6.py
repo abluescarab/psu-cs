@@ -44,7 +44,7 @@ def machine(data, code):
 # and ["ADD","ADD","ADD"] will return 10
 #
 # You can run your program by calling
-# machine([2,3,4], ["ADD","MULL])
+# machine([2,3,4], ["ADD","MUL"])
 # to run your program
 #
 # you can use
@@ -58,6 +58,20 @@ def largestProgram(data):
     """
     >>> largestProgram([2,3,5])
     ['ADD', 'MUL']
+    >>> largestProgram([1])
+    ['ADD']
+    >>> largestProgram([1,5])
+    ['ADD', 'ADD']
+    >>> largestProgram([2,5])
+    ['MUL']
+    >>> largestProgram([5,5,5,5])
+    ['MUL', 'MUL']
+    >>> largestProgram([5,5,5,1])
+    ['ADD', 'MUL', 'ADD']
+    >>> largestProgram([9,7,5,3,5,2,0,1,3,-9,2])
+    ['MUL', 'MUL', 'MUL', 'ADD', 'ADD', 'ADD', 'ADD', 'ADD']
+    >>> largestProgram([9,7,5,3,5,2,0,2,-1,-9,2])
+    ['MUL', 'MUL', 'MUL', 'ADD', 'ADD', 'MUL', 'ADD']
     """
     pass
 
@@ -83,8 +97,16 @@ def largestProgram(data):
 
 def floyd(g):
     """
-    >>> floyd([[0, math.inf, -2, math.inf], [4, 0, 3, math.inf], [math.inf, math.inf, 0, 2], [math.inf, -1, math.inf, 0]])
+    >>> floyd([[0,math.inf,-2,math.inf],[4,0,3,math.inf],[math.inf,math.inf,0,2],[math.inf,-1,math.inf,0]])
     [[0, -1, -2, 0], [4, 0, 2, 4], [5, 1, 0, 2], [3, -1, 1, 0]]
+    >>> floyd([[0,math.inf,-2,math.inf,math.inf],[4,0,3,math.inf,math.inf],[math.inf,math.inf,0,2,2],[math.inf,-1,math.inf,0,math.inf],[1,math.inf,math.inf,math.inf,0]])
+    [[0, -1, -2, 0, 0], [4, 0, 2, 4, 4], [3, 1, 0, 2, 2], [3, -1, 1, 0, 3], [1, 0, -1, 1, 0]]
+    >>> floyd([[0,0,math.inf,math.inf,math.inf],[math.inf,0,7,-5,3],[math.inf,math.inf,0,1,math.inf],[5,math.inf,math.inf,0,math.inf],[-2,math.inf,math.inf,math.inf,0]])
+    [[0, 0, 7, -5, 3], [0, 0, 7, -5, 3], [6, 6, 0, 1, 9], [5, 5, 12, 0, 8], [-2, -2, 5, -7, 0]]
+    >>> floyd([[0,5,math.inf,10],[math.inf,0,3,math.inf],[math.inf,math.inf,0,1],[math.inf,math.inf,math.inf,0]])
+    [[0, 5, 8, 9], [inf, 0, 3, 4], [inf, inf, 0, 1], [inf, inf, inf, 0]]
+    >>> floyd([[0,3,math.inf,5],[2,0,math.inf,4],[math.inf,1,0,math.inf],[math.inf,math.inf,2,0]])
+    [[0, 3, 7, 5], [2, 0, 6, 4], [3, 1, 0, 5], [5, 3, 2, 0]]
     """
     pass
 
@@ -109,6 +131,16 @@ def rods(weights, prices, d):
     """
     >>> rods([3,4,5,6,7], [2,3,6,8,11], 20)
     30
+    >>> rods([1,2,3,4,5,6,7,8], [1,5,8,9,10,17,17,20], 8)
+    22
+    >>> rods([1,2,3,4,5,6,7,8], [3,5,8,9,10,17,17,20], 8)
+    24
+    >>> rods([1], [3], 8)
+    24
+    >>> rods([1,2], [3,9], 0)
+    0
+    >>> rods([2,4,8], [1,4,10], 32)
+    40
     """
     pass
 
