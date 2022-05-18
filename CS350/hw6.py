@@ -134,23 +134,22 @@ def floyd(g):
 # Running Time:
 ###########################################################################
 
-def rods_rec(lengths, prices, length, price, memos):
+def rods_rec(lengths, prices, length, memos):
     if memos[length] is not None:
         return memos[length]
 
-    minLength = length
-    maxPrice = price
+    result = 0
 
-    for i in range(len(prices)):
-        if length - lengths[i] >= 0:
-            temp = rods_rec(lengths, prices, length - lengths[i],
-                    price + prices[i], memos)
+    for i in range(len(lengths)):
+        value = 0
 
-            minLength = min(minLength, temp[0] + 1)
-            maxPrice = max(maxPrice, temp[1])
+        if length >= lengths[i]:
+            value = rods_rec(lengths, prices, length - lengths[i], memos) + prices[i]
 
-    memos[length] = (minLength, maxPrice)
-    return (minLength, maxPrice)
+        result = value if value > result else result
+
+    memos[length] = result
+    return result
 
 def rods(weights, prices, d):
     """
@@ -168,7 +167,7 @@ def rods(weights, prices, d):
     40
     """
     memos = [None] * (d + 1)
-    return rods_rec(weights, prices, d, 0, memos)[1]
+    return rods_rec(weights, prices, d, memos)
 
 ############################################################################
 # Problem 4: Parenthesizing matrices.
@@ -217,12 +216,12 @@ def matrixParens(sizes):
 
 if __name__ == "__main__":
     import doctest
-    # doctest.testmod()
+    doctest.testmod()
 
     import utils
-    utils.asrt(rods([3,4,5,6,7], [2,3,6,8,11], 20), 30)
-    utils.asrt(rods([1,2,3,4,5,6,7,8], [1,5,8,9,10,17,17,20], 8), 22)
-    utils.asrt(rods([1,2,3,4,5,6,7,8], [3,5,8,9,10,17,17,20], 8), 24)
-    utils.asrt(rods([1], [3], 8), 24)
-    utils.asrt(rods([1,2], [3,9], 0), 0)
-    utils.asrt(rods([2,4,8], [1,4,10], 32), 40)
+    # utils.asrt(rods([3,4,5,6,7], [2,3,6,8,11], 20), 30)
+    # utils.asrt(rods([1,2,3,4,5,6,7,8], [1,5,8,9,10,17,17,20], 8), 22)
+    # utils.asrt(rods([1,2,3,4,5,6,7,8], [3,5,8,9,10,17,17,20], 8), 24)
+    # utils.asrt(rods([1], [3], 8), 24)
+    # utils.asrt(rods([1,2], [3,9], 0), 0)
+    # utils.asrt(rods([2,4,8], [1,4,10], 32), 40)
