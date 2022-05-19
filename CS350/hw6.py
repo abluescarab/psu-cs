@@ -211,17 +211,49 @@ def matrixParens(sizes):
     >>> matrixParens([(10,20),(20,30),(30,40),(40,30)])
     30000
     """
-    pass
+    # n = len(sizes)
+    # c = [[-1] * (len(sizes) + 1)] * (len(sizes) + 1)
 
+    # for length in range(0, n):
+    #     for i in range(1, n - length):
+    #         j = i + length - 1
+    #         k = i
+
+    #         while j < n and k <= j:
+    #             cost = c[i][k] + c[k + 1][j] + sizes[i - 1][1] * sizes[k][1] * sizes[j][1]
+
+    #             print(cost)
+
+    #             if c[i][j] == -1 or cost < c[i][j]:
+    #                 print("changing to cost")
+    #                 c[i][j] = cost
+
+    #             k = k + 1
+
+    # print(c)
+    # return c[1][n - 1]
 
 if __name__ == "__main__":
     import doctest
-    doctest.testmod()
+    # doctest.testmod()
 
-    import utils
-    # utils.asrt(rods([3,4,5,6,7], [2,3,6,8,11], 20), 30)
-    # utils.asrt(rods([1,2,3,4,5,6,7,8], [1,5,8,9,10,17,17,20], 8), 22)
-    # utils.asrt(rods([1,2,3,4,5,6,7,8], [3,5,8,9,10,17,17,20], 8), 24)
-    # utils.asrt(rods([1], [3], 8), 24)
-    # utils.asrt(rods([1,2], [3,9], 0), 0)
-    # utils.asrt(rods([2,4,8], [1,4,10], 32), 40)
+    from utils import TestSuite
+    suite = TestSuite()
+    suite.add_test(largestProgram, [2,3,5], ['ADD', 'MUL'])
+    suite.add_test(largestProgram, [1], ['ADD'])
+    suite.add_test(largestProgram, [1,5], ['ADD', 'ADD'])
+    suite.add_test(largestProgram, [2,5], ['MUL'])
+    suite.add_test(largestProgram, [5,5,5,5], ['MUL', 'MUL'])
+    suite.add_test(largestProgram, [5,5,5,1], ['ADD', 'MUL', 'ADD'])
+    suite.add_test(largestProgram, [9,7,5,3,5,2,0,1,3,-9,2], ['MUL', 'MUL', 'MUL', 'ADD', 'ADD', 'ADD', 'ADD', 'ADD'])
+    suite.add_test(largestProgram, [9,7,5,3,5,2,0,2,-1,-9,2], ['MUL', 'MUL', 'MUL', 'ADD', 'ADD', 'MUL', 'ADD'])
+
+    suite.run()
+    # print("passed: " + str(passed))
+    # utils.asrt(matrixParens([(3,5),(5,4),(4,7)]), 144)
+    # utils.asrt(matrixParens([3,5,4,7]), 144)
+    # utils.asrt(matrixParens([(6,10),(10,30),(30,12),(12,16),(16,9),(9,1),(1,3)]), 1074)
+    # utils.asrt(matrixParens([(4,9),(9,2)]), 72)
+    # utils.asrt(matrixParens([(10,30),(30,5),(5,60)]), 4500)
+    # utils.asrt(matrixParens([(40,20),(20,30),(30,10),(10,30)]), 26000)
+    # utils.asrt(matrixParens([(10,20),(20,30),(30,40),(40,30)]), 30000)
