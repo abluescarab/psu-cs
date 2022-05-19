@@ -237,7 +237,7 @@ if __name__ == "__main__":
     import doctest
     # doctest.testmod()
 
-    from utils import TestSuite
+    from test_suite import TestSuite
     suite = TestSuite()
     suite.add_test(largestProgram, [2,3,5], ['ADD', 'MUL'])
     suite.add_test(largestProgram, [1], ['ADD'])
