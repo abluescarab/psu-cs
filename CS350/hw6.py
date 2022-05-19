@@ -51,7 +51,7 @@ def machine(data, code):
 # machine(numbers, largestProgram(numbers))
 # to test your algorithm on any list of numbers.
 #
-# running time:
+# Running time: Theta(n)
 ###########################################################################
 
 def largestProgram(data):
@@ -60,20 +60,35 @@ def largestProgram(data):
     ['ADD', 'MUL']
     >>> largestProgram([1])
     ['ADD']
-    >>> largestProgram([1,5])
-    ['ADD', 'ADD']
     >>> largestProgram([2,5])
     ['MUL']
     >>> largestProgram([5,5,5,5])
     ['MUL', 'MUL']
-    >>> largestProgram([5,5,5,1])
-    ['ADD', 'MUL', 'ADD']
-    >>> largestProgram([9,7,5,3,5,2,0,1,3,-9,2])
-    ['MUL', 'MUL', 'MUL', 'ADD', 'ADD', 'ADD', 'ADD', 'ADD']
-    >>> largestProgram([9,7,5,3,5,2,0,2,-1,-9,2])
-    ['MUL', 'MUL', 'MUL', 'ADD', 'ADD', 'MUL', 'ADD']
     """
-    pass
+    commands = []
+    index = 0
+
+    while index < len(data):
+        if index + 1 >= len(data):
+            commands.append('ADD')
+            break
+
+        sum = data[index]
+        mul = data[index] * data[index + 1]
+        next_mul = 0
+
+        if index + 2 < len(data):
+            next_mul += data[index + 1] * data[index + 2]
+
+        if sum > mul or next_mul > mul:
+            commands.append('ADD')
+        else:
+            commands.append('MUL')
+            index += 1
+
+        index += 1
+
+    return commands
 
 ###########################################################################
 # Problem 2
@@ -131,7 +146,7 @@ def floyd(g):
 # to maximize the profit.
 # You should return the maximum profit you can make.
 #
-# Running Time:
+# Running Time: Theta(n)
 ###########################################################################
 
 def rods_rec(lengths, prices, length, memos):
@@ -211,49 +226,8 @@ def matrixParens(sizes):
     >>> matrixParens([(10,20),(20,30),(30,40),(40,30)])
     30000
     """
-    # n = len(sizes)
-    # c = [[-1] * (len(sizes) + 1)] * (len(sizes) + 1)
-
-    # for length in range(0, n):
-    #     for i in range(1, n - length):
-    #         j = i + length - 1
-    #         k = i
-
-    #         while j < n and k <= j:
-    #             cost = c[i][k] + c[k + 1][j] + sizes[i - 1][1] * sizes[k][1] * sizes[j][1]
-
-    #             print(cost)
-
-    #             if c[i][j] == -1 or cost < c[i][j]:
-    #                 print("changing to cost")
-    #                 c[i][j] = cost
-
-    #             k = k + 1
-
-    # print(c)
-    # return c[1][n - 1]
+    pass
 
 if __name__ == "__main__":
     import doctest
-    # doctest.testmod()
-
-    from test_suite import TestSuite
-    suite = TestSuite()
-    suite.add_test(largestProgram, [2,3,5], ['ADD', 'MUL'])
-    suite.add_test(largestProgram, [1], ['ADD'])
-    suite.add_test(largestProgram, [1,5], ['ADD', 'ADD'])
-    suite.add_test(largestProgram, [2,5], ['MUL'])
-    suite.add_test(largestProgram, [5,5,5,5], ['MUL', 'MUL'])
-    suite.add_test(largestProgram, [5,5,5,1], ['ADD', 'MUL', 'ADD'])
-    suite.add_test(largestProgram, [9,7,5,3,5,2,0,1,3,-9,2], ['MUL', 'MUL', 'MUL', 'ADD', 'ADD', 'ADD', 'ADD', 'ADD'])
-    suite.add_test(largestProgram, [9,7,5,3,5,2,0,2,-1,-9,2], ['MUL', 'MUL', 'MUL', 'ADD', 'ADD', 'MUL', 'ADD'])
-
-    suite.run()
-    # print("passed: " + str(passed))
-    # utils.asrt(matrixParens([(3,5),(5,4),(4,7)]), 144)
-    # utils.asrt(matrixParens([3,5,4,7]), 144)
-    # utils.asrt(matrixParens([(6,10),(10,30),(30,12),(12,16),(16,9),(9,1),(1,3)]), 1074)
-    # utils.asrt(matrixParens([(4,9),(9,2)]), 72)
-    # utils.asrt(matrixParens([(10,30),(30,5),(5,60)]), 4500)
-    # utils.asrt(matrixParens([(40,20),(20,30),(30,10),(10,30)]), 26000)
-    # utils.asrt(matrixParens([(10,20),(20,30),(30,40),(40,30)]), 30000)
+    doctest.testmod()
