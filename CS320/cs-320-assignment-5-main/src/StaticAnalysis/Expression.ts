@@ -119,8 +119,14 @@ export function inferExprType(scope: Scope, expr: Expr): SourceType {
     case "bool":
       return expr.tag;
 
-    case "lessThan":
-      throw new Error("unimplemented");
+    case "lessThan": {
+      const leftType = inferExprType(scope, expr.leftSubexpr);
+      const rightType = inferExprType(scope, expr.rightSubexpr);
+
+      assertType("num", leftType);
+      assertType("num", rightType);
+      return "bool";
+    }
 
     // This code works, but you'll be modifying it in exercise 2 to be more
     // complete.
