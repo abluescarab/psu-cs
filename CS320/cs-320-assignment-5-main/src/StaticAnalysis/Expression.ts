@@ -131,7 +131,12 @@ export function inferExprType(scope: Scope, expr: Expr): SourceType {
     // This code works, but you'll be modifying it in exercise 2 to be more
     // complete.
     case "and":
-    case "or":
-      return inferInfixExprType("bool", "bool", scope, expr);
+    case "or": {
+      const leftType = inferExprType(scope, expr.leftSubexpr);
+      const rightType = inferExprType(scope, expr.rightSubexpr);
+
+      assertType(leftType, rightType);
+      return leftType;
+    }
   }
 }
