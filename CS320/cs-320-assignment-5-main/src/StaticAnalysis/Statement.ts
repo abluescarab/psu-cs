@@ -107,5 +107,33 @@ export function typecheckStmt(scope: Scope, stmt: Stmt): void {
 
       break;
     }
+
+    case "switch": {
+      const outerScopeVarNames: Set<string> = namesInScope(scope);
+      const scrutineeType = inferExprType(scope, stmt.scrutinee);
+
+      for(const [value, body] of stmt.valueCases.entries()) {
+        if(scrutineeType == "bool" && typeof value != "boolean")
+          throw new StaticTypeError("expected boolean, got " + value);
+        else if(scrutineeType == "num" && typeof value != "number")
+          throw new StaticTypeError("expected number, got " + value);
+
+        typecheckStmt(scope, body);
+
+        for (const varName of scope.keys())
+          if (!outerScopeVarNames.has(varName))
+            undeclare(varName, scope);
+      }
+
+      if(stmt.defaultCase != null) {
+        typecheckStmt(scope, stmt.defaultCase);
+
+        for (const varName of scope.keys())
+          if (!outerScopeVarNames.has(varName))
+            undeclare(varName, scope);
+      }
+
+      break;
+    }
   }
 }
