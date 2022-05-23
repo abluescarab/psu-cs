@@ -86,6 +86,14 @@ class TestSuite:
 
         self._print_results()
 
+    def run_by_index(self, index):
+        self._reset()
+
+        if index < len(self._tests):
+            self._run_single(self._tests[index])
+
+        self._print_results()
+
     def remove_by_function(self, func):
         self._tests = [t for t in self._tests if t.func != func]
 
@@ -94,6 +102,9 @@ class TestSuite:
 
     def remove_by_expected(self, expected):
         self._tests = [t for t in self._tests if t.expected != expected]
+
+    def remove_by_index(self, index):
+        self._tests.pop(index)
 
     def clear(self):
         self._tests.clear()
