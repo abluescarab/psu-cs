@@ -1,20 +1,21 @@
 class Test:
-    def __init__(self, func, args, expected):
+    def __init__(self, func, expected, *args, **kwargs):
         self.func = func
         self.args = args
+        self.kwargs = kwargs
         self.expected = expected
 
     def run(self):
         try:
-            result = self.func(self.args)
+            result = self.func(*self.args, **self.kwargs)
 
             assert result == self.expected, \
-                f"fail: got {result}, expected {self.expected}"
+                f"[{self.func.__name__}] fail: got {result}, expected {self.expected}"
         except AssertionError as e:
             print(e)
             return False
         else:
-            print(f"pass: got {self.expected}")
+            print(f"[{self.func.__name__}] pass: got {self.expected}")
             return True
 
 
@@ -24,8 +25,8 @@ class TestSuite:
         self._performed = 0
         self._passed = 0
 
-    def add_test(self, func, args, expected):
-        self._tests.append(Test(func, args, expected))
+    def add_test(self, func, expected, *args, **kwargs):
+        self._tests.append(Test(func, expected, *args, **kwargs))
 
     def _print_results(self):
         if len(self._tests) > 0:
