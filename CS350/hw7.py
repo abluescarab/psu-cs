@@ -1,5 +1,3 @@
-
-
 ################################################################
 # Problem 1
 #
@@ -16,8 +14,18 @@
 
 def schedule(jobs):
     """
-    >>> schedule([(5,40), (30,35), (6,20), (19, 31), (23, 29), (28, 32)])
+    >>> schedule([(5,40),(30,35),(6,20),(19,31),(23,29),(28,32)])
     [[(6, 20), (23, 29), (30, 35)], [(19, 31)], [(28, 32)], [(5, 40)]]
+    >>> schedule([(3,6),(9, 20),(12,30),(5, 6),(14, 30),(20, 35),(32, 40)])
+    [[(3, 6), (9, 20), (20, 35)], [(5, 6), (12, 30), (32, 40)], [(14, 30)]]
+    >>> schedule([(1,2)])
+    [[(1, 2)]]
+    >>> schedule([(3,4),(1,2)])
+    [[(1, 2), (3, 4)]]
+    >>> schedule([(1,3),(3,4)])
+    [[(1, 3), (3, 4)]]
+    >>> schedule([(1,3),(2,4)])
+    [[(1, 3)], [(2, 4)]]
     """
     pass
 
@@ -36,8 +44,18 @@ def schedule(jobs):
 
 def superstring(strings):
     """
-    >>> superstring(["CADBC", "CDAABD", "BCDA", "DDCA", "ADBCADC"])
+    >>> superstring(["CADBC","CDAABD","BCDA","DDCA","ADBCADC"])
     'BCDAABDDCADBCADC'
+    >>> superstring(["BADCH","HWBA","CHADIS","ADCHDJKSHWB"])
+    'CHADISBADCHDJKSHWBA'
+    >>> superstring(["A","B","C","D","E"])
+    'ABCDE'
+    >>> superstring(["AHHI","HIP"])
+    'AHHIP'
+    >>> superstring(["HIP","IPP"])
+    'HIPP'
+    >>> superstring(["HELLO","LOHELLPO","OPO"])
+    'HELLOHELLPOPO'
     """
     pass
 
@@ -51,7 +69,6 @@ def superstring(strings):
 # Running time:
 ################################################################
 
-
 def dijkstra(g, a, b):
     """
     >>> g = [ [(1,3), (2,6)], \
@@ -63,9 +80,25 @@ def dijkstra(g, a, b):
               [(4,9), (5,2), (9,4)], \
               [(5,8), (8,3)], \
               [(3,1), (7,3), (9,2)], \
-              [(6,4), (8,2)] ]
+              [(6,4), (8,2)], \
+              [(11,1)], \
+              [(10,1)]]
     >>> dijkstra(g,0,9)
     [0, 2, 3, 8, 9]
+    >>> dijkstra(g,0,7)
+    [0, 2, 3, 8, 7]
+    >>> dijkstra(g,0,10)
+    >>> dijkstra(g,0,11)
+    >>> dijkstra(g,11,10)
+    [11, 10]
+    >>> dijkstra(g,7,7)       # Just make a special case for this
+    [7]
+    >>> dijkstra(g,0,1)
+    [0, 1]
+    >>> dijkstra(g,5,3)
+    [5, 2, 3]
+    >>> dijkstra(g,5,1)
+    [5, 6, 4, 1]
     """
     pass
 
