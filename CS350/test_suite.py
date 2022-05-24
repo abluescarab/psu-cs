@@ -20,19 +20,20 @@ class Test:
 
 
 class TestSuite:
-    def __init__(self):
+    def __init__(self, separate_results_by_function=False):
         self._tests = []
         self._performed = 0
         self._passed = 0
+        self.separate_results_by_function = separate_results_by_function
 
     def add_test(self, func, expected, *args, **kwargs):
         self._tests.append(Test(func, expected, *args, **kwargs))
 
-    def _print_results(self):
+    def _print_results(self, func_name=None):
         if len(self._tests) > 0:
             print()
 
-        print(f"result:", end=" ")
+        print(f"[{func_name if func_name is not None else 'all'}] result:", end=" ")
 
         if len(self._tests) > 0:
             print(f"{self._passed} passed, "
@@ -54,11 +55,18 @@ class TestSuite:
 
     def run(self):
         self._reset()
+        last_func = self._tests[0].func.__name__
 
         for t in self._tests:
-            self._run_single(t)
+            if self.separate_results_by_function and t.func.__name__ != last_func:
+                self._print_results(last_func)
+                self._reset()
 
-        self._print_results()
+            self._run_single(t)
+            last_func = t.func.__name__
+
+        self._print_results(last_func if self.separate_results_by_function
+                            else None)
 
     def run_by_function(self, func):
         self._reset()
