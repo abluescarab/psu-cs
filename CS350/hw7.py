@@ -131,26 +131,44 @@ def superstring(strings):
 # Problem 3
 #
 # Find the shortest path from a to b
-# in a weighted graph g that is represented by an adjacency matrix.
+# in a weighted graph g that is represented by an adjacency list.
 # You can assume all edge weights are positive.
 #
 # Running time:
 ################################################################
 
+import math
+
+# def dijkstra_rec(g, a, b, vertex, visited, path, dists):
+# def dijkstra_rec(g, a, b, current, last, visited):
+#     closest_v = -1
+#     closest_w = math.inf
+
+#     for v, w in g[current]:
+#         if v == b:
+#             return v
+
+#         if w < closest_w and v not in visited:
+#             closest_w = w
+#             closest_v = v
+
+#     visited.append(current)
+#     return current + dijkstra_rec(g, a, b, closest_v, current, visited)
+
 def dijkstra(g, a, b):
     """
-    >>> g = [ [(1,3), (2,6)], \
-              [(0,3), (4,4)], \
-              [(0,6), (3,2), (5,7)], \
-              [(2,2), (4,4), (8,1)], \
-              [(1,4), (3,4), (6,9)], \
-              [(2,7), (6,2), (7,8)], \
-              [(4,9), (5,2), (9,4)], \
-              [(5,8), (8,3)], \
-              [(3,1), (7,3), (9,2)], \
-              [(6,4), (8,2)], \
-              [(11,1)], \
-              [(10,1)]]
+    >>> g = [ [(1,3), (2,6)], \         # 0
+              [(0,3), (4,4)], \         # 1
+              [(0,6), (3,2), (5,7)], \  # 2
+              [(2,2), (4,4), (8,1)], \  # 3
+              [(1,4), (3,4), (6,9)], \  # 4
+              [(2,7), (6,2), (7,8)], \  # 5
+              [(4,9), (5,2), (9,4)], \  # 6
+              [(5,8), (8,3)], \         # 7
+              [(3,1), (7,3), (9,2)], \  # 8
+              [(6,4), (8,2)], \         # 9
+              [(11,1)], \               # 10
+              [(10,1)]]                 # 11
     >>> dijkstra(g,0,9)
     [0, 2, 3, 8, 9]
     >>> dijkstra(g,0,7)
@@ -168,42 +186,54 @@ def dijkstra(g, a, b):
     >>> dijkstra(g,5,1)
     [5, 6, 4, 1]
     """
-    if a == b:
-        return [a]
+    dists = [math.inf] * len(g)
+    dists[a] = 0
+    paths = {}
+    visited = [False] * len(g)
 
-    visited = [a]
+    for i in range(len(g)):
+        v, w = (-1, math.inf)
 
-    # return dijkstra_rec(g, a, b, 0, visited)
+        for vert, weight in g[i]:
+            if not visited[vert] and weight < dists[vert]:
+                v, w = (vert, weight)
+
+        print(v,w)
+
+        # v, w = min([v for v in g[i] if v not in visited], key=lambda v: v[1])
+        # visited[v] = True
+        # print(v, w)
+        # visited[v] = True
 
 
 if __name__ == "__main__":
     import doctest
     # doctest.testmod()
 
-    from test_suite import TestSuite
+    from test_suite import TestSuite, RunByType
 
     suite = TestSuite(True)
     suite.add_test(schedule, [[(6, 20), (23, 29), (30, 35)], [(19, 31)], [(28, 32)], [(5, 40)]],
-        [(5,40),(30,35),(6,20),(19,31),(23,29),(28,32)])
+        [[(5,40),(30,35),(6,20),(19,31),(23,29),(28,32)]])
     suite.add_test(schedule, [[(3, 6), (9, 20), (20, 35)], [(5, 6), (12, 30), (32, 40)], [(14, 30)]],
-        [(3,6),(9, 20),(12,30),(5, 6),(14, 30),(20, 35),(32, 40)])
+        [[(3,6),(9, 20),(12,30),(5, 6),(14, 30),(20, 35),(32, 40)]])
     suite.add_test(schedule, [[(1, 2)]],
-        [(1,2)])
+        [[(1,2)]])
     suite.add_test(schedule, [[(1, 2), (3, 4)]],
-        [(3,4),(1,2)])
+        [[(3,4),(1,2)]])
     suite.add_test(schedule, [[(1, 3), (3, 4)]],
-        [(1,3),(3,4)])
+        [[(1,3),(3,4)]])
     suite.add_test(schedule, [[(1, 3)], [(2, 4)]],
-        [(1,3),(2,4)])
+        [[(1,3),(2,4)]])
 
     suite.add_test(superstring, 'BCDAABDDCADBCADC',
-        ["CADBC","CDAABD","BCDA","DDCA","ADBCADC"])
+        [["CADBC","CDAABD","BCDA","DDCA","ADBCADC"]])
     suite.add_test(superstring, 'AEDCB',
-        ["A","B","C","D","E"])
+        [["A","B","C","D","E"]])
     suite.add_test(superstring, 'AHHIP',
-        ["AHHI","HIP"])
+        [["AHHI","HIP"]])
     suite.add_test(superstring, 'HIPP',
-        ["HIP","IPP"])
+        [["HIP","IPP"]])
 
     g = [ [(1,3), (2,6)], \
         [(0,3), (4,4)], \
@@ -217,14 +247,12 @@ if __name__ == "__main__":
         [(6,4), (8,2)], \
         [(11,1)], \
         [(10,1)]]
-    suite.add_test(dijkstra, [0, 2, 3, 8, 9], g, 0, 9)
-    suite.add_test(dijkstra, [0, 2, 3, 8, 7], g, 0, 7)
-    suite.add_test(dijkstra, None, g, 0, 10)
-    suite.add_test(dijkstra, None, g, 0, 11)
-    suite.add_test(dijkstra, [11, 10], g, 11 ,10)
-    suite.add_test(dijkstra, [7], g, 7, 7)
-    suite.add_test(dijkstra, [0, 1], g, 0, 1)
-    suite.add_test(dijkstra, [5, 2, 3], g, 5, 3)
-    suite.add_test(dijkstra, [5, 6, 4, 1], g, 5, 1)
-
-    suite.run()
+    suite.add_test(dijkstra, [0, 2, 3, 8, 9], [g, 0, 9])
+    suite.add_test(dijkstra, [0, 2, 3, 8, 7], [g, 0, 7])
+    suite.add_test(dijkstra, None, [g, 0, 10])
+    suite.add_test(dijkstra, None, [g, 0, 11])
+    suite.add_test(dijkstra, [11, 10], [g, 11 ,10])
+    suite.add_test(dijkstra, [7], [g, 7, 7])
+    suite.add_test(dijkstra, [0, 1], [g, 0, 1])
+    suite.add_test(dijkstra, [5, 2, 3], [g, 5, 3])
+    suite.add_test(dijkstra, [5, 6, 4, 1], [g, 5, 1])
