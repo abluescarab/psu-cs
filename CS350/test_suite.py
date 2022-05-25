@@ -1,3 +1,6 @@
+from enum import Enum
+
+
 class Test:
     def __init__(self, func, expected, args=[], kwargs={}):
         self.func = func
@@ -21,6 +24,11 @@ class Test:
             print(f"[{self.func.__name__}] pass: got {self.expected}")
             return True
 
+class RunByType(Enum):
+    Function = 0
+    Expected = 1
+    Arguments = 2
+    Index = 3
 
 class TestSuite:
     def __init__(self, separate_results_by_function=False):
@@ -71,38 +79,17 @@ class TestSuite:
         self._print_results(last_func if self.separate_results_by_function
                             else None)
 
-    def run_by_function(self, func):
+    def run_by(self, type: RunByType, run_by):
         self._reset()
 
-        for t in self._tests:
-            if t.func == func:
-                self._run_single(t)
-
-        self._print_results()
-
-    def run_by_args(self, args):
-        self._reset()
-
-        for t in self._tests:
-            if t.args == args:
-                self._run_single(t)
-
-        self._print_results()
-
-    def run_by_expected(self, expected):
-        self._reset()
-
-        for t in self._tests:
-            if t.expected == expected:
-                self._run_single(t)
-
-        self._print_results()
-
-    def run_by_index(self, index):
-        self._reset()
-
-        if index < len(self._tests):
-            self._run_single(self._tests[index])
+        if type == RunByType.Index and 0 <= run_by < len(self._tests):
+            self._run_single(self._tests[run_by])
+        else:
+            for t in self._tests:
+                if (type == RunByType.Function and t.func == run_by) \
+                or (type == RunByType.Expected and t.expected == run_by) \
+                or (type == RunByType.Arguments and t.args == run_by):
+                    self._run_single(t)
 
         self._print_results()
 
