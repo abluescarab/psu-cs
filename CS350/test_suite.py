@@ -93,17 +93,15 @@ class TestSuite:
 
         self._print_results()
 
-    def remove_by_function(self, func):
-        self._tests = [t for t in self._tests if t.func != func]
-
-    def remove_by_args(self, args):
-        self._tests = [t for t in self._tests if t.args != args]
-
-    def remove_by_expected(self, expected):
-        self._tests = [t for t in self._tests if t.expected != expected]
-
-    def remove_by_index(self, index):
-        self._tests.pop(index)
+    def remove_by(self, type: RunByType, remove_by):
+        if type == RunByType.Function:
+            self._tests = [t for t in self._tests if t.func != remove_by]
+        elif type == RunByType.Expected:
+            self._tests = [t for t in self._tests if t.expected != remove_by]
+        elif type == RunByType.Arguments:
+            self._tests = [t for t in self._tests if t.args != remove_by]
+        elif type == RunByType.Index:
+            self._tests.pop(remove_by)
 
     def clear(self):
         self._tests.clear()
