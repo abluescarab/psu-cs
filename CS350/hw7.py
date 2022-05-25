@@ -29,29 +29,25 @@ def schedule(jobs):
     """
     jobs_sorted = sorted(jobs, key=lambda j: j[1])
     scheduled = [[]]
-    index = 0
     processor = 0
     visited = []
 
     while len(visited) < len(jobs_sorted):
-        while index < len(jobs_sorted):
-            if jobs_sorted[index] not in visited:
-                start = jobs_sorted[index][0]
+        for i in range(len(jobs_sorted)):
+            if jobs_sorted[i] not in visited:
+                start = jobs_sorted[i][0]
                 last_end = 0
 
                 if len(scheduled[processor]) > 0:
                     last_end = scheduled[processor][-1][1]
 
                 if start >= last_end:
-                    scheduled[processor].append(jobs_sorted[index])
-                    visited.append((jobs_sorted[index]))
-
-            index += 1
+                    scheduled[processor].append(jobs_sorted[i])
+                    visited.append((jobs_sorted[i]))
 
         if len(visited) < len(jobs_sorted):
             scheduled.append([])
             processor += 1
-            index = 0
 
     return scheduled
 
