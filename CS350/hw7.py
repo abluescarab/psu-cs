@@ -27,28 +27,33 @@ def schedule(jobs):
     >>> schedule([(1,3),(2,4)])
     [[(1, 3)], [(2, 4)]]
     """
-    # if len(jobs) < 2:
-    #     return jobs
+    jobs_sorted = sorted(jobs, key=lambda j: j[1])
+    scheduled = [[]]
+    index = 0
+    processor = 0
+    visited = []
 
-    # jobs.sort(key=lambda j: j[1])
-    # scheduled = [[jobs[0]]]
-    # index = 0
+    while len(visited) < len(jobs_sorted):
+        while index < len(jobs_sorted):
+            if jobs_sorted[index] not in visited:
+                start = jobs_sorted[index][0]
+                last_end = 0
 
-    # for i in range(1, len(jobs)):
-    #     # for j in range(len(jobs)):
-    #     #     if i == j:
-    #     #         continue
+                if len(scheduled[processor]) > 0:
+                    last_end = scheduled[processor][-1][1]
 
-    #     curr_start, curr_end = jobs[i]
-    #     last_start, last_end = jobs[i - 1]
+                if start >= last_end:
+                    scheduled[processor].append(jobs_sorted[index])
+                    visited.append((jobs_sorted[index]))
 
-    #     if curr_start < last_end:
-    #         scheduled.append([jobs[i]])
-    #         index += 1
-    #     else:
-    #         scheduled[index].append(jobs[i])
+            index += 1
 
-    # return scheduled
+        if len(visited) < len(jobs_sorted):
+            scheduled.append([])
+            processor += 1
+            index = 0
+
+    return scheduled
 
 ################################################################
 # Problem 2
