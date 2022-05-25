@@ -1,5 +1,5 @@
 class Test:
-    def __init__(self, func, expected, *args, **kwargs):
+    def __init__(self, func, expected, args=[], kwargs={}):
         self.func = func
         self.args = args
         self.kwargs = kwargs
@@ -7,7 +7,10 @@ class Test:
 
     def run(self):
         try:
-            result = self.func(*self.args, **self.kwargs)
+            if self.kwargs:
+                result = self.func(*self.args, **self.kwargs)
+            else:
+                result = self.func(*self.args)
 
             assert result == self.expected, \
                 f"[{self.func.__name__}] fail: got {result}, expected {self.expected}"
@@ -26,8 +29,8 @@ class TestSuite:
         self._passed = 0
         self.separate_results_by_function = separate_results_by_function
 
-    def add_test(self, func, expected, *args, **kwargs):
-        self._tests.append(Test(func, expected, *args, **kwargs))
+    def add_test(self, func, expected, args=[], kwargs={}):
+        self._tests.append(Test(func, expected, args, kwargs))
 
     def _print_results(self, func_name=None):
         if len(self._tests) > 0:
