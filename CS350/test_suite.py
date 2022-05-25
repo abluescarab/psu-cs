@@ -25,10 +25,10 @@ class Test:
             return True
 
 class RunByType(Enum):
-    Function = 0
-    Expected = 1
+    Function  = 0
+    Expected  = 1
     Arguments = 2
-    Index = 3
+    Index     = 3
 
 class TestSuite:
     def __init__(self, separate_results_by_function=False):
@@ -38,7 +38,9 @@ class TestSuite:
         self.separate_results_by_function = separate_results_by_function
 
     def add_test(self, func, expected, args=[], kwargs={}):
-        self._tests.append(Test(func, expected, args, kwargs))
+        test = Test(func, expected, args, kwargs)
+        self._tests.append(test)
+        return test
 
     def _print_results(self, func_name=None):
         if len(self._tests) > 0:
