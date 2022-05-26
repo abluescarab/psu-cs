@@ -1,3 +1,5 @@
+import math
+
 ################################################################
 # Problem 1
 #
@@ -8,7 +10,7 @@
 # Give a greedy algorithm to schdule the jobs on the fewest
 # number of processors total
 #
-# Running Time:
+# Running Time: Theta(nlog(n)+n^2)
 #
 ################################################################
 
@@ -27,13 +29,13 @@ def schedule(jobs):
     >>> schedule([(1,3),(2,4)])
     [[(1, 3)], [(2, 4)]]
     """
-    jobs_sorted = sorted(jobs, key=lambda j: j[1])
+    jobs_sorted = sorted(jobs, key=lambda j: j[1])                  # O(n log n)
     scheduled = [[jobs_sorted[0]]]
     processor = 0
     visited = [jobs_sorted[0]]
 
-    while len(visited) < len(jobs_sorted):
-        for i in range(1, len(jobs_sorted)):
+    while len(visited) < len(jobs_sorted):                          # O(n)
+        for i in range(1, len(jobs_sorted)):                        # O(n-1)
             if jobs_sorted[i] not in visited:
                 start = jobs_sorted[i][0]
                 last_end = 0
@@ -60,25 +62,28 @@ def schedule(jobs):
 #
 # Use the approximation algorithm we gave in class.
 #
-# Running Time:
+# Running Time: Theta(n^4)
 #
 ################################################################
 
-def find_overlap(s, t):
+def find_overlap(s, t):                         # running time: O(2n) + O(2i)
     i = 0
     largest = ""
     order = (s, t)
     minLen = min(len(s), len(t))
 
-    for i in range(minLen):
-        if t.startswith(s[i:]):
-            largest = s[i:]
+    for i in range(minLen):                     # O(n)
+        slice = s[i:]                           # O(i)
+        if t.startswith(slice):
+            largest = slice
             break
 
-    for i in range(minLen):
-        if s.startswith(t[i:]):
-            if len(t[i:]) > len(largest):
-                largest = t[i:]
+    for i in range(minLen):                     # O(n)
+        slice = t[i:]                           # O(i)
+
+        if s.startswith(slice):
+            if len(slice) > len(largest):
+                largest = slice
                 order = (t, s)
                 break
 
@@ -95,18 +100,18 @@ def superstring(strings):
     >>> superstring(["HIP","IPP"])
     'HIPP'
     """
-    while len(strings) > 1:
+    while len(strings) > 1:                             # O(n-1)
         longest_str = ""
         full_str = ""
         a = ""
         b = ""
 
-        for i in range(len(strings)):
-            for j in range(len(strings)):
+        for i in range(len(strings)):                   # O(n)
+            for j in range(len(strings)):               # O(n)
                 if i == j:
                     continue
 
-                strr, str1, str2 = find_overlap(strings[i], strings[j])
+                strr, str1, str2 = find_overlap(strings[i], strings[j]) # O(2n)
 
                 if len(strr) > len(longest_str):
                     longest_str = strr
@@ -134,26 +139,8 @@ def superstring(strings):
 # in a weighted graph g that is represented by an adjacency list.
 # You can assume all edge weights are positive.
 #
-# Running time:
+# Running time: Theta((V + E) * p(V))
 ################################################################
-
-import math
-
-# def dijkstra_rec(g, a, b, vertex, visited, path, dists):
-# def dijkstra_rec(g, a, b, current, last, visited):
-#     closest_v = -1
-#     closest_w = math.inf
-
-#     for v, w in g[current]:
-#         if v == b:
-#             return v
-
-#         if w < closest_w and v not in visited:
-#             closest_w = w
-#             closest_v = v
-
-#     visited.append(current)
-#     return current + dijkstra_rec(g, a, b, closest_v, current, visited)
 
 def dijkstra(g, a, b):
     """
@@ -187,72 +174,40 @@ def dijkstra(g, a, b):
     [5, 6, 4, 1]
     """
     dists = [math.inf] * len(g)
+    prevs = [None] * len(g)
+    visited = []
+    path = []
+    temp = b
+
     dists[a] = 0
-    paths = {}
-    visited = [False] * len(g)
 
-    for i in range(len(g)):
-        v, w = (-1, math.inf)
+    while len(visited) < len(g):
+        v, w = -1, math.inf
 
-        for vert, weight in g[i]:
-            if not visited[vert] and weight < dists[vert]:
-                v, w = (vert, weight)
+        for u, weight in enumerate(dists):
+            if u not in visited and weight < w:
+                v = u
+                w = weight
 
-        print(v,w)
+        if v == b:
+            break
 
-        # v, w = min([v for v in g[i] if v not in visited], key=lambda v: v[1])
-        # visited[v] = True
-        # print(v, w)
-        # visited[v] = True
+        visited.append(v)
+
+        for u, weight in g[v]:
+            if u not in visited and dists[v] + weight < dists[u]:
+                dists[u] = dists[v] + weight
+                prevs[u] = v
+
+    # traverse from b to a
+    if prevs[temp] is not None or temp == a:
+        while temp is not None:
+            path.insert(0, temp)
+            temp = prevs[temp]
+
+    return path if path else None
 
 
 if __name__ == "__main__":
     import doctest
-    # doctest.testmod()
-
-    from test_suite import TestSuite, RunByType
-
-    suite = TestSuite(True)
-    suite.add_test(schedule, [[(6, 20), (23, 29), (30, 35)], [(19, 31)], [(28, 32)], [(5, 40)]],
-        [[(5,40),(30,35),(6,20),(19,31),(23,29),(28,32)]])
-    suite.add_test(schedule, [[(3, 6), (9, 20), (20, 35)], [(5, 6), (12, 30), (32, 40)], [(14, 30)]],
-        [[(3,6),(9, 20),(12,30),(5, 6),(14, 30),(20, 35),(32, 40)]])
-    suite.add_test(schedule, [[(1, 2)]],
-        [[(1,2)]])
-    suite.add_test(schedule, [[(1, 2), (3, 4)]],
-        [[(3,4),(1,2)]])
-    suite.add_test(schedule, [[(1, 3), (3, 4)]],
-        [[(1,3),(3,4)]])
-    suite.add_test(schedule, [[(1, 3)], [(2, 4)]],
-        [[(1,3),(2,4)]])
-
-    suite.add_test(superstring, 'BCDAABDDCADBCADC',
-        [["CADBC","CDAABD","BCDA","DDCA","ADBCADC"]])
-    suite.add_test(superstring, 'AEDCB',
-        [["A","B","C","D","E"]])
-    suite.add_test(superstring, 'AHHIP',
-        [["AHHI","HIP"]])
-    suite.add_test(superstring, 'HIPP',
-        [["HIP","IPP"]])
-
-    g = [ [(1,3), (2,6)], \
-        [(0,3), (4,4)], \
-        [(0,6), (3,2), (5,7)], \
-        [(2,2), (4,4), (8,1)], \
-        [(1,4), (3,4), (6,9)], \
-        [(2,7), (6,2), (7,8)], \
-        [(4,9), (5,2), (9,4)], \
-        [(5,8), (8,3)], \
-        [(3,1), (7,3), (9,2)], \
-        [(6,4), (8,2)], \
-        [(11,1)], \
-        [(10,1)]]
-    suite.add_test(dijkstra, [0, 2, 3, 8, 9], [g, 0, 9])
-    suite.add_test(dijkstra, [0, 2, 3, 8, 7], [g, 0, 7])
-    suite.add_test(dijkstra, None, [g, 0, 10])
-    suite.add_test(dijkstra, None, [g, 0, 11])
-    suite.add_test(dijkstra, [11, 10], [g, 11 ,10])
-    suite.add_test(dijkstra, [7], [g, 7, 7])
-    suite.add_test(dijkstra, [0, 1], [g, 0, 1])
-    suite.add_test(dijkstra, [5, 2, 3], [g, 5, 3])
-    suite.add_test(dijkstra, [5, 6, 4, 1], [g, 5, 1])
+    doctest.testmod()
