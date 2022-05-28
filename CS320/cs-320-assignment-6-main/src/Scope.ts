@@ -172,6 +172,13 @@ export class MapFuncScope implements FuncScope {
 // implementation of newFunctionScope in src/Factories.ts, which will change the
 // behavior of all function scopes in the interpreter.
 
+export class DebugMapFuncScope extends MapFuncScope {
+  override dispatch(name: string): Func {
+    console.info(name);
+    return super.dispatch(name);
+  }
+}
+
 // ******************
 // * EXERCISE 1 END *
 // ******************
