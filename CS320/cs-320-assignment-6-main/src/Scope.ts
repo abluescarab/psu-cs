@@ -350,27 +350,66 @@ export class ListVarScopeSpec<Entry> {
 // Uncomment the code below to get started. You will not need to modify any of
 // this provided code, but you'll need to add your own method implementations.
 
-// export class ListVarScope<Entry> extends ListVarScopeSpec<Entry> implements VarScope<Entry> {
-//   protected override outerScopes: ListVarScope<Entry> | null;
-//
-//   constructor(
-//     top: Map<string, Entry> = new Map(),
-//     rest: ListVarScope<Entry> | null = null
-//   ) {
-//     super(top, rest);
-//     this.currentScope = top;
-//     this.outerScopes = rest;
-//   }
-//
-//   pushNestedScope(): void {
-//     this.outerScopes = new ListVarScope(this.currentScope, this.outerScopes);
-//     this.currentScope = new Map();
-//   }
-//
-//   popNestedScope(): void {
-//     if (this.outerScopes == null)
-//       throw new Error("tried to pop from empty stack");
-//     this.currentScope = this.outerScopes.currentScope;
-//     this.outerScopes = this.outerScopes.outerScopes;
-//   }
-// }
+export class ListVarScope<Entry> extends ListVarScopeSpec<Entry> implements VarScope<Entry> {
+  protected override outerScopes: ListVarScope<Entry> | null;
+
+  constructor(
+    top: Map<string, Entry> = new Map(),
+    rest: ListVarScope<Entry> | null = null
+  ) {
+    super(top, rest);
+    this.currentScope = top;
+    this.outerScopes = rest;
+  }
+
+  pushNestedScope(): void {
+    this.outerScopes = new ListVarScope(this.currentScope, this.outerScopes);
+    this.currentScope = new Map();
+  }
+
+  popNestedScope(): void {
+    if (this.outerScopes == null)
+      throw new Error("tried to pop from empty stack");
+    this.currentScope = this.outerScopes.currentScope;
+    this.outerScopes = this.outerScopes.outerScopes;
+  }
+
+  lookup(name: string): Entry {
+    let result = null;
+    let scope : ListVarScope<Entry> | null = this;
+
+    while(scope != null && scope.currentScope != null) {
+      if(scope.currentScope.has(name) && (result = scope.currentScope.get(name)) != null)
+        return result;
+
+      scope = scope.outerScopes;
+    }
+
+    throw new ScopeError("name is not in scope: " + name);
+  }
+
+  declare(name: string, entry: Entry): void {
+    if(this.currentScope.has(name)) {
+      throw new ScopeError("declaring duplicate variable name: " + name);
+    }
+
+    this.currentScope.set(name, entry);
+  }
+
+  update(name: string, entry: Entry): void {
+    let scope : ListVarScope<Entry> | null = this;
+    let found = false;
+
+    while(scope != null && scope.currentScope != null && !found) {
+      if(scope.currentScope.has(name)) {
+        scope.currentScope.set(name, entry);
+        found = true;
+      }
+
+      scope = scope.outerScopes;
+    }
+
+    if(!found)
+      throw new ScopeError("updating undeclared variable name: " + name);
+  }
+}
