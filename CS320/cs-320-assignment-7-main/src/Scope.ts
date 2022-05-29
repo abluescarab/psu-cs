@@ -99,6 +99,9 @@ export class MapVarScope<Entry> implements VarScope<Entry> {
   // functions.
 
   executeInNestedScope(action: () => void): void {
+    this.pushNestedScope();
+    action();
+    this.popNestedScope();
   }
 
   // ******************
