@@ -1,0 +1,79 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "npm: build (wsl)",
+			"type": "shell",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "dedicated",
+				"showReuseMessage": false,
+				"clear": false
+			},
+			"command": "wsl",
+			"args": [
+				"bash",
+				"-ic",
+				"npm run build"
+			],
+			"options": {
+				"shell": {
+					"executable": "powershell"
+				}
+			},
+			"group": {
+				"kind": "build",
+				"isDefault": false
+			},
+			"problemMatcher": [],
+			"detail": "webpack"
+		},
+		{
+			"label": "npm: test (wsl)",
+			"type": "shell",
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "dedicated",
+				"showReuseMessage": false,
+				"clear": false
+			},
+			"command": "wsl",
+			"args": [
+				"bash",
+				"-ic",
+				"npm run test"
+			],
+			"options": {
+				"shell": {
+					"executable": "powershell"
+				}
+			},
+			"group": {
+				"kind": "test",
+				"isDefault": false
+			},
+			"problemMatcher": [],
+			"detail": "jest"
+		},
+		{
+			"type": "npm",
+			"script": "build",
+			"group": "build",
+			"problemMatcher": [],
+			"label": "npm: build (linux)",
+			"detail": "webpack"
+		},
+		{
+			"type": "npm",
+			"script": "test",
+			"group": "test",
+			"problemMatcher": [],
+			"label": "npm: test (linux)",
+			"detail": "jest"
+		}
+	]
+}

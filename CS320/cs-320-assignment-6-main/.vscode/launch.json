@@ -5,8 +5,13 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "windows": {
+        "preLaunchTask": "npm: build (wsl)"
+      },
+      "linux": {
+        "preLaunchTask": "npm: build (linux)"
+      },
       "name": "Debug in Chrome",
-      "preLaunchTask": "npm: build",
       "type": "pwa-chrome",
       "request": "launch",
       "reAttach": true,
@@ -70,7 +75,6 @@
     {
       "name": "Debug in Edge",
       "type": "pwa-msedge",
-      "preLaunchTask": "npm: build",
       "request": "launch",
       "reAttach": true,
       "file": "${workspaceFolder}/html/index.html",
