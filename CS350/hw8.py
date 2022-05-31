@@ -45,18 +45,30 @@
 # |763|418|259|
 # +---+---+---+
 
-def in_row(board, row, num):
-    return num in board[row]
+def count_in_row(board, row, num):
+    return board[row].count(num)
 
-def in_col(board, col, num):
+def count_in_col(board, col, num):
+    count = 0
+
     for row in board:
         if row[col] == num:
-            return True
+            count += 1
 
-    return False
+    return count
 
-def in_3x3(board, current_cell, num):
-    print(current_cell, end=": ")
+# def in_row(board, row, num):
+#     return num in board[row]
+
+# def in_col(board, col, num):
+#     for row in board:
+#         if row[col] == num:
+#             return True
+
+#     return False
+
+def count_in_3x3(board, current_cell, num):
+    count = 0
     row, col = current_cell
 
     if row % 3 != 0:
@@ -74,9 +86,9 @@ def in_3x3(board, current_cell, num):
     for r in range(0, 3):
         for c in range(0, 3):
             if board[row + r][col + c] == num:
-                return True
+                count += 1
 
-    return False
+    return count
 
 def last_square(board, row, col):
     last_row = row
@@ -107,6 +119,18 @@ def next_square(board, row, col):
         next_col += 1
 
     return (next_row, next_col)
+
+def validate_board(board):
+    for row in range(len(board)):
+        for col in range(len(board[row])):
+            for i in range(1, 10):
+                if board[row][col] == 0 or \
+                   count_in_row(board, row, i) > 1 or \
+                   count_in_col(board, col, i) > 1 or \
+                   count_in_3x3(board, (row, col), i) > 1:
+                    return False
+
+    return True
 
 def sudoku(board):
     """
@@ -155,7 +179,7 @@ if __name__ == "__main__":
 
     suite.add_test(sudoku,
         [[4, 3, 5, 2, 6, 9, 7, 8, 1],
-        [6, 8, 2, 5, 7, 1, 4, 9, 1],
+        [6, 8, 2, 5, 7, 1, 4, 9, 3],
         [1, 9, 7, 8, 3, 4, 5, 6, 2],
         [8, 2, 6, 1, 9, 5, 9, 4, 7],
         [3, 7, 4, 6, 8, 2, 9, 1, 5],
