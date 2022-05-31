@@ -45,6 +45,69 @@
 # |763|418|259|
 # +---+---+---+
 
+def in_row(board, row, num):
+    return num in board[row]
+
+def in_col(board, col, num):
+    for row in board:
+        if row[col] == num:
+            return True
+
+    return False
+
+def in_3x3(board, current_cell, num):
+    print(current_cell, end=": ")
+    row, col = current_cell
+
+    if row % 3 != 0:
+        if (row - 1) % 3 == 0:
+            row -= 1
+        elif (row - 2) % 3 == 0:
+            row -= 2
+
+    if col % 3 != 0:
+        if (col - 1) % 3 == 0:
+            col -= 1
+        elif (col - 2) % 3 == 0:
+            col -= 2
+
+    for r in range(0, 3):
+        for c in range(0, 3):
+            if board[row + r][col + c] == num:
+                return True
+
+    return False
+
+def last_square(board, row, col):
+    last_row = row
+    last_col = col
+
+    if col - 1 < 0:
+        last_col = len(board[row]) - 1
+        last_row -= 1
+
+        if last_row < 0:
+            last_row = len(board) - 1
+    else:
+        last_col -= 1
+
+    return (last_row, last_col)
+
+def next_square(board, row, col):
+    next_row = row
+    next_col = col
+
+    if col + 1 >= len(board[row]):
+        next_col = 0
+        next_row += 1
+
+        if next_row >= len(board):
+            next_row = 0
+    else:
+        next_col += 1
+
+    return (next_row, next_col)
+
 def sudoku(board):
     """
     >>> board = [ [4,3,0,2,6,0,7,0,1], \
