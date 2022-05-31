@@ -57,16 +57,6 @@ def count_in_col(board, col, num):
 
     return count
 
-# def in_row(board, row, num):
-#     return num in board[row]
-
-# def in_col(board, col, num):
-#     for row in board:
-#         if row[col] == num:
-#             return True
-
-#     return False
-
 def count_in_3x3(board, current_cell, num):
     count = 0
     row, col = current_cell
