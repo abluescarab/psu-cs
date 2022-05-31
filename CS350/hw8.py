@@ -122,6 +122,28 @@ def validate_board(board):
 
     return True
 
+def sudoku_rec(board, last_cell, current_cell, backtrack=False):
+    row, col = current_cell
+    next_cell = next_square(board, *current_cell)
+
+    if board[row][col] != 0 and not backtrack:
+        return sudoku_rec(board, current_cell, next_cell)
+
+    for i in range(1, 10):
+        if board[row][col] != i and \
+            not count_in_row(board, row, i) and \
+            not count_in_col(board, col, i) and \
+            not count_in_3x3(board, current_cell, i):
+            board[row][col] = i
+
+    if validate_board(board) or next_cell == (0, 0):
+        return board
+
+    if board[row][col] == 0:
+        return sudoku_rec(board, current_cell, last_cell, True)
+    else:
+        return sudoku_rec(board, current_cell, next_cell)
+
 def sudoku(board):
     """
     >>> board = [ [4,3,0,2,6,0,7,0,1], \
@@ -158,7 +180,20 @@ def sudoku(board):
     >>> sudoku(board)
     [[3, 1, 2, 4, 8, 5, 9, 6, 7], [8, 4, 9, 6, 7, 1, 5, 3, 2], [5, 6, 7, 3, 9, 2, 1, 8, 4], [6, 3, 8, 2, 5, 7, 4, 1, 9], [4, 9, 5, 8, 1, 6, 2, 7, 3], [7, 2, 1, 9, 4, 3, 6, 5, 8], [2, 7, 3, 1, 6, 9, 8, 4, 5], [9, 8, 6, 5, 3, 4, 7, 2, 1], [1, 5, 4, 7, 2, 8, 3, 9, 6]]
     """
-    pass
+    sudoku_rec(board, (-1, -1), (0, 0))
+    r = [[4, 3, 5, 2, 6, 9, 7, 8, 1],
+        [6, 8, 2, 5, 7, 1, 4, 9, 3],
+        [1, 9, 7, 8, 3, 4, 5, 6, 2],
+        [8, 2, 6, 1, 9, 5, 9, 4, 7],
+        [3, 7, 4, 6, 8, 2, 9, 1, 5],
+        [9, 5, 1, 7, 4, 3, 6, 2, 8],
+        [5, 1, 9, 3, 2, 6, 8, 7, 4],
+        [2, 4, 8, 9, 5, 7, 1, 3, 6],
+        [7, 6, 3, 4, 1, 8, 2, 5, 9]]
+
+    for row in range(len(board)):
+        print(f"{board[row]}    {r[row]}")
+
 
 if __name__ == "__main__":
     import doctest
@@ -227,4 +262,4 @@ if __name__ == "__main__":
                   [0,0,0,5,0,4,0,2,0], \
                   [0,0,0,7,0,0,3,0,0]]])
 
-    suite.run()
+    suite.run_by(RunByType.Index, 0)
