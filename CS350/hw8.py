@@ -45,104 +45,45 @@
 # |763|418|259|
 # +---+---+---+
 
-def count_in_row(board, row, num):
-    return board[row].count(num)
+def can_place(board, row, col, num):
+    if num in board[row]:
+        return False
 
-def count_in_col(board, col, num):
-    count = 0
+    for r in board:
+        if r[col] == num:
+            return False
 
-    for row in board:
-        if row[col] == num:
-            count += 1
-
-    return count
-
-def count_in_3x3(board, current_cell, num):
-    count = 0
-    row, col = current_cell
-
-    if row % 3 != 0:
-        if (row - 1) % 3 == 0:
-            row -= 1
-        elif (row - 2) % 3 == 0:
-            row -= 2
-
-    if col % 3 != 0:
-        if (col - 1) % 3 == 0:
-            col -= 1
-        elif (col - 2) % 3 == 0:
-            col -= 2
+    row -= row % 3
+    col -= col % 3
 
     for r in range(0, 3):
         for c in range(0, 3):
             if board[row + r][col + c] == num:
-                count += 1
-
-    return count
-
-def last_square(board, row, col):
-    last_row = row
-    last_col = col
-
-    if col - 1 < 0:
-        last_col = len(board[row]) - 1
-        last_row -= 1
-
-        if last_row < 0:
-            last_row = len(board) - 1
-    else:
-        last_col -= 1
-
-    return (last_row, last_col)
-
-def next_square(board, row, col):
-    next_row = row
-    next_col = col
-
-    if col + 1 >= len(board[row]):
-        next_col = 0
-        next_row += 1
-
-        if next_row >= len(board):
-            next_row = 0
-    else:
-        next_col += 1
-
-    return (next_row, next_col)
-
-def validate_board(board):
-    for row in range(len(board)):
-        for col in range(len(board[row])):
-            for i in range(1, 10):
-                if board[row][col] == 0 or \
-                   count_in_row(board, row, i) > 1 or \
-                   count_in_col(board, col, i) > 1 or \
-                   count_in_3x3(board, (row, col), i) > 1:
-                    return False
+                return False
 
     return True
 
-def sudoku_rec(board, last_cell, current_cell, backtrack=False):
-    row, col = current_cell
-    next_cell = next_square(board, *current_cell)
+def sudoku_rec(board, row, col):
+    if row == len(board) - 1 and col == len(board[0]):
+        return True
 
-    if board[row][col] != 0 and not backtrack:
-        return sudoku_rec(board, current_cell, next_cell)
+    if col == len(board[0]):
+        col = 0
+        row += 1
+
+    if board[row][col] != 0:
+        return sudoku_rec(board, row, col + 1)
 
     for i in range(1, 10):
-        if board[row][col] != i and \
-            not count_in_row(board, row, i) and \
-            not count_in_col(board, col, i) and \
-            not count_in_3x3(board, current_cell, i):
+        if can_place(board, row, col, i):
             board[row][col] = i
 
-    if validate_board(board) or next_cell == (0, 0):
-        return board
+            if sudoku_rec(board, row, col + 1):
+                return True
 
-    if board[row][col] == 0:
-        return sudoku_rec(board, current_cell, last_cell, True)
-    else:
-        return sudoku_rec(board, current_cell, next_cell)
+        board[row][col] = 0
+
+    return False
 
 def sudoku(board):
     """
@@ -156,7 +97,7 @@ def sudoku(board):
                   [0,4,0,0,5,0,0,3,6], \
                   [7,0,3,0,1,8,0,0,0] ]
     >>> sudoku(board)
-    [[4, 3, 5, 2, 6, 9, 7, 8, 1], [6, 8, 2, 5, 7, 1, 4, 9, 1], [1, 9, 7, 8, 3, 4, 5, 6, 2], [8, 2, 6, 1, 9, 5, 9, 4, 7], [3, 7, 4, 6, 8, 2, 9, 1, 5], [9, 5, 1, 7, 4, 3, 6, 2, 8], [5, 1, 9, 3, 2, 6, 8, 7, 4], [2, 4, 8, 9, 5, 7, 1, 3, 6], [7, 6, 3, 4, 1, 8, 2, 5, 9]]
+    [[4, 3, 5, 2, 6, 9, 7, 8, 1], [6, 8, 2, 5, 7, 1, 4, 9, 3], [1, 9, 7, 8, 3, 4, 5, 6, 2], [8, 2, 6, 1, 9, 5, 3, 4, 7], [3, 7, 4, 6, 8, 2, 9, 1, 5], [9, 5, 1, 7, 4, 3, 6, 2, 8], [5, 1, 9, 3, 2, 6, 8, 7, 4], [2, 4, 8, 9, 5, 7, 1, 3, 6], [7, 6, 3, 4, 1, 8, 2, 5, 9]]
     >>> board = [ [5,0,0,0,0,0,0,3,0], \
                   [0,3,0,0,8,0,1,0,0], \
                   [0,1,0,0,4,3,0,0,0], \
@@ -180,86 +121,10 @@ def sudoku(board):
     >>> sudoku(board)
     [[3, 1, 2, 4, 8, 5, 9, 6, 7], [8, 4, 9, 6, 7, 1, 5, 3, 2], [5, 6, 7, 3, 9, 2, 1, 8, 4], [6, 3, 8, 2, 5, 7, 4, 1, 9], [4, 9, 5, 8, 1, 6, 2, 7, 3], [7, 2, 1, 9, 4, 3, 6, 5, 8], [2, 7, 3, 1, 6, 9, 8, 4, 5], [9, 8, 6, 5, 3, 4, 7, 2, 1], [1, 5, 4, 7, 2, 8, 3, 9, 6]]
     """
-    sudoku_rec(board, (-1, -1), (0, 0))
-    r = [[4, 3, 5, 2, 6, 9, 7, 8, 1],
-        [6, 8, 2, 5, 7, 1, 4, 9, 3],
-        [1, 9, 7, 8, 3, 4, 5, 6, 2],
-        [8, 2, 6, 1, 9, 5, 9, 4, 7],
-        [3, 7, 4, 6, 8, 2, 9, 1, 5],
-        [9, 5, 1, 7, 4, 3, 6, 2, 8],
-        [5, 1, 9, 3, 2, 6, 8, 7, 4],
-        [2, 4, 8, 9, 5, 7, 1, 3, 6],
-        [7, 6, 3, 4, 1, 8, 2, 5, 9]]
-
-    for row in range(len(board)):
-        print(f"{board[row]}    {r[row]}")
+    sudoku_rec(board, 0, 0)
+    return board
 
 
 if __name__ == "__main__":
     import doctest
-    # doctest.testmod()
-
-    from test_suite import TestSuite, RunByType
-    suite = TestSuite()
-
-    suite.add_test(sudoku,
-        [[4, 3, 5, 2, 6, 9, 7, 8, 1],
-        [6, 8, 2, 5, 7, 1, 4, 9, 3],
-        [1, 9, 7, 8, 3, 4, 5, 6, 2],
-        [8, 2, 6, 1, 9, 5, 9, 4, 7],
-        [3, 7, 4, 6, 8, 2, 9, 1, 5],
-        [9, 5, 1, 7, 4, 3, 6, 2, 8],
-        [5, 1, 9, 3, 2, 6, 8, 7, 4],
-        [2, 4, 8, 9, 5, 7, 1, 3, 6],
-        [7, 6, 3, 4, 1, 8, 2, 5, 9]],
-        [[ [4,3,0,2,6,0,7,0,1], \
-                  [6,8,0,0,7,0,0,9,0], \
-                  [0,0,0,0,0,4,5,0,0], \
-                  [8,2,0,1,0,0,0,4,0], \
-                  [0,0,4,6,0,2,9,0,0], \
-                  [0,5,0,0,0,3,0,2,8], \
-                  [0,0,9,3,0,0,0,7,4], \
-                  [0,4,0,0,5,0,0,3,6], \
-                  [7,0,3,0,1,8,0,0,0] ]])
-
-    suite.add_test(sudoku,
-        [[5, 2, 4, 7, 9, 1, 6, 3, 8],
-        [7, 3, 9, 2, 8, 6, 1, 4, 5],
-        [8, 1, 6, 5, 4, 3, 2, 7, 9],
-        [3, 8, 2, 4, 6, 7, 9, 5, 1],
-        [4, 9, 1, 8, 3, 5, 7, 2, 6],
-        [6, 7, 5, 1, 2, 9, 4, 8, 3],
-        [9, 4, 3, 6, 7, 8, 5, 1, 2],
-        [2, 5, 8, 9, 1, 4, 3, 6, 7],
-        [1, 6, 7, 3, 5, 2, 8, 9, 4]],
-        [[ [5,0,0,0,0,0,0,3,0], \
-              [0,3,0,0,8,0,1,0,0], \
-              [0,1,0,0,4,3,0,0,0], \
-              [3,0,0,4,6,0,0,0,0], \
-              [0,9,0,0,0,0,0,2,0], \
-              [0,0,0,1,0,9,0,8,3], \
-              [0,4,0,0,0,8,0,1,0], \
-              [0,5,0,9,1,0,0,0,0], \
-              [1,6,0,0,5,2,0,0,0] ]])
-
-    suite.add_test(sudoku,
-        [[3, 1, 2, 4, 8, 5, 9, 6, 7],
-        [8, 4, 9, 6, 7, 1, 5, 3, 2],
-        [5, 6, 7, 3, 9, 2, 1, 8, 4],
-        [6, 3, 8, 2, 5, 7, 4, 1, 9],
-        [4, 9, 5, 8, 1, 6, 2, 7, 3],
-        [7, 2, 1, 9, 4, 3, 6, 5, 8],
-        [2, 7, 3, 1, 6, 9, 8, 4, 5],
-        [9, 8, 6, 5, 3, 4, 7, 2, 1],
-        [1, 5, 4, 7, 2, 8, 3, 9, 6]],
-        [[[0,1,2,4,0,0,9,0,7], \
-                  [0,0,0,6,0,0,0,0,2], \
-                  [5,0,0,0,9,2,0,0,4], \
-                  [0,0,8,0,0,0,0,1,9], \
-                  [4,0,5,8,0,0,0,0,0], \
-                  [7,0,0,0,0,0,0,0,0], \
-                  [0,0,3,1,0,0,8,0,0], \
-                  [0,0,0,5,0,4,0,2,0], \
-                  [0,0,0,7,0,0,3,0,0]]])
-
-    suite.run_by(RunByType.Index, 0)
+    doctest.testmod()
