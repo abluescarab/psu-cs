@@ -200,7 +200,7 @@ def dijkstra(g, a, b):
                 prevs[u] = v
 
     # traverse from b to a
-    if prevs[temp] is not None or temp == a:
+    if prevs[b] is not None or b == a:
         while temp is not None:
             path.insert(0, temp)
             temp = prevs[temp]
