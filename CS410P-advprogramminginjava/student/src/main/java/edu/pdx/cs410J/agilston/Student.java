@@ -112,11 +112,10 @@ public class Student extends Human {
     if(args.length < 3)
       missingArgs += "<gpa> ";
 
-    if(args.length < 4)
+    if(args.length < 4) {
       missingArgs += "<classes>";
-
-    if(args.length < 4)
       throw new IllegalArgumentException("Missing command line arguments: " + missingArgs);
+    }
 
     String name = args[0];
     String gender = args[1].toLowerCase();
