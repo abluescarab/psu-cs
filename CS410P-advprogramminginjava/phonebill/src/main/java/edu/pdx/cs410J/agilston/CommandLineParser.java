@@ -71,13 +71,15 @@ public class CommandLineParser {
 
         for(String arg : args) {
             if((matcher = shortFlag.matcher(arg)).matches()) {
-                flags.addAll(List.of(matcher.group(1).split("")));
+                for(String group : matcher.group(1).split("")) {
+                    flags.add(group.toLowerCase());
+                }
             }
             else if((matcher = longFlag.matcher(arg)).matches()) {
-                flags.add(matcher.group(1));
+                flags.add(matcher.group(1).toLowerCase());
             }
             else if((matcher = option.matcher(arg)).matches()) {
-                options.put(matcher.group(1), matcher.group(2));
+                options.put(matcher.group(1).toLowerCase(), matcher.group(2));
             }
             else {
                 arguments.add(arg);
