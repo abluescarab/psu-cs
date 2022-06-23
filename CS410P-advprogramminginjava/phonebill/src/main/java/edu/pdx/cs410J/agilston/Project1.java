@@ -8,15 +8,29 @@ import java.util.List;
  * The main class for the CS410J Phone Bill Project
  */
 public class Project1 {
+    /**
+     * Checks if a string is a valid phone number.
+     * @param phoneNumber phone number string
+     * @return <code>true</code> if valid phone number; <code>false</code> if not
+     */
     @VisibleForTesting
     static boolean isValidPhoneNumber(String phoneNumber) {
         return phoneNumber.matches("\\d{3}-\\d{3}-\\d{4}");
     }
 
+    /**
+     * Checks if a string is a valid date and time.
+     * @param dateTime date and time string
+     * @return <code>true</code> if valid date time; <code>false</code> if not
+     */
     static boolean isValidDateTime(String dateTime) {
         return dateTime.matches("(?:\\d{1,2}/){2}\\d{4} \\d{1,2}:\\d{1,2}");
     }
 
+    /**
+     * Validates all command line arguments have been given.
+     * @param args command line arguments
+     */
     private static void validateArguments(List<String> args) {
         String missingArgs = "";
 
@@ -45,6 +59,9 @@ public class Project1 {
         }
     }
 
+    /**
+     * Prints command line usage information.
+     */
     private static void printUsage() {
         System.out.println("usage: java -jar target/phonebill-2022.0.0.jar [options] <args>");
         System.out.println("  args are (in this order):");
