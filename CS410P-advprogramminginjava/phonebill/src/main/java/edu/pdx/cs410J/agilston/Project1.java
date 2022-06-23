@@ -2,6 +2,10 @@ package edu.pdx.cs410J.agilston;
 
 import com.google.common.annotations.VisibleForTesting;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 
 /**
@@ -81,11 +85,11 @@ public class Project1 {
     public static void main(String[] args) {
         CommandLineParser parser = new CommandLineParser(args);
         List<String> arguments = parser.getArguments();
-        String customer = "";
-        String callerNumber = "";
-        String calleeNumber = "";
-        String begin = "";
-        String end = "";
+        String customer;
+        String callerNumber;
+        String calleeNumber;
+        String begin;
+        String end;
 
         if(parser.hasFlag("help") || parser.hasFlag("h")) {
             printUsage();
@@ -93,7 +97,21 @@ public class Project1 {
         }
 
         if(parser.hasFlag("README")) {
-            // TODO: print README and exit
+            try(InputStream readmeFile = Project1.class.getResourceAsStream("README.txt")) {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(readmeFile));
+                StringBuilder readme = new StringBuilder();
+                String line;
+
+                while((line = reader.readLine()) != null) {
+                    readme.append(line);
+                }
+
+                System.out.println(readme);
+            }
+            catch(IOException e) {
+                throw new RuntimeException(e);
+            }
+
             return;
         }
 
@@ -131,9 +149,11 @@ public class Project1 {
         }
 
         PhoneCall call = new PhoneCall(callerNumber, calleeNumber, begin, end);
+        PhoneBill bill = new PhoneBill(customer);
+        bill.addPhoneCall(call);
 
         if(parser.hasFlag("print")) {
-            // TODO: print description of new phone call
+            System.out.println(call);
         }
     }
 }
