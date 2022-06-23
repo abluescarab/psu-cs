@@ -34,6 +34,18 @@ public class Student extends Human {
     this.gender = gender;
   }
 
+  public final ArrayList<String> getClasses() {
+    return this.classes;
+  }
+
+  public final double getGPA() {
+    return this.gpa;
+  }
+
+  public final String getGender() {
+    return this.gender;
+  }
+
   /**                                                                               
    * All students say "This class is too much work"
    */

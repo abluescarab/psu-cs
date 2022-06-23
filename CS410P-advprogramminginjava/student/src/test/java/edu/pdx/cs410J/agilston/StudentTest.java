@@ -18,8 +18,11 @@ public class StudentTest
   @Test
   void studentNamedPatIsNamedPat() {
     String name = "Pat";
-    var pat = new Student(name, new ArrayList<>(), 0.0, "Doesn't matter");
-    assertThat(pat.getName(), equalTo(name));
+    var student = new Student(name, new ArrayList<>(), 0.0, "Doesn't matter");
+    assertThat(student.getName(), equalTo(name));
+    assertThat(student.getGPA(), equalTo(0.0));
+    assertThat(student.getClasses(), equalTo(new ArrayList<String>()));
+    assertThat(student.getGender(), equalTo("Doesn't matter"));
   }
 
 }
