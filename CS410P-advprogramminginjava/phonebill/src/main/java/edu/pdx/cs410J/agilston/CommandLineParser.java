@@ -5,9 +5,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CommandLineParser {
-    private List<String> flags;
-    private Map<String, String> options;
-    private List<String> arguments;
+    private final List<String> flags;
+    private final Map<String, String> options;
+    private final List<String> arguments;
 
     public CommandLineParser(String[] args) {
         flags = new ArrayList<>();
