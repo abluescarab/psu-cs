@@ -2,6 +2,8 @@ package edu.pdx.cs410J.agilston;
 
 import com.google.common.annotations.VisibleForTesting;
 
+import java.util.regex.Pattern;
+
 /**
  * The main class for the CS410J Phone Bill Project
  */
@@ -9,7 +11,7 @@ public class Project1 {
 
   @VisibleForTesting
   static boolean isValidPhoneNumber(String phoneNumber) {
-    return true;
+    return Pattern.matches("\\d{3}-\\d{3}-\\d{4}", phoneNumber);
   }
 
   public static void main(String[] args) {
