@@ -11,11 +11,11 @@ import java.util.regex.Pattern;
  * A class used to store a phone call with the caller's and receiver's numbers and call length.
  */
 public class PhoneCall extends AbstractPhoneCall {
-    protected String caller;
-    protected String callee;
-    protected LocalDateTime beginTime;
-    protected LocalDateTime endTime;
-    private DateTimeFormatter formatter;
+    protected final String caller;
+    protected final String callee;
+    protected final LocalDateTime beginTime;
+    protected final LocalDateTime endTime;
+    private final DateTimeFormatter formatter;
 
     /**
      * Creates a new phone call.
@@ -25,8 +25,7 @@ public class PhoneCall extends AbstractPhoneCall {
      * @param endTime date and time the call ended (mm/dd/yyyy hh:mm)
      */
     public PhoneCall(String callerNumber, String calleeNumber, String beginTime, String endTime) {
-        formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm");
-
+        this.formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm");
         this.caller = callerNumber;
         this.callee = calleeNumber;
         this.beginTime = formatDateTime(beginTime);
