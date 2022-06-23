@@ -11,6 +11,10 @@ public class Project1 {
         return phoneNumber.matches("\\d{3}-\\d{3}-\\d{4}");
     }
 
+    static boolean isValidDateTime(String dateTime) {
+        return dateTime.matches("(?:\\d{1,2}/){2}\\d{4} \\d{1,2}:\\d{1,2}");
+    }
+
     private static void printUsage() {
         System.out.println("usage: java -jar target/phonebill-2022.0.0.jar [options] <args>");
         System.out.println("  args are (in this order):");
