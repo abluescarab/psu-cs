@@ -107,14 +107,17 @@ public class Student extends Human {
     double gpa;
     ArrayList<String> classes;
 
-    if(args.length < 1)
+    if(args.length < 1) {
       missingArgs += "<name> ";
+    }
 
-    if(args.length < 2)
+    if(args.length < 2) {
       missingArgs += "<gender> ";
+    }
 
-    if(args.length < 3)
+    if(args.length < 3) {
       missingArgs += "<gpa> ";
+    }
 
     if(args.length < 4) {
       missingArgs += "<classes>";
@@ -124,8 +127,11 @@ public class Student extends Human {
     name = args[0];
     gender = args[1].toLowerCase();
 
-    if(!Objects.equals(gender, "male") && !Objects.equals(gender, "female") && !Objects.equals(gender, "other"))
+    if(!Objects.equals(gender, "male")
+            && !Objects.equals(gender, "female")
+            && !Objects.equals(gender, "other")) {
       throw new IllegalArgumentException("Incorrect argument: \"gender\" must be \"male\", \"female\", or \"other\"");
+    }
 
     try {
       gpa = Double.parseDouble(args[2]);
@@ -134,8 +140,9 @@ public class Student extends Human {
       throw new IllegalArgumentException("Incorrect argument: GPA must be a number");
     }
 
-    if(gpa < 0.0)
+    if(gpa < 0.0) {
       throw new IllegalArgumentException("Incorrect argument: GPA cannot be negative");
+    }
 
     classes = new ArrayList<>(Arrays.asList(args).subList(3, args.length));
     return new Student(name, classes, gpa, gender);

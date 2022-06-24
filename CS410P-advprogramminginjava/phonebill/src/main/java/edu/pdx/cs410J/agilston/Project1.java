@@ -38,23 +38,29 @@ public class Project1 {
     private static void validateArguments(List<String> args) {
         String missingArgs = "";
 
-        if(args.size() < 1)
+        if(args.size() < 1) {
             missingArgs += "<customer> ";
+        }
 
-        if(args.size() < 2)
+        if(args.size() < 2) {
             missingArgs += "<caller number> ";
+        }
 
-        if(args.size() < 3)
+        if(args.size() < 3) {
             missingArgs += "<callee number> ";
+        }
 
-        if(args.size() < 4)
+        if(args.size() < 4) {
             missingArgs += "<begin date> ";
+        }
 
-        if(args.size() < 5)
+        if(args.size() < 5) {
             missingArgs += "<begin time> ";
+        }
 
-        if(args.size() < 6)
+        if(args.size() < 6) {
             missingArgs += "<end date> ";
+        }
 
         if(args.size() < 7) {
             missingArgs += "<end time>";
@@ -134,13 +140,15 @@ public class Project1 {
             begin = arguments.get(3) + " " + arguments.get(4);
 
             if(!isValidDateTime(begin)) {
-                throw new IllegalArgumentException("Invalid argument: begin time must be in format mm/dd/yyyy hh:mm or m/d/yyyy h:mm");
+                throw new IllegalArgumentException("Invalid argument: begin time must be in format mm/dd/yyyy hh:mm or "
+                        + "m/d/yyyy h:mm");
             }
 
             end = arguments.get(5) + " " + arguments.get(6);
 
             if(!isValidDateTime(end)) {
-                throw new IllegalArgumentException("Invalid argument: end time must be in format mm/dd/yyyy hh:mm or m/d/yyyy h:mm");
+                throw new IllegalArgumentException("Invalid argument: end time must be in format mm/dd/yyyy hh:mm or "
+                        + "m/d/yyyy h:mm");
             }
         }
         catch(Exception e) {
