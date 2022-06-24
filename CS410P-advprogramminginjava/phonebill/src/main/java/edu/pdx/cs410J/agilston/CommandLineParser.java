@@ -34,7 +34,6 @@ public class CommandLineParser {
 
     /**
      * Gets all positional command line arguments.
-     * @return list of positional arguments
      */
     public List<String> getArguments() {
         return this.arguments;
