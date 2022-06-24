@@ -73,7 +73,7 @@ public class Student extends Human {
    * <code>Student</code>.
    */
   public String toString() {
-    String classString = "";
+    String classString;
 
     if(this.classes.size() == 1) {
       classString = this.classes.get(0);
@@ -102,6 +102,10 @@ public class Student extends Human {
    */
   private static Student createStudent(String[] args) {
     String missingArgs = "";
+    String name;
+    String gender;
+    double gpa;
+    ArrayList<String> classes;
 
     if(args.length < 1)
       missingArgs += "<name> ";
@@ -117,10 +121,8 @@ public class Student extends Human {
       throw new IllegalArgumentException("Missing command line arguments: " + missingArgs);
     }
 
-    String name = args[0];
-    String gender = args[1].toLowerCase();
-    double gpa = 0.0;
-    ArrayList<String> classes = new ArrayList<String>();
+    name = args[0];
+    gender = args[1].toLowerCase();
 
     if(!Objects.equals(gender, "male") && !Objects.equals(gender, "female") && !Objects.equals(gender, "other"))
       throw new IllegalArgumentException("Incorrect argument: \"gender\" must be \"male\", \"female\", or \"other\"");
@@ -135,7 +137,7 @@ public class Student extends Human {
     if(gpa < 0.0)
       throw new IllegalArgumentException("Incorrect argument: GPA cannot be negative");
 
-    classes = new ArrayList<String>(Arrays.asList(args).subList(3, args.length));
+    classes = new ArrayList<>(Arrays.asList(args).subList(3, args.length));
     return new Student(name, classes, gpa, gender);
   }
 
@@ -147,7 +149,7 @@ public class Student extends Human {
   public static void main(String[] args) {
     try {
       Student student = createStudent(args);
-      System.out.println(student.toString());
+      System.out.println(student);
     }
     catch(Exception e) {
       System.err.println(e.getMessage());
