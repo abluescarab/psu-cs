@@ -2,6 +2,8 @@ package edu.pdx.cs410J.agilston.commandline.arguments;
 
 import edu.pdx.cs410J.agilston.commandline.CommandLineParser;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -9,39 +11,91 @@ import java.util.Objects;
  * Creates a new command line argument.
  */
 public class CommandLineArgument {
+    public enum ValueType {
+        VALUE,
+        CHOICE,
+        LIST
+    }
+
     protected String name;
     protected String help;
     protected String value;
     protected String defaultValue;
+    protected ValueType valueType;
+    protected int listSize;
     protected List<String> choices;
     protected List<String> aliases;
 
     /**
      * Creates a new command line argument.
+     *
      * @param name name to type
      */
     public CommandLineArgument(String name) {
-        this(name, "", null);
+        this(name, "", ValueType.VALUE);
     }
 
     /**
      * Creates a new command line argument.
-     * @param name name to type
-     * @param help help displayed with <code>--help</code>
+     *
+     * @param name      name to type
+     * @param valueType type of value to store in the argument
+     * @param aliases alternative names to type
      */
-    public CommandLineArgument(String name, String help) {
-        this(name, help, null);
+    public CommandLineArgument(String name, ValueType valueType, String... aliases) {
+        this(name, "", valueType, aliases);
     }
 
     /**
      * Creates a new command line argument.
-     * @param name name to type
-     * @param help help displayed with <code>--help</code>
+     *
+     * @param name    name to type
+     * @param help    help displayed with <code>--help</code>
+     * @param aliases alternative names to type
      */
     public CommandLineArgument(String name, String help, String... aliases) {
+        this(name, help, ValueType.VALUE, aliases);
+    }
+
+    /**
+     * Creates a new command line argument.
+     *
+     * @param name      name to type
+     * @param help      help displayed with <code>--help</code>
+     * @param valueType type of value to store in the argument
+     * @param aliases   alternative names to type
+     */
+    public CommandLineArgument(String name, String help, ValueType valueType, String... aliases) {
         this.name = name.replace(" ", "_");
         this.help = help;
-        this.choices = List.of(choices);
+        this.valueType = valueType;
+        this.choices = null;
+        this.listSize = 0;
+        this.aliases = aliases == null ? Collections.emptyList() : List.of(aliases);
+    }
+
+    /**
+     * Sets the value of the command.
+     *
+     * @param value value to set to
+     */
+    public void setValue(String value) {
+        switch(valueType) {
+            case VALUE:
+                this.value = value;
+                break;
+            case CHOICE:
+                if(choices.size() > 0 && choices.contains(value)) {
+                    this.value = value;
+                }
+                else {
+                    this.value = this.defaultValue;
+                }
+                break;
+            default:
+                this.value = this.defaultValue;
+                break;
+        }
     }
 
     /**
@@ -56,6 +110,10 @@ public class CommandLineArgument {
      */
     public final String getHelp() {
         return help;
+    }
+
+    public final ValueType getValueType() {
+        return valueType;
     }
 
     /**
@@ -73,6 +131,13 @@ public class CommandLineArgument {
     }
 
     /**
+     * Gets an unmodifiable list of aliases.
+     */
+    public final List<String> getAliases() {
+        return aliases;
+    }
+
+    /**
      * Gets the value if it was provided or the default value otherwise.
      */
     public final String getValueOrDefault() {
@@ -83,7 +148,9 @@ public class CommandLineArgument {
         return value;
     }
 
-    /** Gets a formatted help string for the argument.
+    /**
+     * Gets a formatted help string for the argument.
+     *
      * @param lineLength maximum length of each printed line
      * @param indentSize size of indentation before line
      */

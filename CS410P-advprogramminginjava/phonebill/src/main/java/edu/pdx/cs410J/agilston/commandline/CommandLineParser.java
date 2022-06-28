@@ -1,6 +1,5 @@
 package edu.pdx.cs410J.agilston.commandline;
 
-import edu.pdx.cs410J.agilston.commandline.arguments.AliasedArgument;
 import edu.pdx.cs410J.agilston.commandline.arguments.CommandLineArgument;
 
 import java.io.PrintStream;
@@ -24,7 +23,6 @@ public class CommandLineParser {
 
     // command line arguments
     protected Map<String, CommandLineArgument> arguments;
-    protected List<String> givenOptions;
     protected List<String> givenArguments;
 
     /**
@@ -51,11 +49,12 @@ public class CommandLineParser {
     /**
      * Add an argument to the command line interface.
      *
-     * @param name name to type
-     * @param help help text displayed with <code>--help</code>
+     * @param name      name to type
+     * @param valueType type of value to store in the argument
+     * @param aliases   alternative names to type
      */
-    public void addArgument(String name, String help) {
-        arguments.put(name, new CommandLineArgument(name, help));
+    public void addArgument(String name, CommandLineArgument.ValueType valueType, String... aliases) {
+        arguments.put(name, new CommandLineArgument(name, valueType, aliases));
     }
 
     /**
@@ -67,6 +66,18 @@ public class CommandLineParser {
      */
     public void addArgument(String name, String help, String... aliases) {
         arguments.put(name, new CommandLineArgument(name, help, aliases));
+    }
+
+    /**
+     * Add an argument to the command line interface.
+     *
+     * @param name      name to type
+     * @param help      help text displayed with <code>--help</code>
+     * @param valueType type of value to store in the argument
+     * @param aliases   alternative names to type
+     */
+    public void addArgument(String name, String help, CommandLineArgument.ValueType valueType, String... aliases) {
+        arguments.put(name, new CommandLineArgument(name, help, valueType, aliases));
     }
 
     /**
@@ -86,10 +97,6 @@ public class CommandLineParser {
      * @return <code>true</code> if the argument has been given; <code>false</code> if not
      */
     public boolean hasArgument(String name) {
-        if(name.startsWith("-")) {
-            return givenOptions.contains(name);
-        }
-
         return givenArguments.contains(name);
     }
 
@@ -100,12 +107,14 @@ public class CommandLineParser {
      * @return argument from the command line
      */
     public CommandLineArgument getArgument(String name) {
+        if(!givenArguments.contains(name)) {
+            return null;
+        }
+
         if(name.startsWith("-") && !arguments.containsKey(name)) {
             for(CommandLineArgument arg : arguments.values()) {
                 try {
-                    AliasedArgument opt = (AliasedArgument)arg;
-
-                    if(opt.getAliases().contains(name)) {
+                    if(arg.getAliases().contains(name)) {
                         return arg;
                     }
                 }
@@ -169,6 +178,8 @@ public class CommandLineParser {
         StringBuilder usage = new StringBuilder();
         StringBuilder positional = new StringBuilder("positional arguments:\n");
         StringBuilder optional = new StringBuilder("optional arguments:\n");
+        boolean hasPositional = false;
+        boolean hasOptional = false;
 
         usage.append("usage: ");
         usage.append(jarFilename);
@@ -178,29 +189,14 @@ public class CommandLineParser {
                 usage.append(String.format(" [%s]", arg.getName()));
                 optional.append(arg.getFormattedHelp(maxLineLength, indentSize))
                         .append("\n");
+                hasOptional = true;
             }
             else {
                 usage.append(String.format(" %s", arg.getName()));
                 positional.append(arg.getFormattedHelp(maxLineLength, indentSize))
                           .append("\n");
+                hasPositional = true;
             }
-        }
-
-        for(var arg : options.values()) {
-            usage.append(" [")
-                 .append(arg.getName())
-                 .append("]");
-
-            optional.append(arg.getFormattedHelp(maxLineLength, indentSize))
-                    .append("\n");
-        }
-
-        for(var arg : arguments.values()) {
-            usage.append(" ")
-                 .append(arg.getName());
-
-            positional.append(arg.getFormattedHelp(maxLineLength, indentSize))
-                      .append("\n");
         }
 
         usage.append("\n");
@@ -211,12 +207,12 @@ public class CommandLineParser {
                  .append("\n");
         }
 
-        if(arguments.size() > 0) {
+        if(hasPositional) {
             usage.append("\n")
                  .append(positional);
         }
 
-        if(options.size() > 0) {
+        if(hasOptional) {
             usage.append("\n")
                  .append(optional);
         }
@@ -236,16 +232,45 @@ public class CommandLineParser {
      * @param args command line arguments
      */
     private void parseArgs(String[] args) {
+        int i = 0;
         Pattern shortFlag = Pattern.compile("-(\\w+)");
         Pattern longFlag = Pattern.compile("--(\\w+)");
-        Pattern option = Pattern.compile(longFlag + "=(.*)");
+        Pattern shortOption = Pattern.compile(shortFlag + "=(.*)");
+        Pattern longOption = Pattern.compile(longFlag + "=(.*)");
         Matcher matcher;
+        CommandLineArgument arg;
+        String name;
 
-        for(String arg : args) {
-            if((matcher = shortFlag.matcher(arg)).matches()) {
+        while(i < args.length) {
+            // short flag:   -f
+            // short option: -f opt
+            if((matcher = shortFlag.matcher(args[i])).matches()) {
                 for(String group : matcher.group(1).split("")) {
+                    givenArguments.add(group.toLowerCase());
 
+                    if((arg = getArgument("-" + group)) != null) {
+                        switch(arg.getValueType()) {
+                            // TODO
+                        }
+                    }
                 }
+            }
+            // long flag:   --flag
+            // long option: --flag opt
+            else if((matcher = longFlag.matcher(args[i])).matches()) {
+                givenArguments.add(matcher.group(1).toLowerCase());
+            }
+            // short option: -f=opt
+            else if((matcher = shortOption.matcher(args[i])).matches()) {
+
+            }
+            // long option: --flag=opt
+            else if((matcher = longOption.matcher(args[i])).matches()) {
+//                givenArguments.add(matcher.group(1).toLowerCase(), matcher.group(2));
+            }
+            // positional argument
+            else {
+                givenArguments.add(args[i]);
             }
         }
 

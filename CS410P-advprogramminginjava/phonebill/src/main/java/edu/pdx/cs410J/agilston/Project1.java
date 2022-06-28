@@ -2,6 +2,8 @@ package edu.pdx.cs410J.agilston;
 
 import com.google.common.annotations.VisibleForTesting;
 import edu.pdx.cs410J.agilston.commandline.CommandLineParser;
+import edu.pdx.cs410J.agilston.commandline.arguments.CommandLineArgument;
+import edu.pdx.cs410J.agilston.commandline.arguments.CommandLineArgument.ValueType;
 
 import java.util.List;
 
@@ -78,12 +80,12 @@ public class Project1 {
             parser.addArgument("--readme", "Prints a README for this project and exits", "-r");
             parser.addArgument("--help", "Prints usage information", "-h");
             parser.addArgument("customer", "Person whose phone bill we're modeling");
-            parser.addArgument("caller number", "Phone number of caller");
-            parser.addArgument("callee number", "Phone number of person who was called");
-            parser.addArgument("begin date", "Date call began (mm/dd/yyy)");
-            parser.addArgument("begin time", "Time call began (24-hour time)");
-            parser.addArgument("end date", "Date call ended (mm/dd/yyy)");
-            parser.addArgument("end time", "Time call ended (24-hour time)");
+            parser.addArgument("caller_number", "Phone number of caller");
+            parser.addArgument("callee_number", "Phone number of person who was called");
+            parser.addArgument("begin_date", "Date call began (mm/dd/yyy)");
+            parser.addArgument("begin_time", "Time call began (24-hour time)");
+            parser.addArgument("end_date", "Date call ended (mm/dd/yyy)");
+            parser.addArgument("end_time", "Time call ended (24-hour time)");
 
             parser.printUsage(System.out);
 
