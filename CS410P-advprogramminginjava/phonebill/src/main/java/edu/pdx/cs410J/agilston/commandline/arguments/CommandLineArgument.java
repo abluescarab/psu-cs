@@ -174,6 +174,13 @@ public class CommandLineArgument {
     }
 
     protected StringBuilder getFormattedName() {
-        return new StringBuilder(name);
+        StringBuilder builder = new StringBuilder(name);
+
+        if(aliases.size() > 0) {
+            builder.append(", ")
+                    .append(String.join(", ", aliases));
+        }
+
+        return builder;
     }
 }
