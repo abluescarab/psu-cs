@@ -8,12 +8,12 @@ import java.util.Objects;
  * Creates a new command line argument.
  */
 public class CommandLineArgument {
-    private String name;
-    private String help;
+    private final String name;
+    private final String help;
+    private final String defaultValue;
+    private final List<String> choices;
+    private final List<String> aliases;
     private String value;
-    private String defaultValue;
-    private List<String> choices;
-    private List<String> aliases;
 
     /**
      * Creates a new command line argument.
@@ -67,15 +67,6 @@ public class CommandLineArgument {
         else {
             this.value = value;
         }
-    }
-
-    /**
-     * Sets the default value of the command.
-     *
-     * @param defaultValue default value to set to
-     */
-    public void setDefaultValue(String defaultValue) {
-        this.defaultValue = defaultValue;
     }
 
     /**
