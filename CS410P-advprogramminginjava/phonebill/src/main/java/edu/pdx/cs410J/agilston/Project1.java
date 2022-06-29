@@ -88,6 +88,7 @@ public class Project1 {
             parser.addArgument("end_time", "Time call ended (24-hour time)");
 
             parser.printUsage(System.out);
+            parser.parse(args);
 
             System.err.println("Missing command line arguments");
         }

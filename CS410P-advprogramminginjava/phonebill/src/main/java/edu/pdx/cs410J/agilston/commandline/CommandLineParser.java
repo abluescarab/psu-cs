@@ -49,17 +49,6 @@ public class CommandLineParser {
     /**
      * Add an argument to the command line interface.
      *
-     * @param name      name to type
-     * @param valueType type of value to store in the argument
-     * @param aliases   alternative names to type
-     */
-    public void addArgument(String name, CommandLineArgument.ValueType valueType, String... aliases) {
-        arguments.put(name, new CommandLineArgument(name, valueType, aliases));
-    }
-
-    /**
-     * Add an argument to the command line interface.
-     *
      * @param name    name to type
      * @param help    help text displayed with <code>--help</code>
      * @param aliases alternative names to type
@@ -71,13 +60,48 @@ public class CommandLineParser {
     /**
      * Add an argument to the command line interface.
      *
-     * @param name      name to type
-     * @param help      help text displayed with <code>--help</code>
-     * @param valueType type of value to store in the argument
-     * @param aliases   alternative names to type
+     * @param name         name to type
+     * @param help         help text displayed with <code>--help</code>
+     * @param defaultValue default value of the command
+     * @param aliases      alternative names to type
      */
-    public void addArgument(String name, String help, CommandLineArgument.ValueType valueType, String... aliases) {
-        arguments.put(name, new CommandLineArgument(name, help, valueType, aliases));
+    public void addArgument(String name, String help, String defaultValue, String... aliases) {
+        arguments.put(name, new CommandLineArgument(name, help, defaultValue, aliases));
+    }
+
+    /**
+     * Add an argument to the command line interface.
+     *
+     * @param name    name to type
+     * @param choices possible values
+     */
+    public void addArgument(String name, String[] choices) {
+        arguments.put(name, new CommandLineArgument(name, choices));
+    }
+
+    /**
+     * Add an argument to the command line interface.
+     *
+     * @param name    name to type
+     * @param help    help text displayed with <code>--help</code>
+     * @param choices possible values
+     * @param aliases alternative names to type
+     */
+    public void addArgument(String name, String help, String[] choices, String... aliases) {
+        arguments.put(name, new CommandLineArgument(name, help, choices, aliases));
+    }
+
+    /**
+     * Add an argument to the command line interface.
+     *
+     * @param name         name to type
+     * @param help         help text displayed with <code>--help</code>
+     * @param defaultValue default value of the command
+     * @param choices      possible values
+     * @param aliases      alternative names to type
+     */
+    public void addArgument(String name, String help, String defaultValue, String[] choices, String... aliases) {
+        arguments.put(name, new CommandLineArgument(name, help, defaultValue, choices, aliases));
     }
 
     /**
@@ -231,7 +255,7 @@ public class CommandLineParser {
      *
      * @param args command line arguments
      */
-    private void parseArgs(String[] args) {
+    public void parse(String[] args) {
         int i = 0;
         Pattern shortFlag = Pattern.compile("-(\\w+)");
         Pattern longFlag = Pattern.compile("--(\\w+)");
@@ -239,19 +263,26 @@ public class CommandLineParser {
         Pattern longOption = Pattern.compile(longFlag + "=(.*)");
         Matcher matcher;
         CommandLineArgument arg;
-        String name;
+        String nextArg;
+        String group;
 
         while(i < args.length) {
             // short flag:   -f
             // short option: -f opt
             if((matcher = shortFlag.matcher(args[i])).matches()) {
-                for(String group : matcher.group(1).split("")) {
-                    givenArguments.add(group.toLowerCase());
+                group = matcher.group(1);
 
-                    if((arg = getArgument("-" + group)) != null) {
-                        switch(arg.getValueType()) {
+                for(String match : matcher.group(1).split("")) {
+                    givenArguments.add(match.toLowerCase());
+
+                    if((arg = getArgument("-" + match)) != null) {
+                        if((i + 1) < args.length) {
+                            nextArg = args[i + 1];
+
                             // TODO
                         }
+
+//                        arg.setValue();
                     }
                 }
             }

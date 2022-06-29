@@ -2,7 +2,6 @@ package edu.pdx.cs410J.agilston.commandline.arguments;
 
 import edu.pdx.cs410J.agilston.commandline.CommandLineParser;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -11,18 +10,10 @@ import java.util.Objects;
  * Creates a new command line argument.
  */
 public class CommandLineArgument {
-    public enum ValueType {
-        VALUE,
-        CHOICE,
-        LIST
-    }
-
     protected String name;
     protected String help;
     protected String value;
     protected String defaultValue;
-    protected ValueType valueType;
-    protected int listSize;
     protected List<String> choices;
     protected List<String> aliases;
 
@@ -32,18 +23,17 @@ public class CommandLineArgument {
      * @param name name to type
      */
     public CommandLineArgument(String name) {
-        this(name, "", ValueType.VALUE);
+        this(name, "");
     }
 
     /**
      * Creates a new command line argument.
      *
-     * @param name      name to type
-     * @param valueType type of value to store in the argument
-     * @param aliases alternative names to type
+     * @param name    name to type
+     * @param choices possible values
      */
-    public CommandLineArgument(String name, ValueType valueType, String... aliases) {
-        this(name, "", valueType, aliases);
+    public CommandLineArgument(String name, String[] choices) {
+        this(name, "", "", choices);
     }
 
     /**
@@ -54,23 +44,47 @@ public class CommandLineArgument {
      * @param aliases alternative names to type
      */
     public CommandLineArgument(String name, String help, String... aliases) {
-        this(name, help, ValueType.VALUE, aliases);
+        this(name, help, "", null, aliases);
     }
 
     /**
      * Creates a new command line argument.
      *
-     * @param name      name to type
-     * @param help      help displayed with <code>--help</code>
-     * @param valueType type of value to store in the argument
-     * @param aliases   alternative names to type
+     * @param name         name to type
+     * @param help         help displayed with <code>--help</code>
+     * @param defaultValue default value for command
+     * @param aliases      alternative names to type
      */
-    public CommandLineArgument(String name, String help, ValueType valueType, String... aliases) {
-        this.name = name.replace(" ", "_");
+    public CommandLineArgument(String name, String help, String defaultValue, String... aliases) {
+        this(name, help, defaultValue, null, aliases);
+    }
+
+    /**
+     * Creates a new command line argument.
+     *
+     * @param name    name to type
+     * @param help    help displayed with <code>--help</code>
+     * @param choices possible values
+     * @param aliases alternative names to type
+     */
+    public CommandLineArgument(String name, String help, String[] choices, String... aliases) {
+        this(name, help, "", choices, aliases);
+    }
+
+    /**
+     * Creates a new command line argument.
+     *
+     * @param name         name to type
+     * @param help         help displayed with <code>--help</code>
+     * @param defaultValue default value for command
+     * @param choices      possible values
+     * @param aliases      alternative names to type
+     */
+    public CommandLineArgument(String name, String help, String defaultValue, String[] choices, String... aliases) {
+        this.name = name;
         this.help = help;
-        this.valueType = valueType;
-        this.choices = null;
-        this.listSize = 0;
+        this.defaultValue = defaultValue;
+        this.choices = choices == null ? Collections.emptyList() : List.of(choices);
         this.aliases = aliases == null ? Collections.emptyList() : List.of(aliases);
     }
 
@@ -80,22 +94,21 @@ public class CommandLineArgument {
      * @param value value to set to
      */
     public void setValue(String value) {
-        switch(valueType) {
-            case VALUE:
-                this.value = value;
-                break;
-            case CHOICE:
-                if(choices.size() > 0 && choices.contains(value)) {
-                    this.value = value;
-                }
-                else {
-                    this.value = this.defaultValue;
-                }
-                break;
-            default:
-                this.value = this.defaultValue;
-                break;
+        if(choices.size() > 0) {
+            this.value = choices.contains(value) ? value : defaultValue;
         }
+        else {
+            this.value = value;
+        }
+    }
+
+    /**
+     * Sets the default value of the command.
+     *
+     * @param defaultValue default value to set to
+     */
+    public void setDefaultValue(String defaultValue) {
+        this.defaultValue = defaultValue;
     }
 
     /**
@@ -110,10 +123,6 @@ public class CommandLineArgument {
      */
     public final String getHelp() {
         return help;
-    }
-
-    public final ValueType getValueType() {
-        return valueType;
     }
 
     /**
@@ -178,7 +187,7 @@ public class CommandLineArgument {
 
         if(aliases.size() > 0) {
             builder.append(", ")
-                    .append(String.join(", ", aliases));
+                   .append(String.join(", ", aliases));
         }
 
         return builder;
