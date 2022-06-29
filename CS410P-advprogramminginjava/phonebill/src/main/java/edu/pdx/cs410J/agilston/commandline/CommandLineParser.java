@@ -308,7 +308,7 @@ public class CommandLineParser {
     public void parse(String[] args) {
         int index = 0;
         int position = 0;
-        Pattern flag = Pattern.compile("(-+\\w+)(?:=(.*))?");
+        Pattern flag = Pattern.compile("(-+[\\w-]+)(?:=(.*))?");
         Matcher matcher;
 
         while(index < args.length) {
@@ -321,9 +321,10 @@ public class CommandLineParser {
                     throw new IllegalArgumentException(String.format("Invalid argument: %s", name));
                 }
 
-                if(option == null && index + 1 < args.length) {
-                    arg.setValue(args[index + 1]);
-                    index++;
+                if(option == null) {
+                    if(index + 1 < args.length) {
+                        arg.setValue(args[--index]);
+                    }
                 }
                 else {
                     arg.setValue(option);
