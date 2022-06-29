@@ -308,29 +308,24 @@ public class CommandLineParser {
     public void parse(String[] args) {
         int index = 0;
         int position = 0;
-        Pattern flag = Pattern.compile("(-+[\\w-]+)(?:=(.*))?");
+        Pattern flag = Pattern.compile("((-+)([\\w-]+))(?:=(.*))?");
         Matcher matcher;
 
         while(index < args.length) {
             if((matcher = flag.matcher(args[index])).matches()) {
-                String name = matcher.group(1).toLowerCase();
-                String option = matcher.group(2);
-                CommandLineArgument arg = getArgument(name);
+                String fullName = matcher.group(1).toLowerCase();
+                String hyphens = matcher.group(2);
+                String option = matcher.group(4);
+                CommandLineArgument arg;
 
-                if(arg == null) {
-                    throw new IllegalArgumentException(String.format("Invalid argument: %s", name));
-                }
-
-                if(option == null) {
-                    if(index + 1 < args.length) {
-                        arg.setValue(args[--index]);
+                if(Objects.equals(hyphens, "-")) {
+                    for(String character : matcher.group(3).toLowerCase().split("")) {
+                        parseArg(args, index, hyphens + character, option);
                     }
                 }
                 else {
-                    arg.setValue(option);
+                    parseArg(args, index, fullName, option);
                 }
-
-                givenArguments.add(arg.getName());
             }
             else {
                 List<CommandLineArgument> positionalArgs = new ArrayList<>(positionalArguments.values());
@@ -348,5 +343,32 @@ public class CommandLineParser {
 
             index++;
         }
+    }
+
+    /**
+     * Parses a single argument.
+     *
+     * @param args   list of arguments
+     * @param index  index of current argument
+     * @param name   name of current argument
+     * @param option option given to current argument
+     */
+    private void parseArg(String[] args, int index, String name, String option) {
+        CommandLineArgument arg = getArgument(name);
+
+        if(arg == null) {
+            throw new IllegalArgumentException(String.format("Invalid argument: %s", name));
+        }
+
+        if(option == null) {
+            if(index + 1 < args.length) {
+                arg.setValue(args[++index]);
+            }
+        }
+        else {
+            arg.setValue(option);
+        }
+
+        givenArguments.add(arg.getName());
     }
 }
