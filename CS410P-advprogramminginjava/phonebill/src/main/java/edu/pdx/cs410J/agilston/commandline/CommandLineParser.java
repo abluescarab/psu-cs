@@ -333,6 +333,11 @@ public class CommandLineParser {
             }
             else {
                 List<CommandLineArgument> positionalArgs = new ArrayList<>(positionalArguments.values());
+
+                if(position >= positionalArgs.size()) {
+                    throw new IllegalArgumentException("Invalid argument: Too many positional arguments given");
+                }
+
                 var posArg = positionalArgs.get(position);
 
                 givenArguments.add(posArg.getName());
