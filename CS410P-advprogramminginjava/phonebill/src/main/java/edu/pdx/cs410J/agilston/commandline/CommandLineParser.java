@@ -40,43 +40,12 @@ public class CommandLineParser {
     /**
      * Add an argument to the command line interface.
      *
-     * @param name name to type
-     */
-    public void addArgument(String name) {
-        arguments.put(name, new CommandLineArgument(name));
-    }
-
-    /**
-     * Add an argument to the command line interface.
-     *
      * @param name    name to type
      * @param help    help text displayed with <code>--help</code>
      * @param aliases alternative names to type
      */
     public void addArgument(String name, String help, String... aliases) {
         arguments.put(name, new CommandLineArgument(name, help, aliases));
-    }
-
-    /**
-     * Add an argument to the command line interface.
-     *
-     * @param name         name to type
-     * @param help         help text displayed with <code>--help</code>
-     * @param defaultValue default value of the command
-     * @param aliases      alternative names to type
-     */
-    public void addArgument(String name, String help, String defaultValue, String... aliases) {
-        arguments.put(name, new CommandLineArgument(name, help, defaultValue, aliases));
-    }
-
-    /**
-     * Add an argument to the command line interface.
-     *
-     * @param name    name to type
-     * @param choices possible values
-     */
-    public void addArgument(String name, String[] choices) {
-        arguments.put(name, new CommandLineArgument(name, choices));
     }
 
     /**
