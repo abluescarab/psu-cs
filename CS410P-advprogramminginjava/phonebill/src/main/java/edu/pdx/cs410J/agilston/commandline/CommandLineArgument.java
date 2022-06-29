@@ -1,6 +1,4 @@
-package edu.pdx.cs410J.agilston.commandline.arguments;
-
-import edu.pdx.cs410J.agilston.commandline.CommandLineParser;
+package edu.pdx.cs410J.agilston.commandline;
 
 import java.util.Collections;
 import java.util.List;
@@ -10,12 +8,12 @@ import java.util.Objects;
  * Creates a new command line argument.
  */
 public class CommandLineArgument {
-    protected String name;
-    protected String help;
-    protected String value;
-    protected String defaultValue;
-    protected List<String> choices;
-    protected List<String> aliases;
+    private String name;
+    private String help;
+    private String value;
+    private String defaultValue;
+    private List<String> choices;
+    private List<String> aliases;
 
     /**
      * Creates a new command line argument.
