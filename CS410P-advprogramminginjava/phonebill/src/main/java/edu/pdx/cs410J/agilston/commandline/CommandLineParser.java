@@ -358,11 +358,11 @@ public class CommandLineParser {
 
                 if(Objects.equals(hyphens, "-")) {
                     for(String character : matcher.group(3).toLowerCase().split("")) {
-                        parseArg(args, index, hyphens + character, option);
+                        index = parseArg(args, index, hyphens + character, option);
                     }
                 }
                 else {
-                    parseArg(args, index, fullName, option);
+                    index = parseArg(args, index, fullName, option);
                 }
             }
             else {
@@ -391,7 +391,7 @@ public class CommandLineParser {
      * @param name   name of current argument
      * @param option option given to current argument
      */
-    private void parseArg(String[] args, int index, String name, String option) {
+    private int parseArg(String[] args, int index, String name, String option) {
         CommandLineArgument arg = getArgument(name);
 
         if(arg == null) {
@@ -410,5 +410,6 @@ public class CommandLineParser {
         }
 
         givenArguments.add(arg.getName());
+        return index;
     }
 }
