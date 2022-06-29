@@ -53,6 +53,7 @@ public class CommandLineArgument {
         this.defaultValue = defaultValue;
         this.choices = choices == null ? Collections.emptyList() : List.of(choices);
         this.aliases = aliases == null ? Collections.emptyList() : List.of(aliases);
+        this.value = "";
     }
 
     /**
