@@ -1,12 +1,7 @@
 package edu.pdx.cs410J.agilston.commandline;
 
-import edu.pdx.cs410J.agilston.commandline.arguments.CommandLineArgument;
-
 import java.io.PrintStream;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,7 +9,6 @@ import java.util.regex.Pattern;
  * A class used to parse command line arguments. Functionality based on Python's argparse library.
  */
 public class CommandLineParser {
-    // parser options
     protected String jarFilename;
     protected int maxLineLength;
     protected int indentSize;
@@ -22,7 +16,8 @@ public class CommandLineParser {
     protected String epilogue;
 
     // command line arguments
-    protected Map<String, CommandLineArgument> arguments;
+    protected Map<String, CommandLineArgument> positionalArguments;
+    protected Map<String, CommandLineArgument> optionArguments;
     protected List<String> givenArguments;
 
     /**
@@ -31,265 +26,12 @@ public class CommandLineParser {
      * @param jarFilename name of the jar file with <code>main()</code>
      */
     public CommandLineParser(String jarFilename) {
-        arguments = new LinkedHashMap<>();
+        this.positionalArguments = new LinkedHashMap<>();
+        this.optionArguments = new HashMap<>();
+        this.givenArguments = new ArrayList<>();
         this.jarFilename = jarFilename;
         this.maxLineLength = 0;
         this.indentSize = 2;
-    }
-
-    /**
-     * Add an argument to the command line interface.
-     *
-     * @param name    name to type
-     * @param help    help text displayed with <code>--help</code>
-     * @param aliases alternative names to type
-     */
-    public void addArgument(String name, String help, String... aliases) {
-        arguments.put(name, new CommandLineArgument(name, help, aliases));
-    }
-
-    /**
-     * Add an argument to the command line interface.
-     *
-     * @param name    name to type
-     * @param help    help text displayed with <code>--help</code>
-     * @param choices possible values
-     * @param aliases alternative names to type
-     */
-    public void addArgument(String name, String help, String[] choices, String... aliases) {
-        arguments.put(name, new CommandLineArgument(name, help, choices, aliases));
-    }
-
-    /**
-     * Add an argument to the command line interface.
-     *
-     * @param name         name to type
-     * @param help         help text displayed with <code>--help</code>
-     * @param defaultValue default value of the command
-     * @param choices      possible values
-     * @param aliases      alternative names to type
-     */
-    public void addArgument(String name, String help, String defaultValue, String[] choices, String... aliases) {
-        arguments.put(name, new CommandLineArgument(name, help, defaultValue, choices, aliases));
-    }
-
-    /**
-     * Removes a positional or option argument from the command line interface.
-     *
-     * @param name name to remove
-     * @return <code>true</code> if argument was removed successfully; <code>false</code> if not
-     */
-    public boolean removeArgument(String name) {
-        return arguments.remove(name) != null;
-    }
-
-    /**
-     * Checks whether an argument has been provided on the command line.
-     *
-     * @param name name to check for
-     * @return <code>true</code> if the argument has been given; <code>false</code> if not
-     */
-    public boolean hasArgument(String name) {
-        return givenArguments.contains(name);
-    }
-
-    /**
-     * Gets an argument given on the command line.
-     *
-     * @param name name of argument to get
-     * @return argument from the command line
-     */
-    public CommandLineArgument getArgument(String name) {
-        if(!givenArguments.contains(name)) {
-            return null;
-        }
-
-        if(name.startsWith("-") && !arguments.containsKey(name)) {
-            for(CommandLineArgument arg : arguments.values()) {
-                try {
-                    if(arg.getAliases().contains(name)) {
-                        return arg;
-                    }
-                }
-                catch(ClassCastException ignored) {
-                }
-            }
-        }
-
-        return arguments.get(name);
-    }
-
-    /**
-     * Sets the maximum line length printed to the command line.
-     *
-     * @param maxLineLength maximum line length in columns
-     */
-    public void setMaxLineLength(int maxLineLength) {
-        this.maxLineLength = maxLineLength;
-    }
-
-    /**
-     * Sets the indent size to display before new lines on the command line (where applicable).
-     *
-     * @param indentSize indent size in columns
-     */
-    public void setIndentSize(int indentSize) {
-        this.indentSize = indentSize;
-    }
-
-    /**
-     * Sets the prologue displayed after the usage information and before the positional arguments.
-     *
-     * @param prologue prologue text
-     */
-    public void setPrologue(String prologue) {
-        this.prologue = prologue;
-    }
-
-    /**
-     * Sets the epilogue displayed after the optional arguments.
-     *
-     * @param epilogue epilogue text
-     */
-    public void setEpilogue(String epilogue) {
-        this.epilogue = epilogue;
-    }
-
-    /**
-     * Prints the usage information for the parser.
-     *
-     * @param stream stream to print to
-     */
-    public void printUsage(PrintStream stream) {
-//            optional arguments:
-//              -h, --help            show this help message and exit
-//              --generate-reports REPORT_COUNT SERVICE_COUNT, -gr REPORT_COUNT SERVICE_COUNT
-//                                    generate REPORT_COUNT member reports, each with SERVICE_COUNT services on load
-//              --generate-users USER_TYPE USER_COUNT, -gu USER_TYPE USER_COUNT
-//                                    generate users. USER_TYPE must be one of: members, providers, managers.
-
-        StringBuilder usage = new StringBuilder();
-        StringBuilder positional = new StringBuilder("positional arguments:\n");
-        StringBuilder optional = new StringBuilder("optional arguments:\n");
-        boolean hasPositional = false;
-        boolean hasOptional = false;
-
-        usage.append("usage: ");
-        usage.append(jarFilename);
-
-        for(var arg : arguments.values()) {
-            if(arg.getName().startsWith("-")) {
-                usage.append(String.format(" [%s]", arg.getName()));
-                optional.append(arg.getFormattedHelp(maxLineLength, indentSize))
-                        .append("\n");
-                hasOptional = true;
-            }
-            else {
-                usage.append(String.format(" %s", arg.getName()));
-                positional.append(arg.getFormattedHelp(maxLineLength, indentSize))
-                          .append("\n");
-                hasPositional = true;
-            }
-        }
-
-        usage.append("\n");
-
-        if(prologue != null && prologue.length() > 0) {
-            usage.append("\n")
-                 .append(formatString(prologue, maxLineLength))
-                 .append("\n");
-        }
-
-        if(hasPositional) {
-            usage.append("\n")
-                 .append(positional);
-        }
-
-        if(hasOptional) {
-            usage.append("\n")
-                 .append(optional);
-        }
-
-        if(epilogue != null && epilogue.length() > 0) {
-            usage.append("\n")
-                 .append(formatString(epilogue, maxLineLength))
-                 .append("\n");
-        }
-
-        stream.println(usage);
-    }
-
-    /**
-     * Parses the given command line arguments.
-     *
-     * @param args command line arguments
-     */
-    public void parse(String[] args) {
-        int i = 0;
-        Pattern shortFlag = Pattern.compile("-(\\w+)");
-        Pattern longFlag = Pattern.compile("--(\\w+)");
-        Pattern shortOption = Pattern.compile(shortFlag + "=(.*)");
-        Pattern longOption = Pattern.compile(longFlag + "=(.*)");
-        Matcher matcher;
-        CommandLineArgument arg;
-        String nextArg;
-        String group;
-
-        while(i < args.length) {
-            // short flag:   -f
-            // short option: -f opt
-            if((matcher = shortFlag.matcher(args[i])).matches()) {
-                group = matcher.group(1);
-
-                for(String match : matcher.group(1).split("")) {
-                    givenArguments.add(match.toLowerCase());
-
-                    if((arg = getArgument("-" + match)) != null) {
-                        if((i + 1) < args.length) {
-                            nextArg = args[i + 1];
-
-                            // TODO
-                        }
-
-//                        arg.setValue();
-                    }
-                }
-            }
-            // long flag:   --flag
-            // long option: --flag opt
-            else if((matcher = longFlag.matcher(args[i])).matches()) {
-                givenArguments.add(matcher.group(1).toLowerCase());
-            }
-            // short option: -f=opt
-            else if((matcher = shortOption.matcher(args[i])).matches()) {
-
-            }
-            // long option: --flag=opt
-            else if((matcher = longOption.matcher(args[i])).matches()) {
-//                givenArguments.add(matcher.group(1).toLowerCase(), matcher.group(2));
-            }
-            // positional argument
-            else {
-                givenArguments.add(args[i]);
-            }
-        }
-
-//        for(String arg : args) {
-//            if((matcher = shortFlag.matcher(arg)).matches()) {
-//                for(String group : matcher.group(1).split("")) {
-//                    givenFlags.add(group.toLowerCase());
-//                }
-//            }
-//            else if((matcher = longFlag.matcher(arg)).matches()) {
-//                givenFlags.add(matcher.group(1).toLowerCase());
-//            }
-//            else if((matcher = option.matcher(arg)).matches()) {
-//                givenOptions.put(matcher.group(1).toLowerCase(), matcher.group(2));
-//            }
-//            else {
-//                arguments.add(arg);
-//            }
-//        }
     }
 
     /**
@@ -360,5 +102,235 @@ public class CommandLineParser {
         }
 
         return formatted.toString();
+    }
+
+    /**
+     * Add an argument to the command line interface.
+     *
+     * @param name    name to type
+     * @param help    help text displayed with <code>--help</code>
+     * @param aliases alternative names to type
+     */
+    public void addArgument(String name, String help, String... aliases) {
+        addArgument(name, help, "", null, aliases);
+    }
+
+    /**
+     * Add an argument to the command line interface.
+     *
+     * @param name         name to type
+     * @param help         help text displayed with <code>--help</code>
+     * @param defaultValue default value of the command
+     * @param choices      possible values
+     * @param aliases      alternative names to type
+     */
+    public void addArgument(String name, String help, String defaultValue, String[] choices, String... aliases) {
+        String nameLower = name.toLowerCase();
+        Map<String, CommandLineArgument> map = name.startsWith("-") ? optionArguments : positionalArguments;
+
+        map.put(nameLower, new CommandLineArgument(nameLower, help, defaultValue, choices, aliases));
+    }
+
+    /**
+     * Removes a positional or option argument from the command line interface.
+     *
+     * @param name name to remove
+     * @return <code>true</code> if argument was removed successfully; <code>false</code> if not
+     */
+    public boolean removeArgument(String name) {
+        String nameLower = name.toLowerCase();
+        Map<String, CommandLineArgument> map = name.startsWith("-") ? optionArguments : positionalArguments;
+
+        return map.remove(nameLower) != null;
+    }
+
+    /**
+     * Checks whether an argument has been provided on the command line.
+     *
+     * @param name name to check for
+     * @return <code>true</code> if the argument has been given; <code>false</code> if not
+     */
+    public boolean hasArgument(String name) {
+        return givenArguments.contains(name);
+    }
+
+    /**
+     * Gets an argument given on the command line.
+     *
+     * @param name name of argument to get
+     * @return argument from the command line
+     */
+    public CommandLineArgument getArgument(String name) {
+        String nameLower = name.toLowerCase();
+
+        if(!givenArguments.contains(nameLower)) {
+            return null;
+        }
+
+        if(name.startsWith("-") && optionArguments.containsKey(nameLower)) {
+            for(CommandLineArgument arg : optionArguments.values()) {
+                try {
+                    if(arg.getAliases().contains(nameLower)) {
+                        return arg;
+                    }
+                }
+                catch(ClassCastException ignored) {
+                }
+            }
+        }
+
+        return positionalArguments.get(nameLower);
+    }
+
+    /**
+     * Gets the value of an argument. Automatically null checks and returns an empty string if the argument does not
+     * exist.
+     *
+     * @param name name of argument to get
+     * @return value of the argument
+     */
+    public String getValue(String name) {
+        CommandLineArgument arg = getArgument(name);
+        return arg == null ? "" : arg.getValue();
+    }
+
+    /**
+     * Sets the maximum line length printed to the command line.
+     *
+     * @param maxLineLength maximum line length in columns
+     */
+    public void setMaxLineLength(int maxLineLength) {
+        this.maxLineLength = maxLineLength;
+    }
+
+    /**
+     * Sets the indent size to display before new lines on the command line (where applicable).
+     *
+     * @param indentSize indent size in columns
+     */
+    public void setIndentSize(int indentSize) {
+        this.indentSize = indentSize;
+    }
+
+    /**
+     * Sets the prologue displayed after the usage information and before the positional arguments.
+     *
+     * @param prologue prologue text
+     */
+    public void setPrologue(String prologue) {
+        this.prologue = prologue;
+    }
+
+    /**
+     * Sets the epilogue displayed after the optional arguments.
+     *
+     * @param epilogue epilogue text
+     */
+    public void setEpilogue(String epilogue) {
+        this.epilogue = epilogue;
+    }
+
+    /**
+     * Prints the usage information for the parser.
+     *
+     * @param stream stream to print to
+     */
+    public void printUsage(PrintStream stream) {
+        StringBuilder usage = new StringBuilder();
+        StringBuilder positional = new StringBuilder("positional arguments:\n");
+        StringBuilder optional = new StringBuilder("optional arguments:\n");
+
+        usage.append("usage: ");
+        usage.append(jarFilename);
+
+        for(var arg : optionArguments.values()) {
+            usage.append(String.format(" [%s]", arg.getName()));
+            optional.append(arg.getFormattedHelp(maxLineLength, indentSize)).append("\n");
+        }
+
+        for(var arg : positionalArguments.values()) {
+            usage.append(String.format(" %s", arg.getName()));
+            positional.append(arg.getFormattedHelp(maxLineLength, indentSize)).append("\n");
+        }
+
+        usage.append("\n");
+
+        if(prologue != null && prologue.length() > 0) {
+            usage.append("\n").append(formatString(prologue, maxLineLength)).append("\n");
+        }
+
+        if(positionalArguments.size() > 0) {
+            usage.append("\n").append(positional);
+        }
+
+        if(optionArguments.size() > 0) {
+            usage.append("\n").append(optional);
+        }
+
+        if(epilogue != null && epilogue.length() > 0) {
+            usage.append("\n").append(formatString(epilogue, maxLineLength)).append("\n");
+        }
+
+        stream.println(usage);
+    }
+
+    /**
+     * Parses the given command line arguments.
+     *
+     * @param args command line arguments
+     */
+    public void parse(String[] args) {
+        int i = 0;
+        int position = 0;
+        Pattern shortFlag = Pattern.compile("-(\\w+)");
+        Pattern longFlag = Pattern.compile("--(\\w+)");
+        Pattern shortOption = Pattern.compile(shortFlag + "=(.*)");
+        Pattern longOption = Pattern.compile(longFlag + "=(.*)");
+        Matcher matcher;
+        CommandLineArgument arg;
+        String name;
+
+        while(i < args.length) {
+            // -f, -f opt
+            if((matcher = shortFlag.matcher(args[i])).matches()) {
+                name = matcher.group(1).toLowerCase();
+                givenArguments.add(name);
+                //TODO
+            }
+            // -f=opt
+            else if((matcher = shortOption.matcher(args[i])).matches()) {
+                name = matcher.group(1).toLowerCase();
+                givenArguments.add(name);
+
+                if((arg = getArgument("-" + name)) != null) {
+                    arg.setValue(matcher.group(2));
+                }
+            }
+            // --flag, --flag opt
+            else if((matcher = longFlag.matcher(args[i])).matches()) {
+                name = matcher.group(1).toLowerCase();
+                givenArguments.add(name);
+                //TODO
+            }
+            // --flag=opt
+            else if((matcher = longOption.matcher(args[i])).matches()) {
+                name = matcher.group(1).toLowerCase();
+                givenArguments.add(name);
+
+                if((arg = getArgument("--" + name)) != null) {
+                    arg.setValue(matcher.group(2));
+                }
+            }
+            else {
+                List<CommandLineArgument> positionals = new ArrayList<>(positionalArguments.values());
+                var posArg = positionals.get(position);
+
+                givenArguments.add(posArg.getName());
+                posArg.setValue(args[i]);
+                position++;
+            }
+
+            i++;
+        }
     }
 }

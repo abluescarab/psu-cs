@@ -2,8 +2,6 @@ package edu.pdx.cs410J.agilston;
 
 import com.google.common.annotations.VisibleForTesting;
 import edu.pdx.cs410J.agilston.commandline.CommandLineParser;
-import edu.pdx.cs410J.agilston.commandline.arguments.CommandLineArgument;
-import edu.pdx.cs410J.agilston.commandline.arguments.CommandLineArgument.ValueType;
 
 import java.util.List;
 
@@ -13,6 +11,7 @@ import java.util.List;
 public class Project1 {
     /**
      * Checks if a string is a valid phone number.
+     *
      * @param phoneNumber phone number string
      * @return <code>true</code> if valid phone number; <code>false</code> if not
      */
@@ -23,6 +22,7 @@ public class Project1 {
 
     /**
      * Checks if a string is a valid date and time.
+     *
      * @param dateTime date and time string
      * @return <code>true</code> if valid date time; <code>false</code> if not
      */
@@ -32,6 +32,7 @@ public class Project1 {
 
     /**
      * Validates all command line arguments have been given.
+     *
      * @param args command line arguments
      */
     private static void validateArguments(CommandLineParser parser, List<String> args) {
@@ -74,7 +75,7 @@ public class Project1 {
             parser.setMaxLineLength(80);
             parser.setPrologue("This program creates a phone bill for a customer.");
             parser.setEpilogue("Date and time must be in m/d/yyyy h:mm format. Month, day, and hour may " +
-                            "be one digit or two. Year must always be four digits.");
+                    "be one digit or two. Year must always be four digits.");
 
             parser.addArgument("--print", "Prints a description of the new phone call", "-p");
             parser.addArgument("--readme", "Prints a README for this project and exits", "-r");
