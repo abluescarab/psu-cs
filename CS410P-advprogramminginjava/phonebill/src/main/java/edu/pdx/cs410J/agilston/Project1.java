@@ -3,6 +3,10 @@ package edu.pdx.cs410J.agilston;
 import com.google.common.annotations.VisibleForTesting;
 import edu.pdx.cs410J.agilston.commandline.CommandLineParser;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 
 /**
@@ -35,43 +39,50 @@ public class Project1 {
      *
      * @param args command line arguments
      */
-    private static void validateArguments(CommandLineParser parser, List<String> args) {
-        String missingArgs = "";
+    private static void validateArguments(CommandLineParser parser, String[] args) {
+        List<String> missingArgs = List.of(
+                "<customer>",
+                "<caller number>",
+                "<callee number>",
+                "<begin date>",
+                "<begin time>",
+                "<end date>",
+                "<end time>"
+        );
 
-        if(args.size() < 1) {
-            missingArgs += "<customer> ";
-        }
-
-        if(args.size() < 2) {
-            missingArgs += "<caller number> ";
-        }
-
-        if(args.size() < 3) {
-            missingArgs += "<callee number> ";
-        }
-
-        if(args.size() < 4) {
-            missingArgs += "<begin date> ";
-        }
-
-        if(args.size() < 5) {
-            missingArgs += "<begin time> ";
-        }
-
-        if(args.size() < 6) {
-            missingArgs += "<end date> ";
-        }
-
-        if(args.size() < 7) {
-            missingArgs += "<end time>";
+        if(args.length < missingArgs.size()) {
             parser.printUsage(System.out);
-            throw new IllegalArgumentException("Missing command line arguments: " + missingArgs);
+            throw new IllegalArgumentException("Missing command line arguments: "
+                    + String.join(", ", missingArgs.subList(args.length, missingArgs.size())));
+        }
+
+        parser.parse(args);
+
+        if(!isValidPhoneNumber(parser.getValueOrDefault("caller_number"))) {
+            throw new IllegalArgumentException("Invalid argument: Caller number must be in format ###-###-####");
+        }
+
+        if(!isValidDateTime(String.format("%s %s", parser.getValueOrDefault("begin_date"),
+                parser.getValueOrDefault("begin_time")))) {
+            throw new IllegalArgumentException("Invalid argument: Begin time must be in format mm/dd/yyyy hh:mm or "
+                    + "m/d/yyyy h:mm");
+        }
+
+        if(!isValidPhoneNumber(parser.getValueOrDefault("callee_number"))) {
+            throw new IllegalArgumentException("Invalid argument: Callee number must be in format ###-###-####");
+        }
+
+        if(!isValidDateTime(String.format("%s %s", parser.getValueOrDefault("end_date"),
+                parser.getValueOrDefault("end_time")))) {
+            throw new IllegalArgumentException("Invalid argument: Begin time must be in format mm/dd/yyyy hh:mm or "
+                    + "m/d/yyyy h:mm");
         }
     }
 
     public static void main(String[] args) {
+        CommandLineParser parser = new CommandLineParser("phonebill-2022.0.0.jar");
+
         try {
-            CommandLineParser parser = new CommandLineParser("phonebill-2022.0.0.jar");
             parser.setMaxLineLength(80);
             parser.setPrologue("This program creates a phone bill for a customer.");
             parser.setEpilogue("Date and time must be in m/d/yyyy h:mm format. Month, day, and hour may " +
@@ -87,90 +98,50 @@ public class Project1 {
             parser.addArgument("begin_time", "Time call began (24-hour time)");
             parser.addArgument("end_date", "Date call ended (mm/dd/yyy)");
             parser.addArgument("end_time", "Time call ended (24-hour time)");
+            parser.addArgument("test_arg", "Test arg", "1", new String[] { "1", "2", "3" });
 
-            parser.printUsage(System.out);
-            parser.parse(args);
-
-            System.err.println("Missing command line arguments");
+            validateArguments(parser, args);
         }
         catch(Exception e) {
+            parser.printUsage(System.out);
             System.err.println(e.getMessage());
-            e.printStackTrace(System.err);
+            return;
         }
 
-//        CommandLineParser parser = new CommandLineParser(args);
-//        List<String> arguments = parser.getArguments();
-//        String customer;
-//        String callerNumber;
-//        String calleeNumber;
-//        String begin;
-//        String end;
-//
-//        if(parser.hasFlag("help") || parser.hasFlag("h")) {
-//            printUsage();
-//            return;
-//        }
-//
-//        if(parser.hasFlag("README")) {
-//            try(InputStream readmeFile = Project1.class.getResourceAsStream("README.txt")) {
-//                BufferedReader reader = new BufferedReader(new InputStreamReader(readmeFile));
-//                StringBuilder readme = new StringBuilder();
-//                String line;
-//
-//                while((line = reader.readLine()) != null) {
-//                    readme.append(line);
-//                }
-//
-//                System.out.println(readme);
-//            }
-//            catch(IOException e) {
-//                throw new RuntimeException(e);
-//            }
-//
-//            return;
-//        }
-//
-//        try {
-//            validateArguments(arguments);
-//
-//            customer = arguments.get(0);
-//            callerNumber = arguments.get(1);
-//
-//            if(!isValidPhoneNumber(callerNumber)) {
-//                throw new IllegalArgumentException("Invalid argument: caller number must be in format ###-###-####");
-//            }
-//
-//            calleeNumber = arguments.get(2);
-//
-//            if(!isValidPhoneNumber(calleeNumber)) {
-//                throw new IllegalArgumentException("Invalid argument: callee number must be in format ###-###-####");
-//            }
-//
-//            begin = arguments.get(3) + " " + arguments.get(4);
-//
-//            if(!isValidDateTime(begin)) {
-//                throw new IllegalArgumentException("Invalid argument: begin time must be in format mm/dd/yyyy hh:mm or "
-//                        + "m/d/yyyy h:mm");
-//            }
-//
-//            end = arguments.get(5) + " " + arguments.get(6);
-//
-//            if(!isValidDateTime(end)) {
-//                throw new IllegalArgumentException("Invalid argument: end time must be in format mm/dd/yyyy hh:mm or "
-//                        + "m/d/yyyy h:mm");
-//            }
-//        }
-//        catch(Exception e) {
-//            System.err.println(e.getMessage());
-//            return;
-//        }
-//
-//        PhoneCall call = new PhoneCall(callerNumber, calleeNumber, begin, end);
-//        PhoneBill bill = new PhoneBill(customer);
-//        bill.addPhoneCall(call);
-//
-//        if(parser.hasFlag("print")) {
-//            System.out.println(call);
-//        }
+        if(parser.hasArgument("--help")) {
+            parser.printUsage(System.out);
+            return;
+        }
+
+        if(parser.hasArgument("--readme")) {
+            try(InputStream readmeFile = Project1.class.getResourceAsStream("README.txt")) {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(readmeFile));
+                StringBuilder readme = new StringBuilder();
+                String line;
+
+                while((line = reader.readLine()) != null) {
+                    readme.append(line);
+                }
+
+                System.out.println(readme);
+            }
+            catch(IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            return;
+        }
+
+        PhoneCall call = new PhoneCall(
+                parser.getValueOrDefault("caller_number"),
+                parser.getValueOrDefault("callee_number"),
+                parser.getValueOrDefault("begin_date") + " " + parser.getValueOrDefault("begin_time"),
+                parser.getValueOrDefault("end_date") + " " + parser.getValueOrDefault("end_time"));
+        PhoneBill bill = new PhoneBill(parser.getValueOrDefault("customer"));
+        bill.addPhoneCall(call);
+
+        if(parser.hasArgument("--print")) {
+            System.out.println(call);
+        }
     }
 }

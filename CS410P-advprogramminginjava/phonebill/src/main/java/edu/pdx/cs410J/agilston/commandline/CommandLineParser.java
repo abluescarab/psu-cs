@@ -126,8 +126,13 @@ public class CommandLineParser {
      */
     public void addArgument(String name, String help, String defaultValue, String[] choices, String... aliases) {
         String nameLower = name.toLowerCase();
-        Map<String, CommandLineArgument> map = name.startsWith("-") ? optionArguments : positionalArguments;
+        Map<String, CommandLineArgument> map;
 
+        if(!nameLower.startsWith("-") && aliases.length > 0) {
+            throw new IllegalArgumentException("Positional arguments cannot have aliases");
+        }
+
+        map = name.startsWith("-") ? optionArguments : positionalArguments;
         map.put(nameLower, new CommandLineArgument(nameLower, help, defaultValue, choices, aliases));
     }
 
@@ -151,30 +156,39 @@ public class CommandLineParser {
      * @return <code>true</code> if the argument has been given; <code>false</code> if not
      */
     public boolean hasArgument(String name) {
-        return givenArguments.contains(name);
+        String nameLower = name.toLowerCase();
+
+        if(givenArguments.contains(nameLower)) {
+            return true;
+        }
+
+        if(name.startsWith("-")) {
+            for(var arg : optionArguments.values()) {
+                if(arg.getAliases().contains(nameLower) && givenArguments.contains(arg.getName())) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
-     * Gets an argument given on the command line.
+     * Gets an argument.
      *
      * @param name name of argument to get
-     * @return argument from the command line
      */
-    public CommandLineArgument getArgument(String name) {
+    private CommandLineArgument getArgument(String name) {
         String nameLower = name.toLowerCase();
 
-        if(!givenArguments.contains(nameLower)) {
-            return null;
-        }
+        if(name.startsWith("-")) {
+            if(optionArguments.containsKey(nameLower)) {
+                return optionArguments.get(nameLower);
+            }
 
-        if(name.startsWith("-") && optionArguments.containsKey(nameLower)) {
-            for(CommandLineArgument arg : optionArguments.values()) {
-                try {
-                    if(arg.getAliases().contains(nameLower)) {
-                        return arg;
-                    }
-                }
-                catch(ClassCastException ignored) {
+            for(var arg : optionArguments.values()) {
+                if(arg.getAliases().contains(nameLower)) {
+                    return arg;
                 }
             }
         }
@@ -192,6 +206,18 @@ public class CommandLineParser {
     public String getValue(String name) {
         CommandLineArgument arg = getArgument(name);
         return arg == null ? "" : arg.getValue();
+    }
+
+    /**
+     * Gets the value or default value of an argument. Automatically null checks and returns an empty string if the
+     * argument does not exist.
+     *
+     * @param name name of argument to get
+     * @return value or default value if not provided
+     */
+    public String getValueOrDefault(String name) {
+        CommandLineArgument arg = getArgument(name);
+        return arg == null ? "" : arg.getValueOrDefault();
     }
 
     /**
@@ -282,48 +308,37 @@ public class CommandLineParser {
     public void parse(String[] args) {
         int i = 0;
         int position = 0;
-        Pattern shortFlag = Pattern.compile("-(\\w+)");
-        Pattern longFlag = Pattern.compile("--(\\w+)");
+        Pattern shortFlag = Pattern.compile("(-\\w+)");
+        Pattern longFlag = Pattern.compile("(--\\w+)");
         Pattern shortOption = Pattern.compile(shortFlag + "=(.*)");
         Pattern longOption = Pattern.compile(longFlag + "=(.*)");
-        Matcher matcher;
+        Matcher matcher = null;
         CommandLineArgument arg;
         String name;
+        boolean invalidArg = false;
 
         while(i < args.length) {
             // -f, -f opt
-            if((matcher = shortFlag.matcher(args[i])).matches()) {
-                name = matcher.group(1).toLowerCase();
-                givenArguments.add(name);
-                //TODO
+            if((arg = parseArg(args[i], matcher, shortFlag)) != null) {
+                // TODO
             }
             // -f=opt
-            else if((matcher = shortOption.matcher(args[i])).matches()) {
-                name = matcher.group(1).toLowerCase();
-                givenArguments.add(name);
-
-                if((arg = getArgument("-" + name)) != null) {
-                    arg.setValue(matcher.group(2));
-                }
+            else if((arg = parseArg(args[i], matcher, shortOption)) != null) {
+                // TODO
+                arg.setValue(matcher.group(2));
             }
             // --flag, --flag opt
-            else if((matcher = longFlag.matcher(args[i])).matches()) {
-                name = matcher.group(1).toLowerCase();
-                givenArguments.add(name);
-                //TODO
+            else if((arg = parseArg(args[i], matcher, longFlag)) != null) {
+                // TODO
             }
             // --flag=opt
-            else if((matcher = longOption.matcher(args[i])).matches()) {
-                name = matcher.group(1).toLowerCase();
-                givenArguments.add(name);
-
-                if((arg = getArgument("--" + name)) != null) {
-                    arg.setValue(matcher.group(2));
-                }
+            else if((arg = parseArg(args[i], matcher, longOption)) != null) {
+                // TODO
+                arg.setValue(matcher.group(2));
             }
             else {
-                List<CommandLineArgument> positionals = new ArrayList<>(positionalArguments.values());
-                var posArg = positionals.get(position);
+                List<CommandLineArgument> positionalArgs = new ArrayList<>(positionalArguments.values());
+                var posArg = positionalArgs.get(position);
 
                 givenArguments.add(posArg.getName());
                 posArg.setValue(args[i]);
@@ -332,5 +347,33 @@ public class CommandLineParser {
 
             i++;
         }
+    }
+
+    /**
+     * Parses a single argument.
+     *
+     * @param arg     argument to parse
+     * @param matcher regex matcher to find pattern
+     * @param pattern pattern to find
+     * @return {@link CommandLineArgument} if found; null otherwise
+     */
+    private CommandLineArgument parseArg(String arg, Matcher matcher, Pattern pattern) {
+        matcher = pattern.matcher(arg);
+        String name;
+        CommandLineArgument argument;
+
+        if(!matcher.matches()) {
+            return null;
+        }
+
+        name = matcher.group(1).toLowerCase();
+        argument = getArgument(name);
+
+        if(argument == null) {
+            throw new IllegalArgumentException(String.format("Invalid argument: %s", name));
+        }
+
+        givenArguments.add(argument.getName());
+        return argument;
     }
 }
