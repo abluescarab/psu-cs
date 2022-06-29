@@ -97,7 +97,6 @@ public class Project1 {
             parser.addArgument("begin_time", "Time call began (24-hour time)");
             parser.addArgument("end_date", "Date call ended (mm/dd/yyy)");
             parser.addArgument("end_time", "Time call ended (24-hour time)");
-            parser.addArgument("--test_arg", "Test arg", "1", new String[] { "1", "2", "3" });
 
             validateArguments(parser, args);
 
