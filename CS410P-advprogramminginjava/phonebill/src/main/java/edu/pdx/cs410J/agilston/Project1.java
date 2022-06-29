@@ -97,50 +97,49 @@ public class Project1 {
             parser.addArgument("begin_time", "Time call began (24-hour time)");
             parser.addArgument("end_date", "Date call ended (mm/dd/yyy)");
             parser.addArgument("end_time", "Time call ended (24-hour time)");
-            parser.addArgument("test_arg", "Test arg", "1", new String[] { "1", "2", "3" });
+            parser.addArgument("--test_arg", "Test arg", "1", new String[] { "1", "2", "3" });
 
             validateArguments(parser, args);
+
+            if(parser.hasArgument("--help")) {
+                parser.printUsage(System.out);
+                return;
+            }
+
+            if(parser.hasArgument("--readme")) {
+                try(InputStream readmeFile = Project1.class.getResourceAsStream("README.txt")) {
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(readmeFile));
+                    StringBuilder readme = new StringBuilder();
+                    String line;
+
+                    while((line = reader.readLine()) != null) {
+                        readme.append(line);
+                    }
+
+                    System.out.println(readme);
+                }
+                catch(IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+                return;
+            }
+
+            PhoneCall call = new PhoneCall(
+                    parser.getValueOrDefault("caller_number"),
+                    parser.getValueOrDefault("callee_number"),
+                    parser.getValueOrDefault("begin_date") + " " + parser.getValueOrDefault("begin_time"),
+                    parser.getValueOrDefault("end_date") + " " + parser.getValueOrDefault("end_time"));
+            PhoneBill bill = new PhoneBill(parser.getValueOrDefault("customer"));
+            bill.addPhoneCall(call);
+
+            if(parser.hasArgument("--print")) {
+                System.out.println(call);
+            }
         }
         catch(Exception e) {
             parser.printUsage(System.out);
             System.err.println(e.getMessage());
-            return;
-        }
-
-        if(parser.hasArgument("--help")) {
-            parser.printUsage(System.out);
-            return;
-        }
-
-        if(parser.hasArgument("--readme")) {
-            try(InputStream readmeFile = Project1.class.getResourceAsStream("README.txt")) {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(readmeFile));
-                StringBuilder readme = new StringBuilder();
-                String line;
-
-                while((line = reader.readLine()) != null) {
-                    readme.append(line);
-                }
-
-                System.out.println(readme);
-            }
-            catch(IOException e) {
-                throw new RuntimeException(e);
-            }
-
-            return;
-        }
-
-        PhoneCall call = new PhoneCall(
-                parser.getValueOrDefault("caller_number"),
-                parser.getValueOrDefault("callee_number"),
-                parser.getValueOrDefault("begin_date") + " " + parser.getValueOrDefault("begin_time"),
-                parser.getValueOrDefault("end_date") + " " + parser.getValueOrDefault("end_time"));
-        PhoneBill bill = new PhoneBill(parser.getValueOrDefault("customer"));
-        bill.addPhoneCall(call);
-
-        if(parser.hasArgument("--print")) {
-            System.out.println(call);
         }
     }
 }
