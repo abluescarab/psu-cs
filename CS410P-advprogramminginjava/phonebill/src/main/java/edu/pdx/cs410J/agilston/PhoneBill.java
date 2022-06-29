@@ -15,6 +15,7 @@ public class PhoneBill extends AbstractPhoneBill<PhoneCall> {
 
     /**
      * Creates a new phone bill.
+     *
      * @param customer customer name
      */
     public PhoneBill(String customer) {
@@ -32,6 +33,7 @@ public class PhoneBill extends AbstractPhoneBill<PhoneCall> {
 
     /**
      * Adds a phone call to the bill.
+     *
      * @param call phone call to add
      */
     @Override

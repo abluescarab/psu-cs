@@ -19,10 +19,11 @@ public class PhoneCall extends AbstractPhoneCall {
 
     /**
      * Creates a new phone call.
+     *
      * @param callerNumber caller's number (###-###-####)
      * @param calleeNumber receiver's number (###-###-####)
-     * @param beginTime date and time the call began (mm/dd/yyyy hh:mm)
-     * @param endTime date and time the call ended (mm/dd/yyyy hh:mm)
+     * @param beginTime    date and time the call began (mm/dd/yyyy hh:mm)
+     * @param endTime      date and time the call ended (mm/dd/yyyy hh:mm)
      */
     public PhoneCall(String callerNumber, String calleeNumber, String beginTime, String endTime) {
         this.formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm");
@@ -34,6 +35,7 @@ public class PhoneCall extends AbstractPhoneCall {
 
     /**
      * Formats a date time string, then parses it.
+     *
      * @param dateTime date time string to format
      * @return parsed date time string as {@link LocalDateTime}
      */
