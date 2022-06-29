@@ -51,7 +51,6 @@ public class Project1 {
         );
 
         if(args.length < missingArgs.size()) {
-            parser.printUsage(System.out);
             throw new IllegalArgumentException("Missing command line arguments: "
                     + String.join(", ", missingArgs.subList(args.length, missingArgs.size())));
         }
