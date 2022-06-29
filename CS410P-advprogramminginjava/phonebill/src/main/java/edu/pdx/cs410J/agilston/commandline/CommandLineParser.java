@@ -112,7 +112,19 @@ public class CommandLineParser {
      * @param aliases alternative names to type
      */
     public void addArgument(String name, String help, String... aliases) {
-        addArgument(name, help, "", null, aliases);
+        addArgument(name, help, false, "", null, aliases);
+    }
+
+    /**
+     * Add an argument to the command line interface.
+     *
+     * @param name          name to type
+     * @param help          help text displayed with <code>--help</code>
+     * @param acceptsOption whether the argument accepts an option (-f=opt, --flag=opt)
+     * @param aliases       alternative names to type
+     */
+    public void addArgument(String name, String help, boolean acceptsOption, String... aliases) {
+        addArgument(name, help, acceptsOption, "", null, aliases);
     }
 
     /**
@@ -125,6 +137,20 @@ public class CommandLineParser {
      * @param aliases      alternative names to type
      */
     public void addArgument(String name, String help, String defaultValue, String[] choices, String... aliases) {
+        addArgument(name, help, false, defaultValue, choices, aliases);
+    }
+
+    /**
+     * Add an argument to the command line interface.
+     *
+     * @param name          name to type
+     * @param help          help text displayed with <code>--help</code>
+     * @param acceptsOption whether the argument accepts an option (-f=opt, --flag=opt)
+     * @param defaultValue  default value of the command
+     * @param choices       possible values
+     * @param aliases       alternative names to type
+     */
+    public void addArgument(String name, String help, boolean acceptsOption, String defaultValue, String[] choices, String... aliases) {
         String nameLower = name.toLowerCase();
         Map<String, CommandLineArgument> map;
 
@@ -133,7 +159,7 @@ public class CommandLineParser {
         }
 
         map = name.startsWith("-") ? optionArguments : positionalArguments;
-        map.put(nameLower, new CommandLineArgument(nameLower, help, defaultValue, choices, aliases));
+        map.put(nameLower, new CommandLineArgument(nameLower, help, acceptsOption, defaultValue, choices, aliases));
     }
 
     /**
@@ -282,19 +308,23 @@ public class CommandLineParser {
         usage.append("\n");
 
         if(prologue != null && prologue.length() > 0) {
-            usage.append("\n").append(formatString(prologue, maxLineLength)).append("\n");
+            usage.append("\n")
+                 .append(formatString(prologue, maxLineLength)).append("\n");
         }
 
         if(positionalArguments.size() > 0) {
-            usage.append("\n").append(positional);
+            usage.append("\n")
+                 .append(positional);
         }
 
         if(optionArguments.size() > 0) {
-            usage.append("\n").append(optional);
+            usage.append("\n")
+                 .append(optional);
         }
 
         if(epilogue != null && epilogue.length() > 0) {
-            usage.append("\n").append(formatString(epilogue, maxLineLength)).append("\n");
+            usage.append("\n")
+                 .append(formatString(epilogue, maxLineLength)).append("\n");
         }
 
         stream.println(usage);

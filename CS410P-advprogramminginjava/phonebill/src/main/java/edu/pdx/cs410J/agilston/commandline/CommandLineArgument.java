@@ -13,6 +13,7 @@ class CommandLineArgument {
     private final String defaultValue;
     private final List<String> choices;
     private final List<String> aliases;
+    private final boolean acceptsOption;
     private String value;
 
     /**
@@ -23,7 +24,19 @@ class CommandLineArgument {
      * @param aliases alternative names to type
      */
     public CommandLineArgument(String name, String help, String... aliases) {
-        this(name, help, "", null, aliases);
+        this(name, help, false, "", null, aliases);
+    }
+
+    /**
+     * Creates a new command line argument.
+     *
+     * @param name          name to type
+     * @param help          help displayed with <code>--help</code>
+     * @param acceptsOption whether the argument accepts an option (-f=opt, --flag=opt)
+     * @param aliases       alternative names to type
+     */
+    public CommandLineArgument(String name, String help, boolean acceptsOption, String... aliases) {
+        this(name, help, acceptsOption, "", null, aliases);
     }
 
     /**
@@ -36,26 +49,27 @@ class CommandLineArgument {
      * @param aliases      alternative names to type
      */
     public CommandLineArgument(String name, String help, String defaultValue, String[] choices, String... aliases) {
+        this(name, help, false, defaultValue, choices, aliases);
+    }
+
+    /**
+     * Creates a new command line argument.
+     *
+     * @param name          name to type
+     * @param help          help displayed with <code>--help</code>
+     * @param acceptsOption whether the argument accepts an option (-f=opt, --flag=opt)
+     * @param defaultValue  default value for command
+     * @param choices       possible values
+     * @param aliases       alternative names to type
+     */
+    public CommandLineArgument(String name, String help, boolean acceptsOption, String defaultValue, String[] choices, String... aliases) {
         this.name = name;
         this.help = help;
         this.defaultValue = defaultValue;
         this.choices = choices == null ? Collections.emptyList() : List.of(choices);
         this.aliases = aliases == null ? Collections.emptyList() : List.of(aliases);
+        this.acceptsOption = acceptsOption;
         this.value = "";
-    }
-
-    /**
-     * Sets the value of the command.
-     *
-     * @param value value to set to
-     */
-    public void setValue(String value) {
-        if(choices.size() > 0) {
-            this.value = choices.contains(value) ? value : defaultValue;
-        }
-        else {
-            this.value = value;
-        }
     }
 
     /**
@@ -77,6 +91,20 @@ class CommandLineArgument {
      */
     public final String getValue() {
         return value;
+    }
+
+    /**
+     * Sets the value of the command.
+     *
+     * @param value value to set to
+     */
+    public void setValue(String value) {
+        if(choices.size() > 0) {
+            this.value = choices.contains(value) ? value : defaultValue;
+        }
+        else {
+            this.value = value;
+        }
     }
 
     /**
@@ -102,6 +130,13 @@ class CommandLineArgument {
         }
 
         return value;
+    }
+
+    /**
+     * Gets whether the argument accepts an option (-f=opt, --flag=opt).
+     */
+    public final boolean acceptsOption() {
+        return acceptsOption;
     }
 
     /**
