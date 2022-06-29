@@ -314,8 +314,6 @@ public class CommandLineParser {
         Pattern longOption = Pattern.compile(longFlag + "=(.*)");
         Matcher matcher = null;
         CommandLineArgument arg;
-        String name;
-        boolean invalidArg = false;
 
         while(i < args.length) {
             // -f, -f opt
