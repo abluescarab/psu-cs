@@ -29,18 +29,6 @@ public class CommandLineArgument {
     /**
      * Creates a new command line argument.
      *
-     * @param name    name to type
-     * @param help    help displayed with <code>--help</code>
-     * @param choices possible values
-     * @param aliases alternative names to type
-     */
-    public CommandLineArgument(String name, String help, String[] choices, String... aliases) {
-        this(name, help, "", choices, aliases);
-    }
-
-    /**
-     * Creates a new command line argument.
-     *
      * @param name         name to type
      * @param help         help displayed with <code>--help</code>
      * @param defaultValue default value for command
