@@ -7,7 +7,7 @@ import java.util.Objects;
 /**
  * Creates a new command line argument.
  */
-public class CommandLineArgument {
+class CommandLineArgument {
     private final String name;
     private final String help;
     private final String defaultValue;
