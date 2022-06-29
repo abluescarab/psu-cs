@@ -87,9 +87,9 @@ public class Project1 {
             parser.setEpilogue("Date and time must be in m/d/yyyy h:mm format. Month, day, and hour may " +
                     "be one digit or two. Year must always be four digits.");
 
-            parser.addArgument("--print", "Prints a description of the new phone call", "-p");
-            parser.addArgument("--readme", "Prints a README for this project and exits", "-r");
-            parser.addArgument("--help", "Prints usage information", "-h");
+            parser.addFlag("--print", "Prints a description of the new phone call", false, "-p");
+            parser.addFlag("--readme", "Prints a README for this project and exits", false, "-r");
+            parser.addFlag("--help", "Prints usage information", false, "-h");
             parser.addArgument("customer", "Person whose phone bill we're modeling");
             parser.addArgument("caller_number", "Phone number of caller");
             parser.addArgument("callee_number", "Phone number of person who was called");
