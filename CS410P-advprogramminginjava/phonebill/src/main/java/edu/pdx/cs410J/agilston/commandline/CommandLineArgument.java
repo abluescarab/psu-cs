@@ -140,6 +140,9 @@ public class CommandLineArgument {
         return builder.toString();
     }
 
+    /**
+     * Gets the formatted name of the argument, included aliases.
+     */
     protected StringBuilder getFormattedName() {
         StringBuilder builder = new StringBuilder(name);
 
