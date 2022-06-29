@@ -18,43 +18,12 @@ public class CommandLineArgument {
     /**
      * Creates a new command line argument.
      *
-     * @param name name to type
-     */
-    public CommandLineArgument(String name) {
-        this(name, "");
-    }
-
-    /**
-     * Creates a new command line argument.
-     *
-     * @param name    name to type
-     * @param choices possible values
-     */
-    public CommandLineArgument(String name, String[] choices) {
-        this(name, "", "", choices);
-    }
-
-    /**
-     * Creates a new command line argument.
-     *
      * @param name    name to type
      * @param help    help displayed with <code>--help</code>
      * @param aliases alternative names to type
      */
     public CommandLineArgument(String name, String help, String... aliases) {
         this(name, help, "", null, aliases);
-    }
-
-    /**
-     * Creates a new command line argument.
-     *
-     * @param name         name to type
-     * @param help         help displayed with <code>--help</code>
-     * @param defaultValue default value for command
-     * @param aliases      alternative names to type
-     */
-    public CommandLineArgument(String name, String help, String defaultValue, String... aliases) {
-        this(name, help, defaultValue, null, aliases);
     }
 
     /**
