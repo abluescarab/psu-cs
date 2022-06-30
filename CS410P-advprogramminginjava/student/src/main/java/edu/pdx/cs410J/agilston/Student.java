@@ -3,6 +3,10 @@ package edu.pdx.cs410J.agilston;
 import edu.pdx.cs410J.agilston.commandline.CommandLineParser;
 import edu.pdx.cs410J.lang.Human;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -156,6 +160,8 @@ public class Student extends Human {
         try {
             CommandLineParser parser = new CommandLineParser("student-2022.0.0.jar");
 
+            parser.addFlag("--help", "Display usage info", false, "-h");
+            parser.addFlag("--readme", "Display project readme and exit", false, "-r");
             parser.addArgument("name", "Student name");
             parser.addArgument("gender", "Student gender", "other",
                     new String[] { "male", "female", "other" });
@@ -172,6 +178,31 @@ public class Student extends Human {
             // TODO: add list argument
 
             Student student = createStudent(parser, args);
+
+            if(parser.hasArgument("--help")) {
+                parser.printUsage(System.out);
+                return;
+            }
+
+            if(parser.hasArgument("--readme")) {
+                try(InputStream readmeFile = Project1.class.getResourceAsStream("README.txt")) {
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(readmeFile));
+                    StringBuilder readme = new StringBuilder();
+                    String line;
+
+                    while((line = reader.readLine()) != null) {
+                        readme.append(line);
+                    }
+
+                    System.out.println(readme);
+                }
+                catch(IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+                return;
+            }
+
             System.out.println(student);
         }
         catch(Exception e) {
