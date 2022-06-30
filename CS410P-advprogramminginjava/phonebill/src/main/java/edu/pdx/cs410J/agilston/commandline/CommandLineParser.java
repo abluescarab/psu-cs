@@ -1,6 +1,5 @@
 package edu.pdx.cs410J.agilston.commandline;
 
-import java.io.PrintStream;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -278,11 +277,9 @@ public class CommandLineParser {
     }
 
     /**
-     * Prints the usage information for the parser.
-     *
-     * @param stream stream to print to
+     * Gets the usage information for the parser.
      */
-    public void printUsage(PrintStream stream) {
+    public String getUsageInformation() {
         StringBuilder usage = new StringBuilder();
         StringBuilder positional = new StringBuilder("positional arguments:" + System.lineSeparator());
         StringBuilder optional = new StringBuilder("optional arguments:" + System.lineSeparator());
@@ -326,7 +323,7 @@ public class CommandLineParser {
                  .append(System.lineSeparator());
         }
 
-        stream.println(usage);
+        return usage.toString();
     }
 
     /**

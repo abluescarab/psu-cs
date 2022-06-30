@@ -180,7 +180,7 @@ public class Student extends Human {
             Student student = createStudent(parser, args);
 
             if(parser.hasArgument("--help")) {
-                parser.printUsage(System.out);
+                System.out.print(parser.getUsageInformation());
                 return;
             }
 

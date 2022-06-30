@@ -101,7 +101,7 @@ public class Project1 {
             validateArguments(parser, args);
 
             if(parser.hasArgument("--help")) {
-                parser.printUsage(System.out);
+                System.out.print(parser.getUsageInformation());
                 return;
             }
 
@@ -137,7 +137,7 @@ public class Project1 {
             }
         }
         catch(Exception e) {
-            parser.printUsage(System.out);
+            System.out.print(parser.getUsageInformation());
             System.err.println(e.getMessage());
         }
     }
