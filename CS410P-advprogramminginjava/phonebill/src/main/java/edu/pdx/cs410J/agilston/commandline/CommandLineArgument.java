@@ -145,7 +145,7 @@ class CommandLineArgument {
                 String.format("%" + indentSize + "s%-" + (maxNameLength - indentSize) + "s", "", names));
 
         if(names.length() >= (maxNameLength - indentSize)) {
-            builder.append("\n")
+            builder.append(System.lineSeparator())
                    .append(CommandLineParser.formatString(help, lineLength,
                            String.format("%" + maxNameLength + "s", ""), true));
         }

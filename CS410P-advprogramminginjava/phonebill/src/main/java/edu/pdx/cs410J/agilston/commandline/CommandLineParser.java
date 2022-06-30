@@ -72,7 +72,7 @@ public class CommandLineParser {
             formatted.append(text);
         }
         else {
-            newLineTokenizer = new StringTokenizer(text, "\n");
+            newLineTokenizer = new StringTokenizer(text, System.lineSeparator());
 
             while(newLineTokenizer.hasMoreTokens()) {
                 String block = newLineTokenizer.nextToken();
@@ -82,21 +82,21 @@ public class CommandLineParser {
                     String word = spaceTokenizer.nextToken();
 
                     if(length + word.length() >= columnToBreak) {
-                        formatted.append("\n");
-                        formatted.append(linePrefix);
+                        formatted.append(System.lineSeparator())
+                                 .append(linePrefix);
                         length = linePrefix.length();
                     }
 
-                    formatted.append(word);
-                    formatted.append(" ");
+                    formatted.append(word)
+                             .append(" ");
                     length += word.length() + 1;
                 }
 
                 length = linePrefix.length();
 
                 if(newLineTokenizer.hasMoreTokens()) {
-                    formatted.append("\n\n");
-                    formatted.append(linePrefix);
+                    formatted.append(System.lineSeparator())
+                             .append(linePrefix);
                 }
             }
         }
@@ -284,42 +284,46 @@ public class CommandLineParser {
      */
     public void printUsage(PrintStream stream) {
         StringBuilder usage = new StringBuilder();
-        StringBuilder positional = new StringBuilder("positional arguments:\n");
-        StringBuilder optional = new StringBuilder("optional arguments:\n");
+        StringBuilder positional = new StringBuilder("positional arguments:" + System.lineSeparator());
+        StringBuilder optional = new StringBuilder("optional arguments:" + System.lineSeparator());
 
         usage.append("usage: ");
         usage.append(jarFilename);
 
         for(var arg : flags.values()) {
             usage.append(String.format(" [%s]", arg.getName()));
-            optional.append(arg.getFormattedHelp(maxLineLength, indentSize)).append("\n");
+            optional.append(arg.getFormattedHelp(maxLineLength, indentSize))
+                    .append(System.lineSeparator());
         }
 
         for(var arg : positionalArguments.values()) {
             usage.append(String.format(" %s", arg.getName()));
-            positional.append(arg.getFormattedHelp(maxLineLength, indentSize)).append("\n");
+            positional.append(arg.getFormattedHelp(maxLineLength, indentSize))
+                      .append(System.lineSeparator());
         }
 
-        usage.append("\n");
+        usage.append(System.lineSeparator());
 
         if(prologue != null && prologue.length() > 0) {
-            usage.append("\n")
-                 .append(formatString(prologue, maxLineLength)).append("\n");
+            usage.append(System.lineSeparator())
+                 .append(formatString(prologue, maxLineLength))
+                 .append(System.lineSeparator());
         }
 
         if(positionalArguments.size() > 0) {
-            usage.append("\n")
+            usage.append(System.lineSeparator())
                  .append(positional);
         }
 
         if(flags.size() > 0) {
-            usage.append("\n")
+            usage.append(System.lineSeparator())
                  .append(optional);
         }
 
         if(epilogue != null && epilogue.length() > 0) {
-            usage.append("\n")
-                 .append(formatString(epilogue, maxLineLength)).append("\n");
+            usage.append(System.lineSeparator())
+                 .append(formatString(epilogue, maxLineLength))
+                 .append(System.lineSeparator());
         }
 
         stream.println(usage);
