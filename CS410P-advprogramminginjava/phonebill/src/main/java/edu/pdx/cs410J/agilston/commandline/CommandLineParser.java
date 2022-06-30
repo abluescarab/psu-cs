@@ -115,6 +115,29 @@ public class CommandLineParser {
     }
 
     /**
+     * Adds an optional positional argument to the command line.
+     *
+     * @param name         name to type
+     * @param help         help text displayed with <code>--help</code>
+     * @param defaultValue default value of the argument
+     */
+    public void addArgument(String name, String help, String defaultValue) {
+        addArgument(name, help, false, defaultValue, null);
+    }
+
+    /**
+     * Adds a positional argument to the command line.
+     *
+     * @param name         name to type
+     * @param help         help text displayed with <code>--help</code>
+     * @param defaultValue default value of the argument
+     * @param choices      possible values
+     */
+    public void addArgument(String name, String help, String defaultValue, String[] choices) {
+        addArgument(name, help, false, defaultValue, choices);
+    }
+
+    /**
      * Adds a flag (-f, --flag) to the command line.
      *
      * @param name          name to type

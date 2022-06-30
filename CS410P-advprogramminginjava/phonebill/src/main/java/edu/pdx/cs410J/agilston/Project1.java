@@ -41,13 +41,13 @@ public class Project1 {
      */
     private static void validateArguments(CommandLineParser parser, String[] args) {
         List<String> missingArgs = List.of(
-                "<customer>",
-                "<caller number>",
-                "<callee number>",
-                "<begin date>",
-                "<begin time>",
-                "<end date>",
-                "<end time>"
+                "customer",
+                "caller_number",
+                "callee_number",
+                "begin_date",
+                "begin_time",
+                "end_date",
+                "end_time"
         );
 
         if(args.length < missingArgs.size()) {

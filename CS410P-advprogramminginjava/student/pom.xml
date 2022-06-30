@@ -111,6 +111,18 @@
       <classifier>tests</classifier>
       <scope>test</scope>
     </dependency>
+      <dependency>
+          <groupId>edu.pdx.cs410J.agilston</groupId>
+          <artifactId>phonebill</artifactId>
+          <version>2022.0.0</version>
+          <scope>compile</scope>
+      </dependency>
+    <dependency>
+      <groupId>edu.pdx.cs410J.agilston</groupId>
+      <artifactId>phonebill</artifactId>
+      <version>2022.0.0</version>
+      <scope>compile</scope>
+    </dependency>
   </dependencies>
 
   <profiles>
