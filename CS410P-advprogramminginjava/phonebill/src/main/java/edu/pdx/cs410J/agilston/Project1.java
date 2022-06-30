@@ -61,19 +61,19 @@ public class Project1 {
             throw new IllegalArgumentException("Invalid argument: Caller number must be in format ###-###-####");
         }
 
+        if(!isValidPhoneNumber(parser.getValueOrDefault("callee_number"))) {
+            throw new IllegalArgumentException("Invalid argument: Callee number must be in format ###-###-####");
+        }
+
         if(!isValidDateTime(String.format("%s %s", parser.getValueOrDefault("begin_date"),
                 parser.getValueOrDefault("begin_time")))) {
             throw new IllegalArgumentException("Invalid argument: Begin time must be in format mm/dd/yyyy hh:mm or "
                     + "m/d/yyyy h:mm");
         }
 
-        if(!isValidPhoneNumber(parser.getValueOrDefault("callee_number"))) {
-            throw new IllegalArgumentException("Invalid argument: Callee number must be in format ###-###-####");
-        }
-
         if(!isValidDateTime(String.format("%s %s", parser.getValueOrDefault("end_date"),
                 parser.getValueOrDefault("end_time")))) {
-            throw new IllegalArgumentException("Invalid argument: Begin time must be in format mm/dd/yyyy hh:mm or "
+            throw new IllegalArgumentException("Invalid argument: End time must be in format mm/dd/yyyy hh:mm or "
                     + "m/d/yyyy h:mm");
         }
     }
