@@ -4,6 +4,7 @@ import edu.pdx.cs410J.AbstractPhoneCall;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -59,13 +60,16 @@ public class PhoneCall extends AbstractPhoneCall {
             if(hour.length() == 1)
                 hour = "0" + hour;
 
-            if(minute.length() == 1)
-                minute = "0" + minute;
-
             dateTime = String.format("%s/%s/%s %s:%s", month, day, year, hour, minute);
         }
 
-        return LocalDateTime.parse(dateTime, formatter);
+        try {
+            return LocalDateTime.parse(dateTime, formatter);
+        }
+        catch(DateTimeParseException e) {
+            throw new IllegalArgumentException(String.format("Invalid argument: %s must be in format mm/dd/yyyy hh:mm or "
+                    + "m/d/yyyy h:mm", dateTime));
+        }
     }
 
     /**
