@@ -39,7 +39,7 @@ public class Project1 {
      *
      * @param args command line arguments
      */
-    private static void validateArguments(CommandLineParser parser, String[] args) {
+    static void validateArguments(CommandLineParser parser, String[] args) {
         List<String> missingArgs = List.of(
                 "customer",
                 "caller_number",
