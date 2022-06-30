@@ -380,6 +380,8 @@ public class CommandLineParser {
                 CommandLineArgument arg;
 
                 if(Objects.equals(hyphens, "-")) {
+                    // TODO: enforce -README?
+
                     for(String character : matcher.group(3).toLowerCase().split("")) {
                         index = parseArg(args, index, hyphens + character, option);
                     }
