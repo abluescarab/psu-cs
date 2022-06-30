@@ -182,15 +182,14 @@ public class CommandLineParser {
      */
     private void addArgument(String name, String help, boolean acceptsOption, String defaultValue, String[] choices,
                              String... aliases) {
-        String nameLower = name.toLowerCase();
         Map<String, CommandLineArgument> map;
 
-        if(!nameLower.startsWith("-") && aliases.length > 0) {
+        if(!name.startsWith("-") && aliases.length > 0) {
             throw new IllegalArgumentException("Invalid argument: Positional arguments cannot have aliases");
         }
 
         map = name.startsWith("-") ? flags : positionalArguments;
-        map.put(nameLower, new CommandLineArgument(nameLower, help, acceptsOption, defaultValue, choices, aliases));
+        map.put(name, new CommandLineArgument(name, help, acceptsOption, defaultValue, choices, aliases));
     }
 
     /**
@@ -200,10 +199,9 @@ public class CommandLineParser {
      * @return <code>true</code> if argument was removed successfully; <code>false</code> if not
      */
     public boolean removeArgument(String name) {
-        String nameLower = name.toLowerCase();
         Map<String, CommandLineArgument> map = name.startsWith("-") ? flags : positionalArguments;
 
-        return map.remove(nameLower) != null;
+        return map.remove(name) != null;
     }
 
     /**
@@ -213,15 +211,13 @@ public class CommandLineParser {
      * @return <code>true</code> if the argument has been given; <code>false</code> if not
      */
     public boolean hasArgument(String name) {
-        String nameLower = name.toLowerCase();
-
-        if(givenArguments.contains(nameLower)) {
+        if(givenArguments.contains(name)) {
             return true;
         }
 
         if(name.startsWith("-")) {
             for(var arg : flags.values()) {
-                if(arg.getAliases().contains(nameLower) && givenArguments.contains(arg.getName())) {
+                if(arg.getAliases().contains(name) && givenArguments.contains(arg.getName())) {
                     return true;
                 }
             }
@@ -236,21 +232,19 @@ public class CommandLineParser {
      * @param name name of argument to get
      */
     private CommandLineArgument getArgument(String name) {
-        String nameLower = name.toLowerCase();
-
         if(name.startsWith("-")) {
-            if(flags.containsKey(nameLower)) {
-                return flags.get(nameLower);
+            if(flags.containsKey(name)) {
+                return flags.get(name);
             }
 
             for(var arg : flags.values()) {
-                if(arg.getAliases().contains(nameLower)) {
+                if(arg.getAliases().contains(name)) {
                     return arg;
                 }
             }
         }
 
-        return positionalArguments.get(nameLower);
+        return positionalArguments.get(name);
     }
 
     /**
@@ -374,7 +368,7 @@ public class CommandLineParser {
 
         while(index < args.length) {
             if((matcher = flag.matcher(args[index])).matches()) {
-                String fullName = matcher.group(1).toLowerCase();
+                String fullName = matcher.group(1);
                 String hyphens = matcher.group(2);
                 String option = matcher.group(4);
                 CommandLineArgument arg;
@@ -382,7 +376,7 @@ public class CommandLineParser {
                 if(Objects.equals(hyphens, "-")) {
                     // TODO: enforce -README?
 
-                    for(String character : matcher.group(3).toLowerCase().split("")) {
+                    for(String character : matcher.group(3).split("")) {
                         index = parseArg(args, index, hyphens + character, option);
                     }
                 }
