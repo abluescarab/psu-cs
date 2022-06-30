@@ -3,12 +3,10 @@ package edu.pdx.cs410J.agilston;
 import org.junit.jupiter.api.Test;
 
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import static edu.pdx.cs410J.agilston.PhoneCallTest.createPhoneCall;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Unit tests for the {@link PhoneCall} class.
