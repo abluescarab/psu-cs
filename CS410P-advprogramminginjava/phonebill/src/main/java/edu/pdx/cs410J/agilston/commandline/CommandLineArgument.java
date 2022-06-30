@@ -87,13 +87,6 @@ class CommandLineArgument {
     }
 
     /**
-     * Gets the current value of the argument.
-     */
-    public final String getValue() {
-        return value;
-    }
-
-    /**
      * Sets the value of the command.
      *
      * @param value value to set to

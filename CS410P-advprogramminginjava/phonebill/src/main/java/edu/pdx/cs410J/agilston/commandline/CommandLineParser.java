@@ -230,18 +230,6 @@ public class CommandLineParser {
     }
 
     /**
-     * Gets the value of an argument. Automatically null checks and returns an empty string if the argument does not
-     * exist.
-     *
-     * @param name name of argument to get
-     * @return value of the argument
-     */
-    public String getValue(String name) {
-        CommandLineArgument arg = getArgument(name);
-        return arg == null ? "" : arg.getValue();
-    }
-
-    /**
      * Gets the value or default value of an argument. Automatically null checks and returns an empty string if the
      * argument does not exist.
      *
