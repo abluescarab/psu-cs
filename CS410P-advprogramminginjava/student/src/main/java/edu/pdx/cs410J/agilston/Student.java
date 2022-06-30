@@ -105,7 +105,7 @@ public class Student extends Human {
      * @param args command line arguments
      * @return new student object
      */
-    private static Student createStudent(CommandLineParser parser, String[] args) {
+    static Student createStudent(CommandLineParser parser, String[] args) {
         List<String> missingArgs = List.of(
                 "name",
                 "gender",
@@ -117,9 +117,9 @@ public class Student extends Human {
         double gpa;
         List<String> classes;
 
-        if(args.length < missingArgs.size()) {
+        if(args == null || args.length < missingArgs.size()) {
             throw new IllegalArgumentException("Missing command line arguments: " +
-                    String.join(", ", missingArgs.subList(args.length, missingArgs.size())));
+                    String.join(", ", missingArgs.subList(args == null ? 0 : args.length, missingArgs.size())));
         }
 
         parser.parse(args);
@@ -128,11 +128,11 @@ public class Student extends Human {
             gpa = Double.parseDouble(parser.getValueOrDefault("gpa"));
         }
         catch(NumberFormatException e) {
-            throw new IllegalArgumentException("Incorrect argument: GPA must be a number");
+            throw new IllegalArgumentException("Invalid argument: GPA must be a number");
         }
 
         if(gpa < 0.0) {
-            throw new IllegalArgumentException("Incorrect argument: GPA cannot be negative");
+            throw new IllegalArgumentException("Invalid argument: GPA cannot be negative");
         }
 
         return new Student(
