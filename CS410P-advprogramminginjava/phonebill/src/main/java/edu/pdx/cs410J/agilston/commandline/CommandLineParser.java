@@ -182,13 +182,7 @@ public class CommandLineParser {
      */
     private void addArgument(String name, String help, boolean acceptsOption, String defaultValue, String[] choices,
                              String... aliases) {
-        Map<String, CommandLineArgument> map;
-
-        if(!name.startsWith("-") && aliases.length > 0) {
-            throw new IllegalArgumentException("Invalid argument: Positional arguments cannot have aliases");
-        }
-
-        map = name.startsWith("-") ? flags : positionalArguments;
+        Map<String, CommandLineArgument> map = name.startsWith("-") ? flags : positionalArguments;
         map.put(name, new CommandLineArgument(name, help, acceptsOption, defaultValue, choices, aliases));
     }
 
