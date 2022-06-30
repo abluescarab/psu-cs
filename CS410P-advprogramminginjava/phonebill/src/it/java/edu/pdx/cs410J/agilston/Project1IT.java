@@ -110,7 +110,7 @@ class Project1IT extends InvokeMainTestCase {
                 "00:00",
                 "01/01/2022",
                 "01:00",
-                "--readme");
+                "-README");
         assertThat(result.getTextWrittenToStandardOut(),
                 containsString("Class:   CS410P - Advanced Programming in Java"));
     }
@@ -125,7 +125,7 @@ class Project1IT extends InvokeMainTestCase {
                 "00:00",
                 "01/01/2022",
                 "01:00",
-                "--print");
+                "-print");
         assertThat(result.getTextWrittenToStandardOut(),
                 containsString("Phone call from 555-555-5555 to 888-888-8888 from 01/01/2022 00:00 to " +
                         "01/01/2022 01:00"));

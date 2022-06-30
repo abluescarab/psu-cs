@@ -373,9 +373,7 @@ public class CommandLineParser {
                 String option = matcher.group(4);
                 CommandLineArgument arg;
 
-                if(Objects.equals(hyphens, "-")) {
-                    // TODO: enforce -README?
-
+                if(Objects.equals(hyphens, "-") && getArgument(fullName) == null) {
                     for(String character : matcher.group(3).split("")) {
                         index = parseArg(args, index, hyphens + character, option);
                     }

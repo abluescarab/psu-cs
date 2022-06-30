@@ -87,8 +87,8 @@ public class Project1 {
             parser.setEpilogue("Date and time must be in m/d/yyyy h:mm format. Month, day, and hour may " +
                     "be one digit or two. Year must always be four digits.");
 
-            parser.addFlag("--print", "Prints a description of the new phone call", false, "-p");
-            parser.addFlag("--readme", "Prints a README for this project and exits", false, "-r");
+            parser.addFlag("-print", "Prints a description of the new phone call", false, "-p");
+            parser.addFlag("-README", "Prints a README for this project and exits", false, "-r");
             parser.addFlag("--help", "Prints usage information", false, "-h");
             parser.addArgument("customer", "Person whose phone bill we're modeling");
             parser.addArgument("caller_number", "Phone number of caller");
@@ -105,7 +105,7 @@ public class Project1 {
                 return;
             }
 
-            if(parser.hasArgument("--readme")) {
+            if(parser.hasArgument("-README")) {
                 try(InputStream readmeFile = Project1.class.getResourceAsStream("README.txt")) {
                     BufferedReader reader = new BufferedReader(new InputStreamReader(readmeFile));
                     StringBuilder readme = new StringBuilder();
@@ -132,7 +132,7 @@ public class Project1 {
             PhoneBill bill = new PhoneBill(parser.getValueOrDefault("customer"));
             bill.addPhoneCall(call);
 
-            if(parser.hasArgument("--print")) {
+            if(parser.hasArgument("-print")) {
                 System.out.println(call);
             }
         }
