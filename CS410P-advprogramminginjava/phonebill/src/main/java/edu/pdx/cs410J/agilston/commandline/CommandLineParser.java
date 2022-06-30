@@ -193,18 +193,6 @@ public class CommandLineParser {
     }
 
     /**
-     * Removes a positional or option argument from the command line interface.
-     *
-     * @param name name to remove
-     * @return <code>true</code> if argument was removed successfully; <code>false</code> if not
-     */
-    public boolean removeArgument(String name) {
-        Map<String, CommandLineArgument> map = name.startsWith("-") ? flags : positionalArguments;
-
-        return map.remove(name) != null;
-    }
-
-    /**
      * Checks whether an argument has been provided on the command line.
      *
      * @param name name to check for
