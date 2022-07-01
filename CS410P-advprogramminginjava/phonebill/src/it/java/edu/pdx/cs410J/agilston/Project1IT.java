@@ -95,7 +95,7 @@ class Project1IT extends InvokeMainTestCase {
                 "00:00",
                 "01/01/2022",
                 "01:00",
-                "--help");
+                "-help");
         assertThat(result.getTextWrittenToStandardOut(),
                 containsString("usage: phonebill-2022.0.0.jar"));
     }

@@ -89,7 +89,7 @@ public class Project1 {
 
             parser.addFlag("-print", "Prints a description of the new phone call", false, "-p");
             parser.addFlag("-README", "Prints a README for this project and exits", false, "-r");
-            parser.addFlag("--help", "Prints usage information", false, "-h");
+            parser.addFlag("-help", "Prints usage information", false, "-h");
             parser.addArgument("customer", "Person whose phone bill we're modeling");
             parser.addArgument("caller_number", "Phone number of caller");
             parser.addArgument("callee_number", "Phone number of person who was called");
@@ -100,7 +100,7 @@ public class Project1 {
 
             validateArguments(parser, args);
 
-            if(parser.hasArgument("--help")) {
+            if(parser.hasArgument("-help")) {
                 System.out.print(parser.getUsageInformation());
                 return;
             }

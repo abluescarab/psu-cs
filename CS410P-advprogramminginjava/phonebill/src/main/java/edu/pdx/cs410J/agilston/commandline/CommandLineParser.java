@@ -107,7 +107,7 @@ public class CommandLineParser {
      * Adds a positional argument to the command line.
      *
      * @param name name to type
-     * @param help help text displayed with <code>--help</code>
+     * @param help help text displayed with usage information
      */
     public void addArgument(String name, String help) {
         addArgument(name, help, false, "", null);
@@ -117,7 +117,7 @@ public class CommandLineParser {
      * Adds an optional positional argument to the command line.
      *
      * @param name         name to type
-     * @param help         help text displayed with <code>--help</code>
+     * @param help         help text displayed with usage information
      * @param defaultValue default value of the argument
      */
     public void addArgument(String name, String help, String defaultValue) {
@@ -128,7 +128,7 @@ public class CommandLineParser {
      * Adds a positional argument to the command line.
      *
      * @param name         name to type
-     * @param help         help text displayed with <code>--help</code>
+     * @param help         help text displayed with usage information
      * @param defaultValue default value of the argument
      * @param choices      possible values
      */
@@ -140,7 +140,7 @@ public class CommandLineParser {
      * Adds a flag (-f, --flag) to the command line.
      *
      * @param name          name to type
-     * @param help          help text displayed with <code>--help</code>
+     * @param help          help text displayed with usage information
      * @param acceptsOption whether the command accepts an option (-f=opt, -f opt)
      * @param aliases       alternative names to type
      */
@@ -156,7 +156,7 @@ public class CommandLineParser {
      * Adds a flag (-f, --flag) to the command line.
      *
      * @param name         name to type
-     * @param help         help text displayed with <code>--help</code>
+     * @param help         help text displayed with usage information
      * @param defaultValue default value of the argument
      * @param choices      possible values
      * @param aliases      alternative names to type
@@ -173,7 +173,7 @@ public class CommandLineParser {
      * Add an argument to the command line interface.
      *
      * @param name          name to type
-     * @param help          help text displayed with <code>--help</code>
+     * @param help          help text displayed with usage information
      * @param acceptsOption whether the argument accepts an option (-f=opt, --flag=opt)
      * @param defaultValue  default value of the command
      * @param choices       possible values

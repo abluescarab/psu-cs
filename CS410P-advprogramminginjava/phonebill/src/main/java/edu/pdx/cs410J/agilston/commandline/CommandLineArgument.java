@@ -20,7 +20,7 @@ class CommandLineArgument {
      * Creates a new command line argument.
      *
      * @param name    name to type
-     * @param help    help displayed with <code>--help</code>
+     * @param help    help displayed with usage information
      * @param aliases alternative names to type
      */
     public CommandLineArgument(String name, String help, String... aliases) {
@@ -31,7 +31,7 @@ class CommandLineArgument {
      * Creates a new command line argument.
      *
      * @param name          name to type
-     * @param help          help displayed with <code>--help</code>
+     * @param help          help displayed with usage information
      * @param acceptsOption whether the argument accepts an option (-f=opt, --flag=opt)
      * @param aliases       alternative names to type
      */
@@ -43,7 +43,7 @@ class CommandLineArgument {
      * Creates a new command line argument.
      *
      * @param name         name to type
-     * @param help         help displayed with <code>--help</code>
+     * @param help         help displayed with usage information
      * @param defaultValue default value for command
      * @param choices      possible values
      * @param aliases      alternative names to type
@@ -56,7 +56,7 @@ class CommandLineArgument {
      * Creates a new command line argument.
      *
      * @param name          name to type
-     * @param help          help displayed with <code>--help</code>
+     * @param help          help displayed with usage information
      * @param acceptsOption whether the argument accepts an option (-f=opt, --flag=opt)
      * @param defaultValue  default value for command
      * @param choices       possible values
