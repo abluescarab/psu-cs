@@ -19,42 +19,6 @@ class CommandLineArgument {
     /**
      * Creates a new command line argument.
      *
-     * @param name    name to type
-     * @param help    help displayed with usage information
-     * @param aliases alternative names to type
-     */
-    public CommandLineArgument(String name, String help, String... aliases) {
-        this(name, help, false, "", null, aliases);
-    }
-
-    /**
-     * Creates a new command line argument.
-     *
-     * @param name          name to type
-     * @param help          help displayed with usage information
-     * @param acceptsOption whether the argument accepts an option (-f=opt, --flag=opt)
-     * @param aliases       alternative names to type
-     */
-    public CommandLineArgument(String name, String help, boolean acceptsOption, String... aliases) {
-        this(name, help, acceptsOption, "", null, aliases);
-    }
-
-    /**
-     * Creates a new command line argument.
-     *
-     * @param name         name to type
-     * @param help         help displayed with usage information
-     * @param defaultValue default value for command
-     * @param choices      possible values
-     * @param aliases      alternative names to type
-     */
-    public CommandLineArgument(String name, String help, String defaultValue, String[] choices, String... aliases) {
-        this(name, help, false, defaultValue, choices, aliases);
-    }
-
-    /**
-     * Creates a new command line argument.
-     *
      * @param name          name to type
      * @param help          help displayed with usage information
      * @param acceptsOption whether the argument accepts an option (-f=opt, --flag=opt)
