@@ -222,14 +222,14 @@ public class CommandLineParserTest {
                 + System.lineSeparator() + "This is on a new line.";
 
         assertThat(CommandLineParser.formatString(text, 20, "%", true), equalTo(
-                "%This is a \r\n" +
-                        "%formatted string \r\n" +
-                        "%that breaks on \r\n" +
-                        "%column 20, where \r\n" +
-                        "%each line has a \r\n" +
-                        "%prefix. \r\n" +
-                        "%This is on a new \r\n" +
-                        "%line. "
+                "%This is a " + System.lineSeparator()
+                        + "%formatted string " + System.lineSeparator()
+                        + "%that breaks on " + System.lineSeparator()
+                        + "%column 20, where " + System.lineSeparator()
+                        + "%each line has a " + System.lineSeparator()
+                        + "%prefix. " + System.lineSeparator()
+                        + "%This is on a new " + System.lineSeparator()
+                        + "%line. "
         ));
     }
 
