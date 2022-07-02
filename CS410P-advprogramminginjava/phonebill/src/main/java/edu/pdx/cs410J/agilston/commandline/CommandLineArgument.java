@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Creates a new command line argument.
+ * A class that represents a command line argument.
  */
 class CommandLineArgument {
     private final String name;
