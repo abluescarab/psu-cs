@@ -342,7 +342,6 @@ public class CommandLineParser {
                 String fullName = matcher.group(1);
                 String hyphens = matcher.group(2);
                 String option = matcher.group(4);
-                CommandLineArgument arg;
 
                 if(Objects.equals(hyphens, "-") && getArgument(fullName) == null) {
                     for(String character : matcher.group(3).split("")) {
