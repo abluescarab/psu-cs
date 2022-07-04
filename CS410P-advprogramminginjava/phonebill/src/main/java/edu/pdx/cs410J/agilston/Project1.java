@@ -38,8 +38,9 @@ public class Project1 {
      * Validates all command line arguments have been given.
      *
      * @param args command line arguments
+     * @return whether arguments successfully validated
      */
-    static void validateArguments(CommandLineParser parser, String[] args) {
+    static boolean validateArguments(CommandLineParser parser, String[] args) {
         List<String> missingArgs = List.of(
                 "customer",
                 "caller_number",
@@ -50,12 +51,36 @@ public class Project1 {
                 "end_time"
         );
 
+        parser.parse(args);
+
+        if(parser.hasArgument("-help")) {
+            System.out.print(parser.getUsageInformation());
+            return false;
+        }
+
+        if(parser.hasArgument("-README")) {
+            try(InputStream readmeFile = Project1.class.getResourceAsStream("README.txt")) {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(readmeFile));
+                StringBuilder readme = new StringBuilder();
+                String line;
+
+                while((line = reader.readLine()) != null) {
+                    readme.append(line);
+                }
+
+                System.out.println(readme);
+            }
+            catch(IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            return false;
+        }
+
         if(args.length < missingArgs.size()) {
             throw new IllegalArgumentException("Missing command line arguments: "
                     + String.join(", ", missingArgs.subList(args.length, missingArgs.size())));
         }
-
-        parser.parse(args);
 
         if(!isValidPhoneNumber(parser.getValueOrDefault("caller_number"))) {
             throw new IllegalArgumentException("Invalid argument: Caller number must be in format ###-###-####");
@@ -76,6 +101,8 @@ public class Project1 {
             throw new IllegalArgumentException("Invalid argument: End time must be in format mm/dd/yyyy hh:mm or "
                     + "m/d/yyyy h:mm");
         }
+
+        return true;
     }
 
     public static void main(String[] args) {
@@ -98,29 +125,7 @@ public class Project1 {
             parser.addArgument("end_date", "Date call ended (mm/dd/yyy)");
             parser.addArgument("end_time", "Time call ended (24-hour time)");
 
-            validateArguments(parser, args);
-
-            if(parser.hasArgument("-help")) {
-                System.out.print(parser.getUsageInformation());
-                return;
-            }
-
-            if(parser.hasArgument("-README")) {
-                try(InputStream readmeFile = Project1.class.getResourceAsStream("README.txt")) {
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(readmeFile));
-                    StringBuilder readme = new StringBuilder();
-                    String line;
-
-                    while((line = reader.readLine()) != null) {
-                        readme.append(line);
-                    }
-
-                    System.out.println(readme);
-                }
-                catch(IOException e) {
-                    throw new RuntimeException(e);
-                }
-
+            if(!validateArguments(parser, args)) {
                 return;
             }
 
@@ -137,8 +142,8 @@ public class Project1 {
             }
         }
         catch(Exception e) {
-            System.out.print(parser.getUsageInformation());
             System.err.println(e.getMessage());
+            System.out.println("To view usage information, run with -help.");
         }
     }
 }
