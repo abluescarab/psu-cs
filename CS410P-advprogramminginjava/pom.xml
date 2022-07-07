@@ -65,8 +65,27 @@ accordingly
       </snapshots>
     </repository>
   </repositories>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-site-plugin</artifactId>
+        <configuration>
+          <topSiteURL>scm:git:ssh://git@github.com/abluescarab/psu-cs.git</topSiteURL>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-scm-publish-plugin</artifactId>
+        <version>3.1.0</version>
+        <configuration>
+          <scmBranch>gh-pages</scmBranch>
+          <tryUpdate>true</tryUpdate>
+          <addUniqueDirectory>true</addUniqueDirectory>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
   <scm>
-    <connection>scm:git:http://abluescarab/PortlandStateJavaSummer2022.git</connection>
+    <connection>scm:git:git@github.com:abluescarab/psu-cs.git</connection>
   </scm>
   <distributionManagement>
     <snapshotRepository>
@@ -76,7 +95,7 @@ accordingly
     <site>
       <id>gh-pages</id>
       <name>GitHub Pages</name>
-      <url>scm:git:http://abluescarab/PortlandStateJavaSummer2022.git</url>
+      <url>scm:git:ssh://git@github.com/abluescarab/psu-cs.git</url>
     </site>
   </distributionManagement>
 </project>
