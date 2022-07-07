@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * The main class for the CS410J Phone Bill Project
  */
-public class Project1 {
+public class Project2 {
     /**
      * Checks if a string is a valid phone number.
      *
@@ -59,7 +59,7 @@ public class Project1 {
         }
 
         if(parser.hasArgument("-README")) {
-            try(InputStream readmeFile = Project1.class.getResourceAsStream("README.txt")) {
+            try(InputStream readmeFile = Project2.class.getResourceAsStream("README.txt")) {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(readmeFile));
                 StringBuilder readme = new StringBuilder();
                 String line;
