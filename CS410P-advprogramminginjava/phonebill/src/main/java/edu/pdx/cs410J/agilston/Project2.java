@@ -1,13 +1,12 @@
 package edu.pdx.cs410J.agilston;
 
 import com.google.common.annotations.VisibleForTesting;
+import edu.pdx.cs410J.ParserException;
 import edu.pdx.cs410J.agilston.commandline.CommandLineParser;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * The main class for the CS410J Phone Bill Project
@@ -107,6 +106,11 @@ public class Project2 {
 
     public static void main(String[] args) {
         CommandLineParser parser = new CommandLineParser("phonebill-2022.0.0.jar");
+        String filename;
+        PhoneBill bill = null;
+        PhoneCall call;
+        TextParser textParser;
+        TextDumper textDumper;
 
         try {
             parser.setMaxLineLength(80);
@@ -117,6 +121,7 @@ public class Project2 {
             parser.addFlag("-print", "Prints a description of the new phone call", false, "-p");
             parser.addFlag("-README", "Prints a README for this project and exits", false, "-r");
             parser.addFlag("-help", "Prints usage information", false, "-h");
+            parser.addFlag("-textFile", "Where to read/write the phone bill", true, "-t");
             parser.addArgument("customer", "Person whose phone bill we're modeling");
             parser.addArgument("caller_number", "Phone number of caller");
             parser.addArgument("callee_number", "Phone number of person who was called");
@@ -129,13 +134,36 @@ public class Project2 {
                 return;
             }
 
-            PhoneCall call = new PhoneCall(
+            if(!Objects.equals(filename = parser.getValueOrDefault("-textFile"), "")) {
+                try {
+                    textParser = new TextParser(new FileReader(filename));
+                    bill = textParser.parse();
+                }
+                catch(FileNotFoundException | ParserException ignored) {
+                }
+            }
+
+            if(bill == null) {
+                bill = new PhoneBill(parser.getValueOrDefault("customer"));
+            }
+
+            call = new PhoneCall(
                     parser.getValueOrDefault("caller_number"),
                     parser.getValueOrDefault("callee_number"),
                     parser.getValueOrDefault("begin_date") + " " + parser.getValueOrDefault("begin_time"),
                     parser.getValueOrDefault("end_date") + " " + parser.getValueOrDefault("end_time"));
-            PhoneBill bill = new PhoneBill(parser.getValueOrDefault("customer"));
+
             bill.addPhoneCall(call);
+
+            if(!Objects.equals(filename, "")) {
+                try {
+                    textDumper = new TextDumper(new FileWriter(filename));
+                    textDumper.dump(bill);
+                }
+                catch(IOException e) {
+                    throw new IOException("Could not save file: invalid file name");
+                }
+            }
 
             if(parser.hasArgument("-print")) {
                 System.out.println(call);
