@@ -1,6 +1,5 @@
 package edu.pdx.cs410J.agilston.commandline;
 
-import edu.pdx.cs410J.agilston.commandline.CommandLineParser;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
