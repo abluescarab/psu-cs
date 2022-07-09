@@ -212,6 +212,15 @@ public class CommandLineParserTest {
     }
 
     @Test
+    void addInvalidFlagArgumentWithChoices() {
+        CommandLineParser parser = createParser();
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
+                () -> parser.addFlag("test", "test argument", "", new String[0]));
+
+        assertThat(e.getMessage(), equalTo("Invalid argument: Flag name must start with \"-\""));
+    }
+
+    @Test
     void formatStringWithEmptyTextReturnsEmptyString() {
         assertThat(CommandLineParser.formatString("", 80), equalTo(""));
     }
@@ -249,5 +258,11 @@ public class CommandLineParserTest {
 
         parser.setEpilogue(epilogue);
         assertThat(parser.getUsageInformation(), containsString(epilogue));
+    }
+
+    @Test
+    void gettingValueOfNonexistentArgumentReturnsEmptyString() {
+        CommandLineParser parser = createParser();
+        assertThat(parser.getValueOrDefault("--myarg"), equalTo(""));
     }
 }

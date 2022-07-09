@@ -2,15 +2,20 @@ package edu.pdx.cs410J.agilston;
 
 import edu.pdx.cs410J.InvokeMainTestCase;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.not;
 
 /**
  * Tests the functionality in the {@link Project2} main class.
  */
 class Project2IT extends InvokeMainTestCase {
-
     /**
      * Invokes the main method of {@link Project2} with the given arguments.
      */
@@ -129,5 +134,68 @@ class Project2IT extends InvokeMainTestCase {
         assertThat(result.getTextWrittenToStandardOut(),
                 containsString("Phone call from 555-555-5555 to 888-888-8888 from 01/01/2022 00:00 to " +
                         "01/01/2022 01:00"));
+    }
+
+    @Test
+    void testFileWithMatchingCustomerNameParses(@TempDir File tempDir) throws IOException {
+        String customer = "Name";
+        String fileName = "bill.txt";
+        PhoneBill bill = new PhoneBill(customer);
+        File file = new File(tempDir, fileName);
+        TextDumper textDumper = new TextDumper(new FileWriter(file));
+
+        textDumper.dump(bill);
+
+        MainMethodResult result = invokeMain(
+                customer,
+                "555-555-5555",
+                "888-888-8888",
+                "01/01/2022",
+                "00:00",
+                "01/01/2022",
+                "01:00",
+                "-textFile",
+                file.getCanonicalPath());
+
+        assertThat(result.getTextWrittenToStandardError(), not(containsString("Invalid file")));
+    }
+
+    @Test
+    void testFileNotCreatedWithInvalidName() {
+        MainMethodResult result = invokeMain(
+                "Name",
+                "555-555-5555",
+                "888-888-8888",
+                "01/01/2022",
+                "00:00",
+                "01/01/2022",
+                "01:00",
+                "-textFile",
+                "bill?.txt");
+
+        assertThat(result.getTextWrittenToStandardError(), containsString("Invalid file"));
+    }
+
+    @Test
+    void testFileWithoutMatchingCustomerNameFails(@TempDir File tempDir) throws IOException {
+        String fileName = "bill.txt";
+        PhoneBill bill = new PhoneBill("Customer Name");
+        File file = new File(tempDir, fileName);
+        TextDumper textDumper = new TextDumper(new FileWriter(file));
+
+        textDumper.dump(bill);
+
+        MainMethodResult result = invokeMain(
+                "Name",
+                "555-555-5555",
+                "888-888-8888",
+                "01/01/2022",
+                "00:00",
+                "01/01/2022",
+                "01:00",
+                "-textFile",
+                file.getCanonicalPath());
+
+        assertThat(result.getTextWrittenToStandardError(), containsString("Invalid file"));
     }
 }
