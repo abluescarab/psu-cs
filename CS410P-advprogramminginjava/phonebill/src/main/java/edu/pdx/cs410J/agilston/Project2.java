@@ -142,7 +142,7 @@ public class Project2 {
                     bill = textParser.parse();
 
                     if(!Objects.equals(customer, bill.getCustomer())) {
-                        throw new IllegalArgumentException("Customer name from file does not match customer argument");
+                        throw new IllegalArgumentException("Invalid file: Customer names do not match");
                     }
                 }
                 catch(FileNotFoundException ignored) {
@@ -167,7 +167,7 @@ public class Project2 {
                     textDumper.dump(bill);
                 }
                 catch(IOException e) {
-                    throw new IOException("Could not save file: invalid file name");
+                    throw new IOException(String.format("Invalid file name: %s", filename));
                 }
             }
 
