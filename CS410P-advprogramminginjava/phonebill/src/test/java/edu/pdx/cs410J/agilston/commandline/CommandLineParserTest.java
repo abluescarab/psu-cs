@@ -1,4 +1,4 @@
-package edu.pdx.cs410J.agilston;
+package edu.pdx.cs410J.agilston.commandline;
 
 import edu.pdx.cs410J.agilston.commandline.CommandLineParser;
 import org.junit.jupiter.api.Test;
