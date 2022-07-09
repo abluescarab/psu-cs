@@ -1,7 +1,6 @@
 package edu.pdx.cs410J.agilston;
 
 import com.google.common.annotations.VisibleForTesting;
-import edu.pdx.cs410J.ParserException;
 import edu.pdx.cs410J.agilston.commandline.CommandLineParser;
 
 import java.io.*;
