@@ -111,6 +111,7 @@ public class Project2 {
         PhoneCall call;
         TextParser textParser;
         TextDumper textDumper;
+        String customer;
 
         try {
             parser.setMaxLineLength(80);
@@ -134,18 +135,24 @@ public class Project2 {
                 return;
             }
 
+            customer = parser.getValueOrDefault("customer");
+
             // TODO: throw error if customer in text file does not match given
             if(!Objects.equals(filename = parser.getValueOrDefault("-textFile"), "")) {
                 try {
                     textParser = new TextParser(new FileReader(filename));
                     bill = textParser.parse();
+
+                    if(!Objects.equals(customer, bill.getCustomer())) {
+                        throw new IllegalArgumentException("Customer name from file does not match customer argument");
+                    }
                 }
-                catch(FileNotFoundException | ParserException ignored) {
+                catch(FileNotFoundException ignored) {
                 }
             }
 
             if(bill == null) {
-                bill = new PhoneBill(parser.getValueOrDefault("customer"));
+                bill = new PhoneBill(customer);
             }
 
             call = new PhoneCall(
