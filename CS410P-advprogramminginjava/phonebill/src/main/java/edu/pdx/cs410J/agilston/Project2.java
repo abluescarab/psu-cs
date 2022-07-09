@@ -137,7 +137,6 @@ public class Project2 {
 
             customer = parser.getValueOrDefault("customer");
 
-            // TODO: throw error if customer in text file does not match given
             if(!Objects.equals(filename = parser.getValueOrDefault("-textFile"), "")) {
                 try {
                     textParser = new TextParser(new FileReader(filename));
