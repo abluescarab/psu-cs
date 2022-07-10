@@ -171,7 +171,7 @@ class Project2IT extends InvokeMainTestCase {
                 "01/01/2022",
                 "01:00",
                 "-textFile",
-                "bill?.txt");
+                "bill/.txt");
 
         assertThat(result.getTextWrittenToStandardError(), containsString("Invalid file"));
     }
