@@ -15,6 +15,10 @@ public class TextDumper implements PhoneBillDumper<PhoneBill> {
         this.writer = writer;
     }
 
+    /**
+     * Dumps a phone bill to a specified writer.
+     * @param bill bill to dump
+     */
     @Override
     public void dump(PhoneBill bill) {
         try(PrintWriter pw = new PrintWriter(this.writer)) {

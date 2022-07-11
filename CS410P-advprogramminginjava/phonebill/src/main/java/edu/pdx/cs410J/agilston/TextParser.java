@@ -17,6 +17,11 @@ public class TextParser implements PhoneBillParser<PhoneBill> {
         this.reader = reader;
     }
 
+    /**
+     * Parses a phone bill from a specified reader.
+     * @return parsed phone bill
+     * @throws ParserException if customer is missing from file
+     */
     @Override
     public PhoneBill parse() throws ParserException {
         try(BufferedReader br = new BufferedReader(this.reader)) {
