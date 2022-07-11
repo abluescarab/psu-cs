@@ -7,6 +7,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 
+/**
+ * A class that parses a phone bill from a reader.
+ */
 public class TextParser implements PhoneBillParser<PhoneBill> {
     private final Reader reader;
 

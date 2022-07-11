@@ -5,6 +5,9 @@ import edu.pdx.cs410J.PhoneBillDumper;
 import java.io.PrintWriter;
 import java.io.Writer;
 
+/**
+ * A class that dumps a phone bill to a writer.
+ */
 public class TextDumper implements PhoneBillDumper<PhoneBill> {
     private final Writer writer;
 
