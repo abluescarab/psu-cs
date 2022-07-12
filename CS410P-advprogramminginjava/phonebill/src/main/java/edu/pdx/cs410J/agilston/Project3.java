@@ -172,8 +172,12 @@ public class Project3 {
             if(!Objects.equals(filename, "")) {
                 try {
                     File file = new File(filename);
+                    File parent;
 
-                    file.getParentFile().mkdirs();
+                    if((parent = file.getParentFile()) != null) {
+                        parent.mkdirs();
+                    }
+
                     textDumper = new TextDumper(new FileWriter(file));
                     textDumper.dump(bill);
                 }
