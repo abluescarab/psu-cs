@@ -163,7 +163,10 @@ public class Project2 {
 
             if(!Objects.equals(filename, "")) {
                 try {
-                    textDumper = new TextDumper(new FileWriter(filename));
+                    File file = new File(filename);
+
+                    file.getParentFile().mkdirs();
+                    textDumper = new TextDumper(new FileWriter(file));
                     textDumper.dump(bill);
                 }
                 catch(IOException e) {

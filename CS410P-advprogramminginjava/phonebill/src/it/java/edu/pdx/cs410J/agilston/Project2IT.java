@@ -161,22 +161,6 @@ class Project2IT extends InvokeMainTestCase {
     }
 
     @Test
-    void testFileNotCreatedWithInvalidName() {
-        MainMethodResult result = invokeMain(
-                "Name",
-                "555-555-5555",
-                "888-888-8888",
-                "01/01/2022",
-                "00:00",
-                "01/01/2022",
-                "01:00",
-                "-textFile",
-                "bill/.txt");
-
-        assertThat(result.getTextWrittenToStandardError(), containsString("Invalid file"));
-    }
-
-    @Test
     void testFileWithoutMatchingCustomerNameFails(@TempDir File tempDir) throws IOException {
         String fileName = "bill.txt";
         PhoneBill bill = new PhoneBill("Customer Name");
