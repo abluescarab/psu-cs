@@ -29,7 +29,7 @@ public class Project3 {
      * @return <code>true</code> if valid date time; <code>false</code> if not
      */
     static boolean isValidDateTime(String dateTime) {
-        return dateTime.matches("(?:\\d{1,2}/){2}\\d{4} \\d{1,2}:\\d{1,2}");
+        return dateTime.matches(PhoneCall.DATE_TIME_REGEX);
     }
 
     /**
@@ -88,16 +88,20 @@ public class Project3 {
             throw new IllegalArgumentException("Invalid argument: Callee number must be in format ###-###-####");
         }
 
-        if(!isValidDateTime(String.format("%s %s", parser.getValueOrDefault("begin_date"),
-                parser.getValueOrDefault("begin_time")))) {
-            throw new IllegalArgumentException("Invalid argument: Begin time must be in format mm/dd/yyyy hh:mm or "
-                    + "m/d/yyyy h:mm");
+        if(!isValidDateTime(String.format("%s %s %s",
+                parser.getValueOrDefault("begin_date", 0),
+                parser.getValueOrDefault("begin_date", 1),
+                parser.getValueOrDefault("begin_date", 2)))) {
+            throw new IllegalArgumentException("Invalid argument: Begin time must be in format mm/dd/yyyy hh:mm am/pm or "
+                    + "m/d/yyyy h:mm AM/PM");
         }
 
-        if(!isValidDateTime(String.format("%s %s", parser.getValueOrDefault("end_date"),
-                parser.getValueOrDefault("end_time")))) {
-            throw new IllegalArgumentException("Invalid argument: End time must be in format mm/dd/yyyy hh:mm or "
-                    + "m/d/yyyy h:mm");
+        if(!isValidDateTime(String.format("%s %s %s",
+                parser.getValueOrDefault("end_date", 0),
+                parser.getValueOrDefault("end_date", 1),
+                parser.getValueOrDefault("end_date", 2)))) {
+            throw new IllegalArgumentException("Invalid argument: End time must be in format mm/dd/yyyy hh:mm am/pm or "
+                    + "m/d/yyyy h:mm AM/PM");
         }
 
         return true;
@@ -115,20 +119,18 @@ public class Project3 {
         try {
             parser.setMaxLineLength(80);
             parser.setPrologue("This program creates a phone bill for a customer.");
-            parser.setEpilogue("Date and time must be in m/d/yyyy h:mm format. Month, day, and hour may " +
+            parser.setEpilogue("Date and time must be in m/d/yyyy h:mm am/pm format. Month, day, and hour may " +
                     "be one digit or two. Year must always be four digits.");
 
-            parser.addFlag("-print", "Prints a description of the new phone call", false, "-p");
-            parser.addFlag("-README", "Prints a README for this project and exits", false, "-r");
-            parser.addFlag("-help", "Prints usage information", false, 2, "-h");
-            parser.addFlag("-textFile", "Where to read/write the phone bill", true, "-t");
+            parser.addFlag("-print", "Prints a description of the new phone call", "-p");
+            parser.addFlag("-README", "Prints a README for this project and exits", "-r");
+            parser.addFlag("-help", "Prints usage information", "-h");
+            parser.addFlag("-textFile", "Where to read/write the phone bill", 1, "-t");
             parser.addArgument("customer", "Person whose phone bill we're modeling");
             parser.addArgument("caller_number", "Phone number of caller");
             parser.addArgument("callee_number", "Phone number of person who was called");
-            parser.addArgument("begin_date", "Date call began (mm/dd/yyy)", 3);
-//            parser.addArgument("begin_time", "Time call began (24-hour time)", 3);
-            parser.addArgument("end_date", "Date call ended (mm/dd/yyy)", 3);
-//            parser.addArgument("end_time", "Time call ended (24-hour time)");
+            parser.addArgument("begin_date", "Date call began (mm/dd/yyyy hh:mm am/pm)", 3);
+            parser.addArgument("end_date", "Date call ended (mm/dd/yyyy hh:mm am/pm)", 3);
 
             if(!validateArguments(parser, args)) {
                 return;
@@ -156,8 +158,14 @@ public class Project3 {
             call = new PhoneCall(
                     parser.getValueOrDefault("caller_number"),
                     parser.getValueOrDefault("callee_number"),
-                    parser.getValueOrDefault("begin_date") + " " + parser.getValueOrDefault("begin_time"),
-                    parser.getValueOrDefault("end_date") + " " + parser.getValueOrDefault("end_time"));
+                    String.format("%s %s %s",
+                            parser.getValueOrDefault("begin_date", 0),
+                            parser.getValueOrDefault("begin_date", 1),
+                            parser.getValueOrDefault("begin_date", 2)),
+                    String.format("%s %s %s",
+                            parser.getValueOrDefault("end_date", 0),
+                            parser.getValueOrDefault("end_date", 1),
+                            parser.getValueOrDefault("end_date", 2)));
 
             bill.addPhoneCall(call);
 

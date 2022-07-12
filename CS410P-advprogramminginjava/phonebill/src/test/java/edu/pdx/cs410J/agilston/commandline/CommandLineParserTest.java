@@ -17,8 +17,8 @@ public class CommandLineParserTest {
         parser.addArgument("positional2", "Positional argument 2", "2");
         parser.addArgument("positional3", "Positional argument 3", "3",
                 new String[] { "1", "2", "3" });
-        parser.addFlag("--test1", "Test flag without option", false, "-t");
-        parser.addFlag("--test2", "Test flag with option", true, "-e");
+        parser.addFlag("--test1", "Test flag without option", "-t");
+        parser.addFlag("--test2", "Test flag with option", 1, "-e");
         parser.addFlag("--test3", "Test flag with choices", "a", new String[] { "a", "b", "c" }, "-s");
         return parser;
     }
@@ -160,7 +160,6 @@ public class CommandLineParserTest {
         assertThat(parser.getValueOrDefault("positional2"), equalTo("b"));
         assertThat(parser.getValueOrDefault("positional3"), equalTo("3"));
         assertThat(parser.hasArgument("--test1"), equalTo(true));
-        assertThat(parser.getValueOrDefault("--test1"), equalTo(""));
         assertThat(parser.getValueOrDefault("--test2"), equalTo("test"));
         assertThat(parser.getValueOrDefault("--test3"), equalTo("a"));
     }
@@ -205,7 +204,7 @@ public class CommandLineParserTest {
     void addInvalidFlagArgument() {
         CommandLineParser parser = createParser();
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
-                () -> parser.addFlag("test", "Test argument", false));
+                () -> parser.addFlag("test", "Test argument"));
 
         assertThat(e.getMessage(), equalTo("Invalid argument: Flag name must start with \"-\""));
     }
@@ -269,7 +268,7 @@ public class CommandLineParserTest {
     void longNameInFormattedHelpStringWraps() {
         CommandLineParser parser = createParser();
         CommandLineArgument arg = new CommandLineArgument("--myveryveryveryveryverylongargument",
-                "this is a very long argument", false, "", new String[0], 1);
+                "this is a very long argument", "", new String[0], 0);
 
         parser.flags.put(arg.getName(), arg);
         assertThat(arg.getFormattedHelp(parser.maxLineLength, parser.indentSize),

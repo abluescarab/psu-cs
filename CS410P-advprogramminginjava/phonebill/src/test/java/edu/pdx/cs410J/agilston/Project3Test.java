@@ -30,22 +30,22 @@ class Project3Test {
 
     @Test
     void validDateTimeFormatReturnsTrue() {
-        assertThat(Project3.isValidDateTime("01/01/2022 00:00"), equalTo(true));
-        assertThat(Project3.isValidDateTime("1/01/2022 00:00"), equalTo(true));
-        assertThat(Project3.isValidDateTime("01/1/2022 00:00"), equalTo(true));
-        assertThat(Project3.isValidDateTime("01/01/2022 0:00"), equalTo(true));
-        assertThat(Project3.isValidDateTime("1/1/2022 00:00"), equalTo(true));
-        assertThat(Project3.isValidDateTime("1/01/2022 0:00"), equalTo(true));
-        assertThat(Project3.isValidDateTime("1/1/2022 0:00"), equalTo(true));
-        assertThat(Project3.isValidDateTime("13/01/2022 01:00"), equalTo(true));
-        assertThat(Project3.isValidDateTime("01/32/2022 01:00"), equalTo(true));
-        assertThat(Project3.isValidDateTime("01/01/2022 25:00"), equalTo(true));
-        assertThat(Project3.isValidDateTime("01/01/2022 01:60"), equalTo(true));
+        assertThat(Project3.isValidDateTime("01/01/2022 12:00 am"), equalTo(true));
+        assertThat(Project3.isValidDateTime("1/01/2022 12:00 am"), equalTo(true));
+        assertThat(Project3.isValidDateTime("01/1/2022 12:00 am"), equalTo(true));
+        assertThat(Project3.isValidDateTime("01/01/2022 1:00 am"), equalTo(true));
+        assertThat(Project3.isValidDateTime("1/1/2022 12:00 am"), equalTo(true));
+        assertThat(Project3.isValidDateTime("1/01/2022 1:00 am"), equalTo(true));
+        assertThat(Project3.isValidDateTime("1/1/2022 1:00 am"), equalTo(true));
+        assertThat(Project3.isValidDateTime("13/01/2022 01:00 am"), equalTo(true));
+        assertThat(Project3.isValidDateTime("01/32/2022 01:00 am"), equalTo(true));
+        assertThat(Project3.isValidDateTime("01/01/2022 25:00 am"), equalTo(true));
+        assertThat(Project3.isValidDateTime("01/01/2022 01:60 am"), equalTo(true));
     }
 
     @Test
     void invalidDateTimeFormatReturnsFalse() {
-        assertThat(Project3.isValidDateTime("01/01/22 01:00"), equalTo(false));
+        assertThat(Project3.isValidDateTime("01/01/22 01:00 am"), equalTo(false));
         assertThat(Project3.isValidDateTime("AA/BB/CCCC DD:EE"), equalTo(false));
     }
 

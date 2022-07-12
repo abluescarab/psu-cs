@@ -110,18 +110,18 @@ public class CommandLineParser {
      * @param help help text displayed with usage information
      */
     public void addArgument(String name, String help) {
-        addArgument(name, help, false, "", null, 1);
+        addArgument(name, help, "", null, 1);
     }
 
     /**
      * Adds a positional argument to the command line.
      *
-     * @param name             name to type
-     * @param help             help text displayed with usage information
-     * @param argumentListSize number of sub arguments accepted
+     * @param name         name to type
+     * @param help         help text displayed with usage information
+     * @param argumentList number of sub arguments accepted
      */
-    public void addArgument(String name, String help, int argumentListSize) {
-        addArgument(name, help, false, "", null, argumentListSize);
+    public void addArgument(String name, String help, int argumentList) {
+        addArgument(name, help, "", null, argumentList);
     }
 
     /**
@@ -132,19 +132,19 @@ public class CommandLineParser {
      * @param defaultValue default value of the argument
      */
     public void addArgument(String name, String help, String defaultValue) {
-        addArgument(name, help, false, defaultValue, null, 1);
+        addArgument(name, help, defaultValue, null, 1);
     }
 
     /**
      * Adds an optional positional argument to the command line.
      *
-     * @param name             name to type
-     * @param help             help text displayed with usage information
-     * @param defaultValue     default value of the argument
-     * @param argumentListSize number of sub arguments accepted
+     * @param name         name to type
+     * @param help         help text displayed with usage information
+     * @param defaultValue default value of the argument
+     * @param argumentList number of sub arguments accepted
      */
-    public void addArgument(String name, String help, String defaultValue, int argumentListSize) {
-        addArgument(name, help, false, defaultValue, null, argumentListSize);
+    public void addArgument(String name, String help, String defaultValue, int argumentList) {
+        addArgument(name, help, defaultValue, null, argumentList);
     }
 
     /**
@@ -156,40 +156,38 @@ public class CommandLineParser {
      * @param choices      possible values
      */
     public void addArgument(String name, String help, String defaultValue, String[] choices) {
-        addArgument(name, help, false, defaultValue, choices, 1);
+        addArgument(name, help, defaultValue, choices, 1);
     }
 
     /**
      * Adds a flag (-f, --flag) to the command line.
      *
-     * @param name          name to type
-     * @param help          help text displayed with usage information
-     * @param acceptsOption whether the command accepts an option (-f=opt, -f opt)
-     * @param aliases       alternative names to type
+     * @param name    name to type
+     * @param help    help text displayed with usage information
+     * @param aliases alternative names to type
      */
-    public void addFlag(String name, String help, boolean acceptsOption, String... aliases) {
+    public void addFlag(String name, String help, String... aliases) {
         if(!name.startsWith("-")) {
             throw new IllegalArgumentException("Invalid argument: Flag name must start with \"-\"");
         }
 
-        addArgument(name, help, acceptsOption, "", null, acceptsOption ? 1 : 0, aliases);
+        addArgument(name, help, "", null, 0, aliases);
     }
 
     /**
      * Adds a flag (-f, --flag) to the command line.
      *
-     * @param name             name to type
-     * @param help             help text displayed with usage information
-     * @param acceptsOption    whether the command accepts an option (-f=opt, -f opt)
-     * @param argumentListSize number of sub arguments accepted
-     * @param aliases          alternative names to type
+     * @param name         name to type
+     * @param help         help text displayed with usage information
+     * @param argumentList number of sub arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
+     * @param aliases      alternative names to type
      */
-    public void addFlag(String name, String help, boolean acceptsOption, int argumentListSize, String... aliases) {
+    public void addFlag(String name, String help, int argumentList, String... aliases) {
         if(!name.startsWith("-")) {
             throw new IllegalArgumentException("Invalid argument: Flag name must start with \"-\"");
         }
 
-        addArgument(name, help, acceptsOption, "", null, argumentListSize, aliases);
+        addArgument(name, help, "", null, argumentList, aliases);
     }
 
     /**
@@ -206,25 +204,29 @@ public class CommandLineParser {
             throw new IllegalArgumentException("Invalid argument: Flag name must start with \"-\"");
         }
 
-        addArgument(name, help, true, defaultValue, choices, 0, aliases);
+        addArgument(name, help, defaultValue, choices, 1, aliases);
     }
 
     /**
      * Add an argument to the command line interface.
      *
-     * @param name             name to type
-     * @param help             help text displayed with usage information
-     * @param acceptsOption    whether the argument accepts an option (-f=opt, --flag=opt)
-     * @param defaultValue     default value of the command
-     * @param choices          possible values
-     * @param argumentListSize number of sub arguments accepted
-     * @param aliases          alternative names to type
+     * @param name         name to type
+     * @param help         help text displayed with usage information
+     * @param defaultValue default value of the command
+     * @param choices      possible values
+     * @param argumentList number of sub arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
+     * @param aliases      alternative names to type
      */
-    private void addArgument(String name, String help, boolean acceptsOption, String defaultValue, String[] choices,
-                             int argumentListSize, String... aliases) {
+    private void addArgument(String name, String help, String defaultValue, String[] choices, int argumentList,
+                             String... aliases) {
         Map<String, CommandLineArgument> map = name.startsWith("-") ? flags : positionalArguments;
-        map.put(name, new CommandLineArgument(name, help, acceptsOption, defaultValue, choices, argumentListSize,
-                aliases));
+        CommandLineArgument arg = new CommandLineArgument(name, help, defaultValue, choices, argumentList, aliases);
+
+        map.put(name, arg);
+
+        for(var alias : arg.getAliases()) {
+            map.put(alias, arg);
+        }
     }
 
     /**
@@ -239,11 +241,8 @@ public class CommandLineParser {
         }
 
         if(name.startsWith("-")) {
-            for(var arg : flags.values()) {
-                if(arg.getAliases().contains(name) && givenArguments.contains(arg.getName())) {
-                    return true;
-                }
-            }
+            // check if we are searching for the full name but the given arg was an alias
+            return flags.containsKey(name) && givenArguments.contains(flags.get(name).getName());
         }
 
         return false;
@@ -255,16 +254,8 @@ public class CommandLineParser {
      * @param name name of argument to get
      */
     private CommandLineArgument getArgument(String name) {
-        if(name.startsWith("-")) {
-            if(flags.containsKey(name)) {
-                return flags.get(name);
-            }
-
-            for(var arg : flags.values()) {
-                if(arg.getAliases().contains(name)) {
-                    return arg;
-                }
-            }
+        if(name.startsWith("-") && flags.containsKey(name)) {
+            return flags.get(name);
         }
 
         return positionalArguments.get(name);
@@ -420,7 +411,7 @@ public class CommandLineParser {
 
                 givenArguments.add(posArg.getName());
 
-                while(subarg < posArg.getArgumentListSize()) {
+                while(subarg < posArg.getArgumentList()) {
                     posArg.setValue(subarg++, args[index++]);
                 }
 
@@ -446,10 +437,13 @@ public class CommandLineParser {
             throw new IllegalArgumentException(String.format("Invalid argument: %s", name));
         }
 
-        if(arg.acceptsOption()) {
+        int argumentList = arg.getArgumentList();
+        int subarg = 0;
+
+        if(argumentList > 0) {
             if(option == null) {
-                if(index + 1 < args.length) {
-                    arg.setValue(args[++index]);
+                while(subarg < argumentList && (index + 1 < args.length)) {
+                    arg.setValue(subarg++, args[++index]);
                 }
             }
             else {

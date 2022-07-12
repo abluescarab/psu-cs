@@ -12,6 +12,8 @@ import java.util.regex.Pattern;
  * A class used to store a phone call with the caller's and receiver's numbers and call length.
  */
 public class PhoneCall extends AbstractPhoneCall {
+    public static final String DATE_TIME_REGEX = "(\\d{1,2})/(\\d{1,2})/(\\d{4}) (\\d{1,2}):(\\d{1,2}) ([APap][Mm])";
+
     protected final String caller;
     protected final String callee;
     protected final LocalDateTime beginTime;
@@ -27,7 +29,7 @@ public class PhoneCall extends AbstractPhoneCall {
      * @param endTime      date and time the call ended (mm/dd/yyyy hh:mm)
      */
     public PhoneCall(String callerNumber, String calleeNumber, String beginTime, String endTime) {
-        this.formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm");
+        this.formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a");
         this.caller = callerNumber;
         this.callee = calleeNumber;
         this.beginTime = formatDateTime(beginTime);
@@ -41,7 +43,7 @@ public class PhoneCall extends AbstractPhoneCall {
      * @return parsed date time string as {@link LocalDateTime}
      */
     private LocalDateTime formatDateTime(String dateTime) {
-        Pattern pattern = Pattern.compile("(\\d{1,2})/(\\d{1,2})/(\\d{4}) (\\d{1,2}):(\\d{1,2})");
+        Pattern pattern = Pattern.compile(DATE_TIME_REGEX);
         Matcher matcher = pattern.matcher(dateTime);
 
         if(matcher.matches()) {
@@ -50,6 +52,7 @@ public class PhoneCall extends AbstractPhoneCall {
             String year = matcher.group(3);
             String hour = matcher.group(4);
             String minute = matcher.group(5);
+            String ampm = matcher.group(6).toUpperCase();
 
             if(month.length() == 1)
                 month = "0" + month;
@@ -60,15 +63,15 @@ public class PhoneCall extends AbstractPhoneCall {
             if(hour.length() == 1)
                 hour = "0" + hour;
 
-            dateTime = String.format("%s/%s/%s %s:%s", month, day, year, hour, minute);
+            dateTime = String.format("%s/%s/%s %s:%s %s", month, day, year, hour, minute, ampm);
         }
 
         try {
             return LocalDateTime.parse(dateTime, formatter);
         }
         catch(DateTimeParseException e) {
-            throw new IllegalArgumentException(String.format("Invalid argument: %s must be in format mm/dd/yyyy hh:mm or "
-                    + "m/d/yyyy h:mm", dateTime));
+            throw new IllegalArgumentException(String.format("Invalid argument: %s must be in format mm/dd/yyyy hh:mm "
+                    + "am/pm or m/d/yyyy h:mm AM/PM", dateTime));
         }
     }
 
@@ -93,7 +96,7 @@ public class PhoneCall extends AbstractPhoneCall {
      */
     @Override
     public String getBeginTimeString() {
-        return formatter.format(beginTime);
+        return formatter.format(beginTime).replace("AM", "am").replace("PM", "pm");
     }
 
     /**
@@ -101,6 +104,6 @@ public class PhoneCall extends AbstractPhoneCall {
      */
     @Override
     public String getEndTimeString() {
-        return formatter.format(endTime);
+        return formatter.format(endTime).replace("AM", "am").replace("PM", "pm");
     }
 }

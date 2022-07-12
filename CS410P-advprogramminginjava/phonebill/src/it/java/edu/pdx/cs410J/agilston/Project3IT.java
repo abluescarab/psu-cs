@@ -39,9 +39,11 @@ class Project3IT extends InvokeMainTestCase {
                 "(555) 555-5555",
                 "888-888-8888",
                 "01/01/2022",
-                "00:00",
+                "12:00",
+                "am",
                 "01/01/2022",
-                "01:00");
+                "01:00",
+                "am");
         assertThat(result.getTextWrittenToStandardError(),
                 containsString("Invalid argument: Caller number must be in format ###-###-####"));
     }
@@ -53,9 +55,11 @@ class Project3IT extends InvokeMainTestCase {
                 "555-555-5555",
                 "(888) 888-8888",
                 "01/01/2022",
-                "00:00",
+                "12:00",
+                "am",
                 "01/01/2022",
-                "01:00");
+                "01:00",
+                "am");
         assertThat(result.getTextWrittenToStandardError(),
                 containsString("Invalid argument: Callee number must be in format ###-###-####"));
     }
@@ -67,12 +71,14 @@ class Project3IT extends InvokeMainTestCase {
                 "555-555-5555",
                 "888-888-8888",
                 "01/01/22",
-                "00:00",
+                "12:00",
+                "am",
                 "01/01/2022",
-                "01:00");
+                "01:00",
+                "am");
         assertThat(result.getTextWrittenToStandardError(),
-                containsString("Invalid argument: Begin time must be in format mm/dd/yyyy hh:mm or "
-                        + "m/d/yyyy h:mm"));
+                containsString("Invalid argument: Begin time must be in format mm/dd/yyyy hh:mm am/pm or "
+                        + "m/d/yyyy h:mm AM/PM"));
     }
 
     @Test
@@ -82,12 +88,14 @@ class Project3IT extends InvokeMainTestCase {
                 "555-555-5555",
                 "888-888-8888",
                 "01/01/2022",
-                "00:00",
+                "12:00",
+                "am",
                 "01/01/22",
-                "01:00");
+                "01:00",
+                "am");
         assertThat(result.getTextWrittenToStandardError(),
-                containsString("Invalid argument: End time must be in format mm/dd/yyyy hh:mm or "
-                        + "m/d/yyyy h:mm"));
+                containsString("Invalid argument: End time must be in format mm/dd/yyyy hh:mm am/pm or "
+                        + "m/d/yyyy h:mm AM/PM"));
     }
 
     @Test
@@ -97,9 +105,11 @@ class Project3IT extends InvokeMainTestCase {
                 "555-555-5555",
                 "888-888-8888",
                 "01/01/2022",
-                "00:00",
+                "12:00",
+                "am",
                 "01/01/2022",
                 "01:00",
+                "am",
                 "-help");
         assertThat(result.getTextWrittenToStandardOut(),
                 containsString("usage: phonebill-2022.0.0.jar"));
@@ -112,9 +122,11 @@ class Project3IT extends InvokeMainTestCase {
                 "555-555-5555",
                 "888-888-8888",
                 "01/01/2022",
-                "00:00",
+                "12:00",
+                "am",
                 "01/01/2022",
                 "01:00",
+                "am",
                 "-README");
         assertThat(result.getTextWrittenToStandardOut(),
                 containsString("Class:   CS410P - Advanced Programming in Java"));
@@ -127,13 +139,15 @@ class Project3IT extends InvokeMainTestCase {
                 "555-555-5555",
                 "888-888-8888",
                 "01/01/2022",
-                "00:00",
+                "12:00",
+                "am",
                 "01/01/2022",
                 "01:00",
+                "am",
                 "-print");
         assertThat(result.getTextWrittenToStandardOut(),
-                containsString("Phone call from 555-555-5555 to 888-888-8888 from 01/01/2022 00:00 to " +
-                        "01/01/2022 01:00"));
+                containsString("Phone call from 555-555-5555 to 888-888-8888 from 01/01/2022 12:00 am to " +
+                        "01/01/2022 01:00 am"));
     }
 
     @Test
@@ -151,9 +165,11 @@ class Project3IT extends InvokeMainTestCase {
                 "555-555-5555",
                 "888-888-8888",
                 "01/01/2022",
-                "00:00",
+                "12:00",
+                "am",
                 "01/01/2022",
                 "01:00",
+                "am",
                 "-textFile",
                 file.getCanonicalPath());
 
@@ -174,9 +190,11 @@ class Project3IT extends InvokeMainTestCase {
                 "555-555-5555",
                 "888-888-8888",
                 "01/01/2022",
-                "00:00",
+                "12:00",
+                "am",
                 "01/01/2022",
                 "01:00",
+                "am",
                 "-textFile",
                 file.getCanonicalPath());
 

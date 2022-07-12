@@ -13,23 +13,23 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 public class PhoneCallTest {
     static PhoneCall createPhoneCall() {
-        return new PhoneCall("555-555-5555", "888-888-8888", "01/01/2022 00:00", "01/01/2022 01:00");
+        return new PhoneCall("555-555-5555", "888-888-8888", "01/01/2022 12:00 am", "01/01/2022 01:00 am");
     }
 
     private static PhoneCall createPhoneCallWithCallerNumber(String callerNumber) {
-        return new PhoneCall(callerNumber, "888-888-8888", "01/01/2022 00:00", "01/01/2022 01:00");
+        return new PhoneCall(callerNumber, "888-888-8888", "01/01/2022 12:00 am", "01/01/2022 01:00 am");
     }
 
     private static PhoneCall createPhoneCallWithCalleeNumber(String calleeNumber) {
-        return new PhoneCall("555-555-5555", calleeNumber, "01/01/2022 00:00", "01/01/2022 01:00");
+        return new PhoneCall("555-555-5555", calleeNumber, "01/01/2022 12:00 am", "01/01/2022 01:00 am");
     }
 
     private static PhoneCall createPhoneCallWithBeginTime(String beginTime) {
-        return new PhoneCall("555-555-5555", "888-888-8888", beginTime, "01/01/2022 01:00");
+        return new PhoneCall("555-555-5555", "888-888-8888", beginTime, "01/01/2022 01:00 am");
     }
 
     private static PhoneCall createPhoneCallWithEndTime(String endTime) {
-        return new PhoneCall("555-555-5555", "888-888-8888", "01/01/2022 00:00", endTime);
+        return new PhoneCall("555-555-5555", "888-888-8888", "01/01/2022 12:00 am", endTime);
     }
 
     @Test
@@ -47,8 +47,6 @@ public class PhoneCallTest {
         String time = "13/01/2022 00:00";
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
                 () -> createPhoneCallWithBeginTime(time));
-        assertThat(e.getMessage(), equalTo(String.format("Invalid argument: %s must be in format mm/dd/yyyy hh:mm or "
-                + "m/d/yyyy h:mm", time)));
     }
 
     @Test
@@ -56,27 +54,25 @@ public class PhoneCallTest {
         String time = "11/35/2022 12:00";
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
                 () -> createPhoneCallWithEndTime(time));
-        assertThat(e.getMessage(), equalTo(String.format("Invalid argument: %s must be in format mm/dd/yyyy hh:mm or "
-                + "m/d/yyyy h:mm", time)));
     }
 
     @Test
     void parsesFullBeginTimeStringCorrectly() {
-        assertThat(createPhoneCall().getBeginTimeString(), equalTo("01/01/2022 00:00"));
+        assertThat(createPhoneCall().getBeginTimeString(), equalTo("01/01/2022 12:00 am"));
     }
 
     @Test
     void parsesFullEndTimeStringCorrectly() {
-        assertThat(createPhoneCall().getEndTimeString(), equalTo("01/01/2022 01:00"));
+        assertThat(createPhoneCall().getEndTimeString(), equalTo("01/01/2022 01:00 am"));
     }
 
     @Test
     void parsesShortBeginTimeStringCorrectly() {
-        assertThat(createPhoneCallWithBeginTime("1/1/2022 0:00").getBeginTimeString(), equalTo("01/01/2022 00:00"));
+        assertThat(createPhoneCallWithBeginTime("1/1/2022 1:00 am").getBeginTimeString(), equalTo("01/01/2022 01:00 am"));
     }
 
     @Test
     void parsesShortEndTimeStringCorrectly() {
-        assertThat(createPhoneCallWithEndTime("1/1/2022 1:00").getEndTimeString(), equalTo("01/01/2022 01:00"));
+        assertThat(createPhoneCallWithEndTime("1/1/2022 1:00 am").getEndTimeString(), equalTo("01/01/2022 01:00 am"));
     }
 }

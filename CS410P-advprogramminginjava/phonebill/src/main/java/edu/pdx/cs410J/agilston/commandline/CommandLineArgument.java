@@ -12,30 +12,27 @@ class CommandLineArgument {
     private final String defaultValue;
     private final List<String> choices;
     private final List<String> aliases;
-    private final boolean acceptsOption;
-    private final int argumentListSize;
+    private final int argumentList;
     private final String[] values;
 
     /**
      * Creates a new command line argument.
      *
-     * @param name             name to type
-     * @param help             help displayed with usage information
-     * @param acceptsOption    whether the argument accepts an option (-f=opt, --flag=opt)
-     * @param defaultValue     default value for command
-     * @param choices          possible values
-     * @param argumentListSize number of sub arguments accepted
-     * @param aliases          alternative names to type
+     * @param name         name to type
+     * @param help         help displayed with usage information
+     * @param defaultValue default value for command
+     * @param choices      possible values
+     * @param argumentList number of sub arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
+     * @param aliases      alternative names to type
      */
-    public CommandLineArgument(String name, String help, boolean acceptsOption, String defaultValue, String[] choices,
-                               int argumentListSize, String... aliases) {
+    public CommandLineArgument(String name, String help, String defaultValue, String[] choices, int argumentList,
+                               String... aliases) {
         this.name = name;
         this.help = help;
-        this.acceptsOption = acceptsOption;
         this.defaultValue = defaultValue;
         this.choices = choices == null ? Collections.emptyList() : List.of(choices);
-        this.argumentListSize = argumentListSize;
-        this.values = new String[this.argumentListSize];
+        this.argumentList = argumentList;
+        this.values = new String[this.argumentList];
         this.aliases = aliases == null ? Collections.emptyList() : List.of(aliases);
     }
 
@@ -114,15 +111,8 @@ class CommandLineArgument {
     /**
      * Gets the number of sub arguments accepted.
      */
-    public final int getArgumentListSize() {
-        return argumentListSize;
-    }
-
-    /**
-     * Gets whether the argument accepts an option (-f=opt, --flag=opt).
-     */
-    public final boolean acceptsOption() {
-        return acceptsOption;
+    public final int getArgumentList() {
+        return argumentList;
     }
 
     /**
