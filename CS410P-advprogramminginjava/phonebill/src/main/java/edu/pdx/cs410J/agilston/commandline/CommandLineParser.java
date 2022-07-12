@@ -417,8 +417,6 @@ public class CommandLineParser {
 
                 position++;
             }
-
-//            index++;
         }
     }
 

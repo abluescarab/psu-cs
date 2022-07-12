@@ -2,9 +2,11 @@ package edu.pdx.cs410J.agilston;
 
 import edu.pdx.cs410J.AbstractPhoneCall;
 
-import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,8 +18,8 @@ public class PhoneCall extends AbstractPhoneCall {
 
     protected final String caller;
     protected final String callee;
-    protected final LocalDateTime beginTime;
-    protected final LocalDateTime endTime;
+    protected final ZonedDateTime beginTime;
+    protected final ZonedDateTime endTime;
     private final DateTimeFormatter formatter;
 
     /**
@@ -29,7 +31,7 @@ public class PhoneCall extends AbstractPhoneCall {
      * @param endTime      date and time the call ended (mm/dd/yyyy hh:mm)
      */
     public PhoneCall(String callerNumber, String calleeNumber, String beginTime, String endTime) {
-        this.formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a");
+        this.formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a").withZone(ZoneId.systemDefault());
         this.caller = callerNumber;
         this.callee = calleeNumber;
         this.beginTime = formatDateTime(beginTime);
@@ -40,9 +42,9 @@ public class PhoneCall extends AbstractPhoneCall {
      * Formats a date time string, then parses it.
      *
      * @param dateTime date time string to format
-     * @return parsed date time string as {@link LocalDateTime}
+     * @return parsed date time string as {@link ZonedDateTime}
      */
-    private LocalDateTime formatDateTime(String dateTime) {
+    private ZonedDateTime formatDateTime(String dateTime) {
         Pattern pattern = Pattern.compile(DATE_TIME_REGEX);
         Matcher matcher = pattern.matcher(dateTime);
 
@@ -67,7 +69,7 @@ public class PhoneCall extends AbstractPhoneCall {
         }
 
         try {
-            return LocalDateTime.parse(dateTime, formatter);
+            return ZonedDateTime.parse(dateTime, formatter);
         }
         catch(DateTimeParseException e) {
             throw new IllegalArgumentException(String.format("Invalid argument: %s must be in format mm/dd/yyyy hh:mm "
@@ -92,10 +94,27 @@ public class PhoneCall extends AbstractPhoneCall {
     }
 
     /**
+     * Gets the begin time.
+     */
+    @Override
+    public Date getBeginTime() {
+        return Date.from(beginTime.toInstant());
+    }
+
+    /**
+     * Gets the end time.
+     */
+    @Override
+    public Date getEndTime() {
+        return Date.from(endTime.toInstant());
+    }
+
+    /**
      * Gets the call's begin time in mm/dd/yyyy hh:mm format.
      */
     @Override
     public String getBeginTimeString() {
+        // TODO: change to yy instead of yyyy
         return formatter.format(beginTime).replace("AM", "am").replace("PM", "pm");
     }
 
@@ -104,6 +123,7 @@ public class PhoneCall extends AbstractPhoneCall {
      */
     @Override
     public String getEndTimeString() {
+        // TODO: change to yy instead of yyyy
         return formatter.format(endTime).replace("AM", "am").replace("PM", "pm");
     }
 }
