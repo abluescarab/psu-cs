@@ -185,7 +185,7 @@ public class Student extends Human {
             }
 
             if(parser.hasArgument("--readme")) {
-                try(InputStream readmeFile = Project2.class.getResourceAsStream("README.txt")) {
+                try(InputStream readmeFile = Project3.class.getResourceAsStream("README.txt")) {
                     BufferedReader reader = new BufferedReader(new InputStreamReader(readmeFile));
                     StringBuilder readme = new StringBuilder();
                     String line;

@@ -269,7 +269,7 @@ public class CommandLineParserTest {
     void longNameInFormattedHelpStringWraps() {
         CommandLineParser parser = createParser();
         CommandLineArgument arg = new CommandLineArgument("--myveryveryveryveryverylongargument",
-                "this is a very long argument", false, "", new String[0]);
+                "this is a very long argument", false, "", new String[0], 1);
 
         parser.flags.put(arg.getName(), arg);
         assertThat(arg.getFormattedHelp(parser.maxLineLength, parser.indentSize),

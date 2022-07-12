@@ -120,15 +120,15 @@ public class Project3 {
 
             parser.addFlag("-print", "Prints a description of the new phone call", false, "-p");
             parser.addFlag("-README", "Prints a README for this project and exits", false, "-r");
-            parser.addFlag("-help", "Prints usage information", false, "-h");
+            parser.addFlag("-help", "Prints usage information", false, 2, "-h");
             parser.addFlag("-textFile", "Where to read/write the phone bill", true, "-t");
             parser.addArgument("customer", "Person whose phone bill we're modeling");
             parser.addArgument("caller_number", "Phone number of caller");
             parser.addArgument("callee_number", "Phone number of person who was called");
-            parser.addArgument("begin_date", "Date call began (mm/dd/yyy)");
-            parser.addArgument("begin_time", "Time call began (24-hour time)");
-            parser.addArgument("end_date", "Date call ended (mm/dd/yyy)");
-            parser.addArgument("end_time", "Time call ended (24-hour time)");
+            parser.addArgument("begin_date", "Date call began (mm/dd/yyy)", 3);
+//            parser.addArgument("begin_time", "Time call began (24-hour time)", 3);
+            parser.addArgument("end_date", "Date call ended (mm/dd/yyy)", 3);
+//            parser.addArgument("end_time", "Time call ended (24-hour time)");
 
             if(!validateArguments(parser, args)) {
                 return;
