@@ -2,7 +2,6 @@ package edu.pdx.cs410J.agilston;
 
 import edu.pdx.cs410J.PhoneBillDumper;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.time.Duration;
@@ -18,7 +17,7 @@ public class PrettyPrinter implements PhoneBillDumper<PhoneBill> {
     }
 
     @Override
-    public void dump(PhoneBill bill) throws IOException {
+    public void dump(PhoneBill bill) {
         try(PrintWriter pw = new PrintWriter(this.writer)) {
             StringBuilder line;
             Duration duration;
@@ -47,15 +46,13 @@ public class PrettyPrinter implements PhoneBillDumper<PhoneBill> {
                 if(hours > 0) {
                     line.append(hours)
                         .append(" ")
-                        .append(hours > 1 ? "hours" : "hour")
+                        .append(hours == 1 ? "hour" : "hours")
                         .append(" ");
                 }
 
-                if(minutes > 0) {
-                    line.append(minutes)
-                        .append(" ")
-                        .append(minutes > 1 ? "minutes" : "minute");
-                }
+                line.append(minutes)
+                    .append(" ")
+                    .append(minutes == 1 ? "minute" : "minutes");
 
                 pw.println(line);
             }
