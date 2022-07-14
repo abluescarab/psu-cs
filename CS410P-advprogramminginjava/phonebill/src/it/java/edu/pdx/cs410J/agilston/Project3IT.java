@@ -200,4 +200,37 @@ class Project3IT extends InvokeMainTestCase {
 
         assertThat(result.getTextWrittenToStandardError(), containsString("Invalid file"));
     }
+
+    @Test
+    void endTimeBeforeBeginTimeFails() {
+        MainMethodResult result = invokeMain(
+                "Name",
+                "555-555-5555",
+                "888-888-8888",
+                "01/01/2022",
+                "08:00",
+                "am",
+                "01/01/2022",
+                "07:00",
+                "am");
+        assertThat(result.getTextWrittenToStandardError(),
+                containsString("Invalid argument: End time must be at or after begin time"));
+    }
+
+    @Test
+    void prettyPrinterPrintsCorrectlyToStandardOut() {
+        MainMethodResult result = invokeMain(
+                "Name",
+                "555-555-5555",
+                "888-888-8888",
+                "01/01/2022",
+                "08:00",
+                "am",
+                "01/01/2022",
+                "09:00",
+                "am",
+                "-pretty",
+                "-");
+        assertThat(result.getTextWrittenToStandardOut(), containsString("Phone bill for Name:"));
+    }
 }
