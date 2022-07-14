@@ -6,6 +6,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -125,6 +126,13 @@ public class PhoneCall extends AbstractPhoneCall implements Comparable<PhoneCall
     public String getEndTimeString() {
         // TODO: change to yy instead of yyyy
         return formatter.format(endTime).replace("AM", "am").replace("PM", "pm");
+    }
+
+    /**
+     * Gets the time of the call in milliseconds.
+     */
+    public long getDuration() {
+        return ChronoUnit.MILLIS.between(beginTime, endTime);
     }
 
     /**
