@@ -146,8 +146,8 @@ class Project3IT extends InvokeMainTestCase {
                 "am",
                 "-print");
         assertThat(result.getTextWrittenToStandardOut(),
-                containsString("Phone call from 555-555-5555 to 888-888-8888 from 01/01/2022 12:00 am to " +
-                        "01/01/2022 01:00 am"));
+                containsString("Phone call from 555-555-5555 to 888-888-8888 from 01/01/22 12:00 am to " +
+                        "01/01/22 01:00 am"));
     }
 
     @Test

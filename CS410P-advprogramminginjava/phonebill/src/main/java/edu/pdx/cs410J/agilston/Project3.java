@@ -4,6 +4,7 @@ import com.google.common.annotations.VisibleForTesting;
 import edu.pdx.cs410J.agilston.commandline.CommandLineParser;
 
 import java.io.*;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
 
@@ -48,6 +49,8 @@ public class Project3 {
                 "end_date",
                 "end_time"
         );
+        String beginTime;
+        String endTime;
 
         parser.parse(args);
 
@@ -88,20 +91,28 @@ public class Project3 {
             throw new IllegalArgumentException("Invalid argument: Callee number must be in format ###-###-####");
         }
 
-        if(!isValidDateTime(String.format("%s %s %s",
+        beginTime = String.format("%s %s %s",
                 parser.getValueOrDefault("begin_date", 0),
                 parser.getValueOrDefault("begin_date", 1),
-                parser.getValueOrDefault("begin_date", 2)))) {
+                parser.getValueOrDefault("begin_date", 2));
+
+        if(!isValidDateTime(beginTime)) {
             throw new IllegalArgumentException("Invalid argument: Begin time must be in format mm/dd/yyyy hh:mm am/pm or "
                     + "m/d/yyyy h:mm AM/PM");
         }
 
-        if(!isValidDateTime(String.format("%s %s %s",
+        endTime = String.format("%s %s %s",
                 parser.getValueOrDefault("end_date", 0),
                 parser.getValueOrDefault("end_date", 1),
-                parser.getValueOrDefault("end_date", 2)))) {
+                parser.getValueOrDefault("end_date", 2));
+
+        if(!isValidDateTime(endTime)) {
             throw new IllegalArgumentException("Invalid argument: End time must be in format mm/dd/yyyy hh:mm am/pm or "
                     + "m/d/yyyy h:mm AM/PM");
+        }
+
+        if(ChronoUnit.MILLIS.between(PhoneCall.formatDateTime(beginTime), PhoneCall.formatDateTime(endTime)) < 0) {
+            throw new IllegalArgumentException("Invalid argument: End time must be at or after begin time");
         }
 
         return true;

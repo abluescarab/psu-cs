@@ -44,35 +44,33 @@ public class PhoneCallTest {
 
     @Test
     void invalidBeginTimeFails() {
-        String time = "13/01/2022 00:00";
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
-                () -> createPhoneCallWithBeginTime(time));
+                () -> createPhoneCallWithBeginTime("13/01/2022 00:00"));
     }
 
     @Test
     void invalidEndTimeFails() {
-        String time = "11/35/2022 12:00";
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
-                () -> createPhoneCallWithEndTime(time));
+                () -> createPhoneCallWithEndTime("11/35/2022 12:00"));
     }
 
     @Test
     void parsesFullBeginTimeStringCorrectly() {
-        assertThat(createPhoneCall().getBeginTimeString(), equalTo("01/01/2022 12:00 am"));
+        assertThat(createPhoneCall().getBeginTimeString(), equalTo("01/01/22 12:00 am"));
     }
 
     @Test
     void parsesFullEndTimeStringCorrectly() {
-        assertThat(createPhoneCall().getEndTimeString(), equalTo("01/01/2022 01:00 am"));
+        assertThat(createPhoneCall().getEndTimeString(), equalTo("01/01/22 01:00 am"));
     }
 
     @Test
     void parsesShortBeginTimeStringCorrectly() {
-        assertThat(createPhoneCallWithBeginTime("1/1/2022 1:00 am").getBeginTimeString(), equalTo("01/01/2022 01:00 am"));
+        assertThat(createPhoneCallWithBeginTime("1/1/2022 1:00 am").getBeginTimeString(), equalTo("01/01/22 01:00 am"));
     }
 
     @Test
     void parsesShortEndTimeStringCorrectly() {
-        assertThat(createPhoneCallWithEndTime("1/1/2022 1:00 am").getEndTimeString(), equalTo("01/01/2022 01:00 am"));
+        assertThat(createPhoneCallWithEndTime("1/1/2022 1:00 am").getEndTimeString(), equalTo("01/01/22 01:00 am"));
     }
 }

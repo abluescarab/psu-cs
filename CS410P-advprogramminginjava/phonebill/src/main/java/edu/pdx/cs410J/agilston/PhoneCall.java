@@ -16,12 +16,13 @@ import java.util.regex.Pattern;
  */
 public class PhoneCall extends AbstractPhoneCall implements Comparable<PhoneCall> {
     public static final String DATE_TIME_REGEX = "(\\d{1,2})/(\\d{1,2})/(\\d{4}) (\\d{1,2}):(\\d{1,2}) ([APap][Mm])";
+    public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a")
+                                                                                 .withZone(ZoneId.systemDefault());
 
-    protected final String caller;
-    protected final String callee;
-    protected final ZonedDateTime beginTime;
-    protected final ZonedDateTime endTime;
-    private final DateTimeFormatter formatter;
+    private final String caller;
+    private final String callee;
+    private final ZonedDateTime beginTime;
+    private final ZonedDateTime endTime;
 
     /**
      * Creates a new phone call.
@@ -32,7 +33,6 @@ public class PhoneCall extends AbstractPhoneCall implements Comparable<PhoneCall
      * @param endTime      date and time the call ended (mm/dd/yyyy hh:mm)
      */
     public PhoneCall(String callerNumber, String calleeNumber, String beginTime, String endTime) {
-        this.formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a").withZone(ZoneId.systemDefault());
         this.caller = callerNumber;
         this.callee = calleeNumber;
         this.beginTime = formatDateTime(beginTime);
@@ -57,20 +57,23 @@ public class PhoneCall extends AbstractPhoneCall implements Comparable<PhoneCall
             String minute = matcher.group(5);
             String ampm = matcher.group(6).toUpperCase();
 
-            if(month.length() == 1)
+            if(month.length() == 1) {
                 month = "0" + month;
+            }
 
-            if(day.length() == 1)
+            if(day.length() == 1) {
                 day = "0" + day;
+            }
 
-            if(hour.length() == 1)
+            if(hour.length() == 1) {
                 hour = "0" + hour;
+            }
 
             dateTime = String.format("%s/%s/%s %s:%s %s", month, day, year, hour, minute, ampm);
         }
 
         try {
-            return ZonedDateTime.parse(dateTime, formatter);
+            return ZonedDateTime.parse(dateTime, DATE_TIME_FORMATTER);
         }
         catch(DateTimeParseException e) {
             throw new IllegalArgumentException(String.format("Invalid argument: %s must be in format mm/dd/yyyy hh:mm "
@@ -111,21 +114,27 @@ public class PhoneCall extends AbstractPhoneCall implements Comparable<PhoneCall
     }
 
     /**
-     * Gets the call's begin time in mm/dd/yyyy hh:mm format.
+     * Gets the call's begin time in mm/dd/yy hh:mm format.
      */
     @Override
     public String getBeginTimeString() {
-        // TODO: change to yy instead of yyyy
-        return formatter.format(beginTime).replace("AM", "am").replace("PM", "pm");
+        return DateTimeFormatter.ofPattern("MM/dd/yy hh:mm a")
+                                .withZone(ZoneId.systemDefault())
+                                .format(beginTime)
+                                .replace("AM", "am")
+                                .replace("PM", "pm");
     }
 
     /**
-     * Gets the call's end time in mm/dd/yyyy hh:mm format.
+     * Gets the call's end time in mm/dd/yy hh:mm format.
      */
     @Override
     public String getEndTimeString() {
-        // TODO: change to yy instead of yyyy
-        return formatter.format(endTime).replace("AM", "am").replace("PM", "pm");
+        return DateTimeFormatter.ofPattern("MM/dd/yy hh:mm a")
+                                .withZone(ZoneId.systemDefault())
+                                .format(endTime)
+                                .replace("AM", "am")
+                                .replace("PM", "pm");
     }
 
     /**

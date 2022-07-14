@@ -22,11 +22,16 @@ public class TextDumper implements PhoneBillDumper<PhoneBill> {
     @Override
     public void dump(PhoneBill bill) {
         try(PrintWriter pw = new PrintWriter(this.writer)) {
+            String beginTime;
+            String endTime;
+
             pw.println(bill.getCustomer());
 
             for(PhoneCall call : bill.getPhoneCalls()) {
-                pw.println(String.format("%s,%s,%s,%s", call.getCaller(), call.getCallee(), call.getBeginTimeString(),
-                        call.getEndTimeString()));
+                beginTime = PhoneCall.DATE_TIME_FORMATTER.format(call.getBeginTime().toInstant());
+                endTime = PhoneCall.DATE_TIME_FORMATTER.format(call.getEndTime().toInstant());
+
+                pw.println(String.format("%s,%s,%s,%s", call.getCaller(), call.getCallee(), beginTime, endTime));
             }
 
             pw.flush();
