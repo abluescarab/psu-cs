@@ -129,10 +129,10 @@ public class PhoneCall extends AbstractPhoneCall implements Comparable<PhoneCall
     }
 
     /**
-     * Gets the time of the call in milliseconds.
+     * Gets the duration of the call in minutes.
      */
     public long getDuration() {
-        return ChronoUnit.MILLIS.between(beginTime, endTime);
+        return ChronoUnit.MINUTES.between(beginTime, endTime);
     }
 
     /**
