@@ -89,6 +89,15 @@ class CommandLineArgument {
     }
 
     /**
+     * Checks whether the command has a specific alias.
+     * @param alias alias to check for
+     * @return true if the alias exists; false otherwise
+     */
+    public final boolean hasAlias(String alias) {
+        return aliases.contains(alias);
+    }
+
+    /**
      * Gets a value if it was provided or the default value otherwise.
      */
     public final String getValueOrDefault() {

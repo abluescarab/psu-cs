@@ -220,13 +220,7 @@ public class CommandLineParser {
     private void addArgument(String name, String help, String defaultValue, String[] choices, int argumentList,
                              String... aliases) {
         Map<String, CommandLineArgument> map = name.startsWith("-") ? flags : positionalArguments;
-        CommandLineArgument arg = new CommandLineArgument(name, help, defaultValue, choices, argumentList, aliases);
-
-        map.put(name, arg);
-
-        for(var alias : arg.getAliases()) {
-            map.put(alias, arg);
-        }
+        map.put(name, new CommandLineArgument(name, help, defaultValue, choices, argumentList, aliases));
     }
 
     /**
@@ -241,8 +235,9 @@ public class CommandLineParser {
         }
 
         if(name.startsWith("-")) {
-            // check if we are searching for the full name but the given arg was an alias
-            return flags.containsKey(name) && givenArguments.contains(flags.get(name).getName());
+            // check if we are searching for an arg by its full name but the alias was given, or vice versa
+            CommandLineArgument arg = getArgument(name);
+            return arg != null && givenArguments.contains(arg.getName());
         }
 
         return false;
@@ -254,8 +249,16 @@ public class CommandLineParser {
      * @param name name of argument to get
      */
     private CommandLineArgument getArgument(String name) {
-        if(name.startsWith("-") && flags.containsKey(name)) {
-            return flags.get(name);
+        if(name.startsWith("-")) {
+            if(flags.containsKey(name)) {
+                return flags.get(name);
+            }
+
+            for(CommandLineArgument arg : flags.values()) {
+                if(arg.hasAlias(name)) {
+                    return arg;
+                }
+            }
         }
 
         return positionalArguments.get(name);
