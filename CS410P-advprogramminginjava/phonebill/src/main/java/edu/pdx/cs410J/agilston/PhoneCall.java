@@ -45,7 +45,7 @@ public class PhoneCall extends AbstractPhoneCall implements Comparable<PhoneCall
      * @param dateTime date time string to format
      * @return parsed date time string as {@link ZonedDateTime}
      */
-    private ZonedDateTime formatDateTime(String dateTime) {
+    public static ZonedDateTime formatDateTime(String dateTime) {
         Pattern pattern = Pattern.compile(DATE_TIME_REGEX);
         Matcher matcher = pattern.matcher(dateTime);
 

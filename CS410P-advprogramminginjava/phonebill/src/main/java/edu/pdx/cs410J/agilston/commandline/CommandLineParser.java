@@ -277,7 +277,7 @@ public class CommandLineParser {
 
     /**
      * Gets a value or default value of an argument. Automatically null checks and returns an empty string if the
-     * argument does not exist.
+     * argument does not exist. Index can be used to find a sub argument by its position within the argument list.
      *
      * @param name  name of argument to get
      * @param index value index to get

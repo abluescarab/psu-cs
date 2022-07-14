@@ -118,13 +118,26 @@ public class Project3 {
         return true;
     }
 
+    static boolean canWriteFile(String filename) throws IOException, SecurityException {
+        File file = new File(filename);
+        File parent;
+
+        if((parent = file.getParentFile()) != null) {
+            parent.mkdirs();
+        }
+
+        return file.createNewFile() || file.canWrite();
+    }
+
     public static void main(String[] args) {
         CommandLineParser parser = new CommandLineParser("phonebill-2022.0.0.jar");
         String filename;
+        String prettyFilename;
         PhoneBill bill = null;
         PhoneCall call;
         TextParser textParser;
         TextDumper textDumper;
+        PrettyPrinter prettyPrinter;
         String customer;
 
         try {
@@ -137,6 +150,8 @@ public class Project3 {
             parser.addFlag("-README", "Prints a README for this project and exits", "-r");
             parser.addFlag("-help", "Prints usage information", "-h");
             parser.addFlag("-textFile", "Where to read/write the phone bill", 1, "-t");
+            parser.addFlag("-pretty", "Pretty print the phone bill to a text file or standard out (file -)",
+                    1, "-y");
             parser.addArgument("customer", "Person whose phone bill we're modeling");
             parser.addArgument("caller_number", "Phone number of caller");
             parser.addArgument("callee_number", "Phone number of person who was called");
@@ -180,21 +195,22 @@ public class Project3 {
 
             bill.addPhoneCall(call);
 
-            if(!Objects.equals(filename, "")) {
-                try {
-                    File file = new File(filename);
-                    File parent;
+            if(!Objects.equals(filename, "") && canWriteFile(filename)) {
+                textDumper = new TextDumper(new FileWriter(filename));
+                textDumper.dump(bill);
+            }
 
-                    if((parent = file.getParentFile()) != null) {
-                        parent.mkdirs();
-                    }
+            if(parser.hasArgument("-pretty")) {
+                prettyFilename = parser.getValueOrDefault("-pretty");
 
-                    textDumper = new TextDumper(new FileWriter(file));
-                    textDumper.dump(bill);
+                if(Objects.equals(prettyFilename, "-")) {
+                    prettyPrinter = new PrettyPrinter(new PrintWriter(System.out));
                 }
-                catch(IOException e) {
-                    throw new IOException(String.format("Invalid file name: %s", filename));
+                else {
+                    prettyPrinter = new PrettyPrinter(new FileWriter(prettyFilename));
                 }
+
+                prettyPrinter.dump(bill);
             }
 
             if(parser.hasArgument("-print")) {
