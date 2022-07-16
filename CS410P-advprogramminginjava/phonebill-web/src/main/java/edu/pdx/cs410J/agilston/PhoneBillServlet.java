@@ -16,8 +16,7 @@ import java.util.Map;
  * of how to use HTTP and Java servlets to store simple dictionary of words
  * and their definitions.
  */
-public class PhoneBillServlet extends HttpServlet
-{
+public class PhoneBillServlet extends HttpServlet {
     static final String WORD_PARAMETER = "word";
     static final String DEFINITION_PARAMETER = "definition";
 
@@ -30,15 +29,15 @@ public class PhoneBillServlet extends HttpServlet
      * are written to the HTTP response.
      */
     @Override
-    protected void doGet( HttpServletRequest request, HttpServletResponse response ) throws IOException
-    {
-        response.setContentType( "text/plain" );
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("text/plain");
 
-        String word = getParameter( WORD_PARAMETER, request );
-        if (word != null) {
+        String word = getParameter(WORD_PARAMETER, request);
+        if(word != null) {
             writeDefinition(word, response);
 
-        } else {
+        }
+        else {
             writeAllDictionaryEntries(response);
         }
     }
@@ -49,19 +48,18 @@ public class PhoneBillServlet extends HttpServlet
      * entry to the HTTP response.
      */
     @Override
-    protected void doPost( HttpServletRequest request, HttpServletResponse response ) throws IOException
-    {
-        response.setContentType( "text/plain" );
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("text/plain");
 
-        String word = getParameter(WORD_PARAMETER, request );
-        if (word == null) {
+        String word = getParameter(WORD_PARAMETER, request);
+        if(word == null) {
             missingRequiredParameter(response, WORD_PARAMETER);
             return;
         }
 
-        String definition = getParameter(DEFINITION_PARAMETER, request );
-        if ( definition == null) {
-            missingRequiredParameter( response, DEFINITION_PARAMETER );
+        String definition = getParameter(DEFINITION_PARAMETER, request);
+        if(definition == null) {
+            missingRequiredParameter(response, DEFINITION_PARAMETER);
             return;
         }
 
@@ -71,7 +69,7 @@ public class PhoneBillServlet extends HttpServlet
         pw.println(Messages.definedWordAs(word, definition));
         pw.flush();
 
-        response.setStatus( HttpServletResponse.SC_OK);
+        response.setStatus(HttpServletResponse.SC_OK);
     }
 
     /**
@@ -95,28 +93,28 @@ public class PhoneBillServlet extends HttpServlet
 
     /**
      * Writes an error message about a missing parameter to the HTTP response.
-     *
+     * <p>
      * The text of the error message is created by {@link Messages#missingRequiredParameter(String)}
      */
-    private void missingRequiredParameter( HttpServletResponse response, String parameterName )
-        throws IOException
-    {
+    private void missingRequiredParameter(HttpServletResponse response, String parameterName)
+            throws IOException {
         String message = Messages.missingRequiredParameter(parameterName);
         response.sendError(HttpServletResponse.SC_PRECONDITION_FAILED, message);
     }
 
     /**
      * Writes the definition of the given word to the HTTP response.
-     *
+     * <p>
      * The text of the message is formatted with {@link TextDumper}
      */
     private void writeDefinition(String word, HttpServletResponse response) throws IOException {
         String definition = this.dictionary.get(word);
 
-        if (definition == null) {
+        if(definition == null) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 
-        } else {
+        }
+        else {
             PrintWriter pw = response.getWriter();
 
             Map<String, String> wordDefinition = Map.of(word, definition);
@@ -129,32 +127,32 @@ public class PhoneBillServlet extends HttpServlet
 
     /**
      * Writes all of the dictionary entries to the HTTP response.
-     *
+     * <p>
      * The text of the message is formatted with {@link TextDumper}
      */
-    private void writeAllDictionaryEntries(HttpServletResponse response ) throws IOException
-    {
+    private void writeAllDictionaryEntries(HttpServletResponse response) throws IOException {
         PrintWriter pw = response.getWriter();
         TextDumper dumper = new TextDumper(pw);
         dumper.dump(dictionary);
 
-        response.setStatus( HttpServletResponse.SC_OK );
+        response.setStatus(HttpServletResponse.SC_OK);
     }
 
     /**
      * Returns the value of the HTTP request parameter with the given name.
      *
      * @return <code>null</code> if the value of the parameter is
-     *         <code>null</code> or is the empty string
+     * <code>null</code> or is the empty string
      */
     private String getParameter(String name, HttpServletRequest request) {
-      String value = request.getParameter(name);
-      if (value == null || "".equals(value)) {
-        return null;
+        String value = request.getParameter(name);
+        if(value == null || "".equals(value)) {
+            return null;
 
-      } else {
-        return value;
-      }
+        }
+        else {
+            return value;
+        }
     }
 
     @VisibleForTesting

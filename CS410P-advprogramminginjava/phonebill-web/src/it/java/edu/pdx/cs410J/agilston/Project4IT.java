@@ -25,19 +25,19 @@ class Project4IT extends InvokeMainTestCase {
 
     @Test
     void test0RemoveAllMappings() throws IOException {
-      PhoneBillRestClient client = new PhoneBillRestClient(HOSTNAME, Integer.parseInt(PORT));
-      client.removeAllDictionaryEntries();
+        PhoneBillRestClient client = new PhoneBillRestClient(HOSTNAME, Integer.parseInt(PORT));
+        client.removeAllDictionaryEntries();
     }
 
     @Test
     void test1NoCommandLineArguments() {
-        MainMethodResult result = invokeMain( Project4.class );
+        MainMethodResult result = invokeMain(Project4.class);
         assertThat(result.getTextWrittenToStandardError(), containsString(Project4.MISSING_ARGS));
     }
 
     @Test
     void test2EmptyServer() {
-        MainMethodResult result = invokeMain( Project4.class, HOSTNAME, PORT );
+        MainMethodResult result = invokeMain(Project4.class, HOSTNAME, PORT);
         String out = result.getTextWrittenToStandardOut();
         assertThat(out, out, containsString(PrettyPrinter.formatWordCount(0)));
     }
@@ -49,8 +49,9 @@ class Project4IT extends InvokeMainTestCase {
             invokeMain(Project4.class, HOSTNAME, PORT, word);
             fail("Expected a RestException to be thrown");
 
-        } catch (UncaughtExceptionInMain ex) {
-            RestException cause = (RestException) ex.getCause();
+        }
+        catch(UncaughtExceptionInMain ex) {
+            RestException cause = (RestException)ex.getCause();
             assertThat(cause.getHttpStatusCode(), equalTo(HttpURLConnection.HTTP_NOT_FOUND));
         }
     }
@@ -60,15 +61,15 @@ class Project4IT extends InvokeMainTestCase {
         String word = "WORD";
         String definition = "DEFINITION";
 
-        MainMethodResult result = invokeMain( Project4.class, HOSTNAME, PORT, word, definition );
+        MainMethodResult result = invokeMain(Project4.class, HOSTNAME, PORT, word, definition);
         String out = result.getTextWrittenToStandardOut();
         assertThat(out, out, containsString(Messages.definedWordAs(word, definition)));
 
-        result = invokeMain( Project4.class, HOSTNAME, PORT, word );
+        result = invokeMain(Project4.class, HOSTNAME, PORT, word);
         out = result.getTextWrittenToStandardOut();
         assertThat(out, out, containsString(PrettyPrinter.formatDictionaryEntry(word, definition)));
 
-        result = invokeMain( Project4.class, HOSTNAME, PORT );
+        result = invokeMain(Project4.class, HOSTNAME, PORT);
         out = result.getTextWrittenToStandardOut();
         assertThat(out, out, containsString(PrettyPrinter.formatDictionaryEntry(word, definition)));
     }

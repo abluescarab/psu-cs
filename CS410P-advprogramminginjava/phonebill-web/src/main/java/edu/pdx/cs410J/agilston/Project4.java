@@ -22,36 +22,42 @@ public class Project4 {
         String word = null;
         String definition = null;
 
-        for (String arg : args) {
-            if (hostName == null) {
+        for(String arg : args) {
+            if(hostName == null) {
                 hostName = arg;
 
-            } else if ( portString == null) {
+            }
+            else if(portString == null) {
                 portString = arg;
 
-            } else if (word == null) {
+            }
+            else if(word == null) {
                 word = arg;
 
-            } else if (definition == null) {
+            }
+            else if(definition == null) {
                 definition = arg;
 
-            } else {
+            }
+            else {
                 usage("Extraneous command line argument: " + arg);
             }
         }
 
-        if (hostName == null) {
-            usage( MISSING_ARGS );
+        if(hostName == null) {
+            usage(MISSING_ARGS);
 
-        } else if ( portString == null) {
-            usage( "Missing port" );
+        }
+        else if(portString == null) {
+            usage("Missing port");
         }
 
         int port;
         try {
-            port = Integer.parseInt( portString );
-            
-        } catch (NumberFormatException ex) {
+            port = Integer.parseInt(portString);
+
+        }
+        catch(NumberFormatException ex) {
             usage("Port \"" + portString + "\" must be an integer");
             return;
         }
@@ -60,7 +66,7 @@ public class Project4 {
 
         String message;
         try {
-            if (word == null) {
+            if(word == null) {
                 // Print all word/definition pairs
                 Map<String, String> dictionary = client.getAllDictionaryEntries();
                 StringWriter sw = new StringWriter();
@@ -68,17 +74,20 @@ public class Project4 {
                 pretty.dump(dictionary);
                 message = sw.toString();
 
-            } else if (definition == null) {
+            }
+            else if(definition == null) {
                 // Print all dictionary entries
                 message = PrettyPrinter.formatDictionaryEntry(word, client.getDefinition(word));
 
-            } else {
+            }
+            else {
                 // Post the word/definition pair
                 client.addDictionaryEntry(word, definition);
                 message = Messages.definedWordAs(word, definition);
             }
 
-        } catch (IOException | ParserException ex ) {
+        }
+        catch(IOException | ParserException ex) {
             error("While contacting server: " + ex);
             return;
         }
@@ -88,29 +97,28 @@ public class Project4 {
 
     /**
      * Makes sure that the give response has the expected HTTP status code
-     * @param code The expected status code
+     *
+     * @param code     The expected status code
      * @param response The response from the server
      */
-    private static void checkResponseCode( int code, HttpRequestHelper.Response response )
-    {
-        if (response.getHttpStatusCode() != code) {
+    private static void checkResponseCode(int code, HttpRequestHelper.Response response) {
+        if(response.getHttpStatusCode() != code) {
             error(String.format("Expected HTTP code %d, got code %d.\n\n%s", code,
-                                response.getHttpStatusCode(), response.getContent()));
+                    response.getHttpStatusCode(), response.getContent()));
         }
     }
 
-    private static void error( String message )
-    {
+    private static void error(String message) {
         PrintStream err = System.err;
         err.println("** " + message);
     }
 
     /**
      * Prints usage information for this program and exits
+     *
      * @param message An error message to print
      */
-    private static void usage( String message )
-    {
+    private static void usage(String message) {
         PrintStream err = System.err;
         err.println("** " + message);
         err.println();

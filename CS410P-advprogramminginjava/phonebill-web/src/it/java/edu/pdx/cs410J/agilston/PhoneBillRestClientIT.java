@@ -19,47 +19,46 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 @TestMethodOrder(MethodName.class)
 class PhoneBillRestClientIT {
-  private static final String HOSTNAME = "localhost";
-  private static final String PORT = System.getProperty("http.port", "8080");
+    private static final String HOSTNAME = "localhost";
+    private static final String PORT = System.getProperty("http.port", "8080");
 
-  private PhoneBillRestClient newPhoneBillRestClient() {
-    int port = Integer.parseInt(PORT);
-    return new PhoneBillRestClient(HOSTNAME, port);
-  }
+    private PhoneBillRestClient newPhoneBillRestClient() {
+        int port = Integer.parseInt(PORT);
+        return new PhoneBillRestClient(HOSTNAME, port);
+    }
 
-  @Test
-  void test0RemoveAllDictionaryEntries() throws IOException {
-    PhoneBillRestClient client = newPhoneBillRestClient();
-    client.removeAllDictionaryEntries();
-  }
+    @Test
+    void test0RemoveAllDictionaryEntries() throws IOException {
+        PhoneBillRestClient client = newPhoneBillRestClient();
+        client.removeAllDictionaryEntries();
+    }
 
-  @Test
-  void test1EmptyServerContainsNoDictionaryEntries() throws IOException, ParserException {
-    PhoneBillRestClient client = newPhoneBillRestClient();
-    Map<String, String> dictionary = client.getAllDictionaryEntries();
-    assertThat(dictionary.size(), equalTo(0));
-  }
+    @Test
+    void test1EmptyServerContainsNoDictionaryEntries() throws IOException, ParserException {
+        PhoneBillRestClient client = newPhoneBillRestClient();
+        Map<String, String> dictionary = client.getAllDictionaryEntries();
+        assertThat(dictionary.size(), equalTo(0));
+    }
 
-  @Test
-  void test2DefineOneWord() throws IOException, ParserException {
-    PhoneBillRestClient client = newPhoneBillRestClient();
-    String testWord = "TEST WORD";
-    String testDefinition = "TEST DEFINITION";
-    client.addDictionaryEntry(testWord, testDefinition);
+    @Test
+    void test2DefineOneWord() throws IOException, ParserException {
+        PhoneBillRestClient client = newPhoneBillRestClient();
+        String testWord = "TEST WORD";
+        String testDefinition = "TEST DEFINITION";
+        client.addDictionaryEntry(testWord, testDefinition);
 
-    String definition = client.getDefinition(testWord);
-    assertThat(definition, equalTo(testDefinition));
-  }
+        String definition = client.getDefinition(testWord);
+        assertThat(definition, equalTo(testDefinition));
+    }
 
-  @Test
-  void test4EmptyWordThrowsException() {
-    PhoneBillRestClient client = newPhoneBillRestClient();
-    String emptyString = "";
+    @Test
+    void test4EmptyWordThrowsException() {
+        PhoneBillRestClient client = newPhoneBillRestClient();
+        String emptyString = "";
 
-    RestException ex =
-      assertThrows(RestException.class, () -> client.addDictionaryEntry(emptyString, emptyString));
-    assertThat(ex.getHttpStatusCode(), equalTo(HttpURLConnection.HTTP_PRECON_FAILED));
-    assertThat(ex.getMessage(), equalTo(Messages.missingRequiredParameter("word")));
-  }
+        RestException ex = assertThrows(RestException.class, () -> client.addDictionaryEntry(emptyString, emptyString));
+        assertThat(ex.getHttpStatusCode(), equalTo(HttpURLConnection.HTTP_PRECON_FAILED));
+        assertThat(ex.getMessage(), equalTo(Messages.missingRequiredParameter("word")));
+    }
 
 }
