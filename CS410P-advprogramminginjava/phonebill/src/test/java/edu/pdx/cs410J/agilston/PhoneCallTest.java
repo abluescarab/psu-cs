@@ -44,14 +44,12 @@ public class PhoneCallTest {
 
     @Test
     void invalidBeginTimeFails() {
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
-                () -> createPhoneCallWithBeginTime("13/01/2022 00:00"));
+        assertThrows(IllegalArgumentException.class, () -> createPhoneCallWithBeginTime("13/01/2022 00:00"));
     }
 
     @Test
     void invalidEndTimeFails() {
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
-                () -> createPhoneCallWithEndTime("11/35/2022 12:00"));
+        assertThrows(IllegalArgumentException.class, () -> createPhoneCallWithEndTime("11/35/2022 12:00"));
     }
 
     @Test
