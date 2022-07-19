@@ -119,7 +119,9 @@ class CommandLineArgument {
     }
 
     /**
-     * Gets whether the argument has any sub-arguments.
+     * Checks whether the argument has any sub-arguments.
+     *
+     * @return whether the argument has sub-arguments
      */
     public final boolean hasArguments() {
         return arguments.length > 0;

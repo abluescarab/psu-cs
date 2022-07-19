@@ -36,7 +36,8 @@ public class Project3 {
     /**
      * Validates all command line arguments have been given.
      *
-     * @param args command line arguments
+     * @param parser parser to validate with
+     * @param args   command line arguments
      * @return whether arguments successfully validated
      */
     static boolean validateArguments(CommandLineParser parser, String[] args) {
