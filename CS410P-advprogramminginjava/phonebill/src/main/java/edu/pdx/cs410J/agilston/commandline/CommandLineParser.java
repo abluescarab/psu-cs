@@ -79,14 +79,15 @@ public class CommandLineParser {
             formatted.append(firstLinePrefix);
         }
 
-        if(columnToBreak <= 0 || length + text.length() <= columnToBreak) {
-            formatted.append(text);
-        }
-        else {
-            newLineTokenizer = new StringTokenizer(text, System.lineSeparator());
+        newLineTokenizer = new StringTokenizer(text, System.lineSeparator());
 
-            while(newLineTokenizer.hasMoreTokens()) {
-                String block = newLineTokenizer.nextToken();
+        while(newLineTokenizer.hasMoreTokens()) {
+            String block = newLineTokenizer.nextToken();
+
+            if(columnToBreak <= 0 || length + block.length() <= columnToBreak) {
+                formatted.append(block);
+            }
+            else {
                 spaceTokenizer = new StringTokenizer(block, " ");
 
                 while(spaceTokenizer.hasMoreTokens()) {
@@ -117,11 +118,11 @@ public class CommandLineParser {
                 }
 
                 length = linePrefix.length();
+            }
 
-                if(newLineTokenizer.hasMoreTokens()) {
-                    formatted.append(System.lineSeparator())
-                             .append(linePrefix);
-                }
+            if(newLineTokenizer.hasMoreTokens()) {
+                formatted.append(System.lineSeparator())
+                         .append(linePrefix);
             }
         }
 
@@ -441,7 +442,7 @@ public class CommandLineParser {
         }
 
         usage = new StringBuilder(formatString(usage.toString(), maxLineLength, "",
-                String.format("%" + "usage:".length() + "s", "")));
+                String.format("%" + "usage: ".length() + "s", "")));
         usage.append(System.lineSeparator());
 
         if(prologue != null && prologue.length() > 0) {

@@ -171,11 +171,6 @@ class CommandLineArgument {
                    .append(String.join(", ", aliases));
         }
 
-        if(argumentNames.length > 0) {
-            builder.append(" ")
-                   .append(String.join(" ", argumentNames));
-        }
-
         return builder;
     }
 }

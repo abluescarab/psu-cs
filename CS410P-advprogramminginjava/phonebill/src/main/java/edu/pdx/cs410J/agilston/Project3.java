@@ -66,10 +66,11 @@ public class Project3 {
                 String line;
 
                 while((line = reader.readLine()) != null) {
-                    readme.append(line);
+                    readme.append(line)
+                          .append(System.lineSeparator());
                 }
 
-                System.out.println(readme);
+                System.out.println(CommandLineParser.formatString(readme.toString(), parser.getMaxLineLength()));
             }
             catch(IOException e) {
                 throw new RuntimeException(e);
