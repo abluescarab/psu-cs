@@ -77,7 +77,7 @@ public class PhoneCall extends AbstractPhoneCall implements Comparable<PhoneCall
         }
         catch(DateTimeParseException e) {
             throw new IllegalArgumentException(String.format("Invalid argument: %s must be in format mm/dd/yyyy hh:mm "
-                    + "am/pm or m/d/yyyy h:mm AM/PM", dateTime));
+                    + "am/pm or m/d/yyyy h:mm AM/PM", dateTime), e);
         }
     }
 

@@ -43,8 +43,11 @@ public class TextParser implements PhoneBillParser<PhoneBill> {
 
             return bill;
         }
+        catch(IndexOutOfBoundsException e) {
+            throw new ParserException("Phone bill file cannot be parsed", e);
+        }
         catch(IOException e) {
-            throw new ParserException("While parsing phone bill text", e);
+            throw new ParserException("Phone bill file cannot be read", e);
         }
     }
 }
