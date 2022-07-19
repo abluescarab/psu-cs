@@ -460,7 +460,7 @@ public class CommandLineParser {
 
         if((usageLength + appendLength) >= maxLineLength) {
             builder.append(System.lineSeparator())
-                   .append("      ") // length of "usage: "
+                   .append(String.format("%" + "usage:".length() + "s", ""))
                    .append(toAppend);
             newLength = 0;
         }
