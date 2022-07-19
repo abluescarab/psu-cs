@@ -119,6 +119,13 @@ class CommandLineArgument {
     }
 
     /**
+     * Gets whether the argument has any sub-arguments.
+     */
+    public final boolean hasArguments() {
+        return argumentNames.length > 0;
+    }
+
+    /**
      * Gets sub argument names.
      */
     public final String[] getArguments() {
@@ -143,6 +150,7 @@ class CommandLineArgument {
         }
 
         builder.append(help);
+
         builder = new StringBuilder(CommandLineParser.formatString(
                 builder.toString(),
                 lineLength,

@@ -398,27 +398,37 @@ public class CommandLineParser {
      * Gets the usage information for the parser.
      */
     public String getUsageInformation() {
-        int currentUsageLength = 0;
         StringBuilder usage = new StringBuilder();
         StringBuilder positional = new StringBuilder("positional arguments:" + System.lineSeparator());
         StringBuilder optional = new StringBuilder("optional arguments:" + System.lineSeparator());
 
         usage.append("usage: ")
              .append(jarFilename);
-        currentUsageLength = usage.length();
 
         for(var arg : positionalArguments.values()) {
-            currentUsageLength = splitUsage(usage, String.format(" %s", arg.getName()), currentUsageLength);
+            usage.append(String.format(" %s", arg.getName()));
             positional.append(arg.getFormattedHelp(maxLineLength, indentSize))
                       .append(System.lineSeparator());
         }
 
         for(var arg : flags.values()) {
-            currentUsageLength = splitUsage(usage, String.format(" [%s]", arg.getName()), currentUsageLength);
+            String flagInfo;
+
+            if(arg.hasArguments()) {
+                var args = arg.getArguments();
+                flagInfo = String.format(" [%s=%s]", arg.getName(), String.join(", ", args));
+            }
+            else {
+                flagInfo = String.format(" [%s]", arg.getName());
+            }
+
+            usage.append(flagInfo);
             optional.append(arg.getFormattedHelp(maxLineLength, indentSize))
                     .append(System.lineSeparator());
         }
 
+        usage = new StringBuilder(formatString(usage.toString(), maxLineLength, "",
+                String.format("%" + "usage:".length() + "s", "")));
         usage.append(System.lineSeparator());
 
         if(prologue != null && prologue.length() > 0) {
@@ -444,32 +454,6 @@ public class CommandLineParser {
         }
 
         return usage.toString();
-    }
-
-    /**
-     * Splits the usage information line.
-     *
-     * @param builder     builder to append to
-     * @param toAppend    string to append
-     * @param usageLength current length of usage information
-     * @return new length of usage information
-     */
-    private int splitUsage(StringBuilder builder, String toAppend, int usageLength) {
-        int newLength = usageLength;
-        int appendLength = toAppend.length();
-
-        if((usageLength + appendLength) >= maxLineLength) {
-            builder.append(System.lineSeparator())
-                   .append(String.format("%" + "usage:".length() + "s", ""))
-                   .append(toAppend);
-            newLength = 0;
-        }
-        else {
-            builder.append(toAppend);
-            newLength += appendLength;
-        }
-
-        return newLength;
     }
 
     /**
