@@ -98,9 +98,22 @@ public class CommandLineParser {
                         length = linePrefix.length();
                     }
 
-                    formatted.append(word)
+                    int wordIndex = block.indexOf(word);
+
+                    formatted.append(block, 0, wordIndex)
+                             .append(word)
                              .append(" ");
-                    length += word.length() + 1;
+
+                    int newLength = wordIndex + word.length() + 1;
+
+                    if(newLength <= block.length()) {
+                        block = block.substring(newLength);
+                    }
+                    else {
+                        block = "";
+                    }
+
+                    length += newLength;
                 }
 
                 length = linePrefix.length();
