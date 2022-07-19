@@ -9,14 +9,13 @@ import java.util.regex.Pattern;
  */
 public class CommandLineParser {
     private final String jarFilename;
+    private final Map<String, CommandLineArgument> positionalArguments;
+    private final Map<String, CommandLineArgument> flags;
+    private final List<String> givenArguments;
     private int maxLineLength;
     private int indentSize;
     private String prologue;
     private String epilogue;
-    // command line arguments
-    private final Map<String, CommandLineArgument> positionalArguments;
-    private final Map<String, CommandLineArgument> flags;
-    private final List<String> givenArguments;
 
     /**
      * Creates a new command line parser.
@@ -70,8 +69,7 @@ public class CommandLineParser {
         }
 
         StringBuilder formatted = new StringBuilder();
-        StringTokenizer newLineTokenizer;
-        StringTokenizer spaceTokenizer;
+        String[] lines = text.split(System.lineSeparator());
         int length = 0;
 
         if(!Objects.equals(firstLinePrefix, "")) {
@@ -79,20 +77,14 @@ public class CommandLineParser {
             formatted.append(firstLinePrefix);
         }
 
-        newLineTokenizer = new StringTokenizer(text, System.lineSeparator());
-
-        while(newLineTokenizer.hasMoreTokens()) {
-            String block = newLineTokenizer.nextToken();
+        for(int i = 0; i < lines.length; i++) {
+            String block = lines[i];
 
             if(columnToBreak <= 0 || length + block.length() <= columnToBreak) {
                 formatted.append(block);
             }
             else {
-                spaceTokenizer = new StringTokenizer(block, " ");
-
-                while(spaceTokenizer.hasMoreTokens()) {
-                    String word = spaceTokenizer.nextToken();
-
+                for(String word : block.split(" ")) {
                     if(length + word.length() + 1 >= columnToBreak) {
                         formatted.append(System.lineSeparator())
                                  .append(linePrefix);
@@ -120,7 +112,7 @@ public class CommandLineParser {
                 length = linePrefix.length();
             }
 
-            if(newLineTokenizer.hasMoreTokens()) {
+            if(i < lines.length - 1) {
                 formatted.append(System.lineSeparator())
                          .append(linePrefix);
             }
