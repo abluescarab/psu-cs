@@ -8,16 +8,15 @@ import java.util.regex.Pattern;
  * A class used to parse command line arguments. Functionality based on Python's argparse library.
  */
 public class CommandLineParser {
-    protected String jarFilename;
-    protected int maxLineLength;
-    protected int indentSize;
-    protected String prologue;
-    protected String epilogue;
-
+    private final String jarFilename;
+    private int maxLineLength;
+    private int indentSize;
+    private String prologue;
+    private String epilogue;
     // command line arguments
-    protected Map<String, CommandLineArgument> positionalArguments;
-    protected Map<String, CommandLineArgument> flags;
-    protected List<String> givenArguments;
+    private final Map<String, CommandLineArgument> positionalArguments;
+    private final Map<String, CommandLineArgument> flags;
+    private final List<String> givenArguments;
 
     /**
      * Creates a new command line parser.
@@ -314,12 +313,26 @@ public class CommandLineParser {
     }
 
     /**
+     * Gets the maximum line length printed to the command line.
+     */
+    public int getMaxLineLength() {
+        return maxLineLength;
+    }
+
+    /**
      * Sets the maximum line length printed to the command line.
      *
      * @param maxLineLength maximum line length in columns
      */
     public void setMaxLineLength(int maxLineLength) {
         this.maxLineLength = Math.abs(maxLineLength);
+    }
+
+    /**
+     * Gets the indent size to display before new lines.
+     */
+    public int getIndentSize() {
+        return indentSize;
     }
 
     /**

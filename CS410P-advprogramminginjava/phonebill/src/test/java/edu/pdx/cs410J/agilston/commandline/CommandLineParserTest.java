@@ -11,21 +11,26 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * Unit tests for the {@link CommandLineParser} class.
  */
 public class CommandLineParserTest {
-    private CommandLineParser createParser() {
+    private CommandLineParser createParser(boolean addCommands) {
         CommandLineParser parser = new CommandLineParser("phonebill-2022.0.0.jar");
-        parser.addArgument("positional1", "Positional argument 1");
-        parser.addArgument("positional2", "Positional argument 2", "2");
-        parser.addArgument("positional3", "Positional argument 3", "3",
-                new String[] { "1", "2", "3" });
-        parser.addFlag("--test1", "Test flag without option", "-t");
-        parser.addFlag("--test2", "Test flag with option", 1, "-e");
-        parser.addFlag("--test3", "Test flag with choices", "a", new String[] { "a", "b", "c" }, "-s");
+
+        if(addCommands) {
+            parser.addArgument("positional1", "Positional argument 1");
+            parser.addArgument("positional2", "Positional argument 2", "2");
+            parser.addArgument("positional3", "Positional argument 3", "3",
+                    new String[] { "1", "2", "3" });
+            parser.addFlag("--test1", "Test flag without option", "-t");
+            parser.addFlag("--test2", "Test flag with option", 1, "-e");
+            parser.addFlag("--test3", "Test flag with choices", "a",
+                    new String[] { "a", "b", "c" }, "-s");
+        }
+
         return parser;
     }
 
     @Test
     void parseWithValidArguments() {
-        CommandLineParser parser = createParser();
+        CommandLineParser parser = createParser(true);
         parser.parse(new String[] {
                 "1",
                 "b",
@@ -46,7 +51,7 @@ public class CommandLineParserTest {
 
     @Test
     void parseWithFlagAliases() {
-        CommandLineParser parser = createParser();
+        CommandLineParser parser = createParser(true);
         parser.parse(new String[] {
                 "1",
                 "b",
@@ -68,7 +73,7 @@ public class CommandLineParserTest {
 
     @Test
     void parseWithCombinedFlagAliases() {
-        CommandLineParser parser = createParser();
+        CommandLineParser parser = createParser(true);
         parser.parse(new String[] {
                 "1",
                 "b",
@@ -89,7 +94,7 @@ public class CommandLineParserTest {
 
     @Test
     void parseWithMissingPositionalThatHasDefaultValue() {
-        CommandLineParser parser = createParser();
+        CommandLineParser parser = createParser(true);
         parser.parse(new String[] {
                 "1",
                 "--test1",
@@ -110,7 +115,7 @@ public class CommandLineParserTest {
 
     @Test
     void parseWithMissingPositionalArguments() {
-        CommandLineParser parser = createParser();
+        CommandLineParser parser = createParser(true);
         parser.parse(new String[] {
                 "--test1",
                 "--test2=test",
@@ -130,7 +135,7 @@ public class CommandLineParserTest {
 
     @Test
     void parseWithNoArguments() {
-        CommandLineParser parser = createParser();
+        CommandLineParser parser = createParser(true);
         parser.parse(new String[0]);
 
         assertThat(parser.hasArgument("positional1"), equalTo(false));
@@ -145,7 +150,7 @@ public class CommandLineParserTest {
 
     @Test
     void parseWithIncorrectOptions() {
-        CommandLineParser parser = createParser();
+        CommandLineParser parser = createParser(true);
         parser.parse(new String[] {
                 "1",
                 "b",
@@ -166,7 +171,7 @@ public class CommandLineParserTest {
 
     @Test
     void parseWithTooManyPositionalArguments() {
-        CommandLineParser parser = createParser();
+        CommandLineParser parser = createParser(true);
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
                 () -> parser.parse(new String[] {
                         "1",
@@ -184,7 +189,7 @@ public class CommandLineParserTest {
 
     @Test
     void parseWithNonexistentFlag() {
-        CommandLineParser parser = createParser();
+        CommandLineParser parser = createParser(true);
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
                 () -> parser.parse(new String[] {
                         "1",
@@ -202,7 +207,7 @@ public class CommandLineParserTest {
 
     @Test
     void addInvalidFlagArgument() {
-        CommandLineParser parser = createParser();
+        CommandLineParser parser = createParser(false);
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
                 () -> parser.addFlag("test", "Test argument"));
 
@@ -211,7 +216,7 @@ public class CommandLineParserTest {
 
     @Test
     void addInvalidFlagArgumentWithChoices() {
-        CommandLineParser parser = createParser();
+        CommandLineParser parser = createParser(false);
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
                 () -> parser.addFlag("test", "test argument", "", new String[0]));
 
@@ -262,7 +267,7 @@ public class CommandLineParserTest {
 
     @Test
     void printUsageInformationWithPrologue() {
-        CommandLineParser parser = createParser();
+        CommandLineParser parser = createParser(false);
         String prologue = "This is a prologue.";
 
         parser.setPrologue(prologue);
@@ -271,7 +276,7 @@ public class CommandLineParserTest {
 
     @Test
     void printUsageInformationWithEpilogue() {
-        CommandLineParser parser = createParser();
+        CommandLineParser parser = createParser(false);
         String epilogue = "This is an epilogue.";
 
         parser.setEpilogue(epilogue);
@@ -280,18 +285,16 @@ public class CommandLineParserTest {
 
     @Test
     void gettingValueOfNonexistentArgumentReturnsEmptyString() {
-        CommandLineParser parser = createParser();
+        CommandLineParser parser = createParser(false);
         assertThat(parser.getValueOrDefault("--myarg"), equalTo(""));
     }
 
     @Test
     void longNameInFormattedHelpStringWraps() {
-        CommandLineParser parser = createParser();
-        CommandLineArgument arg = new CommandLineArgument("--myveryveryveryveryverylongargument",
-                "this is a very long argument", "", new String[0], 0);
+        CommandLineParser parser = createParser(false);
+        parser.addFlag("--myveryveryveryveryverylongargument", "this is a very long argument", 0);
 
-        parser.flags.put(arg.getName(), arg);
-        assertThat(arg.getFormattedHelp(parser.maxLineLength, parser.indentSize),
-                containsString(System.lineSeparator()));
+        assertThat(parser.getUsageInformation(),
+                containsString("--myveryveryveryveryverylongargument" + System.lineSeparator()));
     }
 }
