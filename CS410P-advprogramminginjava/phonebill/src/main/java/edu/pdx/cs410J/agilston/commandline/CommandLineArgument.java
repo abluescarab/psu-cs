@@ -12,27 +12,27 @@ class CommandLineArgument {
     private final String defaultValue;
     private final List<String> choices;
     private final List<String> aliases;
-    private final String[] argumentNames;
+    private final String[] arguments;
     private final String[] values;
 
     /**
      * Creates a new command line argument.
      *
-     * @param name          name to type
-     * @param help          help displayed with usage information
-     * @param defaultValue  default value for command
-     * @param choices       possible values
-     * @param argumentNames sub-arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
-     * @param aliases       alternative names to type
+     * @param name         name to type
+     * @param help         help displayed with usage information
+     * @param defaultValue default value for command
+     * @param choices      possible values
+     * @param arguments    sub-arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
+     * @param aliases      alternative names to type
      */
-    public CommandLineArgument(String name, String help, String defaultValue, String[] choices, String[] argumentNames,
+    public CommandLineArgument(String name, String help, String defaultValue, String[] choices, String[] arguments,
                                String... aliases) {
         this.name = name;
         this.help = help;
         this.defaultValue = defaultValue;
         this.choices = choices == null ? Collections.emptyList() : List.of(choices);
-        this.argumentNames = argumentNames == null ? new String[0] : argumentNames;
-        this.values = new String[argumentNames == null ? 1 : argumentNames.length];
+        this.arguments = arguments == null ? new String[0] : arguments;
+        this.values = new String[arguments == null ? 1 : arguments.length];
         this.aliases = aliases == null ? Collections.emptyList() : List.of(aliases);
     }
 
@@ -122,14 +122,14 @@ class CommandLineArgument {
      * Gets whether the argument has any sub-arguments.
      */
     public final boolean hasArguments() {
-        return argumentNames.length > 0;
+        return arguments.length > 0;
     }
 
     /**
      * Gets sub argument names.
      */
     public final String[] getArguments() {
-        return argumentNames;
+        return arguments;
     }
 
     /**

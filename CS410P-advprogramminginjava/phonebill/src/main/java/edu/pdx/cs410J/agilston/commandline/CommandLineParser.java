@@ -134,12 +134,12 @@ public class CommandLineParser {
     /**
      * Adds a positional argument to the command line.
      *
-     * @param name          name to type
-     * @param help          help text displayed with usage information
-     * @param argumentNames sub-arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
+     * @param name      name to type
+     * @param help      help text displayed with usage information
+     * @param arguments sub-arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
      */
-    public void addArgument(String name, String help, String[] argumentNames) {
-        addArgument(name, help, "", null, argumentNames);
+    public void addArgument(String name, String help, String[] arguments) {
+        addArgument(name, help, "", null, arguments);
     }
 
     /**
@@ -168,38 +168,38 @@ public class CommandLineParser {
     /**
      * Adds an optional positional argument to the command line.
      *
-     * @param name          name to type
-     * @param help          help text displayed with usage information
-     * @param argumentNames sub-arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
+     * @param name      name to type
+     * @param help      help text displayed with usage information
+     * @param arguments sub-arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
      */
-    public void addListArgument(String name, String help, String[] argumentNames) {
-        addArgument(name, help, null, null, argumentNames);
+    public void addListArgument(String name, String help, String[] arguments) {
+        addArgument(name, help, null, null, arguments);
     }
 
     /**
      * Adds an optional positional argument to the command line.
      *
-     * @param name          name to type
-     * @param help          help text displayed with usage information
-     * @param defaultValue  default value of the argument
-     * @param argumentNames sub-arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
+     * @param name         name to type
+     * @param help         help text displayed with usage information
+     * @param defaultValue default value of the argument
+     * @param arguments    sub-arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
      */
-    public void addListArgument(String name, String help, String defaultValue, String[] argumentNames) {
-        addArgument(name, help, defaultValue, null, argumentNames);
+    public void addListArgument(String name, String help, String defaultValue, String[] arguments) {
+        addArgument(name, help, defaultValue, null, arguments);
     }
 
     /**
      * Adds an optional positional argument to the command line.
      *
-     * @param name          name to type
-     * @param help          help text displayed with usage information
-     * @param defaultValue  default value of the argument
-     * @param choices       possible values
-     * @param argumentNames sub-arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
+     * @param name         name to type
+     * @param help         help text displayed with usage information
+     * @param defaultValue default value of the argument
+     * @param choices      possible values
+     * @param arguments    sub-arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
      */
     public void addListArgument(String name, String help, String defaultValue, String[] choices,
-                                String[] argumentNames) {
-        addArgument(name, help, defaultValue, choices, argumentNames);
+                                String[] arguments) {
+        addArgument(name, help, defaultValue, choices, arguments);
     }
 
     /**
@@ -220,69 +220,69 @@ public class CommandLineParser {
     /**
      * Adds a flag (-f, --flag) to the command line.
      *
-     * @param name          name to type
-     * @param help          help text displayed with usage information
-     * @param argumentNames sub-arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
-     * @param aliases       alternative names to type
+     * @param name      name to type
+     * @param help      help text displayed with usage information
+     * @param arguments sub-arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
+     * @param aliases   alternative names to type
      */
-    public void addFlag(String name, String help, String[] argumentNames, String... aliases) {
+    public void addFlag(String name, String help, String[] arguments, String... aliases) {
         if(!name.startsWith("-")) {
             throw new IllegalArgumentException("Invalid argument: Flag name must start with \"-\"");
         }
 
-        addArgument(name, help, "", null, argumentNames, aliases);
+        addArgument(name, help, "", null, arguments, aliases);
     }
 
     /**
      * Adds a flag (-f, --flag) to the command line.
      *
-     * @param name          name to type
-     * @param help          help text displayed with usage information
-     * @param defaultValue  default value of the argument
-     * @param argumentNames sub-arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
-     * @param aliases       alternative names to type
+     * @param name         name to type
+     * @param help         help text displayed with usage information
+     * @param defaultValue default value of the argument
+     * @param arguments    sub-arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
+     * @param aliases      alternative names to type
      */
-    public void addFlag(String name, String help, String defaultValue, String[] argumentNames, String... aliases) {
+    public void addFlag(String name, String help, String defaultValue, String[] arguments, String... aliases) {
         if(!name.startsWith("-")) {
             throw new IllegalArgumentException("Invalid argument: Flag name must start with \"-\"");
         }
 
-        addArgument(name, help, defaultValue, null, argumentNames, aliases);
+        addArgument(name, help, defaultValue, null, arguments, aliases);
     }
 
     /**
      * Adds a flag (-f, --flag) to the command line.
      *
-     * @param name          name to type
-     * @param help          help text displayed with usage information
-     * @param defaultValue  default value of the argument
-     * @param choices       possible values
-     * @param argumentNames sub-arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
-     * @param aliases       alternative names to type
+     * @param name         name to type
+     * @param help         help text displayed with usage information
+     * @param defaultValue default value of the argument
+     * @param choices      possible values
+     * @param arguments    sub-arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
+     * @param aliases      alternative names to type
      */
-    public void addFlag(String name, String help, String defaultValue, String[] choices, String[] argumentNames,
+    public void addFlag(String name, String help, String defaultValue, String[] choices, String[] arguments,
                         String... aliases) {
         if(!name.startsWith("-")) {
             throw new IllegalArgumentException("Invalid argument: Flag name must start with \"-\"");
         }
 
-        addArgument(name, help, defaultValue, choices, argumentNames, aliases);
+        addArgument(name, help, defaultValue, choices, arguments, aliases);
     }
 
     /**
      * Add an argument to the command line interface.
      *
-     * @param name          name to type
-     * @param help          help text displayed with usage information
-     * @param defaultValue  default value of the command
-     * @param choices       possible values
-     * @param argumentNames sub-arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
-     * @param aliases       alternative names to type
+     * @param name         name to type
+     * @param help         help text displayed with usage information
+     * @param defaultValue default value of the command
+     * @param choices      possible values
+     * @param arguments    sub-arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
+     * @param aliases      alternative names to type
      */
-    private void addArgument(String name, String help, String defaultValue, String[] choices, String[] argumentNames,
+    private void addArgument(String name, String help, String defaultValue, String[] choices, String[] arguments,
                              String... aliases) {
         Map<String, CommandLineArgument> map = name.startsWith("-") ? flags : positionalArguments;
-        map.put(name, new CommandLineArgument(name, help, defaultValue, choices, argumentNames, aliases));
+        map.put(name, new CommandLineArgument(name, help, defaultValue, choices, arguments, aliases));
     }
 
     /**
