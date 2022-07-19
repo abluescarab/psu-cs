@@ -22,7 +22,7 @@ class CommandLineArgument {
      * @param help          help displayed with usage information
      * @param defaultValue  default value for command
      * @param choices       possible values
-     * @param argumentNames sub arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
+     * @param argumentNames sub-arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
      * @param aliases       alternative names to type
      */
     public CommandLineArgument(String name, String help, String defaultValue, String[] choices, String[] argumentNames,

@@ -130,7 +130,7 @@ public class CommandLineParser {
      *
      * @param name          name to type
      * @param help          help text displayed with usage information
-     * @param argumentNames sub arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
+     * @param argumentNames sub-arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
      */
     public void addArgument(String name, String help, String[] argumentNames) {
         addArgument(name, help, "", null, argumentNames);
@@ -164,7 +164,7 @@ public class CommandLineParser {
      *
      * @param name          name to type
      * @param help          help text displayed with usage information
-     * @param argumentNames sub arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
+     * @param argumentNames sub-arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
      */
     public void addListArgument(String name, String help, String[] argumentNames) {
         addArgument(name, help, null, null, argumentNames);
@@ -176,7 +176,7 @@ public class CommandLineParser {
      * @param name          name to type
      * @param help          help text displayed with usage information
      * @param defaultValue  default value of the argument
-     * @param argumentNames sub arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
+     * @param argumentNames sub-arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
      */
     public void addListArgument(String name, String help, String defaultValue, String[] argumentNames) {
         addArgument(name, help, defaultValue, null, argumentNames);
@@ -189,7 +189,7 @@ public class CommandLineParser {
      * @param help          help text displayed with usage information
      * @param defaultValue  default value of the argument
      * @param choices       possible values
-     * @param argumentNames sub arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
+     * @param argumentNames sub-arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
      */
     public void addListArgument(String name, String help, String defaultValue, String[] choices,
                                 String[] argumentNames) {
@@ -216,7 +216,7 @@ public class CommandLineParser {
      *
      * @param name          name to type
      * @param help          help text displayed with usage information
-     * @param argumentNames sub arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
+     * @param argumentNames sub-arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
      * @param aliases       alternative names to type
      */
     public void addFlag(String name, String help, String[] argumentNames, String... aliases) {
@@ -233,7 +233,7 @@ public class CommandLineParser {
      * @param name          name to type
      * @param help          help text displayed with usage information
      * @param defaultValue  default value of the argument
-     * @param argumentNames sub arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
+     * @param argumentNames sub-arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
      * @param aliases       alternative names to type
      */
     public void addFlag(String name, String help, String defaultValue, String[] argumentNames, String... aliases) {
@@ -251,7 +251,7 @@ public class CommandLineParser {
      * @param help          help text displayed with usage information
      * @param defaultValue  default value of the argument
      * @param choices       possible values
-     * @param argumentNames sub arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
+     * @param argumentNames sub-arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
      * @param aliases       alternative names to type
      */
     public void addFlag(String name, String help, String defaultValue, String[] choices, String[] argumentNames,
@@ -270,7 +270,7 @@ public class CommandLineParser {
      * @param help          help text displayed with usage information
      * @param defaultValue  default value of the command
      * @param choices       possible values
-     * @param argumentNames sub arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
+     * @param argumentNames sub-arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
      * @param aliases       alternative names to type
      */
     private void addArgument(String name, String help, String defaultValue, String[] choices, String[] argumentNames,
