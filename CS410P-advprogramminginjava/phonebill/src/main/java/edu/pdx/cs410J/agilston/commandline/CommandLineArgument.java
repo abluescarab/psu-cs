@@ -90,6 +90,7 @@ class CommandLineArgument {
 
     /**
      * Checks whether the command has a specific alias.
+     *
      * @param alias alias to check for
      * @return true if the alias exists; false otherwise
      */
@@ -132,23 +133,20 @@ class CommandLineArgument {
      */
     public String getFormattedHelp(int lineLength, int indentSize) {
         int maxNameLength = 24;
-        boolean newLine = false;
         StringBuilder names = getFormattedName();
         StringBuilder builder = new StringBuilder(
                 String.format("%" + indentSize + "s%-" + (maxNameLength - indentSize) + "s", "", names));
 
         if((names.length() + indentSize) >= maxNameLength) {
             builder.append(System.lineSeparator());
-            newLine = true;
         }
 
-        // TODO: fix breaking on line 80
-
-        builder.append(
-                CommandLineParser.formatString(help,
-                lineLength,
-                String.format("%" + maxNameLength + "s", ""),
-                newLine));
+        builder = new StringBuilder(
+                CommandLineParser.formatString(builder + help,
+                        lineLength,
+                        String.format("%" + maxNameLength + "s", ""),
+                        false,
+                        true));
 
         return builder.toString();
     }

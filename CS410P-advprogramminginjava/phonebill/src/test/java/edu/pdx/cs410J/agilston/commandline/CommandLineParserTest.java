@@ -228,8 +228,8 @@ public class CommandLineParserTest {
         String text = "This is a formatted string that breaks on column 20, where each line has a prefix."
                 + System.lineSeparator() + "This is on a new line.";
 
-        assertThat(CommandLineParser.formatString(text, 20, "%", true), equalTo(
-                "%This is a " + System.lineSeparator()
+        assertThat(CommandLineParser.formatString(text, 20, "%", true, false),
+                equalTo("%This is a " + System.lineSeparator()
                         + "%formatted string " + System.lineSeparator()
                         + "%that breaks on " + System.lineSeparator()
                         + "%column 20, where " + System.lineSeparator()
@@ -237,7 +237,27 @@ public class CommandLineParserTest {
                         + "%prefix. " + System.lineSeparator()
                         + "%This is on a new " + System.lineSeparator()
                         + "%line. "
-        ));
+                ));
+    }
+
+    @Test
+    void formatStringWithExtraSpacingWithCommandLineParser() {
+        String text = "This is a formatted string               that keeps extra spacing and breaks on column 20, "
+                + "where each line has a prefix." + System.lineSeparator() + "This is on a new line.";
+
+        assertThat(CommandLineParser.formatString(text, 20, "%", true, true),
+                equalTo("%This is a " + System.lineSeparator()
+                        + "%formatted string " + System.lineSeparator()
+                        + "%              that " + System.lineSeparator()
+                        + "%keeps extra " + System.lineSeparator()
+                        + "%spacing and " + System.lineSeparator()
+                        + "%breaks on column " + System.lineSeparator()
+                        + "%20, where each " + System.lineSeparator()
+                        + "%line has a " + System.lineSeparator()
+                        + "%prefix. " + System.lineSeparator()
+                        + "%This is on a new " + System.lineSeparator()
+                        + "%line. "
+                ));
     }
 
     @Test

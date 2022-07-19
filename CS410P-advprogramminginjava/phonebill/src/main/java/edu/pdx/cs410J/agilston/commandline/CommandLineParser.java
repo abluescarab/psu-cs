@@ -41,7 +41,7 @@ public class CommandLineParser {
      * @return formatted string
      */
     public static String formatString(String text, int columnToBreak) {
-        return formatString(text, columnToBreak, "", false);
+        return formatString(text, columnToBreak, "", false, false);
     }
 
     /**
@@ -53,7 +53,8 @@ public class CommandLineParser {
      * @param prefixOnFirstLine whether to print the prefix on the first line
      * @return formatted string
      */
-    public static String formatString(String text, int columnToBreak, String linePrefix, boolean prefixOnFirstLine) {
+    public static String formatString(String text, int columnToBreak, String linePrefix, boolean prefixOnFirstLine,
+                                      boolean preserveSpacing) {
         if(text == null || text.length() == 0) {
             return "";
         }
@@ -61,7 +62,7 @@ public class CommandLineParser {
         StringBuilder formatted = new StringBuilder();
         StringTokenizer newLineTokenizer;
         StringTokenizer spaceTokenizer;
-        int length = linePrefix.length();
+        int length = prefixOnFirstLine ? linePrefix.length() : 0;
 
         if(prefixOnFirstLine) {
             formatted.append(linePrefix);
@@ -80,15 +81,35 @@ public class CommandLineParser {
                 while(spaceTokenizer.hasMoreTokens()) {
                     String word = spaceTokenizer.nextToken();
 
-                    if(length + word.length() >= columnToBreak) {
+                    if(length + word.length() + 1 >= columnToBreak) {
                         formatted.append(System.lineSeparator())
                                  .append(linePrefix);
                         length = linePrefix.length();
                     }
 
-                    formatted.append(word)
-                             .append(" ");
-                    length += word.length() + 1;
+                    if(preserveSpacing) {
+                        int wordIndex = block.indexOf(word);
+
+                        formatted.append(block, 0, wordIndex)
+                                 .append(word)
+                                 .append(" ");
+
+                        int newLength = wordIndex + word.length() + 1;
+
+                        if(newLength <= block.length()) {
+                            block = block.substring(newLength);
+                        }
+                        else {
+                            block = "";
+                        }
+
+                        length += newLength;
+                    }
+                    else {
+                        formatted.append(word)
+                                 .append(" ");
+                        length += word.length() + 1;
+                    }
                 }
 
                 length = linePrefix.length();
