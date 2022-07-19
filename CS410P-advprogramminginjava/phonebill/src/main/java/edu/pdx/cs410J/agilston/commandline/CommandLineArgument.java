@@ -143,11 +143,9 @@ class CommandLineArgument {
         StringBuilder names = getFormattedName();
         StringBuilder builder = new StringBuilder(
                 String.format("%-" + (maxNameLength - indentSize) + "s", names));
-        String largeIndent = String.format("%" + maxNameLength + "s", "");
 
         if((names.length() + indentSize) >= maxNameLength) {
-            builder.append(System.lineSeparator())
-                   .append(largeIndent);
+            builder.append(System.lineSeparator());
         }
 
         builder.append(help);
@@ -156,7 +154,7 @@ class CommandLineArgument {
                 builder.toString(),
                 lineLength,
                 String.format("%" + indentSize + "s", ""),
-                largeIndent));
+                String.format("%" + maxNameLength + "s", "")));
 
         return builder.toString();
     }
