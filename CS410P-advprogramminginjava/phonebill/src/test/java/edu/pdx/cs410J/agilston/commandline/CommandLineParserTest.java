@@ -231,7 +231,7 @@ public class CommandLineParserTest {
         String text = "This is a formatted string that breaks on column 20, where each line has a prefix."
                 + System.lineSeparator() + "This is on a new line.";
 
-        assertThat(CommandLineParser.formatString(text, 20, "%", true, false),
+        assertThat(CommandLineParser.formatString(text, 20, "%"),
                 equalTo("%This is a " + System.lineSeparator()
                         + "%formatted string " + System.lineSeparator()
                         + "%that breaks on " + System.lineSeparator()
@@ -270,7 +270,7 @@ public class CommandLineParserTest {
     @Test
     void longNameInFormattedHelpStringWraps() {
         CommandLineParser parser = createParser(false);
-        parser.addFlag("--myveryveryveryveryverylongargument", "this is a very long argument", 0);
+        parser.addFlag("--myveryveryveryveryverylongargument", "this is a very long argument");
 
         assertThat(parser.getUsageInformation(),
                 containsString("--myveryveryveryveryverylongargument" + System.lineSeparator()));

@@ -72,13 +72,14 @@ public class CommandLineParser {
         StringBuilder formatted = new StringBuilder();
         StringTokenizer newLineTokenizer;
         StringTokenizer spaceTokenizer;
-        int length = prefixOnFirstLine ? linePrefix.length() : 0;
+        int length = 0;
 
-        if(prefixOnFirstLine) {
-            formatted.append(linePrefix);
+        if(!Objects.equals(firstLinePrefix, "")) {
+            length = firstLinePrefix.length();
+            formatted.append(firstLinePrefix);
         }
 
-        if(columnToBreak <= 0 || text.length() <= columnToBreak) {
+        if(columnToBreak <= 0 || length + text.length() <= columnToBreak) {
             formatted.append(text);
         }
         else {
@@ -97,29 +98,9 @@ public class CommandLineParser {
                         length = linePrefix.length();
                     }
 
-                    if(preserveSpacing) {
-                        int wordIndex = block.indexOf(word);
-
-                        formatted.append(block, 0, wordIndex)
-                                 .append(word)
-                                 .append(" ");
-
-                        int newLength = wordIndex + word.length() + 1;
-
-                        if(newLength <= block.length()) {
-                            block = block.substring(newLength);
-                        }
-                        else {
-                            block = "";
-                        }
-
-                        length += newLength;
-                    }
-                    else {
-                        formatted.append(word)
-                                 .append(" ");
-                        length += word.length() + 1;
-                    }
+                    formatted.append(word)
+                             .append(" ");
+                    length += word.length() + 1;
                 }
 
                 length = linePrefix.length();

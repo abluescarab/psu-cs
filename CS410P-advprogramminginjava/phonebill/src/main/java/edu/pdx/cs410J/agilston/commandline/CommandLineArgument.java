@@ -135,18 +135,19 @@ class CommandLineArgument {
         int maxNameLength = 24;
         StringBuilder names = getFormattedName();
         StringBuilder builder = new StringBuilder(
-                String.format("%" + indentSize + "s%-" + (maxNameLength - indentSize) + "s", "", names));
+                String.format("%-" + (maxNameLength - indentSize) + "s", names));
 
         if((names.length() + indentSize) >= maxNameLength) {
-            builder.append(System.lineSeparator());
+            builder.append(System.lineSeparator())
+                   .append(String.format("%" + maxNameLength + "s", ""));
         }
 
-        builder = new StringBuilder(
-                CommandLineParser.formatString(builder + help,
-                        lineLength,
-                        String.format("%" + maxNameLength + "s", ""),
-                        false,
-                        true));
+        builder.append(help);
+        builder = new StringBuilder(CommandLineParser.formatString(
+                builder.toString(),
+                lineLength,
+                String.format("%" + indentSize + "s", ""),
+                String.format("%" + maxNameLength + "s", "")));
 
         return builder.toString();
     }
