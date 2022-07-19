@@ -23,6 +23,7 @@ class CommandLineArgument {
      * @param defaultValue default value for command
      * @param choices      possible values
      * @param argumentList number of sub arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
+     *                     (maximum 100)
      * @param aliases      alternative names to type
      */
     public CommandLineArgument(String name, String help, String defaultValue, String[] choices, int argumentList,
@@ -31,7 +32,7 @@ class CommandLineArgument {
         this.help = help;
         this.defaultValue = defaultValue;
         this.choices = choices == null ? Collections.emptyList() : List.of(choices);
-        this.argumentList = argumentList;
+        this.argumentList = Math.min(Math.abs(argumentList), 100);
         this.values = new String[this.argumentList];
         this.aliases = aliases == null ? Collections.emptyList() : List.of(aliases);
     }

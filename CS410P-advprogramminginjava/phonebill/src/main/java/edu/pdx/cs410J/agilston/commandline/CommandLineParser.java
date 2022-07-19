@@ -139,7 +139,8 @@ public class CommandLineParser {
      *
      * @param name         name to type
      * @param help         help text displayed with usage information
-     * @param argumentList number of sub arguments accepted
+     * @param argumentList number of sub arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
+     *                     (maximum 100)
      */
     public void addArgument(String name, String help, int argumentList) {
         addArgument(name, help, "", null, argumentList);
@@ -162,7 +163,8 @@ public class CommandLineParser {
      * @param name         name to type
      * @param help         help text displayed with usage information
      * @param defaultValue default value of the argument
-     * @param argumentList number of sub arguments accepted
+     * @param argumentList number of sub arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
+     *                     (maximum 100)
      */
     public void addArgument(String name, String help, String defaultValue, int argumentList) {
         addArgument(name, help, defaultValue, null, argumentList);
@@ -201,6 +203,7 @@ public class CommandLineParser {
      * @param name         name to type
      * @param help         help text displayed with usage information
      * @param argumentList number of sub arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
+     *                     (maximum 100)
      * @param aliases      alternative names to type
      */
     public void addFlag(String name, String help, int argumentList, String... aliases) {
@@ -236,6 +239,7 @@ public class CommandLineParser {
      * @param defaultValue default value of the command
      * @param choices      possible values
      * @param argumentList number of sub arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
+     *                     (maximum 100)
      * @param aliases      alternative names to type
      */
     private void addArgument(String name, String help, String defaultValue, String[] choices, int argumentList,
@@ -315,7 +319,7 @@ public class CommandLineParser {
      * @param maxLineLength maximum line length in columns
      */
     public void setMaxLineLength(int maxLineLength) {
-        this.maxLineLength = maxLineLength;
+        this.maxLineLength = Math.abs(maxLineLength);
     }
 
     /**
@@ -324,7 +328,7 @@ public class CommandLineParser {
      * @param indentSize indent size in columns
      */
     public void setIndentSize(int indentSize) {
-        this.indentSize = indentSize;
+        this.indentSize = Math.abs(indentSize);
     }
 
     /**
@@ -355,8 +359,8 @@ public class CommandLineParser {
         StringBuilder positional = new StringBuilder("positional arguments:" + System.lineSeparator());
         StringBuilder optional = new StringBuilder("optional arguments:" + System.lineSeparator());
 
-        usage.append("usage: ");
-        usage.append(jarFilename);
+        usage.append("usage: ")
+             .append(jarFilename);
         currentUsageLength = usage.length();
 
         for(var arg : positionalArguments.values()) {
