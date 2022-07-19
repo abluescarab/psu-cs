@@ -121,7 +121,7 @@ class CommandLineArgument {
     /**
      * Gets sub argument names.
      */
-    public final String[] getArgumentNames() {
+    public final String[] getArguments() {
         return argumentNames;
     }
 
