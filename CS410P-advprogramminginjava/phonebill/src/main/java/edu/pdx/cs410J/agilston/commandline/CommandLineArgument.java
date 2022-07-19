@@ -12,28 +12,27 @@ class CommandLineArgument {
     private final String defaultValue;
     private final List<String> choices;
     private final List<String> aliases;
-    private final int argumentList;
+    private final String[] argumentNames;
     private final String[] values;
 
     /**
      * Creates a new command line argument.
      *
-     * @param name         name to type
-     * @param help         help displayed with usage information
-     * @param defaultValue default value for command
-     * @param choices      possible values
-     * @param argumentList number of sub arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
-     *                     (maximum 100)
-     * @param aliases      alternative names to type
+     * @param name          name to type
+     * @param help          help displayed with usage information
+     * @param defaultValue  default value for command
+     * @param choices       possible values
+     * @param argumentNames sub arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt
+     * @param aliases       alternative names to type
      */
-    public CommandLineArgument(String name, String help, String defaultValue, String[] choices, int argumentList,
+    public CommandLineArgument(String name, String help, String defaultValue, String[] choices, String[] argumentNames,
                                String... aliases) {
         this.name = name;
         this.help = help;
         this.defaultValue = defaultValue;
         this.choices = choices == null ? Collections.emptyList() : List.of(choices);
-        this.argumentList = Math.min(Math.abs(argumentList), 100);
-        this.values = new String[this.argumentList];
+        this.argumentNames = argumentNames == null ? new String[0] : argumentNames;
+        this.values = new String[argumentNames == null ? 1 : argumentNames.length];
         this.aliases = aliases == null ? Collections.emptyList() : List.of(aliases);
     }
 
@@ -120,10 +119,10 @@ class CommandLineArgument {
     }
 
     /**
-     * Gets the number of sub arguments accepted.
+     * Gets sub argument names.
      */
-    public final int getArgumentList() {
-        return argumentList;
+    public final String[] getArgumentNames() {
+        return argumentNames;
     }
 
     /**
@@ -161,6 +160,11 @@ class CommandLineArgument {
         if(aliases.size() > 0) {
             builder.append(", ")
                    .append(String.join(", ", aliases));
+        }
+
+        if(argumentNames.length > 0) {
+            builder.append(" ")
+                   .append(String.join(" ", argumentNames));
         }
 
         return builder;

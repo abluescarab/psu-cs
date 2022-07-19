@@ -149,14 +149,17 @@ public class Project3 {
             parser.addFlag("-print", "Prints a description of the new phone call", "-p");
             parser.addFlag("-README", "Prints a README for this project and exits", "-r");
             parser.addFlag("-help", "Prints usage information", "-h");
-            parser.addFlag("-textFile", "Where to read/write the phone bill", 1, "-t");
+            parser.addFlag("-textFile", "Where to read/write the phone bill",
+                    new String[] { "file_name" }, "-t");
             parser.addFlag("-pretty", "Pretty print the phone bill to a text file or standard out (file -)",
-                    1, "-y");
+                    new String[] { "file_name" }, "-y");
             parser.addArgument("customer", "Person whose phone bill we're modeling");
             parser.addArgument("caller_number", "Phone number of caller");
             parser.addArgument("callee_number", "Phone number of person who was called");
-            parser.addArgument("begin_date", "Date call began (mm/dd/yyyy hh:mm am/pm)", 3);
-            parser.addArgument("end_date", "Date call ended (mm/dd/yyyy hh:mm am/pm)", 3);
+            parser.addListArgument("begin_date", "Date call began (mm/dd/yyyy hh:mm am/pm)",
+                    new String[] { "date", "time", "am_pm" });
+            parser.addListArgument("end_date", "Date call ended (mm/dd/yyyy hh:mm am/pm)",
+                    new String[] { "date", "time", "am_pm" });
 
             if(!validateArguments(parser, args)) {
                 return;

@@ -17,12 +17,10 @@ public class CommandLineParserTest {
         if(addCommands) {
             parser.addArgument("positional1", "Positional argument 1");
             parser.addArgument("positional2", "Positional argument 2", "2");
-            parser.addArgument("positional3", "Positional argument 3", "3",
-                    new String[] { "1", "2", "3" });
+            parser.addArgument("positional3", "Positional argument 3", "3", new String[] { "1", "2", "3" });
             parser.addFlag("--test1", "Test flag without option", "-t");
-            parser.addFlag("--test2", "Test flag with option", 1, "-e");
-            parser.addFlag("--test3", "Test flag with choices", "a",
-                    new String[] { "a", "b", "c" }, "-s");
+            parser.addFlag("--test2", "Test flag with option", new String[] { "arg1" }, "-e");
+            parser.addFlag("--test3", "Test flag with choices", "a", new String[] { "a", "b", "c" }, new String[] { "arg1" }, "-s");
         }
 
         return parser;
@@ -239,26 +237,6 @@ public class CommandLineParserTest {
                         + "%that breaks on " + System.lineSeparator()
                         + "%column 20, where " + System.lineSeparator()
                         + "%each line has a " + System.lineSeparator()
-                        + "%prefix. " + System.lineSeparator()
-                        + "%This is on a new " + System.lineSeparator()
-                        + "%line. "
-                ));
-    }
-
-    @Test
-    void formatStringWithExtraSpacingWithCommandLineParser() {
-        String text = "This is a formatted string               that keeps extra spacing and breaks on column 20, "
-                + "where each line has a prefix." + System.lineSeparator() + "This is on a new line.";
-
-        assertThat(CommandLineParser.formatString(text, 20, "%", true, true),
-                equalTo("%This is a " + System.lineSeparator()
-                        + "%formatted string " + System.lineSeparator()
-                        + "%              that " + System.lineSeparator()
-                        + "%keeps extra " + System.lineSeparator()
-                        + "%spacing and " + System.lineSeparator()
-                        + "%breaks on column " + System.lineSeparator()
-                        + "%20, where each " + System.lineSeparator()
-                        + "%line has a " + System.lineSeparator()
                         + "%prefix. " + System.lineSeparator()
                         + "%This is on a new " + System.lineSeparator()
                         + "%line. "
