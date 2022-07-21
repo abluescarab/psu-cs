@@ -120,6 +120,14 @@ public class Project3 {
         return true;
     }
 
+    /**
+     * Checks whether a file can be written to.
+     *
+     * @param filename file to write to
+     * @return whether the file can be written to
+     * @throws IOException       if the file is not valid
+     * @throws SecurityException if the program cannot access the file due to OS security measures
+     */
     static boolean canWriteFile(String filename) throws IOException, SecurityException {
         File file = new File(filename);
         File parent;
