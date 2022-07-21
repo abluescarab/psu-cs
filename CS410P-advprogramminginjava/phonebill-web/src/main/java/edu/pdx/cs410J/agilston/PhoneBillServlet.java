@@ -88,7 +88,6 @@ public class PhoneBillServlet extends HttpServlet {
         pw.flush();
 
         response.setStatus(HttpServletResponse.SC_OK);
-
     }
 
     /**
@@ -159,5 +158,4 @@ public class PhoneBillServlet extends HttpServlet {
     String getDefinition(String word) {
         return this.dictionary.get(word);
     }
-
 }

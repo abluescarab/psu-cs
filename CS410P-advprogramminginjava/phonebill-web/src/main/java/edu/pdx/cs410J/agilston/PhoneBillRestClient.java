@@ -18,12 +18,10 @@ import static java.net.HttpURLConnection.HTTP_OK;
  * to do something other than just send dictionary entries.
  */
 public class PhoneBillRestClient {
-
     private static final String WEB_APP = "phonebill";
     private static final String SERVLET = "calls";
 
     private final HttpRequestHelper http;
-
 
     /**
      * Creates a client to the Phone Bil REST service running on the given host and port
@@ -53,13 +51,13 @@ public class PhoneBillRestClient {
     /**
      * Returns the definition for the given word
      */
-    public String getDefinition(String word) throws IOException, ParserException {
-        Response response = http.get(Map.of("word", word));
+    public String getPhoneBill(String customer) throws IOException, ParserException {
+        Response response = http.get(Map.of("customer", customer));
         throwExceptionIfNotOkayHttpStatus(response);
         String content = response.getContent();
 
         TextParser parser = new TextParser(new StringReader(content));
-        return parser.parse().get(word);
+        return parser.parse().get(customer);
     }
 
     public void addDictionaryEntry(String word, String definition) throws IOException {
@@ -79,5 +77,4 @@ public class PhoneBillRestClient {
             throw new RestException(code, message);
         }
     }
-
 }
