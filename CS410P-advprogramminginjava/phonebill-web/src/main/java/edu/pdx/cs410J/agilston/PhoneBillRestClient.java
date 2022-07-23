@@ -39,37 +39,60 @@ public class PhoneBillRestClient {
     }
 
     /**
-     * Returns all dictionary entries from the server
+     * Gets all phone bills from the server.
      */
-    public Map<String, String> getAllDictionaryEntries() throws IOException, ParserException {
+    public Map<String, String> getAllPhoneBills() throws IOException, ParserException {
         Response response = http.get(Map.of());
-
         TextParser parser = new TextParser(new StringReader(response.getContent()));
+
         return parser.parse();
     }
 
     /**
-     * Returns the definition for the given word
+     * Returns the phone bill for the given customer.
      */
     public String getPhoneBill(String customer) throws IOException, ParserException {
         Response response = http.get(Map.of("customer", customer));
-        throwExceptionIfNotOkayHttpStatus(response);
-        String content = response.getContent();
 
+        throwExceptionIfNotOkayHttpStatus(response);
+
+        String content = response.getContent();
         TextParser parser = new TextParser(new StringReader(content));
+
         return parser.parse().get(customer);
     }
 
-    public void addDictionaryEntry(String word, String definition) throws IOException {
-        Response response = http.post(Map.of("word", word, "definition", definition));
+    /**
+     * Add a phone call to a customer's bill.
+     *
+     * @param customer customer name
+     * @param call     phone call to add
+     * @throws IOException if post fails
+     */
+    public void addPhoneCall(String customer, PhoneCall call) throws IOException {
+        String beginTime = PhoneCall.DATE_TIME_FORMATTER.format(call.getBeginTime().toInstant());
+        String endTime = PhoneCall.DATE_TIME_FORMATTER.format(call.getEndTime().toInstant());
+        Response response = http.post(Map.of("customer", customer, "call",
+                String.format(Project4.BILL_FORMAT, call.getCaller(), call.getCallee(), beginTime, endTime)));
+
         throwExceptionIfNotOkayHttpStatus(response);
     }
 
-    public void removeAllDictionaryEntries() throws IOException {
+    /**
+     * Removes all phone bills.
+     *
+     * @throws IOException if delete fails
+     */
+    public void removeAllPhoneBills() throws IOException {
         Response response = http.delete(Map.of());
         throwExceptionIfNotOkayHttpStatus(response);
     }
 
+    /**
+     * Throws an exception if an HTTP request fails.
+     *
+     * @param response response to check status of
+     */
     private void throwExceptionIfNotOkayHttpStatus(Response response) {
         int code = response.getHttpStatusCode();
         if(code != HTTP_OK) {

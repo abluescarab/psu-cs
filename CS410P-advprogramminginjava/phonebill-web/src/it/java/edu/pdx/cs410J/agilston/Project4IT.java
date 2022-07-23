@@ -26,7 +26,7 @@ class Project4IT extends InvokeMainTestCase {
     @Test
     void test0RemoveAllMappings() throws IOException {
         PhoneBillRestClient client = new PhoneBillRestClient(HOSTNAME, Integer.parseInt(PORT));
-        client.removeAllDictionaryEntries();
+        client.removeAllPhoneBills();
     }
 
     @Test
@@ -63,7 +63,7 @@ class Project4IT extends InvokeMainTestCase {
 
         MainMethodResult result = invokeMain(Project4.class, HOSTNAME, PORT, word, definition);
         String out = result.getTextWrittenToStandardOut();
-        assertThat(out, out, containsString(Messages.definedWordAs(word, definition)));
+        assertThat(out, out, containsString(Messages.createdCustomerBill(word, definition)));
 
         result = invokeMain(Project4.class, HOSTNAME, PORT, word);
         out = result.getTextWrittenToStandardOut();

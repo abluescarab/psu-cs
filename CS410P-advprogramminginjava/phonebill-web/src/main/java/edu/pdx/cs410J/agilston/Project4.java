@@ -1,12 +1,14 @@
 package edu.pdx.cs410J.agilston;
 
 import com.google.common.annotations.VisibleForTesting;
+import edu.pdx.cs410J.ParserException;
 import edu.pdx.cs410J.agilston.commandline.CommandLineParser;
 import edu.pdx.cs410J.web.HttpRequestHelper;
 
 import java.io.*;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The main class that parses the command line and communicates with the
@@ -14,55 +16,27 @@ import java.util.List;
  */
 public class Project4 {
     public static final String MISSING_ARGS = "Missing command line arguments";
+    public static final String BILL_DELIMITER = ",";
+    public static final String BILL_FORMAT = "%s" + BILL_DELIMITER + "%s" + BILL_DELIMITER + "%s" + BILL_DELIMITER
+            + "%s";
 
     public static void main(String... args) {
         CommandLineParser parser = createParser();
 
         try {
-//            String hostName = null;
-//            String portString = null;
-//            String word = null;
-//            String definition = null;
-//
-//            for(String arg : args) {
-//                if(hostName == null) {
-//                    hostName = arg;
-//
-//                }
-//                else if(portString == null) {
-//                    portString = arg;
-//
-//                }
-//                else if(word == null) {
-//                    word = arg;
-//
-//                }
-//                else if(definition == null) {
-//                    definition = arg;
-//
-//                }
-//                else {
-//                    usage("Extraneous command line argument: " + arg);
-//                }
-//            }
-//
-//            if(hostName == null) {
-//                usage(MISSING_ARGS);
-//
-//            }
-//            else if(portString == null) {
-//                usage("Missing port");
-//            }
-//
-//            int port;
-//            try {
-//                port = Integer.parseInt(portString);
-//
-//            }
-//            catch(NumberFormatException ex) {
-//                usage("Port \"" + portString + "\" must be an integer");
-//                return;
-//            }
+            validateArguments(parser, args);
+
+            PhoneBillRestClient client = new PhoneBillRestClient(parser.getValueOrDefault("-host"),
+                    Integer.parseInt(parser.getValueOrDefault("-port")));
+            String message;
+
+            try {
+                if(parser.getValueOrDefault("customer") == null) {
+                    // Print all bills
+                    Map<String, String> dictionary =
+                }
+            }
+
 //            PhoneBillRestClient client = new PhoneBillRestClient(hostName, port);
 //
 //            String message;
@@ -88,14 +62,12 @@ public class Project4 {
 //                }
 //
 //            }
-//            catch(IOException | ParserException ex) {
-//                error("While contacting server: " + ex);
-//                return;
-//            }
-//
+            catch(IOException | ParserException e) {
+                error("While contacting server: " + e);
+                return;
+            }
+
 //            System.out.println(message);
-            PhoneBillRestClient client = new PhoneBillRestClient(parser.getValueOrDefault("-host"),
-                    Integer.parseInt(parser.getValueOrDefault("-port")));
         }
         catch(Exception e) {
             System.err.println(e.getMessage());

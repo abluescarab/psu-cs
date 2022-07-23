@@ -9,12 +9,11 @@ public class Messages {
         return String.format("The required parameter \"%s\" is missing", parameterName);
     }
 
-    public static String definedWordAs(String word, String definition) {
-        return String.format("Defined %s as %s", word, definition);
+    public static String createdCustomerBill(String customer, String bill) {
+        return String.format("Created %s bill as %s", customer, bill);
     }
 
-    public static String allDictionaryEntriesDeleted() {
-        return "All dictionary entries have been deleted";
+    public static String allBillsDeleted() {
+        return "All bills have been deleted";
     }
-
 }

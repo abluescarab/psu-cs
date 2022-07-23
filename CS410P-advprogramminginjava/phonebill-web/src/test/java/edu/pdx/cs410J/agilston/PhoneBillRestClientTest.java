@@ -25,7 +25,7 @@ public class PhoneBillRestClientTest {
 
         PhoneBillRestClient client = new PhoneBillRestClient(http);
 
-        assertThat(client.getAllDictionaryEntries(), equalTo(dictionary));
+        assertThat(client.getAllPhoneBills(), equalTo(dictionary));
     }
 
     private HttpRequestHelper.Response dictionaryAsText(Map<String, String> dictionary) {

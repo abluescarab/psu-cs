@@ -17,32 +17,29 @@ public class TextParser {
         this.reader = reader;
     }
 
-    public Map<String, String> parse() throws ParserException {
-        Pattern pattern = Pattern.compile("(.*) : (.*)");
+    public Map<String, PhoneBill> parse() throws ParserException {
+        Pattern pattern = Pattern.compile("(.*?),(.*)");
+        Map<String, PhoneBill> bills = new HashMap<>();
 
-        Map<String, String> map = new HashMap<>();
-
-        try(
-                BufferedReader br = new BufferedReader(this.reader)
-        ) {
-
+        try(BufferedReader br = new BufferedReader(this.reader)) {
             for(String line = br.readLine(); line != null; line = br.readLine()) {
                 Matcher matcher = pattern.matcher(line);
+
                 if(!matcher.find()) {
                     throw new ParserException("Unexpected text: " + line);
                 }
 
-                String word = matcher.group(1);
-                String definition = matcher.group(2);
+                String customer = matcher.group(1);
+                String billString = matcher.group(2);
+                PhoneBill bill = new PhoneBill(customer);
 
-                map.put(word, definition);
+                bills.put(customer, billString);
             }
-
         }
         catch(IOException e) {
             throw new ParserException("While parsing dictionary", e);
         }
 
-        return map;
+        return bills;
     }
 }
