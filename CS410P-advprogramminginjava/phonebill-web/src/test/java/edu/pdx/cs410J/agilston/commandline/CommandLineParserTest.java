@@ -262,9 +262,9 @@ public class CommandLineParserTest {
     }
 
     @Test
-    void gettingValueOfNonexistentArgumentReturnsEmptyString() {
+    void gettingValueOfNonexistentArgumentReturnsNull() {
         CommandLineParser parser = createParser(false);
-        assertThat(parser.getValueOrDefault("--myarg"), equalTo(""));
+        assertThat(parser.getValueOrDefault("--myarg"), equalTo(null));
     }
 
     @Test
