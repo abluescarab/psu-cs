@@ -119,6 +119,20 @@ class CommandLineArgument {
     }
 
     /**
+     * Gets all values separated by a delimiter or the default value otherwise.
+     *
+     * @param delimiter delimiter to separate values by
+     * @return delimiter-separated values or default value
+     */
+    public final String getAllValuesOrDefault(String delimiter) {
+        if(values[0] == null) {
+            return defaultValue;
+        }
+
+        return String.join(delimiter, values);
+    }
+
+    /**
      * Checks whether the argument has any sub-arguments.
      *
      * @return whether the argument has sub-arguments

@@ -188,20 +188,14 @@ public class Project4 {
             throw new IllegalArgumentException("Invalid argument: Callee number must be in format ###-###-####");
         }
 
-        String beginTime = String.format("%s %s %s",
-                parser.getValueOrDefault("begin_date", 0),
-                parser.getValueOrDefault("begin_date", 1),
-                parser.getValueOrDefault("begin_date", 2));
+        String beginTime = parser.getAllValuesOrDefault("begin_date", " ");
 
         if(!isValidDateTime(beginTime)) {
             throw new IllegalArgumentException(String.format("Invalid argument: Begin time %s must be in format "
                     + "mm/dd/yyyy hh:mm am/pm or m/d/yyyy h:mm AM/PM", beginTime));
         }
 
-        String endTime = String.format("%s %s %s",
-                parser.getValueOrDefault("end_date", 0),
-                parser.getValueOrDefault("end_date", 1),
-                parser.getValueOrDefault("end_date", 2));
+        String endTime = parser.getAllValuesOrDefault("end_date", " ");
 
         if(!isValidDateTime(endTime)) {
             throw new IllegalArgumentException(String.format("Invalid argument: End time %s must be in format "

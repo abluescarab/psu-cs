@@ -332,7 +332,19 @@ public class CommandLineParser {
      */
     public String getValueOrDefault(String name, int index) {
         CommandLineArgument arg = getArgument(name);
-        return arg == null ? "" : arg.getValueOrDefault(index);
+        return arg == null ? null : arg.getValueOrDefault(index);
+    }
+
+    /**
+     * Gets all the values or default value of an argument, separated by the specified delimiter.
+     *
+     * @param name      name of argument to get
+     * @param delimiter delimiter to separate arguments by
+     * @return all values or default value if not provided
+     */
+    public String getAllValuesOrDefault(String name, String delimiter) {
+        CommandLineArgument arg = getArgument(name);
+        return arg == null ? null : arg.getAllValuesOrDefault(delimiter);
     }
 
     /**
@@ -455,7 +467,7 @@ public class CommandLineParser {
     public void parse(String[] args) {
         int index = 0;
         int position = 0;
-        Pattern flag = Pattern.compile("((-+)([\\w-]+))(?:=(.*))?");
+        Pattern flag = Pattern.compile("((-+)(\\w+))(?:=(.*))?");
         Matcher matcher;
 
         while(index < args.length) {
