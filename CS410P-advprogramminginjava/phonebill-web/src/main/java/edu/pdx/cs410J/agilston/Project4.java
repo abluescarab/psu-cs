@@ -3,7 +3,6 @@ package edu.pdx.cs410J.agilston;
 import com.google.common.annotations.VisibleForTesting;
 import edu.pdx.cs410J.ParserException;
 import edu.pdx.cs410J.agilston.commandline.CommandLineParser;
-import edu.pdx.cs410J.web.HttpRequestHelper;
 
 import java.io.*;
 import java.time.temporal.ChronoUnit;
@@ -28,49 +27,38 @@ public class Project4 {
 
             PhoneBillRestClient client = new PhoneBillRestClient(parser.getValueOrDefault("-host"),
                     Integer.parseInt(parser.getValueOrDefault("-port")));
+            String customer = parser.getValueOrDefault("customer");
             String message;
 
             try {
-                if(parser.getValueOrDefault("customer") == null) {
+                if(customer == null) {
                     // Print all bills
-                    Map<String, String> dictionary =
+                    Map<String, PhoneBill> dictionary = client.getAllPhoneBills();
+                    StringWriter writer = new StringWriter();
+                    PrettyPrinter prettyPrinter = new PrettyPrinter(writer);
+                    prettyPrinter.dump(dictionary);
+                    message = writer.toString();
+                }
+                else {
+                    // Add new call to bill
+                    PhoneCall call = new PhoneCall(
+                            parser.getValueOrDefault("caller_number"),
+                            parser.getValueOrDefault("callee_number"),
+                            parser.getAllValuesOrDefault("begin_date", " "),
+                            parser.getAllValuesOrDefault("end_date", " "));
+                    client.addPhoneCall(customer, call);
+                    message = Messages.addedCustomerPhoneCall(customer, call);
                 }
             }
-
-//            PhoneBillRestClient client = new PhoneBillRestClient(hostName, port);
-//
-//            String message;
-//            try {
-//                if(word == null) {
-//                    // Print all word/definition pairs
-//                    Map<String, String> dictionary = client.getAllDictionaryEntries();
-//                    StringWriter sw = new StringWriter();
-//                    PrettyPrinter pretty = new PrettyPrinter(sw);
-//                    pretty.dump(dictionary);
-//                    message = sw.toString();
-//
-//                }
-//                else if(definition == null) {
-//                    // Print all dictionary entries
-//                    message = PrettyPrinter.formatDictionaryEntry(word, client.getDefinition(word));
-//
-//                }
-//                else {
-//                    // Post the word/definition pair
-//                    client.addDictionaryEntry(word, definition);
-//                    message = Messages.definedWordAs(word, definition);
-//                }
-//
-//            }
             catch(IOException | ParserException e) {
-                error("While contacting server: " + e);
-                return;
+                throw new RuntimeException("While contacting server: " + e, e);
             }
 
-//            System.out.println(message);
+            System.out.println(message);
         }
         catch(Exception e) {
             System.err.println(e.getMessage());
+            e.printStackTrace(System.err);
             System.out.println("To view usage information, run with -help.");
         }
     }
@@ -206,6 +194,14 @@ public class Project4 {
             throw new IllegalArgumentException("Invalid argument: End time must be at or after begin time");
         }
 
+        if(!parser.hasArgument("-host")) {
+            throw new IllegalArgumentException("Host must be specified");
+        }
+
+        if(!parser.hasArgument("-port")) {
+            throw new IllegalArgumentException("Port must be specified");
+        }
+
         try {
             Integer.parseInt(parser.getValueOrDefault("-port"));
         }
@@ -214,28 +210,5 @@ public class Project4 {
         }
 
         return true;
-    }
-
-    /**
-     * Makes sure that the give response has the expected HTTP status code
-     *
-     * @param code     The expected status code
-     * @param response The response from the server
-     */
-    private static void checkResponseCode(int code, HttpRequestHelper.Response response) {
-        if(response.getHttpStatusCode() != code) {
-            error(String.format("Expected HTTP code %d, got code %d.\n\n%s", code,
-                    response.getHttpStatusCode(), response.getContent()));
-        }
-    }
-
-    /**
-     * Prints an error message to <code>System.err</code>.
-     *
-     * @param message
-     */
-    private static void error(String message) {
-        PrintStream err = System.err;
-        err.println("** " + message);
     }
 }

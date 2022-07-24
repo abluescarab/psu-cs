@@ -8,12 +8,24 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class PrettyPrinter implements PhoneBillDumper<PhoneBill> {
     private final Writer writer;
 
     public PrettyPrinter(Writer writer) {
         this.writer = writer;
+    }
+
+    /**
+     * Dump all phone bills.
+     *
+     * @param bills bills to dump
+     */
+    public void dump(Map<String, PhoneBill> bills) {
+        for(PhoneBill bill : bills.values()) {
+            dump(bill);
+        }
     }
 
     @Override

@@ -13,6 +13,10 @@ public class Messages {
         return String.format("Created %s bill as %s", customer, bill);
     }
 
+    public static String addedCustomerPhoneCall(String customer, PhoneCall call) {
+        return String.format("Added %s to %s", call, customer);
+    }
+
     public static String allBillsDeleted() {
         return "All bills have been deleted";
     }

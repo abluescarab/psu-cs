@@ -41,7 +41,7 @@ public class PhoneBillRestClient {
     /**
      * Gets all phone bills from the server.
      */
-    public Map<String, String> getAllPhoneBills() throws IOException, ParserException {
+    public Map<String, PhoneBill> getAllPhoneBills() throws IOException, ParserException {
         Response response = http.get(Map.of());
         TextParser parser = new TextParser(new StringReader(response.getContent()));
 
@@ -51,7 +51,7 @@ public class PhoneBillRestClient {
     /**
      * Returns the phone bill for the given customer.
      */
-    public String getPhoneBill(String customer) throws IOException, ParserException {
+    public PhoneBill getPhoneBill(String customer) throws IOException, ParserException {
         Response response = http.get(Map.of("customer", customer));
 
         throwExceptionIfNotOkayHttpStatus(response);
@@ -72,7 +72,7 @@ public class PhoneBillRestClient {
     public void addPhoneCall(String customer, PhoneCall call) throws IOException {
         String beginTime = PhoneCall.DATE_TIME_FORMATTER.format(call.getBeginTime().toInstant());
         String endTime = PhoneCall.DATE_TIME_FORMATTER.format(call.getEndTime().toInstant());
-        Response response = http.post(Map.of("customer", customer, "call",
+        Response response = http.post(Map.of("customer", customer, "bill",
                 String.format(Project4.BILL_FORMAT, call.getCaller(), call.getCallee(), beginTime, endTime)));
 
         throwExceptionIfNotOkayHttpStatus(response);

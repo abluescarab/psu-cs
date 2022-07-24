@@ -36,7 +36,7 @@ class PhoneBillRestClientIT {
     @Test
     void test1EmptyServerContainsNoDictionaryEntries() throws IOException, ParserException {
         PhoneBillRestClient client = newPhoneBillRestClient();
-        Map<String, String> dictionary = client.getAllPhoneBills();
+        Map<String, PhoneBill> dictionary = client.getAllPhoneBills();
         assertThat(dictionary.size(), equalTo(0));
     }
 

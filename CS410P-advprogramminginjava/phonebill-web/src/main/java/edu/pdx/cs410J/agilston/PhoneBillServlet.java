@@ -7,20 +7,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.TreeMap;
 
 /**
  * This servlet ultimately provides a REST API for working with an
- * <code>PhoneBill</code>.  However, in its current state, it is an example
- * of how to use HTTP and Java servlets to store simple dictionary of words
- * and their definitions.
+ * <code>PhoneBill</code>.
  */
 public class PhoneBillServlet extends HttpServlet {
     static final String CUSTOMER_PARAMETER = "customer";
     static final String BILL_PARAMETER = "bill";
 
-    private final Map<String, PhoneBill> bills = new HashMap<>();
+    private final Map<String, PhoneBill> bills = new TreeMap<>();
 
     /**
      * Handles an HTTP GET request from a client by writing the bill of the
@@ -71,20 +70,22 @@ public class PhoneBillServlet extends HttpServlet {
             bill = bills.get(customer);
         }
         else {
-
             bill = new PhoneBill(customer);
         }
 
-        String[] callInfo = billString.split(Project4.BILL_DELIMITER);
-
-        if(callInfo.length == 4) {
-            bill.addPhoneCall(new PhoneCall(callInfo[0], callInfo[1], callInfo[2], callInfo[3]));
-        }
+//        String[] callInfo = billString.split(Project4.BILL_DELIMITER);
+//        PhoneCall call = null;
+//
+//        if(callInfo.length == 4) {
+//            call = new PhoneCall(callInfo[0], callInfo[1], callInfo[2], callInfo[3]);
+//            bill.addPhoneCall(call);
+//        }
 
         this.bills.put(customer, bill);
 
         PrintWriter pw = response.getWriter();
 
+//        pw.println(Messages.addedCustomerPhoneCall(customer, call) + " from " + billString);
         pw.println(Messages.createdCustomerBill(customer, billString));
         pw.flush();
         response.setStatus(HttpServletResponse.SC_OK);
@@ -112,8 +113,7 @@ public class PhoneBillServlet extends HttpServlet {
      * <p>
      * The text of the error message is created by {@link Messages#missingRequiredParameter(String)}
      */
-    private void missingRequiredParameter(HttpServletResponse response, String parameterName)
-            throws IOException {
+    private void missingRequiredParameter(HttpServletResponse response, String parameterName) throws IOException {
         String message = Messages.missingRequiredParameter(parameterName);
         response.sendError(HttpServletResponse.SC_PRECONDITION_FAILED, message);
     }
@@ -160,13 +160,7 @@ public class PhoneBillServlet extends HttpServlet {
      */
     private String getParameter(String name, HttpServletRequest request) {
         String value = request.getParameter(name);
-
-        if(value == null || "".equals(value)) {
-            return null;
-        }
-        else {
-            return value;
-        }
+        return (value == null || Objects.equals(value, "")) ? null : value;
     }
 
     /**
