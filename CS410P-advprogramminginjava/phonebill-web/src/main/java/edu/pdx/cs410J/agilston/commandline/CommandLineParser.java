@@ -501,7 +501,7 @@ public class CommandLineParser {
 
                 do {
                     posArg.setValue(subarg++, args[index++]);
-                } while(subarg < posArg.getArguments().length);
+                } while(subarg < posArg.getArguments().size());
 
                 position++;
             }
@@ -523,7 +523,7 @@ public class CommandLineParser {
             throw new IllegalArgumentException(String.format("Invalid argument: %s", name));
         }
 
-        int argumentList = arg.getArguments().length;
+        int argumentList = arg.getArguments().size();
         int subarg = 0;
 
         if(argumentList > 0) {
