@@ -205,21 +205,6 @@ public class CommandLineParser {
     /**
      * Adds a flag (-f, --flag) to the command line.
      *
-     * @param name    name to type
-     * @param help    help text displayed with usage information
-     * @param aliases alternative names to type
-     */
-    public void addFlag(String name, String help, String... aliases) {
-        if(!name.startsWith("-")) {
-            throw new IllegalArgumentException("Invalid argument: Flag name must start with \"-\"");
-        }
-
-        addArgument(name, help, "", null, null, aliases);
-    }
-
-    /**
-     * Adds a flag (-f, --flag) to the command line.
-     *
      * @param name      name to type
      * @param help      help text displayed with usage information
      * @param arguments sub-arguments accepted in the form -f=opt, --flag=opt, -f opt, --flag opt

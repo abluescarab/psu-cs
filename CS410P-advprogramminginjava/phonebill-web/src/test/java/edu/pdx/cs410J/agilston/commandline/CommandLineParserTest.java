@@ -18,7 +18,7 @@ public class CommandLineParserTest {
             parser.addArgument("positional1", "Positional argument 1");
             parser.addArgument("positional2", "Positional argument 2", "2");
             parser.addArgument("positional3", "Positional argument 3", "3", new String[] { "1", "2", "3" });
-            parser.addFlag("--test1", "Test flag without option", "-t");
+            parser.addFlag("--test1", "Test flag without option", null, "-t");
             parser.addFlag("--test2", "Test flag with option", new String[] { "arg1" }, "-e");
             parser.addFlag("--test3", "Test flag with choices", "a", new String[] { "a", "b", "c" }, new String[] { "arg1" }, "-s");
         }
@@ -207,7 +207,7 @@ public class CommandLineParserTest {
     void addInvalidFlagArgument() {
         CommandLineParser parser = createParser(false);
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
-                () -> parser.addFlag("test", "Test argument"));
+                () -> parser.addFlag("test", "Test argument", null));
 
         assertThat(e.getMessage(), equalTo("Invalid argument: Flag name must start with \"-\""));
     }
@@ -270,7 +270,7 @@ public class CommandLineParserTest {
     @Test
     void longNameInFormattedHelpStringWraps() {
         CommandLineParser parser = createParser(false);
-        parser.addFlag("--myveryveryveryveryverylongargument", "this is a very long argument");
+        parser.addFlag("--myveryveryveryveryverylongargument", "this is a very long argument", null);
 
         assertThat(parser.getUsageInformation(),
                 containsString("--myveryveryveryveryverylongargument" + System.lineSeparator()));

@@ -109,18 +109,18 @@ public class Project4 {
         parser.setEpilogue("Date and time must be in m/d/yyyy h:mm am/pm format. Month, day, and hour may " +
                 "be one digit or two. Year must always be four digits.");
 
-        parser.addFlag("-print", "Prints a description of the new phone call", "-p");
-        parser.addFlag("-README", "Prints a README for this project and exits", "-r");
-        parser.addFlag("-help", "Prints usage information", "-h");
-        parser.addFlag("-host", "Host computer on which the server runs");
-        parser.addFlag("-port", "Port on which the server is listening");
-        parser.addFlag("-search", "Phone calls which should be searched for");
+        parser.addFlag("-print", "Prints a description of the new phone call", null, "-p");
+        parser.addFlag("-README", "Prints a README for this project and exits", null, "-r");
+        parser.addFlag("-help", "Prints usage information", null, "-h");
+        parser.addFlag("-host", "Host computer on which the server runs", new String[] { "host_name" });
+        parser.addFlag("-port", "Port on which the server is listening", new String[] { "port_number" });
+        parser.addFlag("-search", "Phone calls which should be searched for", null);
         parser.addArgument("customer", "Person whose phone bill we're modeling");
         parser.addArgument("caller_number", "Phone number of caller");
         parser.addArgument("callee_number", "Phone number of person who was called");
-        parser.addListArgument("begin", "Date and time call began",
+        parser.addListArgument("begin_date", "Date and time call began",
                 new String[] { "date", "time", "am_pm" });
-        parser.addListArgument("end", "Date and time call ended",
+        parser.addListArgument("end_date", "Date and time call ended",
                 new String[] { "date", "time", "am_pm" });
 
         return parser;
