@@ -1,5 +1,6 @@
 package edu.pdx.cs410J.agilston.commandline;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -12,7 +13,7 @@ class CommandLineArgument {
     private final String defaultValue;
     private final List<String> choices;
     private final List<String> aliases;
-    private final String[] arguments;
+    private final List<String> arguments;
     private final String[] values;
 
     /**
@@ -31,7 +32,7 @@ class CommandLineArgument {
         this.help = help;
         this.defaultValue = defaultValue;
         this.choices = choices == null ? Collections.emptyList() : List.of(choices);
-        this.arguments = arguments == null ? new String[0] : arguments;
+        this.arguments = arguments == null ? new ArrayList<>() : new ArrayList<>(List.of(arguments));
         this.values = new String[arguments == null ? 1 : arguments.length];
         this.aliases = aliases == null ? Collections.emptyList() : List.of(aliases);
     }
@@ -119,6 +120,16 @@ class CommandLineArgument {
     }
 
     /**
+     * Gets a value if it was provided or the default value otherwise.
+     *
+     * @param argumentName argument name to retrieve
+     */
+    public final String getValueOrDefault(String argumentName) {
+        int index = arguments.indexOf(argumentName);
+        return getValueOrDefault(index);
+    }
+
+    /**
      * Gets all values separated by a delimiter or the default value otherwise.
      *
      * @param delimiter delimiter to separate values by
@@ -138,14 +149,14 @@ class CommandLineArgument {
      * @return whether the argument has sub-arguments
      */
     public final boolean hasArguments() {
-        return arguments.length > 0;
+        return arguments.size() > 0;
     }
 
     /**
      * Gets sub argument names.
      */
-    public final String[] getArguments() {
-        return arguments;
+    public final List<String> getArguments() {
+        return Collections.unmodifiableList(arguments);
     }
 
     /**
