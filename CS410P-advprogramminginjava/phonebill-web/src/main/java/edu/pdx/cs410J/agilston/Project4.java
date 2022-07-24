@@ -194,8 +194,8 @@ public class Project4 {
                 parser.getValueOrDefault("begin_date", 2));
 
         if(!isValidDateTime(beginTime)) {
-            throw new IllegalArgumentException("Invalid argument: Begin time must be in format mm/dd/yyyy hh:mm am/pm or "
-                    + "m/d/yyyy h:mm AM/PM");
+            throw new IllegalArgumentException(String.format("Invalid argument: Begin time %s must be in format "
+                    + "mm/dd/yyyy hh:mm am/pm or m/d/yyyy h:mm AM/PM", beginTime));
         }
 
         String endTime = String.format("%s %s %s",
@@ -204,8 +204,8 @@ public class Project4 {
                 parser.getValueOrDefault("end_date", 2));
 
         if(!isValidDateTime(endTime)) {
-            throw new IllegalArgumentException("Invalid argument: End time must be in format mm/dd/yyyy hh:mm am/pm or "
-                    + "m/d/yyyy h:mm AM/PM");
+            throw new IllegalArgumentException(String.format("Invalid argument: End time %s must be in format "
+                    + "mm/dd/yyyy hh:mm am/pm or m/d/yyyy h:mm AM/PM", endTime));
         }
 
         if(ChronoUnit.MILLIS.between(PhoneCall.formatDateTime(beginTime), PhoneCall.formatDateTime(endTime)) < 0) {
