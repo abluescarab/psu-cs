@@ -18,7 +18,7 @@ public class TextParser {
     }
 
     public Map<String, PhoneBill> parse() throws ParserException {
-        Pattern pattern = Pattern.compile("(.*?),(.*)");
+        Pattern pattern = Pattern.compile("(.*?) : (.*)");
         Map<String, PhoneBill> bills = new TreeMap<>();
 
         try(BufferedReader br = new BufferedReader(this.reader)) {

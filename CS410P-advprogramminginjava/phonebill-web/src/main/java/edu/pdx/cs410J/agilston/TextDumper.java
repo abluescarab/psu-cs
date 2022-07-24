@@ -14,7 +14,7 @@ public class TextDumper {
     public void dump(Map<String, PhoneBill> dictionary) {
         try(PrintWriter pw = new PrintWriter(this.writer)) {
             for(Map.Entry<String, PhoneBill> bill : dictionary.entrySet()) {
-                pw.println(String.format("%s,%s", bill.getKey(), bill.getValue()));
+                pw.println(String.format("%s : %s", bill.getKey(), bill.getValue()));
             }
 
             pw.flush();

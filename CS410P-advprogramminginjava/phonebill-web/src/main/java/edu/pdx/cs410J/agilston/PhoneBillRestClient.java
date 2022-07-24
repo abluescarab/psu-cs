@@ -70,11 +70,7 @@ public class PhoneBillRestClient {
      * @throws IOException if post fails
      */
     public void addPhoneCall(String customer, PhoneCall call) throws IOException {
-        String beginTime = PhoneCall.DATE_TIME_FORMATTER.format(call.getBeginTime().toInstant());
-        String endTime = PhoneCall.DATE_TIME_FORMATTER.format(call.getEndTime().toInstant());
-        Response response = http.post(Map.of("customer", customer, "bill",
-                String.format(Project4.BILL_FORMAT, call.getCaller(), call.getCallee(), beginTime, endTime)));
-
+        Response response = http.post(Map.of("customer", customer, "call", Project4.formatCall(call)));
         throwExceptionIfNotOkayHttpStatus(response);
     }
 
@@ -95,6 +91,7 @@ public class PhoneBillRestClient {
      */
     private void throwExceptionIfNotOkayHttpStatus(Response response) {
         int code = response.getHttpStatusCode();
+
         if(code != HTTP_OK) {
             String message = response.getContent();
             throw new RestException(code, message);

@@ -1,7 +1,5 @@
 package edu.pdx.cs410J.agilston;
 
-import com.google.common.annotations.VisibleForTesting;
-
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,7 +15,7 @@ import java.util.TreeMap;
  */
 public class PhoneBillServlet extends HttpServlet {
     static final String CUSTOMER_PARAMETER = "customer";
-    static final String BILL_PARAMETER = "bill";
+    static final String CALL_PARAMETER = "call";
 
     private final Map<String, PhoneBill> bills = new TreeMap<>();
 
@@ -57,10 +55,10 @@ public class PhoneBillServlet extends HttpServlet {
             return;
         }
 
-        String billString = getParameter(BILL_PARAMETER, request);
+        String callString = getParameter(CALL_PARAMETER, request);
 
-        if(billString == null) {
-            missingRequiredParameter(response, BILL_PARAMETER);
+        if(callString == null) {
+            missingRequiredParameter(response, CALL_PARAMETER);
             return;
         }
 
@@ -73,20 +71,13 @@ public class PhoneBillServlet extends HttpServlet {
             bill = new PhoneBill(customer);
         }
 
-//        String[] callInfo = billString.split(Project4.BILL_DELIMITER);
-//        PhoneCall call = null;
-//
-//        if(callInfo.length == 4) {
-//            call = new PhoneCall(callInfo[0], callInfo[1], callInfo[2], callInfo[3]);
-//            bill.addPhoneCall(call);
-//        }
-
-        this.bills.put(customer, bill);
+        PhoneCall call = Project4.parseCall(callString);
+        bill.addPhoneCall(call);
+        bills.put(customer, bill);
 
         PrintWriter pw = response.getWriter();
 
-//        pw.println(Messages.addedCustomerPhoneCall(customer, call) + " from " + billString);
-        pw.println(Messages.createdCustomerBill(customer, billString));
+        pw.println(Messages.addedCustomerPhoneCall(customer, call) + " from " + callString);
         pw.flush();
         response.setStatus(HttpServletResponse.SC_OK);
     }
@@ -124,7 +115,7 @@ public class PhoneBillServlet extends HttpServlet {
      * The text of the message is formatted with {@link TextDumper}
      */
     private void writeBill(String customer, HttpServletResponse response) throws IOException {
-        PhoneBill bill = this.bills.get(customer);
+        PhoneBill bill = bills.get(customer);
 
         if(bill == null) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -161,15 +152,5 @@ public class PhoneBillServlet extends HttpServlet {
     private String getParameter(String name, HttpServletRequest request) {
         String value = request.getParameter(name);
         return (value == null || Objects.equals(value, "")) ? null : value;
-    }
-
-    /**
-     * Gets the bill for a specified customer.
-     *
-     * @param customer customer name
-     */
-    @VisibleForTesting
-    PhoneBill getBill(String customer) {
-        return this.bills.get(customer);
     }
 }
