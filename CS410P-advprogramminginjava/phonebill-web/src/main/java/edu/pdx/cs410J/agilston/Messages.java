@@ -23,7 +23,7 @@ public class Messages {
      * Gets a message that the server has added a customer phone call.
      */
     public static String addedCustomerPhoneCall(String customer, PhoneCall call) {
-        return String.format("Added %s to %s", call, customer);
+        return String.format("Added %s to %s", call.toString().toLowerCase(), customer);
     }
 
     /**
