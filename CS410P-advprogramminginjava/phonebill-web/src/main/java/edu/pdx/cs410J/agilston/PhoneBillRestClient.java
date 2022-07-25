@@ -56,10 +56,36 @@ public class PhoneBillRestClient {
     }
 
     /**
-     * Returns the phone bill for the given customer.
+     * Gets the phone bill for the given customer.
+     *
+     * @param customer customer name
+     * @throws IOException     if map creation fails
+     * @throws ParserException if {@link TextParser} fails to parse
      */
     public PhoneBill getPhoneBill(String customer) throws IOException, ParserException {
-        Response response = http.get(Map.of("customer", customer));
+        Response response = http.get(Map.of(PhoneBillServlet.CUSTOMER_PARAMETER, customer));
+
+        throwExceptionIfNotOkayHttpStatus(response);
+
+        String content = response.getContent();
+        TextParser parser = new TextParser(new StringReader(content));
+
+        return parser.parse().get(customer);
+    }
+
+    /**
+     * Gets all phone calls from a specific bill that fall between two times.
+     *
+     * @param customer  customer name
+     * @param beginTime time call began
+     * @param endTime   time call ended
+     * @return any calls that fall between begin and end
+     * @throws IOException     if map creation fails
+     * @throws ParserException if {@link TextParser} fails to parse
+     */
+    public PhoneBill getPhoneBillBetween(String customer, String beginTime, String endTime) throws IOException, ParserException {
+        Response response = http.get(Map.of(PhoneBillServlet.CUSTOMER_PARAMETER, customer,
+                PhoneBillServlet.BEGIN_PARAMETER, beginTime, PhoneBillServlet.END_PARAMETER, endTime));
 
         throwExceptionIfNotOkayHttpStatus(response);
 
@@ -77,7 +103,8 @@ public class PhoneBillRestClient {
      * @throws IOException if post fails
      */
     public void addPhoneCall(String customer, PhoneCall call) throws IOException {
-        Response response = http.post(Map.of("customer", customer, "call", Project4.formatCall(call)));
+        Response response = http.post(Map.of(PhoneBillServlet.CUSTOMER_PARAMETER, customer,
+                PhoneBillServlet.CALL_PARAMETER, Project4.formatCall(call)));
         throwExceptionIfNotOkayHttpStatus(response);
     }
 

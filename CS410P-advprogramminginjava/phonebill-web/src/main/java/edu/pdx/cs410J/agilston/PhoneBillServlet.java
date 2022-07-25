@@ -16,6 +16,8 @@ import java.util.TreeMap;
 public class PhoneBillServlet extends HttpServlet {
     static final String CUSTOMER_PARAMETER = "customer";
     static final String CALL_PARAMETER = "call";
+    static final String BEGIN_PARAMETER = "begin";
+    static final String END_PARAMETER = "end";
 
     private final Map<String, PhoneBill> bills = new TreeMap<>();
 
@@ -35,11 +37,23 @@ public class PhoneBillServlet extends HttpServlet {
 
         String customer = getParameter(CUSTOMER_PARAMETER, request);
 
-        if(customer != null) {
+        if(customer == null) {
+            writeAllBills(response);
+            return;
+        }
+
+        String begin = getParameter(BEGIN_PARAMETER, request);
+        String end = getParameter(END_PARAMETER, request);
+
+        // ensure begin and end are always supplied together
+        if(begin == null && end == null) {
             writeBill(customer, response);
         }
+        else if((begin == null) == (end == null)) {
+            writeCallsBetween(customer, begin, end, response);
+        }
         else {
-            writeAllBills(response);
+            missingRequiredParameter(response, begin == null ? BEGIN_PARAMETER : END_PARAMETER);
         }
     }
 
@@ -126,6 +140,31 @@ public class PhoneBillServlet extends HttpServlet {
     }
 
     /**
+     * Writes all calls for a customer between the begin and end times.
+     *
+     * @param customer customer name
+     * @param begin    begin time
+     * @param end      end time
+     * @param response existing HTTP response
+     * @throws IOException if {@link HttpServletResponse#getWriter()} fails
+     */
+    private void writeCallsBetween(String customer, String begin, String end, HttpServletResponse response) throws IOException {
+        PhoneBill bill = bills.get(customer);
+
+        if(bill == null) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
+        PrintWriter writer = response.getWriter();
+        Map<String, PhoneBill> calls = Map.of(customer, bill.filter(begin, end));
+        TextDumper dumper = new TextDumper(writer);
+
+        dumper.dump(calls);
+        response.setStatus(HttpServletResponse.SC_OK);
+    }
+
+    /**
      * Writes the bill for the given customer to the HTTP response.
      * <p>
      * The text of the message is formatted with {@link TextDumper}
@@ -135,15 +174,15 @@ public class PhoneBillServlet extends HttpServlet {
 
         if(bill == null) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return;
         }
-        else {
-            PrintWriter pw = response.getWriter();
-            Map<String, PhoneBill> customerBill = Map.of(customer, bill);
-            TextDumper dumper = new TextDumper(pw);
 
-            dumper.dump(customerBill);
-            response.setStatus(HttpServletResponse.SC_OK);
-        }
+        PrintWriter pw = response.getWriter();
+        Map<String, PhoneBill> customerBill = Map.of(customer, bill);
+        TextDumper dumper = new TextDumper(pw);
+
+        dumper.dump(customerBill);
+        response.setStatus(HttpServletResponse.SC_OK);
     }
 
     /**

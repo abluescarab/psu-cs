@@ -29,25 +29,41 @@ public class Project4 {
                     Integer.parseInt(parser.getValueOrDefault("-port")));
             String customer = parser.getValueOrDefault("customer");
             String message;
+            StringWriter writer = new StringWriter();
+            PrettyPrinter prettyPrinter = new PrettyPrinter(writer);
 
             try {
+                // print all bills
                 if(customer == null) {
-                    // Print all bills
-                    Map<String, PhoneBill> dictionary = client.getAllPhoneBills();
-                    StringWriter writer = new StringWriter();
-                    PrettyPrinter prettyPrinter = new PrettyPrinter(writer);
-                    prettyPrinter.dump(dictionary);
+                    Map<String, PhoneBill> bills = client.getAllPhoneBills();
+                    prettyPrinter.dump(bills);
                     message = writer.toString();
                 }
                 else {
-                    // Add new call to bill
-                    PhoneCall call = new PhoneCall(
-                            parser.getValueOrDefault("caller_number"),
-                            parser.getValueOrDefault("callee_number"),
-                            parser.getAllValuesOrDefault("begin_date", " "),
-                            parser.getAllValuesOrDefault("end_date", " "));
-                    client.addPhoneCall(customer, call);
-                    message = Messages.addedCustomerPhoneCall(customer, call);
+                    // if -search, pass customer, begin date, and end date
+                    if(parser.hasArgument("-search")) {
+                        PhoneBill bill = client.getPhoneBillBetween(customer,
+                                parser.getAllValuesOrDefault("begin", " "),
+                                parser.getAllValuesOrDefault("end", " "));
+                        prettyPrinter.dump(bill);
+                        message = writer.toString();
+                    }
+                    // assume that if caller_number if given, we add a new phone call to bill
+                    else if(parser.hasArgument("caller_number")) {
+                        PhoneCall call = new PhoneCall(
+                                parser.getValueOrDefault("caller_number"),
+                                parser.getValueOrDefault("callee_number"),
+                                parser.getAllValuesOrDefault("begin", " "),
+                                parser.getAllValuesOrDefault("end", " "));
+                        client.addPhoneCall(customer, call);
+                        message = Messages.addedCustomerPhoneCall(customer, call);
+                    }
+                    // print bill from customer
+                    else {
+                        PhoneBill bill = client.getPhoneBill(customer);
+                        prettyPrinter.dump(bill);
+                        message = writer.toString();
+                    }
                 }
             }
             catch(IOException | ParserException e) {
@@ -190,11 +206,22 @@ public class Project4 {
             return false;
         }
 
-        if(!parser.hasArgument("-search") && args.length < missingArgs.size()) {
-            throw new IllegalArgumentException(
-                    String.format("%s: %s",
-                            MISSING_ARGS,
-                            String.join(", ", missingArgs.subList(args.length, missingArgs.size()))));
+        // if -search has been provided but customer, begin time, or end time are missing, args are invalid
+        if(parser.hasArgument("-search")) {
+            if(!parser.hasArgument("customer") || !parser.hasArgument("begin")
+                    || !parser.hasArgument("end")) {
+                throw new IllegalArgumentException("Invalid argument: -search requires customer, begin, and end to be "
+                        + "provided");
+            }
+        }
+        // if search has not been provided and customer has not been provided, args are invalid
+        else if(!parser.hasArgument("customer")) {
+            throw new IllegalArgumentException(String.format("%s: Customer name is required", MISSING_ARGS));
+        }
+        // if -search has not been provided, but customer and some other info has, require all info
+        else if(args.length < missingArgs.size()) {
+            throw new IllegalArgumentException(String.format("%s: %s", MISSING_ARGS, String.join(", ",
+                    missingArgs.subList(args.length, missingArgs.size()))));
         }
 
         if(!isValidPhoneNumber(parser.getValueOrDefault("caller_number"))) {
