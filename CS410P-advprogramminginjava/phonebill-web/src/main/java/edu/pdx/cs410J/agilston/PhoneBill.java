@@ -2,8 +2,10 @@ package edu.pdx.cs410J.agilston;
 
 import edu.pdx.cs410J.AbstractPhoneBill;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -47,5 +49,32 @@ public class PhoneBill extends AbstractPhoneBill<PhoneCall> {
     @Override
     public Collection<PhoneCall> getPhoneCalls() {
         return calls;
+    }
+
+    /**
+     * Returns a new PhoneBill containing only the calls between two times.
+     *
+     * @param beginString time call began
+     * @param endString   time call ended
+     * @return new PhoneBill with calls that fall between begin and end
+     */
+    public PhoneBill filter(String beginString, String endString) {
+        PhoneBill bill = new PhoneBill(customer);
+        ZonedDateTime begin = PhoneCall.formatDateTime(beginString);
+        ZonedDateTime end = PhoneCall.formatDateTime(endString);
+
+        for(PhoneCall call : calls) {
+            Date beginTime = call.getBeginTime();
+            Date endTime = call.getEndTime();
+
+            if(begin.isAfter(ZonedDateTime.from(beginTime.toInstant())) ||
+                    end.isBefore(ZonedDateTime.from(endTime.toInstant()))) {
+                continue;
+            }
+
+            bill.addPhoneCall(call);
+        }
+
+        return bill;
     }
 }
