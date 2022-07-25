@@ -123,11 +123,13 @@ public class Project4 {
 
         parser.setMaxLineLength(80);
         parser.setPrologue("This program creates a phone bill via a RESTful web interface.");
-        parser.setEpilogue("Date and time must be in m/d/yyyy h:mm am/pm format. Month, day, and hour may " +
-                "be one digit or two. Year must always be four digits.");
+        parser.setEpilogue("Date and time must be in m/d/yyyy h:mm am/pm format. Month, day, and hour may "
+                + "be one digit or two. Year must always be four digits.");
 
-        parser.addFlag("-print", "Prints a description of the new phone call", null, "-p");
-        parser.addFlag("-README", "Prints a README for this project and exits", null, "-r");
+        parser.addFlag("-print", "Prints a description of the new phone call", null,
+                "-p");
+        parser.addFlag("-README", "Prints a README for this project and exits", null,
+                "-r");
         parser.addFlag("-help", "Prints usage information", null, "-h");
         parser.addFlag("-host", "Host computer on which the server runs", new String[] { "host_name" });
         parser.addFlag("-port", "Port on which the server is listening", new String[] { "port_number" });
@@ -135,10 +137,9 @@ public class Project4 {
         parser.addArgument("customer", "Person whose phone bill we're modeling");
         parser.addArgument("caller_number", "Phone number of caller");
         parser.addArgument("callee_number", "Phone number of person who was called");
-        parser.addListArgument("begin_date", "Date and time call began",
+        parser.addListArgument("begin", "Date and time call began",
                 new String[] { "date", "time", "am_pm" });
-        parser.addListArgument("end_date", "Date and time call ended",
-                new String[] { "date", "time", "am_pm" });
+        parser.addListArgument("end", "Date and time call ended", new String[] { "date", "time", "am_pm" });
 
         return parser;
     }
@@ -160,8 +161,7 @@ public class Project4 {
                 "begin_ampm",
                 "end_date",
                 "end_time",
-                "end_ampm"
-        );
+                "end_ampm");
 
         parser.parse(args);
 
@@ -205,14 +205,14 @@ public class Project4 {
             throw new IllegalArgumentException("Invalid argument: Callee number must be in format ###-###-####");
         }
 
-        String beginTime = parser.getAllValuesOrDefault("begin_date", " ");
+        String beginTime = parser.getAllValuesOrDefault("begin", " ");
 
         if(!isValidDateTime(beginTime)) {
             throw new IllegalArgumentException(String.format("Invalid argument: Begin time %s must be in format "
                     + "mm/dd/yyyy hh:mm am/pm or m/d/yyyy h:mm AM/PM", beginTime));
         }
 
-        String endTime = parser.getAllValuesOrDefault("end_date", " ");
+        String endTime = parser.getAllValuesOrDefault("end", " ");
 
         if(!isValidDateTime(endTime)) {
             throw new IllegalArgumentException(String.format("Invalid argument: End time %s must be in format "
