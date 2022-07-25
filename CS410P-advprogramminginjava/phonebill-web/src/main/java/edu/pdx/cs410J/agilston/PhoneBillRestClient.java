@@ -33,6 +33,10 @@ public class PhoneBillRestClient {
         this(new HttpRequestHelper(String.format("http://%s:%d/%s/%s", hostName, port, WEB_APP, SERVLET)));
     }
 
+    /**
+     * Creates a new PhoneBillRestClient.
+     * @param http {@link HttpRequestHelper} instance
+     */
     @VisibleForTesting
     PhoneBillRestClient(HttpRequestHelper http) {
         this.http = http;
@@ -40,6 +44,9 @@ public class PhoneBillRestClient {
 
     /**
      * Gets all phone bills from the server.
+     *
+     * @throws IOException     if map creation fails
+     * @throws ParserException if {@link TextParser} fails to parser
      */
     public Map<String, PhoneBill> getAllPhoneBills() throws IOException, ParserException {
         Response response = http.get(Map.of());

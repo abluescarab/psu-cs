@@ -24,6 +24,10 @@ public class PhoneBillServlet extends HttpServlet {
      * customer specified in the "customer" HTTP parameter to the HTTP response.  If the
      * "customer" parameter is not specified, all bills in the dictionary
      * are written to the HTTP response.
+     *
+     * @param request  existing {@link HttpServletRequest}
+     * @param response existing {@link HttpServletResponse}
+     * @throws IOException if any write method fails
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -43,6 +47,11 @@ public class PhoneBillServlet extends HttpServlet {
      * Handles an HTTP POST request by storing the dictionary entry for the
      * "customer" and "bill" request parameters.  It writes the dictionary
      * entry to the HTTP response.
+     *
+     * @param request  existing {@link HttpServletRequest}
+     * @param response existing {@link HttpServletResponse}
+     * @throws IOException if {@link #missingRequiredParameter(HttpServletResponse, String)} or
+     *                     {@link HttpServletResponse#getWriter()} fails
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -86,6 +95,10 @@ public class PhoneBillServlet extends HttpServlet {
      * Handles an HTTP DELETE request by removing all dictionary entries.  This
      * behavior is exposed for testing purposes only.  It's probably not
      * something that you'd want a real application to expose.
+     *
+     * @param request  existing {@link HttpServletRequest}
+     * @param response existing {@link HttpServletResponse}
+     * @throws IOException if {@link HttpServletResponse#getWriter()} fails
      */
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -103,6 +116,9 @@ public class PhoneBillServlet extends HttpServlet {
      * Writes an error message about a missing parameter to the HTTP response.
      * <p>
      * The text of the error message is created by {@link Messages#missingRequiredParameter(String)}
+     *
+     * @param response      existing {@link HttpServletResponse}
+     * @param parameterName parameter name that is missing
      */
     private void missingRequiredParameter(HttpServletResponse response, String parameterName) throws IOException {
         String message = Messages.missingRequiredParameter(parameterName);
