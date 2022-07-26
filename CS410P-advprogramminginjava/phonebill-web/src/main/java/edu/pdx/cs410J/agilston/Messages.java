@@ -7,6 +7,8 @@ package edu.pdx.cs410J.agilston;
 public class Messages {
     /**
      * Gets a message that the HTTP request is missing a required parameter.
+     *
+     * @param parameterName missing parameter name
      */
     public static String missingRequiredParameter(String parameterName) {
         return String.format("The required parameter \"%s\" is missing", parameterName);
@@ -14,6 +16,9 @@ public class Messages {
 
     /**
      * Gets a message that the server has created a new customer bill.
+     *
+     * @param customer customer name
+     * @param bill     new phone bill
      */
     public static String createdCustomerBill(String customer, String bill) {
         return String.format("Created %s bill as %s", customer, bill);
@@ -21,6 +26,9 @@ public class Messages {
 
     /**
      * Gets a message that the server has added a customer phone call.
+     *
+     * @param customer customer name
+     * @param call     new phone call
      */
     public static String addedCustomerPhoneCall(String customer, PhoneCall call) {
         return String.format("Added %s to %s", call.toString().toLowerCase(), customer);
