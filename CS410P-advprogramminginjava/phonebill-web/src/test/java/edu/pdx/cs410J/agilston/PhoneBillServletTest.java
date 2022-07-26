@@ -20,22 +20,22 @@ import static org.mockito.Mockito.*;
  * provide mock http requests and responses.
  */
 class PhoneBillServletTest {
-//    @Test
-//    void initiallyServletContainsNoDictionaryEntries() throws IOException {
-//        PhoneBillServlet servlet = new PhoneBillServlet();
-//
-//        HttpServletRequest request = mock(HttpServletRequest.class);
-//        HttpServletResponse response = mock(HttpServletResponse.class);
-//        PrintWriter pw = mock(PrintWriter.class);
-//
-//        when(response.getWriter()).thenReturn(pw);
-//
-//        servlet.doGet(request, response);
-//
-//        // Nothing is written to the response's PrintWriter
-//        verify(pw, never()).println(anyString());
-//        verify(response).setStatus(HttpServletResponse.SC_OK);
-//    }
+    @Test
+    void initiallyServletContainsNoDictionaryEntries() throws IOException {
+        PhoneBillServlet servlet = new PhoneBillServlet();
+
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        HttpServletResponse response = mock(HttpServletResponse.class);
+        PrintWriter pw = mock(PrintWriter.class);
+
+        when(response.getWriter()).thenReturn(pw);
+
+        servlet.doGet(request, response);
+
+        // Nothing is written to the response's PrintWriter
+        verify(pw, never()).println(anyString());
+        verify(response).setStatus(HttpServletResponse.SC_OK);
+    }
 //
 //    @Test
 //    void addBillToDictionary() throws IOException {
