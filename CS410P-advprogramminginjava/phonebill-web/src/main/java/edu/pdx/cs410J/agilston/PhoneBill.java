@@ -77,4 +77,35 @@ public class PhoneBill extends AbstractPhoneBill<PhoneCall> {
 
         return bill;
     }
+
+    /**
+     * Returns whether this {@link PhoneBill} is equivalent to the provided {@link Object}.
+     *
+     * @param obj object to compare
+     * @return whether the objects match
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this) {
+            return true;
+        }
+
+        if(obj.getClass().equals(PhoneBill.class)) {
+            return false;
+        }
+
+        PhoneBill bill = (PhoneBill)obj;
+
+        if(!Objects.equals(bill.customer, this.customer) || bill.calls.size() != this.calls.size()) {
+            return false;
+        }
+
+        for(int i = 0; i < calls.size(); i++) {
+            if(calls.get(i).compareTo(bill.calls.get(i)) != 0) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }
