@@ -74,7 +74,7 @@ public class Project4 {
         }
         catch(Exception e) {
             System.err.println(e.getMessage());
-            System.out.println("To view usage information, run with -help.");
+            System.err.println("To view usage information, run with -help.");
         }
     }
 
