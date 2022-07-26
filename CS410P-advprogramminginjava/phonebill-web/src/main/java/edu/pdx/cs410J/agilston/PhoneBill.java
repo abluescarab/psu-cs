@@ -90,7 +90,7 @@ public class PhoneBill extends AbstractPhoneBill<PhoneCall> {
             return true;
         }
 
-        if(obj.getClass().equals(PhoneBill.class)) {
+        if(!obj.getClass().equals(PhoneBill.class)) {
             return false;
         }
 
