@@ -74,7 +74,6 @@ public class Project4 {
         }
         catch(Exception e) {
             System.err.println(e.getMessage());
-            e.printStackTrace(System.err);
             System.out.println("To view usage information, run with -help.");
         }
     }
