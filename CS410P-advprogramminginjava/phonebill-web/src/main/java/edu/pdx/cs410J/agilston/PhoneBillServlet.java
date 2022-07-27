@@ -1,5 +1,7 @@
 package edu.pdx.cs410J.agilston;
 
+import com.google.common.annotations.VisibleForTesting;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -207,5 +209,10 @@ public class PhoneBillServlet extends HttpServlet {
     private String getParameter(String name, HttpServletRequest request) {
         String value = request.getParameter(name);
         return (value == null || Objects.equals(value, "")) ? null : value;
+    }
+
+    @VisibleForTesting
+    PhoneBill getBill(String customer) {
+        return bills.get(customer);
     }
 }
