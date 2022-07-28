@@ -275,4 +275,11 @@ public class CommandLineParserTest {
         assertThat(parser.getUsageInformation(),
                 containsString("--myveryveryveryveryverylongargument" + System.lineSeparator()));
     }
+
+    @Test
+    void negativeIndentSizeReturnsPositive() {
+        CommandLineParser parser = createParser(false);
+        parser.setIndentSize(-10);
+        assertThat(parser.getIndentSize(), equalTo(10));
+    }
 }

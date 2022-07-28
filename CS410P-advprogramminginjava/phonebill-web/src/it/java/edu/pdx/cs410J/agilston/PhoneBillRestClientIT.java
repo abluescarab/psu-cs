@@ -1,18 +1,15 @@
 package edu.pdx.cs410J.agilston;
 
 import edu.pdx.cs410J.ParserException;
-import edu.pdx.cs410J.web.HttpRequestHelper.RestException;
 import org.junit.jupiter.api.MethodOrderer.MethodName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Integration test that tests the REST calls made by {@link PhoneBillRestClient}
@@ -34,31 +31,10 @@ class PhoneBillRestClientIT {
     }
 
     @Test
-    void test1EmptyServerContainsNoDictionaryEntries() throws IOException, ParserException {
+    void test1EmptyServerContainsNoCalls() throws IOException, ParserException {
         PhoneBillRestClient client = newPhoneBillRestClient();
-        Map<String, PhoneBill> dictionary = client.getAllPhoneBills();
-        assertThat(dictionary.size(), equalTo(0));
+        Map<String, PhoneBill> bills = client.getAllPhoneBills();
+
+        assertThat(bills.size(), equalTo(0));
     }
-
-    @Test
-    void test2DefineOneWord() throws IOException, ParserException {
-        PhoneBillRestClient client = newPhoneBillRestClient();
-        String testWord = "TEST WORD";
-        String testDefinition = "TEST DEFINITION";
-        client.addDictionaryEntry(testWord, testDefinition);
-
-        String definition = client.getDefinition(testWord);
-        assertThat(definition, equalTo(testDefinition));
-    }
-
-    @Test
-    void test4EmptyWordThrowsException() {
-        PhoneBillRestClient client = newPhoneBillRestClient();
-        String emptyString = "";
-
-        RestException ex = assertThrows(RestException.class, () -> client.addDictionaryEntry(emptyString, emptyString));
-        assertThat(ex.getHttpStatusCode(), equalTo(HttpURLConnection.HTTP_PRECON_FAILED));
-        assertThat(ex.getMessage(), equalTo(Messages.missingRequiredParameter("word")));
-    }
-
 }
