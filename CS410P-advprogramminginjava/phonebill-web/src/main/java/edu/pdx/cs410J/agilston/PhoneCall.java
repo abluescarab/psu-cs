@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -192,5 +193,21 @@ public class PhoneCall extends AbstractPhoneCall implements Comparable<PhoneCall
         }
 
         return caller.compareTo(o.caller);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this) {
+            return true;
+        }
+
+        if(!obj.getClass().equals(PhoneCall.class)) {
+            return false;
+        }
+
+        PhoneCall other = (PhoneCall)obj;
+
+        return Objects.equals(caller, other.caller) && Objects.equals(callee, other.callee)
+                && beginTime.equals(other.beginTime) && endTime.equals(other.endTime);
     }
 }
