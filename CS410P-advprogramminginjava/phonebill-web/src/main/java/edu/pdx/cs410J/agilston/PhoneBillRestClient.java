@@ -83,7 +83,8 @@ public class PhoneBillRestClient {
      * @throws IOException     if map creation fails
      * @throws ParserException if {@link TextParser} fails to parse
      */
-    public PhoneBill getPhoneBillBetween(String customer, String beginTime, String endTime) throws IOException, ParserException {
+    public PhoneBill getPhoneBillBetween(String customer, String beginTime, String endTime) throws IOException,
+            ParserException {
         Response response = http.get(Map.of(PhoneBillServlet.CUSTOMER_PARAMETER, customer,
                 PhoneBillServlet.BEGIN_PARAMETER, beginTime, PhoneBillServlet.END_PARAMETER, endTime));
 
