@@ -104,7 +104,7 @@ public class Project4 {
             return new PhoneCall(info[0], info[1], info[2], info[3]);
         }
 
-        throw new IllegalArgumentException("Call string has missing information");
+        throw new IllegalArgumentException(String.format("Call string \"%s\" has missing information", formatString));
     }
 
     /**
