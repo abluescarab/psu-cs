@@ -98,7 +98,7 @@ public class PhoneBill extends AbstractPhoneBill<PhoneCall> {
         }
 
         for(int i = 0; i < calls.size(); i++) {
-            if(calls.get(i).compareTo(other.calls.get(i)) != 0) {
+            if(!calls.get(i).equals(other.calls.get(i))) {
                 return false;
             }
         }
