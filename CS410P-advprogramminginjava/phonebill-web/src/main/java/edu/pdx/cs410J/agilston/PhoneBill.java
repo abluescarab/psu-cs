@@ -91,14 +91,14 @@ public class PhoneBill extends AbstractPhoneBill<PhoneCall> {
             return false;
         }
 
-        PhoneBill bill = (PhoneBill)obj;
+        PhoneBill other = (PhoneBill)obj;
 
-        if(!Objects.equals(bill.customer, this.customer) || bill.calls.size() != this.calls.size()) {
+        if(!Objects.equals(other.customer, this.customer) || other.calls.size() != this.calls.size()) {
             return false;
         }
 
         for(int i = 0; i < calls.size(); i++) {
-            if(calls.get(i).compareTo(bill.calls.get(i)) != 0) {
+            if(calls.get(i).compareTo(other.calls.get(i)) != 0) {
                 return false;
             }
         }
