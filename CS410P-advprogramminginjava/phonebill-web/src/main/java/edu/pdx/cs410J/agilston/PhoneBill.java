@@ -2,6 +2,7 @@ package edu.pdx.cs410J.agilston;
 
 import edu.pdx.cs410J.AbstractPhoneBill;
 
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.*;
 
@@ -61,11 +62,10 @@ public class PhoneBill extends AbstractPhoneBill<PhoneCall> {
         ZonedDateTime end = PhoneCall.formatDateTime(endString);
 
         for(PhoneCall call : calls) {
-            Date beginTime = call.getBeginTime();
-            Date endTime = call.getEndTime();
+            Date beginDate = call.getBeginTime();
+            ZonedDateTime beginInstant = beginDate.toInstant().atZone(ZoneId.systemDefault());
 
-            if(begin.isAfter(ZonedDateTime.from(beginTime.toInstant())) ||
-                    end.isBefore(ZonedDateTime.from(endTime.toInstant()))) {
+            if(begin.isAfter(beginInstant) || end.isBefore(beginInstant)) {
                 continue;
             }
 
