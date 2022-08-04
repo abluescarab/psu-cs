@@ -1,5 +1,6 @@
 package edu.pdx.cs410J.agilston.phonebill;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -56,12 +57,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId() == R.id.action_readme) {
+            Intent myIntent = new Intent(this, ReadmeActivity.class);
+//            myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            startActivity(myIntent);
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
-//        switch(item.getItemId()) {
-//            case R.id.action_help:
-//                return true;
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
     }
 }

@@ -14,9 +14,14 @@
         android:theme="@style/Theme.PhoneBill"
         tools:targetApi="31">
         <activity
+            android:name=".ReadmeActivity"
+            android:exported="false">
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity"/>
+        </activity>
+        <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/title_activity_main2"
             android:theme="@style/Theme.PhoneBill.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
