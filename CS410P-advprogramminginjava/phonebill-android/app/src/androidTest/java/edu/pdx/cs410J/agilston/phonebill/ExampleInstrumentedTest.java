@@ -1,4 +1,4 @@
-package edu.pdx.cs410J.agilston;
+package edu.pdx.cs410J.agilston.phonebill;
 
 import android.content.Context;
 
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("edu.pdx.cs410J.agilston", appContext.getPackageName());
+        assertEquals("edu.pdx.cs410J.agilston.phonebill", appContext.getPackageName());
     }
 }

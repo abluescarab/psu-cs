@@ -1,4 +1,4 @@
-package edu.pdx.cs410J.agilston;
+package edu.pdx.cs410J.agilston.phonebill;
 
 import org.junit.Test;
 
