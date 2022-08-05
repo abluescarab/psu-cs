@@ -64,7 +64,7 @@ public class CallActivity extends AppCompatActivity {
         // create a date picker for the start date
         MaterialDatePicker<?> startDatePicker =
                 MaterialDatePicker.Builder.datePicker()
-                                          .setTitleText(getText(R.string.edit_start_date))
+                                          .setTitleText(R.string.hint_start_date)
                                           .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                                           .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
                                           .build();
@@ -91,7 +91,7 @@ public class CallActivity extends AppCompatActivity {
         // create a date picker for the end date
         MaterialDatePicker<?> endDatePicker =
                 MaterialDatePicker.Builder.datePicker()
-                                          .setTitleText(getText(R.string.edit_end_date))
+                                          .setTitleText(R.string.hint_end_date)
                                           .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                                           .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
                                           .build();
