@@ -1,15 +1,22 @@
 package edu.pdx.cs410J.agilston.phonebill.activities;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -39,9 +46,22 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
         binding.fab.setOnClickListener(view -> {
-            Intent intent = new Intent(this, CallActivity.class);
-            intent.putExtra(CallActivity.Extras.ACTION, CallActivity.Extras.ACTION_ADD_CALL);
-            startActivity(intent);
+            if(hasFragment(BillFragment.class)) {
+                AlertDialog.Builder dialog = createDialog(R.layout.dialog_add_customer, R.string.title_add_customer,
+                        R.string.hint_customer_name);
+
+                dialog.setPositiveButton("Add", (dialogInterface, i) -> {
+                    // TODO: add customer
+                    dialogInterface.dismiss();
+                });
+
+                dialog.show();
+            }
+            else {
+                Intent intent = new Intent(this, CallActivity.class);
+                intent.putExtra(CallActivity.Extras.ACTION, CallActivity.Extras.ACTION_ADD_CALL);
+                startActivity(intent);
+            }
         });
     }
 
@@ -83,10 +103,8 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         else if(item.getItemId() == R.id.action_search) {
-            BillFragment billFragment = (BillFragment)getSupportFragmentManager().findFragmentByTag(BillFragment.TAG);
-
             // search by customer name if current fragment shows all customers
-            if(billFragment != null && billFragment.isVisible()) {
+            if(hasFragment(BillFragment.class)) {
                 // TODO
             }
             // open search window if current fragment shows calls in a bill
@@ -99,5 +117,29 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private AlertDialog.Builder createDialog(@LayoutRes int layoutId, @StringRes int titleId, @StringRes int hintId) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this).setTitle(titleId);
+        View dialogView = LayoutInflater.from(dialog.getContext()).inflate(layoutId,
+                findViewById(android.R.id.content), false);
+        EditText editText = dialogView.findViewById(R.id.dialog_input);
+
+        editText.setHint(hintId);
+        dialog.setView(dialogView);
+        dialog.setNegativeButton("Cancel", ((dialogInterface, i) -> dialogInterface.cancel()));
+
+        return dialog;
+    }
+
+    private <T extends Fragment> boolean hasFragment(Class<T> clazz) {
+        Fragment nav = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_content_main);
+
+        if(nav != null) {
+            Fragment fragment = nav.getChildFragmentManager().getPrimaryNavigationFragment();
+            return fragment != null && fragment.getClass() == clazz;
+        }
+
+        return false;
     }
 }
