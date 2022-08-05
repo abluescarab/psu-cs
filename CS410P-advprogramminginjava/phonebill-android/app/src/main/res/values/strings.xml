@@ -12,4 +12,12 @@
     <!-- Main toolbar -->
     <string name="menu_main_help">Help</string>
     <string name="menu_main_readme">README</string>
+
+    <!-- Phone call editor -->
+    <string name="edit_caller_number">Caller number</string>
+    <string name="edit_callee_number">Callee number</string>
+    <string name="edit_start_date">Start date</string>
+    <string name="edit_end_date">End date</string>
+    <string name="edit_start_time">Start time</string>
+    <string name="edit_end_time">End time</string>
 </resources>

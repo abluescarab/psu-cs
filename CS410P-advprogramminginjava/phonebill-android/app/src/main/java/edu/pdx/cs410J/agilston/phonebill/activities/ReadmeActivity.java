@@ -1,4 +1,4 @@
-package edu.pdx.cs410J.agilston.phonebill;
+package edu.pdx.cs410J.agilston.phonebill.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Objects;
+
+import edu.pdx.cs410J.agilston.phonebill.R;
 
 public class ReadmeActivity extends AppCompatActivity {
     @Override

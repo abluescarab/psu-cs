@@ -1,22 +1,20 @@
-package edu.pdx.cs410J.agilston.phonebill;
+package edu.pdx.cs410J.agilston.phonebill.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import edu.pdx.cs410J.agilston.phonebill.R;
 import edu.pdx.cs410J.agilston.phonebill.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -38,9 +36,10 @@ public class MainActivity extends AppCompatActivity {
 
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
-        binding.fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action",
-                                                               Snackbar.LENGTH_LONG)
-                                                       .setAction("Action", null).show());
+        binding.fab.setOnClickListener(view -> {
+            Intent intent = new Intent(this, CallActivity.class);
+            startActivity(intent);
+        });
     }
 
     @Override
@@ -58,9 +57,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == R.id.action_readme) {
-            Intent myIntent = new Intent(this, ReadmeActivity.class);
+            Intent intent = new Intent(this, ReadmeActivity.class);
 //            myIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-            startActivity(myIntent);
+            startActivity(intent);
             return true;
         }
 
