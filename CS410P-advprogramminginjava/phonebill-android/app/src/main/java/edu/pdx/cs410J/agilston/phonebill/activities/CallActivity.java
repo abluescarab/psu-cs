@@ -132,7 +132,7 @@ public class CallActivity extends AppCompatActivity {
     }
 
     private String formatTime(int hour, int minute) {
-        DateTimeFormatter from = getFormatter("H:mm");
+        DateTimeFormatter from = getFormatter("H:m");
         DateTimeFormatter to = getFormatter("hh:mm a");
         TemporalAccessor parsed = from.parse(String.format("%s:%s", hour, minute));
         return to.format(parsed);
