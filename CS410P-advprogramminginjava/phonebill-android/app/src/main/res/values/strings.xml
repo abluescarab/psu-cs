@@ -14,10 +14,13 @@
     <!-- Phone call interface -->
     <string name="title_add_call">Add New Call</string>
     <string name="title_search_call">Search Calls</string>
-    <string name="edit_caller_number">Caller number</string>
-    <string name="edit_callee_number">Callee number</string>
-    <string name="edit_start_date">Start date</string>
-    <string name="edit_end_date">End date</string>
-    <string name="edit_start_time">Start time</string>
-    <string name="edit_end_time">End time</string>
+    <string name="title_add_customer">Add Customer</string>
+
+    <string name="hint_customer_name">Customer name</string>
+    <string name="hint_caller_number">Caller number</string>
+    <string name="hint_callee_number">Callee number</string>
+    <string name="hint_start_date">Start date</string>
+    <string name="hint_end_date">End date</string>
+    <string name="hint_start_time">Start time</string>
+    <string name="hint_end_time">End time</string>
 </resources>
