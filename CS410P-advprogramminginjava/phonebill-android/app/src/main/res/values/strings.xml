@@ -2,18 +2,18 @@
     <string name="app_name">Phone Bill</string>
 
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="bill_fragment_label">@string/app_name</string>
+    <string name="call_fragment_label">Calls</string>
 
     <!-- Main toolbar -->
     <string name="menu_main_help">Help</string>
     <string name="menu_main_readme">README</string>
+    <string name="menu_main_search">Search</string>
+    <string name="search_hint">Search…</string>
 
-    <!-- Phone call editor -->
+    <!-- Phone call interface -->
+    <string name="title_add_call">Add New Call</string>
+    <string name="title_search_call">Search Calls</string>
     <string name="edit_caller_number">Caller number</string>
     <string name="edit_callee_number">Callee number</string>
     <string name="edit_start_date">Start date</string>

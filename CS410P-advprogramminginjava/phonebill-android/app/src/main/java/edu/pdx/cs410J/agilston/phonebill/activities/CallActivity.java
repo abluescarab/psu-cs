@@ -2,7 +2,6 @@ package edu.pdx.cs410J.agilston.phonebill.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
 
@@ -15,24 +14,46 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
+import java.util.Objects;
 
 import edu.pdx.cs410J.agilston.phonebill.R;
-import edu.pdx.cs410J.agilston.phonebill.databinding.ActivityCallBinding;
-import edu.pdx.cs410J.agilston.phonebill.databinding.ActivityMainBinding;
 
 public class CallActivity extends AppCompatActivity {
+    public static class Extras {
+        public static final String ACTION = "ACTION";
+        public static final String ACTION_ADD_CALL = "ADD_CALL";
+        public static final String ACTION_SEARCH_CALLS = "SEARCH_CALLS";
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_call);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        EditText callerNumber = findViewById(R.id.editTextPhoneCaller);
-        EditText calleeNumber = findViewById(R.id.editTextPhoneCallee);
-        EditText startDate = findViewById(R.id.editTextDateStart);
-        EditText startTime = findViewById(R.id.editTextTimeStart);
-        EditText endDate = findViewById(R.id.editTextDateEnd);
-        EditText endTime = findViewById(R.id.editTextTimeEnd);
+        FloatingActionButton fab = findViewById(R.id.call_fab);
+        String action = getIntent().getStringExtra(Extras.ACTION);
+
+        if(Objects.equals(action, Extras.ACTION_ADD_CALL)) {
+            setTitle(R.string.title_add_call);
+            fab.setImageResource(R.drawable.ic_add_call);
+        }
+        else {
+            setTitle(R.string.title_search_call);
+            fab.setImageResource(R.drawable.ic_search);
+        }
+
+        // assign action to fab
+        fab.setOnClickListener(view -> {
+            // TODO: save/search call(s)
+        });
+
+        EditText callerNumber = findViewById(R.id.edit_caller_number);
+        EditText calleeNumber = findViewById(R.id.edit_callee_number);
+        EditText startDate = findViewById(R.id.edit_date_start);
+        EditText startTime = findViewById(R.id.edit_time_start);
+        EditText endDate = findViewById(R.id.edit_date_end);
+        EditText endTime = findViewById(R.id.edit_time_end);
         ZonedDateTime dateTime = ZonedDateTime.now();
 
         // set the start date, end date, and end time to the current day and time
@@ -93,13 +114,6 @@ public class CallActivity extends AppCompatActivity {
                 endTimePicker.show(getSupportFragmentManager(), "MATERIAL_END_TIME_PICKER"));
         endTimePicker.addOnPositiveButtonClickListener(selection ->
                 endTime.setText(formatTime(endTimePicker.getHour(), endTimePicker.getMinute())));
-
-        // assign action to fab
-        fab.setOnClickListener(view -> {
-//            Intent intent = new Intent(this, CallActivity.class);
-//            startActivity(intent);
-            // TODO: save phone call
-        });
     }
 
     private String formatDate(int month, int day, int year) {

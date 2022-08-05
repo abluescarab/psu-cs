@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="edu.pdx.cs410J.agilston.phonebill.fragments.FirstFragment"
-        android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
+        android:name="edu.pdx.cs410J.agilston.phonebill.fragments.BillFragment"
+        android:label="@string/bill_fragment_label"
+        tools:layout="@layout/fragment_bill">
 
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
@@ -17,9 +17,9 @@
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="edu.pdx.cs410J.agilston.phonebill.fragments.SecondFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
+        android:name="edu.pdx.cs410J.agilston.phonebill.fragments.CallFragment"
+        android:label="@string/call_fragment_label"
+        tools:layout="@layout/fragment_call">
 
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"

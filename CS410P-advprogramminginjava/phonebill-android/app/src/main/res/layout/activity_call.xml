@@ -16,7 +16,7 @@
             android:layout_height="match_parent">
 
             <EditText
-                android:id="@+id/editTextPhoneCaller"
+                android:id="@+id/edit_caller_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/edit_caller_number"
@@ -29,7 +29,7 @@
             android:layout_height="match_parent">
 
             <EditText
-                android:id="@+id/editTextPhoneCallee"
+                android:id="@+id/edit_callee_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/edit_callee_number"
@@ -42,7 +42,7 @@
             android:layout_height="match_parent" >
 
             <EditText
-                android:id="@+id/editTextDateStart"
+                android:id="@+id/edit_date_start"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="date"
@@ -54,7 +54,7 @@
                 android:focusableInTouchMode="false" />
 
             <EditText
-                android:id="@+id/editTextTimeStart"
+                android:id="@+id/edit_time_start"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="time"
@@ -71,7 +71,7 @@
             android:layout_height="match_parent">
 
             <EditText
-                android:id="@+id/editTextDateEnd"
+                android:id="@+id/edit_date_end"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="date"
@@ -83,7 +83,7 @@
                 android:focusableInTouchMode="false" />
 
             <EditText
-                android:id="@+id/editTextTimeEnd"
+                android:id="@+id/edit_time_end"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="time"
@@ -97,12 +97,12 @@
     </TableLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
+        android:id="@+id/call_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_save_24" />
+        app:srcCompat="@drawable/ic_save" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

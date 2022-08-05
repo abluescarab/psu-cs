@@ -11,6 +11,11 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+        <!-- Toolbar button color. -->
+        <item name="android:colorControlNormal">?attr/colorOnPrimary</item>
     </style>
+
+    <style name="Theme.PhoneBill.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.PhoneBill.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
