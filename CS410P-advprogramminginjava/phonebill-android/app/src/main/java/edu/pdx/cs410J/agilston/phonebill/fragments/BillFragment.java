@@ -7,13 +7,10 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
 
-import edu.pdx.cs410J.agilston.phonebill.R;
 import edu.pdx.cs410J.agilston.phonebill.databinding.FragmentBillBinding;
 
 public class BillFragment extends Fragment {
-    public final static String TAG = "BILL_FRAGMENT";
     private FragmentBillBinding binding;
 
     @Override
@@ -29,7 +26,7 @@ public class BillFragment extends Fragment {
 //            @Override
 //            public void onClick(View view) {
 //                NavHostFragment.findNavController(BillFragment.this)
-//                        .navigate(R.id.action_FirstFragment_to_SecondFragment);
+//                        .navigate(R.id.action_bills_to_calls);
 //            }
 //        });
     }

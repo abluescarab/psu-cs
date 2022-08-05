@@ -17,6 +17,7 @@ public class TextDumper implements PhoneBillDumper<PhoneBill> {
 
     /**
      * Dumps a phone bill to a specified writer.
+     *
      * @param bill bill to dump
      */
     @Override

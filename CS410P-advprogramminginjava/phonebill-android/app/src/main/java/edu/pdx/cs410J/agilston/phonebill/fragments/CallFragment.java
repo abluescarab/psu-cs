@@ -7,23 +7,16 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
 
-import edu.pdx.cs410J.agilston.phonebill.R;
 import edu.pdx.cs410J.agilston.phonebill.databinding.FragmentCallBinding;
 
 public class CallFragment extends Fragment {
     private FragmentCallBinding binding;
 
     @Override
-    public View onCreateView(
-            LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState
-    ) {
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentCallBinding.inflate(inflater, container, false);
         return binding.getRoot();
-
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -33,7 +26,7 @@ public class CallFragment extends Fragment {
 //            @Override
 //            public void onClick(View view) {
 //                NavHostFragment.findNavController(CallFragment.this)
-//                        .navigate(R.id.action_SecondFragment_to_FirstFragment);
+//                        .navigate(R.id.action_calls_to_bills);
 //            }
 //        });
     }

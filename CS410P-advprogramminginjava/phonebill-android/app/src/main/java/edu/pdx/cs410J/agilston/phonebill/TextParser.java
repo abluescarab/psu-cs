@@ -19,6 +19,7 @@ public class TextParser implements PhoneBillParser<PhoneBill> {
 
     /**
      * Parses a phone bill from a specified reader.
+     *
      * @return parsed phone bill
      * @throws ParserException if customer is missing from file
      */

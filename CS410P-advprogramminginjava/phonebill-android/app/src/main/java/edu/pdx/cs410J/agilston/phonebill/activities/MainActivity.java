@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
         MenuItem searchButton = menu.findItem(R.id.action_search);
-//        SearchView searchView = (SearchView) MenuItemCompat.getActionProvider().getActionView(menu.findItem(R.id.action_search));
         SearchView searchView = (SearchView)searchButton.getActionView();
 
         searchView.setQueryHint(getText(R.string.search_hint));
@@ -72,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+
         return true;
     }
 
