@@ -25,6 +25,13 @@ public class CallActivity extends AppCompatActivity {
         public static final String ACTION_SEARCH_CALLS = "SEARCH_CALLS";
     }
 
+    EditText editCallerNumber;
+    EditText editCalleeNumber;
+    EditText editStartDate;
+    EditText editStartTime;
+    EditText editEndDate;
+    EditText editEndTime;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,20 +53,26 @@ public class CallActivity extends AppCompatActivity {
         // assign action to fab
         fab.setOnClickListener(view -> {
             // TODO: save/search call(s)
+            if(Objects.equals(action, Extras.ACTION_ADD_CALL)) {
+
+            }
+            else {
+
+            }
         });
 
-        EditText callerNumber = findViewById(R.id.edit_caller_number);
-        EditText calleeNumber = findViewById(R.id.edit_callee_number);
-        EditText startDate = findViewById(R.id.edit_date_start);
-        EditText startTime = findViewById(R.id.edit_time_start);
-        EditText endDate = findViewById(R.id.edit_date_end);
-        EditText endTime = findViewById(R.id.edit_time_end);
+        editCallerNumber = findViewById(R.id.edit_caller_number);
+        editCalleeNumber = findViewById(R.id.edit_callee_number);
+        editStartDate = findViewById(R.id.edit_date_start);
+        editStartTime = findViewById(R.id.edit_time_start);
+        editEndDate = findViewById(R.id.edit_date_end);
+        editEndTime = findViewById(R.id.edit_time_end);
         ZonedDateTime dateTime = ZonedDateTime.now();
 
         // set the start date, end date, and end time to the current day and time
-        startDate.setText(formatDate(dateTime.getMonthValue(), dateTime.getDayOfMonth(), dateTime.getYear()));
-        endDate.setText(formatDate(dateTime.getMonthValue(), dateTime.getDayOfMonth(), dateTime.getYear()));
-        endTime.setText(formatTime(dateTime.getHour(), dateTime.getMinute()));
+        editStartDate.setText(formatDate(dateTime.getMonthValue(), dateTime.getDayOfMonth(), dateTime.getYear()));
+        editEndDate.setText(formatDate(dateTime.getMonthValue(), dateTime.getDayOfMonth(), dateTime.getYear()));
+        editEndTime.setText(formatTime(dateTime.getHour(), dateTime.getMinute()));
 
         // create a date picker for the start date
         MaterialDatePicker<?> startDatePicker =
@@ -69,10 +82,10 @@ public class CallActivity extends AppCompatActivity {
                                           .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
                                           .build();
 
-        startDate.setOnClickListener(view ->
+        editStartDate.setOnClickListener(view ->
                 startDatePicker.show(getSupportFragmentManager(), "MATERIAL_START_DATE_PICKER"));
         startDatePicker.addOnPositiveButtonClickListener(selection ->
-                startDate.setText(formatDate(startDatePicker.getHeaderText())));
+                editStartDate.setText(formatDate(startDatePicker.getHeaderText())));
 
         // create a time picker for the start time
         MaterialTimePicker startTimePicker =
@@ -83,10 +96,10 @@ public class CallActivity extends AppCompatActivity {
                         .setMinute(dateTime.getMinute())
                         .build();
 
-        startTime.setOnClickListener(view ->
+        editStartTime.setOnClickListener(view ->
                 startTimePicker.show(getSupportFragmentManager(), "MATERIAL_START_TIME_PICKER"));
         startTimePicker.addOnPositiveButtonClickListener(selection ->
-                startTime.setText(formatTime(startTimePicker.getHour(), startTimePicker.getMinute())));
+                editStartTime.setText(formatTime(startTimePicker.getHour(), startTimePicker.getMinute())));
 
         // create a date picker for the end date
         MaterialDatePicker<?> endDatePicker =
@@ -96,10 +109,10 @@ public class CallActivity extends AppCompatActivity {
                                           .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
                                           .build();
 
-        endDate.setOnClickListener(view ->
+        editEndDate.setOnClickListener(view ->
                 endDatePicker.show(getSupportFragmentManager(), "MATERIAL_END_DATE_PICKER"));
         endDatePicker.addOnPositiveButtonClickListener(selection ->
-                endDate.setText(formatDate(endDatePicker.getHeaderText())));
+                editEndDate.setText(formatDate(endDatePicker.getHeaderText())));
 
         // create a time picker for the end time
         MaterialTimePicker endTimePicker =
@@ -110,10 +123,10 @@ public class CallActivity extends AppCompatActivity {
                         .setMinute(dateTime.getMinute())
                         .build();
 
-        endTime.setOnClickListener(view ->
+        editEndTime.setOnClickListener(view ->
                 endTimePicker.show(getSupportFragmentManager(), "MATERIAL_END_TIME_PICKER"));
         endTimePicker.addOnPositiveButtonClickListener(selection ->
-                endTime.setText(formatTime(endTimePicker.getHour(), endTimePicker.getMinute())));
+                editEndTime.setText(formatTime(endTimePicker.getHour(), endTimePicker.getMinute())));
     }
 
     private String formatDate(int month, int day, int year) {
@@ -140,5 +153,14 @@ public class CallActivity extends AppCompatActivity {
 
     private DateTimeFormatter getFormatter(String pattern) {
         return DateTimeFormatter.ofPattern(pattern).withZone(ZoneId.systemDefault());
+    }
+
+    private void addCall() {
+        String callerNumber = editCallerNumber.getText().toString();
+        String calleeNumber = editCalleeNumber.getText().toString();
+        String startDate = editStartDate.getText().toString();
+        String startTime = editStartTime.getText().toString();
+        String endDate = editEndDate.getText().toString();
+        String endTime = editEndTime.getText().toString();
     }
 }
