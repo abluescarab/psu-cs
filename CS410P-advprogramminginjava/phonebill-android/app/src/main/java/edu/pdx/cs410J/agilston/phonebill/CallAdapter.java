@@ -11,10 +11,10 @@ import java.util.List;
 
 import edu.pdx.cs410J.agilston.phonebill.databinding.FragmentCallEntryBinding;
 
-public class CallRecyclerViewAdapter extends RecyclerView.Adapter<CallRecyclerViewAdapter.ViewHolder> {
+public class CallAdapter extends RecyclerView.Adapter<CallAdapter.ViewHolder> {
     private final List<PhoneCall> calls;
 
-    public CallRecyclerViewAdapter(List<PhoneCall> calls) {
+    public CallAdapter(List<PhoneCall> calls) {
         this.calls = calls;
     }
 

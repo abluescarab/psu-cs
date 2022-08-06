@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import edu.pdx.cs410J.agilston.phonebill.CallRecyclerViewAdapter;
+import edu.pdx.cs410J.agilston.phonebill.CallAdapter;
 import edu.pdx.cs410J.agilston.phonebill.R;
 import edu.pdx.cs410J.agilston.phonebill.activities.MainActivity;
 
@@ -36,7 +36,7 @@ public class CallEntryFragment extends Fragment {
 
             recyclerView.addItemDecoration(dividerItemDecoration);
             recyclerView.setLayoutManager(layoutManager);
-            recyclerView.setAdapter(new CallRecyclerViewAdapter(
+            recyclerView.setAdapter(new CallAdapter(
                     new ArrayList<>(MainActivity.getCurrentBill().getPhoneCalls())));
         }
 
