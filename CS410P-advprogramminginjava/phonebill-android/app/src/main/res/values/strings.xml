@@ -23,4 +23,14 @@
     <string name="hint_end_date">End date</string>
     <string name="hint_start_time">Start time</string>
     <string name="hint_end_time">End time</string>
+
+    <string name="entry_from">From:</string>
+    <string name="entry_to">To:</string>
+
+    <!-- Placeholders -->
+    <string name="placeholder_caller">000-000-0000</string>
+    <string name="placeholder_callee">111-111-1111</string>
+    <string name="placeholder_start">01/01/2022 01:00 PM</string>
+    <string name="placeholder_end">01/01/2022 02:00 PM</string>
+    <string name="placeholder_duration">0 hours 0 minutes</string>
 </resources>
