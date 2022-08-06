@@ -154,4 +154,8 @@ public class MainActivity extends AppCompatActivity {
     public static PhoneBill getBill(String customer) {
         return bills.get(customer);
     }
+
+    public static PhoneBill getCurrentBill() {
+
+    }
 }

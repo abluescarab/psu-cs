@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import edu.pdx.cs410J.agilston.phonebill.CallRecyclerViewAdapter;
-import edu.pdx.cs410J.agilston.phonebill.PhoneBill;
 import edu.pdx.cs410J.agilston.phonebill.R;
 import edu.pdx.cs410J.agilston.phonebill.activities.MainActivity;
 
@@ -34,24 +33,13 @@ public class CallEntryFragment extends Fragment {
             LinearLayoutManager layoutManager = new LinearLayoutManager(context);
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(view.getContext(),
                     layoutManager.getOrientation());
-            Bundle bundle = getArguments();
 
-            if(bundle != null) {
-                String customer = bundle.getString(Extras.CUSTOMER);
-                PhoneBill bill = MainActivity.getBill(customer);
-
-                if(bill != null) {
-                    recyclerView.addItemDecoration(dividerItemDecoration);
-                    recyclerView.setLayoutManager(layoutManager);
-                    recyclerView.setAdapter(new CallRecyclerViewAdapter(new ArrayList<>(bill.getPhoneCalls())));
-                }
-            }
+            recyclerView.addItemDecoration(dividerItemDecoration);
+            recyclerView.setLayoutManager(layoutManager);
+            recyclerView.setAdapter(new CallRecyclerViewAdapter(
+                    new ArrayList<>(MainActivity.getCurrentBill().getPhoneCalls())));
         }
 
         return view;
-    }
-
-    public static class Extras {
-        public static final String CUSTOMER = "CUSTOMER";
     }
 }
