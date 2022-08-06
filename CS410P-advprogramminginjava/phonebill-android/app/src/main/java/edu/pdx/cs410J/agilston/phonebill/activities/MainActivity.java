@@ -3,37 +3,45 @@ package edu.pdx.cs410J.agilston.phonebill.activities;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.LayoutRes;
-import androidx.annotation.NonNull;
-import androidx.annotation.StringRes;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
-
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import edu.pdx.cs410J.agilston.phonebill.PhoneBill;
 import edu.pdx.cs410J.agilston.phonebill.R;
 import edu.pdx.cs410J.agilston.phonebill.databinding.ActivityMainBinding;
 import edu.pdx.cs410J.agilston.phonebill.fragments.BillFragment;
 
 public class MainActivity extends AppCompatActivity {
+    private static Map<String, PhoneBill> bills;
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
+
+    public MainActivity() {
+        bills = new HashMap<>();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        bills = new HashMap<>();
         binding = ActivityMainBinding.inflate(getLayoutInflater());
 
         setContentView(binding.getRoot());
@@ -141,5 +149,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return false;
+    }
+
+    public static PhoneBill getBill(String customer) {
+        return bills.get(customer);
     }
 }
