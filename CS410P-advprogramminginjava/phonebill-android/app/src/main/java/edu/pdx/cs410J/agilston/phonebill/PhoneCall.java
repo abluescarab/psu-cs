@@ -2,6 +2,7 @@ package edu.pdx.cs410J.agilston.phonebill;
 
 import edu.pdx.cs410J.AbstractPhoneCall;
 
+import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -143,6 +144,29 @@ public class PhoneCall extends AbstractPhoneCall implements Comparable<PhoneCall
      */
     public long getDuration() {
         return ChronoUnit.MINUTES.between(beginTime, endTime);
+    }
+
+    /**
+     * Gets the duration of the call as a string.
+     */
+    public String getDurationString() {
+        Duration duration = Duration.ofMinutes(getDuration());
+        long hours = duration.toHours();
+        long minutes = duration.toMinutes() - (hours * 60);
+        StringBuilder durationString = new StringBuilder();
+
+        if(hours > 0) {
+            durationString.append(String.format("%s hour%s%s", hours, hours == 1 ? "" : "s", minutes > 0 ? " " : ""));
+        }
+
+        if(minutes > 0) {
+            durationString.append(String.format("%s minute%s", minutes, minutes == 1 ? "" : "s"));
+        }
+        else if(hours < 1) {
+            durationString.append("0 minutes");
+        }
+
+        return durationString.toString();
     }
 
     /**

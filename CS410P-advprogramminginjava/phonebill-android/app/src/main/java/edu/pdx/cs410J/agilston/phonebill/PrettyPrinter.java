@@ -1,13 +1,13 @@
 package edu.pdx.cs410J.agilston.phonebill;
 
-import edu.pdx.cs410J.PhoneBillDumper;
-
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import edu.pdx.cs410J.PhoneBillDumper;
 
 public class PrettyPrinter implements PhoneBillDumper<PhoneBill> {
     private final Writer writer;
@@ -20,9 +20,6 @@ public class PrettyPrinter implements PhoneBillDumper<PhoneBill> {
     public void dump(PhoneBill bill) {
         try(PrintWriter pw = new PrintWriter(this.writer)) {
             StringBuilder line;
-            Duration duration;
-            long hours;
-            long minutes;
             List<PhoneCall> calls = new ArrayList<>(bill.getPhoneCalls());
             Collections.sort(calls);
 
@@ -30,9 +27,6 @@ public class PrettyPrinter implements PhoneBillDumper<PhoneBill> {
             pw.println("CALLER       | CALLEE       | BEGIN TIME        | END TIME          | DURATION");
 
             for(PhoneCall call : calls) {
-                duration = Duration.ofMinutes(call.getDuration());
-                hours = duration.toHours();
-                minutes = duration.toMinutesPart();
                 line = new StringBuilder(call.getCaller());
 
                 line.append(" | ")
@@ -41,18 +35,8 @@ public class PrettyPrinter implements PhoneBillDumper<PhoneBill> {
                     .append(call.getBeginTimeString())
                     .append(" | ")
                     .append(call.getEndTimeString())
-                    .append(" | ");
-
-                if(hours > 0) {
-                    line.append(hours)
-                        .append(" ")
-                        .append(hours == 1 ? "hour" : "hours")
-                        .append(" ");
-                }
-
-                line.append(minutes)
-                    .append(" ")
-                    .append(minutes == 1 ? "minute" : "minutes");
+                    .append(" | ")
+                    .append(call.getDurationString());
 
                 pw.println(line);
             }
