@@ -48,12 +48,13 @@ public class MainActivity extends AppCompatActivity {
 
         // set adapter for customer list
         RecyclerView recyclerView = findViewById(R.id.customer_list);
-        adapter = new CustomerAdapter(PhoneBillList.getCustomers(), item -> {
+        CustomerAdapter adapter = new CustomerAdapter(PhoneBillList.getCustomers(), item -> {
             // TODO: open call view after clicking on customer
             Bundle bundle = new Bundle();
             bundle.putString(CallFragment.Extras.ITEM_NAME, item);
             navController.navigate(R.id.action_bills_to_calls, bundle);
         });
+        PhoneBillList.setCustomerAdapter(adapter);
         recyclerView.setAdapter(adapter);
 
         // bind floating action button
@@ -67,8 +68,7 @@ public class MainActivity extends AppCompatActivity {
                         R.string.hint_customer_name,
                         R.string.required,
                         (dialogInterface, editText) -> {
-                            int item = PhoneBillList.addBill(editText.getText().toString());
-                            adapter.notifyItemInserted(item);
+                            PhoneBillList.addBill(editText.getText().toString());
                             dialogInterface.dismiss();
                         },
                         (dialogInterface, editText) -> dialogInterface.cancel());

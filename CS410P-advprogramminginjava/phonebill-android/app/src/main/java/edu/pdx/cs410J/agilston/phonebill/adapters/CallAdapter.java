@@ -22,7 +22,8 @@ public class CallAdapter extends RecyclerView.Adapter<CallAdapter.CallViewHolder
     @NonNull
     @Override
     public CallViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new CallViewHolder(FragmentCallEntryBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new CallViewHolder(FragmentCallEntryBinding.inflate(LayoutInflater.from(parent.getContext()), parent,
+                false));
     }
 
     @Override
@@ -39,6 +40,11 @@ public class CallAdapter extends RecyclerView.Adapter<CallAdapter.CallViewHolder
     @Override
     public int getItemCount() {
         return calls.size();
+    }
+
+    public void addCall(PhoneCall call) {
+        calls.add(call);
+        notifyItemInserted(calls.indexOf(call));
     }
 
     public class CallViewHolder extends RecyclerView.ViewHolder {

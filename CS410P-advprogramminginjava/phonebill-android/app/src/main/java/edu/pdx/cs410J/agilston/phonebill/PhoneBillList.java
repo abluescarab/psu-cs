@@ -6,30 +6,37 @@ import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import edu.pdx.cs410J.agilston.phonebill.adapters.CallAdapter;
+import edu.pdx.cs410J.agilston.phonebill.adapters.CustomerAdapter;
+
 public class PhoneBillList {
     private static final SortedMap<String, PhoneBill> bills = new TreeMap<>();
+    private static CustomerAdapter customerAdapter;
+    private static CallAdapter callAdapter;
 
-    public static int addBill(String customer) {
+    public static void addBill(String customer) {
         bills.put(customer, new PhoneBill(customer));
-        return bills.headMap(customer).size();
+
+        if(customerAdapter != null) {
+            customerAdapter.addCustomer(customer);
+        }
     }
 
-    public static int addBill(PhoneBill bill) {
+    public static void addBill(PhoneBill bill) {
         bills.put(bill.getCustomer(), bill);
-        return bills.headMap(bill.getCustomer()).size();
+
+        if(customerAdapter != null) {
+            customerAdapter.addCustomer(bill.getCustomer());
+        }
     }
 
     public static void addCall(String customer, PhoneCall call) {
-        PhoneBill bill;
-
-        if(bills.containsKey(customer)) {
-            bill = bills.get(customer);
-        }
-        else {
-            bill = new PhoneBill(customer);
-        }
-
+        PhoneBill bill = bills.containsKey(customer) ? bills.get(customer) : new PhoneBill(customer);
         bill.addPhoneCall(call);
+
+        if(callAdapter != null) {
+            callAdapter.addCall(call);
+        }
     }
 
     public static PhoneBill getBill(String customer) {
@@ -46,5 +53,21 @@ public class PhoneBillList {
 
     public static int indexOf(String customer) {
         return bills.headMap(customer).size();
+    }
+
+    public static CustomerAdapter getCustomerAdapter() {
+        return customerAdapter;
+    }
+
+    public static void setCustomerAdapter(CustomerAdapter customerAdapter) {
+        PhoneBillList.customerAdapter = customerAdapter;
+    }
+
+    public static CallAdapter getCallAdapter() {
+        return callAdapter;
+    }
+
+    public static void setCallAdapter(CallAdapter callAdapter) {
+        PhoneBillList.callAdapter = callAdapter;
     }
 }
