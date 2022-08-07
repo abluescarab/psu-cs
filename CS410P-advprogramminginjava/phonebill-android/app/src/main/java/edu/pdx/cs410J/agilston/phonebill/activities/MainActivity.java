@@ -27,6 +27,7 @@ import edu.pdx.cs410J.agilston.phonebill.PhoneBill;
 import edu.pdx.cs410J.agilston.phonebill.R;
 import edu.pdx.cs410J.agilston.phonebill.databinding.ActivityMainBinding;
 import edu.pdx.cs410J.agilston.phonebill.fragments.BillFragment;
+import edu.pdx.cs410J.agilston.phonebill.fragments.CallFragment;
 
 public class MainActivity extends AppCompatActivity {
     private static Map<String, PhoneBill> bills;
@@ -50,9 +51,9 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this,
                 R.id.nav_host_fragment_content_main);
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
+        // bind floating action button
         binding.fab.setOnClickListener(view -> {
             if(hasFragment(BillFragment.class)) {
                 AlertDialog.Builder dialog = createDialog(R.layout.dialog_add_customer, R.string.title_add_customer,
@@ -111,12 +112,8 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         else if(item.getItemId() == R.id.action_search) {
-            // search by customer name if current fragment shows all customers
-            if(hasFragment(BillFragment.class)) {
-                // TODO
-            }
-            // open search window if current fragment shows calls in a bill
-            else {
+            if(hasFragment(CallFragment.class)) {
+                // open search window if current fragment shows calls in a bill
                 Intent intent = new Intent(this, CallActivity.class);
                 intent.putExtra(CallActivity.Extras.ACTION, CallActivity.Extras.ACTION_SEARCH_CALLS);
                 startActivity(intent);
