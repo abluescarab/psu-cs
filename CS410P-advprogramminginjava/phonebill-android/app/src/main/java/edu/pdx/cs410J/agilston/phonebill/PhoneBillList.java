@@ -2,12 +2,12 @@ package edu.pdx.cs410J.agilston.phonebill;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class PhoneBillList {
-    private static final Map<String, PhoneBill> bills = new HashMap<>();
+    private static final Map<String, PhoneBill> bills = new TreeMap<>();
     private static String selectedCustomer;
 
     public static void addBill(String customer) {
