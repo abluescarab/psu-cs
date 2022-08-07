@@ -27,10 +27,11 @@ import edu.pdx.cs410J.agilston.phonebill.PhoneCall;
 import edu.pdx.cs410J.agilston.phonebill.R;
 import edu.pdx.cs410J.agilston.phonebill.adapters.CustomerAdapter;
 import edu.pdx.cs410J.agilston.phonebill.databinding.ActivityMainBinding;
-import edu.pdx.cs410J.agilston.phonebill.fragments.BillFragment;
+import edu.pdx.cs410J.agilston.phonebill.fragments.CustomerFragment;
 import edu.pdx.cs410J.agilston.phonebill.fragments.CallFragment;
 
 public class MainActivity extends AppCompatActivity {
+    private CustomerAdapter customerAdapter;
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
     private CustomerAdapter adapter;
@@ -46,20 +47,25 @@ public class MainActivity extends AppCompatActivity {
 
         loadBills();
 
-        // set adapter for customer list
-        RecyclerView recyclerView = findViewById(R.id.customer_list);
-        adapter = new CustomerAdapter(PhoneBillList.getCustomers(), item -> {});
-        recyclerView.setAdapter(adapter);
-
         // set up navcontroller for fragment navigation
         NavController navController = Navigation.findNavController(this,
                 R.id.nav_host_fragment_content_main);
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
+        // set adapter for customer list
+        RecyclerView recyclerView = findViewById(R.id.customer_list);
+        CustomerAdapter adapter = new CustomerAdapter(PhoneBillList.getCustomers(), item -> {
+            // TODO: open call view after clicking on customer
+            Bundle bundle = new Bundle();
+            bundle.putString(CallFragment.Extras.ITEM_NAME, item);
+            navController.navigate(R.id.action_bills_to_calls, bundle);
+        });
+        recyclerView.setAdapter(adapter);
+
         // bind floating action button
         binding.fab.setOnClickListener(view -> {
-            if(hasFragment(BillFragment.class)) {
+            if(hasFragment(CustomerFragment.class)) {
                 AlertDialog.Builder dialog = createDialog(R.layout.dialog_add_customer, R.string.title_add_customer,
                         R.string.hint_customer_name);
 
@@ -154,13 +160,18 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadBills() {
         // TODO: replace test bills
-        for(int i = 1; i <= 5; i++) {
-            String format = "%1$s%1$s%1$s-%1$s%1$s%1$s-%1$s%1$s%1$s%1$s";
-            PhoneBill bill = new PhoneBill("Customer " + i);
-            PhoneCall call = new PhoneCall(String.format(format, i), String.format(format, i + 1),
-                    "01/01/2022 01:00 PM", "01/01/2022 02:00 PM");
+        String numberFormat = "%1$s%1$s%1$s-%1$s%1$s%1$s-%1$s%1$s%1$s%1$s";
+        String dateFormat = "01/01/2022 0%1$s:00 PM";
 
-            bill.addPhoneCall(call);
+        for(int i = 1; i <= 5; i++) {
+            PhoneBill bill = new PhoneBill("Customer " + i);
+
+            for(int j = 1; j <= 5; j++) {
+                PhoneCall call = new PhoneCall(String.format(numberFormat, i), String.format(numberFormat, i + 1),
+                        String.format(dateFormat, j), String.format(dateFormat, j + 1));
+                bill.addPhoneCall(call);
+            }
+
             PhoneBillList.addBill(bill);
         }
     }

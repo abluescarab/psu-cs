@@ -24,8 +24,11 @@
     <string name="hint_start_time">Start time</string>
     <string name="hint_end_time">End time</string>
 
-    <string name="entry_from">From:</string>
-    <string name="entry_to">To:</string>
+    <string name="entry_caller">Caller:</string>
+    <string name="entry_callee">Receiver:</string>
+    <string name="entry_start">Began:</string>
+    <string name="entry_end">Ended:</string>
+    <string name="entry_duration">Duration:</string>
 
     <!-- Placeholders -->
     <string name="placeholder_caller">000-000-0000</string>

@@ -7,7 +7,13 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
+import edu.pdx.cs410J.agilston.phonebill.PhoneBillList;
+import edu.pdx.cs410J.agilston.phonebill.R;
+import edu.pdx.cs410J.agilston.phonebill.adapters.CallAdapter;
 import edu.pdx.cs410J.agilston.phonebill.databinding.FragmentCallBinding;
 
 public class CallFragment extends Fragment {
@@ -19,21 +25,25 @@ public class CallFragment extends Fragment {
         return binding.getRoot();
     }
 
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-//        binding.buttonSecond.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                NavHostFragment.findNavController(CallFragment.this)
-//                        .navigate(R.id.action_calls_to_bills);
-//            }
-//        });
-    }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        Bundle bundle = getArguments();
+
+        if(bundle != null) {
+            String customer = bundle.getString(Extras.ITEM_NAME);
+            RecyclerView recyclerView = view.findViewById(R.id.call_list);
+            recyclerView.setAdapter(new CallAdapter(new ArrayList<>(PhoneBillList.getBill(customer).getPhoneCalls())));
+        }
+    }
+
+    public static class Extras {
+        public static String ITEM_NAME = "ITEM_NAME";
     }
 }

@@ -1,7 +1,5 @@
 package edu.pdx.cs410J.agilston.phonebill;
 
-import edu.pdx.cs410J.AbstractPhoneCall;
-
 import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -12,6 +10,8 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import edu.pdx.cs410J.AbstractPhoneCall;
 
 /**
  * A class used to store a phone call with the caller's and receiver's numbers and call length.

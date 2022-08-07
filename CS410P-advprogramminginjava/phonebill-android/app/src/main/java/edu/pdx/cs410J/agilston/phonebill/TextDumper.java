@@ -1,9 +1,9 @@
 package edu.pdx.cs410J.agilston.phonebill;
 
-import edu.pdx.cs410J.PhoneBillDumper;
-
 import java.io.PrintWriter;
 import java.io.Writer;
+
+import edu.pdx.cs410J.PhoneBillDumper;
 
 /**
  * A class that dumps a phone bill to a writer.

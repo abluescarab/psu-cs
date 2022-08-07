@@ -1,11 +1,11 @@
 package edu.pdx.cs410J.agilston.phonebill;
 
-import edu.pdx.cs410J.ParserException;
-import edu.pdx.cs410J.PhoneBillParser;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
+
+import edu.pdx.cs410J.ParserException;
+import edu.pdx.cs410J.PhoneBillParser;
 
 /**
  * A class that parses a phone bill from a reader.

@@ -13,10 +13,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
-
-import edu.pdx.cs410J.agilston.phonebill.adapters.CallAdapter;
-import edu.pdx.cs410J.agilston.phonebill.PhoneBillList;
 import edu.pdx.cs410J.agilston.phonebill.R;
 
 public class CallEntryFragment extends Fragment {
@@ -31,10 +27,9 @@ public class CallEntryFragment extends Fragment {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView)view;
             LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(view.getContext(),
-                    layoutManager.getOrientation());
 
-            recyclerView.addItemDecoration(dividerItemDecoration);
+            recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),
+                    layoutManager.getOrientation()));
             recyclerView.setLayoutManager(layoutManager);
         }
 
