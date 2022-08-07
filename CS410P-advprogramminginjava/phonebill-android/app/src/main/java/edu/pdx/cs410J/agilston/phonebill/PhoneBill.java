@@ -1,5 +1,7 @@
 package edu.pdx.cs410J.agilston.phonebill;
 
+import android.text.TextUtils;
+
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -97,7 +99,7 @@ public class PhoneBill extends AbstractPhoneBill<PhoneCall> {
 
         PhoneBill other = (PhoneBill)obj;
 
-        if(!Objects.equals(other.customer, this.customer) || other.calls.size() != this.calls.size()) {
+        if(!TextUtils.equals(other.customer, this.customer) || other.calls.size() != this.calls.size()) {
             return false;
         }
 

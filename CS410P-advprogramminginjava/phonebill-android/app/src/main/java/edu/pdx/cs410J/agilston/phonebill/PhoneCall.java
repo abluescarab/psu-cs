@@ -1,5 +1,7 @@
 package edu.pdx.cs410J.agilston.phonebill;
 
+import android.text.TextUtils;
+
 import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -223,7 +225,7 @@ public class PhoneCall extends AbstractPhoneCall implements Comparable<PhoneCall
 
         PhoneCall other = (PhoneCall)obj;
 
-        return Objects.equals(caller, other.caller) && Objects.equals(callee, other.callee)
+        return TextUtils.equals(caller, other.caller) && TextUtils.equals(callee, other.callee)
                 && beginTime.equals(other.beginTime) && endTime.equals(other.endTime);
     }
 }

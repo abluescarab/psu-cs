@@ -3,6 +3,7 @@ package edu.pdx.cs410J.agilston.phonebill.activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.EditText;
 
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -41,7 +42,7 @@ public class CallActivity extends AppCompatActivity {
         FloatingActionButton fab = findViewById(R.id.call_fab);
         String action = getIntent().getStringExtra(Extras.ACTION);
 
-        if(Objects.equals(action, Extras.ACTION_ADD_CALL)) {
+        if(TextUtils.equals(action, Extras.ACTION_ADD_CALL)) {
             setTitle(R.string.title_add_call);
             fab.setImageResource(R.drawable.ic_add_call);
         }
@@ -53,7 +54,7 @@ public class CallActivity extends AppCompatActivity {
         // assign action to fab
         fab.setOnClickListener(view -> {
             // TODO: save/search call(s)
-            if(Objects.equals(action, Extras.ACTION_ADD_CALL)) {
+            if(TextUtils.equals(action, Extras.ACTION_ADD_CALL)) {
 
             }
             else {
