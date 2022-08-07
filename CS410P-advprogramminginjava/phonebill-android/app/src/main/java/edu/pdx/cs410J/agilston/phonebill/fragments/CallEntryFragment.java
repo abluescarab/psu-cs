@@ -36,8 +36,6 @@ public class CallEntryFragment extends Fragment {
 
             recyclerView.addItemDecoration(dividerItemDecoration);
             recyclerView.setLayoutManager(layoutManager);
-            recyclerView.setAdapter(new CallAdapter(
-                    new ArrayList<>(PhoneBillList.getSelectedBill().getPhoneCalls())));
         }
 
         return view;
