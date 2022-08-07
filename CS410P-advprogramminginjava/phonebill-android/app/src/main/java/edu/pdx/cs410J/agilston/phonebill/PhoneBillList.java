@@ -14,8 +14,8 @@ public class PhoneBillList {
         bills.put(customer, new PhoneBill(customer));
     }
 
-    public static void addBill(String customer, PhoneBill bill) {
-        bills.put(customer, bill);
+    public static void addBill(PhoneBill bill) {
+        bills.put(bill.getCustomer(), bill);
     }
 
     public static void addCall(String customer, PhoneCall call) {
