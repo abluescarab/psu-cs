@@ -1,17 +1,11 @@
 package edu.pdx.cs410J.agilston.phonebill.activities;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.EditText;
 
-import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
-import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
@@ -27,11 +21,11 @@ import edu.pdx.cs410J.agilston.phonebill.PhoneCall;
 import edu.pdx.cs410J.agilston.phonebill.R;
 import edu.pdx.cs410J.agilston.phonebill.adapters.CustomerAdapter;
 import edu.pdx.cs410J.agilston.phonebill.databinding.ActivityMainBinding;
-import edu.pdx.cs410J.agilston.phonebill.fragments.CustomerFragment;
+import edu.pdx.cs410J.agilston.phonebill.fragments.AlertDialogFragment;
 import edu.pdx.cs410J.agilston.phonebill.fragments.CallFragment;
+import edu.pdx.cs410J.agilston.phonebill.fragments.CustomerFragment;
 
 public class MainActivity extends AppCompatActivity {
-    private CustomerAdapter customerAdapter;
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
     private CustomerAdapter adapter;
@@ -48,14 +42,13 @@ public class MainActivity extends AppCompatActivity {
         loadBills();
 
         // set up navcontroller for fragment navigation
-        NavController navController = Navigation.findNavController(this,
-                R.id.nav_host_fragment_content_main);
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
         // set adapter for customer list
         RecyclerView recyclerView = findViewById(R.id.customer_list);
-        CustomerAdapter adapter = new CustomerAdapter(PhoneBillList.getCustomers(), item -> {
+        adapter = new CustomerAdapter(PhoneBillList.getCustomers(), item -> {
             // TODO: open call view after clicking on customer
             Bundle bundle = new Bundle();
             bundle.putString(CallFragment.Extras.ITEM_NAME, item);
@@ -66,15 +59,20 @@ public class MainActivity extends AppCompatActivity {
         // bind floating action button
         binding.fab.setOnClickListener(view -> {
             if(hasFragment(CustomerFragment.class)) {
-                AlertDialog.Builder dialog = createDialog(R.layout.dialog_add_customer, R.string.title_add_customer,
-                        R.string.hint_customer_name);
-
-                dialog.setPositiveButton("Add", (dialogInterface, i) -> {
-                    // TODO: add customer
-                    dialogInterface.dismiss();
-                });
-
-                dialog.show();
+                AlertDialogFragment dialog = new AlertDialogFragment(
+                        R.layout.dialog_add_customer,
+                        R.string.title_add_customer,
+                        R.string.add,
+                        R.string.cancel,
+                        R.string.hint_customer_name,
+                        R.string.required,
+                        (dialogInterface, editText) -> {
+                            int item = PhoneBillList.addBill(editText.getText().toString());
+                            adapter.notifyItemInserted(item);
+                            dialogInterface.dismiss();
+                        },
+                        (dialogInterface, editText) -> dialogInterface.cancel());
+                dialog.show(getSupportFragmentManager(), AlertDialogFragment.TAG);
             }
             else {
                 Intent intent = new Intent(this, CallActivity.class);
@@ -132,19 +130,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private AlertDialog.Builder createDialog(@LayoutRes int layoutId, @StringRes int titleId, @StringRes int hintId) {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this).setTitle(titleId);
-        View dialogView = LayoutInflater.from(dialog.getContext()).inflate(layoutId,
-                findViewById(android.R.id.content), false);
-        EditText editText = dialogView.findViewById(R.id.dialog_input);
-
-        editText.setHint(hintId);
-        dialog.setView(dialogView);
-        dialog.setNegativeButton("Cancel", ((dialogInterface, i) -> dialogInterface.cancel()));
-
-        return dialog;
     }
 
     private <T extends Fragment> boolean hasFragment(Class<T> clazz) {

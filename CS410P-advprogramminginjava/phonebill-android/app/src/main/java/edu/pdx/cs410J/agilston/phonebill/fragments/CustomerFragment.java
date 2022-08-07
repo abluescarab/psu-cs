@@ -26,23 +26,6 @@ public class CustomerFragment extends Fragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-
-        View view = getView();
-
-        if(view != null) {
-            RecyclerView recyclerView = view.findViewById(R.id.customer_list);
-            recyclerView.getAdapter().notifyDataSetChanged();
-        }
-    }
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
