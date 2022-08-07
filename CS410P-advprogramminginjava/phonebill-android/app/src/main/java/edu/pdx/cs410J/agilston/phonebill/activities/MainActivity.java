@@ -21,7 +21,9 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.RecyclerView;
 
+import edu.pdx.cs410J.agilston.phonebill.PhoneBill;
 import edu.pdx.cs410J.agilston.phonebill.PhoneBillList;
+import edu.pdx.cs410J.agilston.phonebill.PhoneCall;
 import edu.pdx.cs410J.agilston.phonebill.R;
 import edu.pdx.cs410J.agilston.phonebill.adapters.CustomerAdapter;
 import edu.pdx.cs410J.agilston.phonebill.databinding.ActivityMainBinding;
@@ -151,9 +153,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadBills() {
-        // TODO: set up test bills
+        // TODO: replace test bills
         for(int i = 1; i <= 5; i++) {
-            PhoneBillList.addBill("Customer " + i);
+            String format = "%1$s%1$s%1$s-%1$s%1$s%1$s-%1$s%1$s%1$s%1$s";
+            PhoneBill bill = new PhoneBill("Customer " + i);
+            PhoneCall call = new PhoneCall(String.format(format, i), String.format(format, i + 1),
+                    "01/01/2022 01:00 PM", "01/01/2022 02:00 PM");
+
+            bill.addPhoneCall(call);
+            PhoneBillList.addBill(bill);
         }
     }
 }
