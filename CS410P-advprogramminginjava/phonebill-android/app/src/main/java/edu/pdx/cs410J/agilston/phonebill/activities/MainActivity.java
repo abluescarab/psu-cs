@@ -44,6 +44,11 @@ public class MainActivity extends AppCompatActivity {
 
         loadBills();
 
+        // set adapter for customer list
+        RecyclerView recyclerView = findViewById(R.id.customer_list);
+        adapter = new CustomerAdapter(PhoneBillList.getCustomers(), item -> {});
+        recyclerView.setAdapter(adapter);
+
         // set up navcontroller for fragment navigation
         NavController navController = Navigation.findNavController(this,
                 R.id.nav_host_fragment_content_main);

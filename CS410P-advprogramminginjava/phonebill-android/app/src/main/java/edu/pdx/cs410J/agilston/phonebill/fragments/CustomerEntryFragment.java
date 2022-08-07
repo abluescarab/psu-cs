@@ -22,7 +22,8 @@ import edu.pdx.cs410J.agilston.phonebill.R;
 public class CustomerEntryFragment extends Fragment {
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_customer_list, container, false);
 
         // set view adapter
@@ -35,9 +36,6 @@ public class CustomerEntryFragment extends Fragment {
 
             recyclerView.addItemDecoration(dividerItemDecoration);
             recyclerView.setLayoutManager(layoutManager);
-            recyclerView.setAdapter(new CustomerAdapter(new ArrayList<>(PhoneBillList.getCustomers()), item -> {
-                // TODO: shows calls for clicked customer
-            }));
         }
 
         return view;
