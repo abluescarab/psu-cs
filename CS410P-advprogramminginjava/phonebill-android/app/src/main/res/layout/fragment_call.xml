@@ -6,4 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".fragments.CallFragment">
 
+    <include layout="@layout/fragment_call_list" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

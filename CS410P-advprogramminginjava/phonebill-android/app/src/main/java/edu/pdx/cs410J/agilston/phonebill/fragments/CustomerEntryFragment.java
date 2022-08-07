@@ -15,18 +15,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import edu.pdx.cs410J.agilston.phonebill.adapters.CallAdapter;
+import edu.pdx.cs410J.agilston.phonebill.adapters.CustomerAdapter;
 import edu.pdx.cs410J.agilston.phonebill.PhoneBillList;
 import edu.pdx.cs410J.agilston.phonebill.R;
 
-public class CallEntryFragment extends Fragment {
+public class CustomerEntryFragment extends Fragment {
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_call_list, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_customer_list, container, false);
 
-        // set the view adapter for the RecyclerView
+        // set view adapter
         if(view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView)view;
@@ -36,8 +35,9 @@ public class CallEntryFragment extends Fragment {
 
             recyclerView.addItemDecoration(dividerItemDecoration);
             recyclerView.setLayoutManager(layoutManager);
-            recyclerView.setAdapter(new CallAdapter(
-                    new ArrayList<>(PhoneBillList.getSelectedBill().getPhoneCalls())));
+            recyclerView.setAdapter(new CustomerAdapter(new ArrayList<>(PhoneBillList.getCustomers()), item -> {
+                // TODO: shows calls for clicked customer
+            }));
         }
 
         return view;

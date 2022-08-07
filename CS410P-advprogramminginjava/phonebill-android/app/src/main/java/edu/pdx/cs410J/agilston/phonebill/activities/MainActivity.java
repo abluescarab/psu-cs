@@ -19,35 +19,32 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import edu.pdx.cs410J.agilston.phonebill.PhoneBill;
+import edu.pdx.cs410J.agilston.phonebill.adapters.CustomerAdapter;
+import edu.pdx.cs410J.agilston.phonebill.PhoneBillList;
 import edu.pdx.cs410J.agilston.phonebill.R;
 import edu.pdx.cs410J.agilston.phonebill.databinding.ActivityMainBinding;
 import edu.pdx.cs410J.agilston.phonebill.fragments.BillFragment;
 import edu.pdx.cs410J.agilston.phonebill.fragments.CallFragment;
 
 public class MainActivity extends AppCompatActivity {
-    private static Map<String, PhoneBill> bills;
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
-
-    public MainActivity() {
-        bills = new HashMap<>();
-    }
+    private CustomerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        bills = new HashMap<>();
         binding = ActivityMainBinding.inflate(getLayoutInflater());
 
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar);
 
+        loadBills();
+
+        // set up navcontroller for fragment navigation
         NavController navController = Navigation.findNavController(this,
                 R.id.nav_host_fragment_content_main);
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
@@ -96,8 +93,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String s) {
-                // TODO: search customer name
-                return false;
+                adapter.getFilter().filter(s);
+                return true;
             }
         });
 
@@ -148,11 +145,13 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    public static PhoneBill getBill(String customer) {
-        return bills.get(customer);
-    }
+    private void loadBills() {
+        RecyclerView view = findViewById(R.id.customer_list);
+        adapter = (CustomerAdapter)view.getAdapter();
 
-    public static PhoneBill getCurrentBill() {
-
+        // TODO: set up test bills
+        for(int i = 1; i <= 5; i++) {
+            PhoneBillList.addBill("Customer " + i);
+        }
     }
 }

@@ -1,4 +1,4 @@
-package edu.pdx.cs410J.agilston.phonebill;
+package edu.pdx.cs410J.agilston.phonebill.adapters;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import edu.pdx.cs410J.agilston.phonebill.PhoneCall;
 import edu.pdx.cs410J.agilston.phonebill.databinding.FragmentCallEntryBinding;
 
 public class CallAdapter extends RecyclerView.Adapter<CallAdapter.CallViewHolder> {
