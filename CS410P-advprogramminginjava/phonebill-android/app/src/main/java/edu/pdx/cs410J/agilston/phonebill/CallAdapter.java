@@ -11,7 +11,7 @@ import java.util.List;
 
 import edu.pdx.cs410J.agilston.phonebill.databinding.FragmentCallEntryBinding;
 
-public class CallAdapter extends RecyclerView.Adapter<CallAdapter.ViewHolder> {
+public class CallAdapter extends RecyclerView.Adapter<CallAdapter.CallViewHolder> {
     private final List<PhoneCall> calls;
 
     public CallAdapter(List<PhoneCall> calls) {
@@ -20,12 +20,12 @@ public class CallAdapter extends RecyclerView.Adapter<CallAdapter.ViewHolder> {
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(FragmentCallEntryBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+    public CallViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new CallViewHolder(FragmentCallEntryBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CallViewHolder holder, int position) {
         PhoneCall call = calls.get(position);
 
         holder.callerNumber.setText(call.getCaller());
@@ -40,14 +40,14 @@ public class CallAdapter extends RecyclerView.Adapter<CallAdapter.ViewHolder> {
         return calls.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class CallViewHolder extends RecyclerView.ViewHolder {
         public final TextView callerNumber;
         public final TextView calleeNumber;
         public final TextView startDate;
         public final TextView endDate;
         public final TextView duration;
 
-        public ViewHolder(FragmentCallEntryBinding binding) {
+        public CallViewHolder(FragmentCallEntryBinding binding) {
             super(binding.getRoot());
             callerNumber = binding.entryCaller;
             calleeNumber = binding.entryCallee;
