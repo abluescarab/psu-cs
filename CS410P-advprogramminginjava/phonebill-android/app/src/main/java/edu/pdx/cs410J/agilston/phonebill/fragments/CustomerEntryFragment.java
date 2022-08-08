@@ -22,7 +22,7 @@ public class CustomerEntryFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_customer_list, container, false);
 
-        // set view adapter
+        // set view style
         if(view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView)view;
