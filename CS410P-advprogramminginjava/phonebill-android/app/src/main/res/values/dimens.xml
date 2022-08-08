@@ -1,4 +1,5 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="general_margin">10dp</dimen>
+    <dimen name="empty_list_font_size">18sp</dimen>
 </resources>

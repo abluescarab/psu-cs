@@ -1,5 +1,6 @@
 package edu.pdx.cs410J.agilston.phonebill.fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 
 import edu.pdx.cs410J.agilston.phonebill.PhoneBillList;
 import edu.pdx.cs410J.agilston.phonebill.R;
+import edu.pdx.cs410J.agilston.phonebill.activities.MainActivity;
 import edu.pdx.cs410J.agilston.phonebill.adapters.CallAdapter;
 import edu.pdx.cs410J.agilston.phonebill.databinding.FragmentCallBinding;
 
@@ -36,12 +38,23 @@ public class CallFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         Bundle bundle = getArguments();
+        RecyclerView recyclerView = view.findViewById(R.id.call_list);
+        PhoneBillList.addItemDecoration(recyclerView);
 
         if(bundle != null) {
             String customer = bundle.getString(Extras.ITEM_NAME);
-            RecyclerView recyclerView = view.findViewById(R.id.call_list);
-            recyclerView.setAdapter(new CallAdapter(new ArrayList<>(PhoneBillList.getBill(customer).getPhoneCalls())));
+
+            if(PhoneBillList.getCallAdapter() == null) {
+                PhoneBillList.setCallAdapter(new CallAdapter(new ArrayList<>(PhoneBillList.getBill(customer).getPhoneCalls())));
+            }
+
+            Activity activity = requireActivity();
+
+            if(activity instanceof MainActivity) {
+                ((MainActivity)activity).flipCallView(customer);
+            }
         }
+
     }
 
     public static class Extras {

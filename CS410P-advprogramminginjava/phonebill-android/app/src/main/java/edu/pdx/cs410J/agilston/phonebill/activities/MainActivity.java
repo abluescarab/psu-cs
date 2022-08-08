@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ViewFlipper;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.recyclerview.widget.RecyclerView;
 
 import edu.pdx.cs410J.agilston.phonebill.PhoneBill;
 import edu.pdx.cs410J.agilston.phonebill.PhoneBillList;
@@ -26,15 +28,13 @@ import edu.pdx.cs410J.agilston.phonebill.fragments.CustomerFragment;
 
 public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
-    private ActivityMainBinding binding;
-    private CustomerAdapter adapter;
     private NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
 
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar);
@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
                         R.string.required,
                         (dialogInterface, editText) -> {
                             PhoneBillList.addBill(editText.getText().toString());
+                            flipCustomerView();
                             dialogInterface.dismiss();
                         },
                         (dialogInterface, editText) -> dialogInterface.cancel());
@@ -102,7 +103,12 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String s) {
-                adapter.getFilter().filter(s);
+                CustomerAdapter adapter = PhoneBillList.getCustomerAdapter();
+
+                if(adapter != null) {
+                    adapter.getFilter().filter(s);
+                }
+
                 return true;
             }
         });
@@ -139,6 +145,30 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return false;
+    }
+
+    public void flipCustomerView() {
+        flipView(findViewById(R.id.customer_flipper), findViewById(R.id.customer_list),
+                PhoneBillList.getCustomerCount(), PhoneBillList.getCustomerAdapter());
+    }
+
+    public void flipCallView(String customer) {
+        flipView(findViewById(R.id.call_flipper), findViewById(R.id.call_list), PhoneBillList.getCallCount(customer),
+                PhoneBillList.getCallAdapter());
+    }
+
+    private void flipView(ViewFlipper flipper, RecyclerView recyclerView, int count, RecyclerView.Adapter adapter) {
+        if(flipper == null) {
+            return;
+        }
+
+        if(count == 0 || (count == 1 && flipper.getDisplayedChild() == 1)) {
+            flipper.showNext();
+        }
+
+        if(count > 0) {
+            recyclerView.setAdapter(adapter);
+        }
     }
 
     private void loadBills() {

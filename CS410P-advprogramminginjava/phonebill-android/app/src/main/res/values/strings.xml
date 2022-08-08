@@ -35,6 +35,9 @@
     <string name="entry_end">Ended:</string>
     <string name="entry_duration">Duration:</string>
 
+    <string name="empty_customer_list">No customers added</string>
+    <string name="empty_call_list">No calls added</string>
+
     <!-- Placeholders -->
     <string name="placeholder_caller">000-000-0000</string>
     <string name="placeholder_callee">111-111-1111</string>

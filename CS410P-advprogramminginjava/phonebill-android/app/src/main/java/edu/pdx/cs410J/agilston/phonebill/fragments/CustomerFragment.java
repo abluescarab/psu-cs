@@ -1,5 +1,6 @@
 package edu.pdx.cs410J.agilston.phonebill.fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import edu.pdx.cs410J.agilston.phonebill.PhoneBillList;
 import edu.pdx.cs410J.agilston.phonebill.R;
+import edu.pdx.cs410J.agilston.phonebill.activities.MainActivity;
 import edu.pdx.cs410J.agilston.phonebill.adapters.CustomerAdapter;
 import edu.pdx.cs410J.agilston.phonebill.databinding.FragmentCustomerBinding;
 
@@ -33,11 +35,10 @@ public class CustomerFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-
-        // set adapter for customer list
-        RecyclerView recyclerView = requireView().findViewById(R.id.customer_list);
         NavController navController = Navigation.findNavController(requireActivity(),
                 R.id.nav_host_fragment_content_main);
+        View view = requireView();
+        RecyclerView recyclerView = view.findViewById(R.id.customer_list);
 
         adapter = new CustomerAdapter(PhoneBillList.getCustomers(), item -> {
             Bundle bundle = new Bundle();
@@ -45,8 +46,17 @@ public class CustomerFragment extends Fragment {
             navController.navigate(R.id.action_customers_to_calls, bundle);
         });
 
-        PhoneBillList.setCustomerAdapter(adapter);
-        recyclerView.setAdapter(adapter);
+        if(PhoneBillList.getCustomerAdapter() == null) {
+            PhoneBillList.setCustomerAdapter(adapter);
+        }
+
+        PhoneBillList.addItemDecoration(recyclerView);
+
+        Activity activity = requireActivity();
+
+        if(activity instanceof MainActivity) {
+            ((MainActivity)activity).flipCustomerView();
+        }
     }
 
     @Override
