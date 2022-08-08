@@ -46,6 +46,16 @@ public class MainActivity extends AppCompatActivity {
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
+        // change fab icon based on fragment
+        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            if(destination.getId() == R.id.CustomerFragment) {
+                binding.fab.setImageResource(R.drawable.ic_add_person);
+            }
+            else {
+                binding.fab.setImageResource(R.drawable.ic_add_call);
+            }
+        });
+
         // bind floating action button
         binding.fab.setOnClickListener(view -> {
             if(hasFragment(CustomerFragment.class)) {
