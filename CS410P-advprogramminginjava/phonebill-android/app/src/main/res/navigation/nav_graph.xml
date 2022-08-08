@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_customer">
 
         <action
-            android:id="@+id/action_bills_to_calls"
+            android:id="@+id/action_customers_to_calls"
             app:destination="@id/CallFragment" />
     </fragment>
     <fragment
@@ -20,9 +20,5 @@
         android:name="edu.pdx.cs410J.agilston.phonebill.fragments.CallFragment"
         android:label="@string/call_fragment_label"
         tools:layout="@layout/fragment_call">
-
-        <action
-            android:id="@+id/action_calls_to_bills"
-            app:destination="@id/CustomerFragment" />
     </fragment>
 </navigation>

@@ -12,10 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SortedList;
 
 import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
-import edu.pdx.cs410J.agilston.phonebill.PhoneBill;
 import edu.pdx.cs410J.agilston.phonebill.databinding.FragmentCustomerEntryBinding;
 
 public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.CustomerViewHolder> implements Filterable {
@@ -55,7 +52,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
 
     public void addCustomer(String customer) {
         customers.add(customer);
-//        notifyItemInserted(customers.indexOf(customer));
+        notifyItemInserted(customers.indexOf(customer));
     }
 
     public interface OnItemClickListener {

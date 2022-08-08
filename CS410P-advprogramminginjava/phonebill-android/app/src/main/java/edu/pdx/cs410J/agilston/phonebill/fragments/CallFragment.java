@@ -17,6 +17,7 @@ import edu.pdx.cs410J.agilston.phonebill.adapters.CallAdapter;
 import edu.pdx.cs410J.agilston.phonebill.databinding.FragmentCallBinding;
 
 public class CallFragment extends Fragment {
+    // TODO: ensure start time before end time
     private FragmentCallBinding binding;
 
     @Override

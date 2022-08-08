@@ -13,7 +13,6 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.recyclerview.widget.RecyclerView;
 
 import edu.pdx.cs410J.agilston.phonebill.PhoneBill;
 import edu.pdx.cs410J.agilston.phonebill.PhoneBillList;
@@ -29,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
     private CustomerAdapter adapter;
+    private NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,20 +42,9 @@ public class MainActivity extends AppCompatActivity {
         loadBills();
 
         // set up navcontroller for fragment navigation
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-
-        // set adapter for customer list
-        RecyclerView recyclerView = findViewById(R.id.customer_list);
-        CustomerAdapter adapter = new CustomerAdapter(PhoneBillList.getCustomers(), item -> {
-            // TODO: open call view after clicking on customer
-            Bundle bundle = new Bundle();
-            bundle.putString(CallFragment.Extras.ITEM_NAME, item);
-            navController.navigate(R.id.action_bills_to_calls, bundle);
-        });
-        PhoneBillList.setCustomerAdapter(adapter);
-        recyclerView.setAdapter(adapter);
 
         // bind floating action button
         binding.fab.setOnClickListener(view -> {
@@ -84,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, appBarConfiguration) || super.onSupportNavigateUp();
     }
 
