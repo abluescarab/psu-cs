@@ -70,4 +70,20 @@ public class PhoneBillList {
     public static void setCallAdapter(CallAdapter callAdapter) {
         PhoneBillList.callAdapter = callAdapter;
     }
+
+    public static int getCustomerCount() {
+        return bills.keySet().size();
+    }
+
+    public static int getCallCount(String customer) {
+        if(bills.containsKey(customer)) {
+            PhoneBill bill = bills.get(customer);
+
+            if(bill != null) {
+                return bill.getPhoneCalls().size();
+            }
+        }
+
+        return 0;
+    }
 }
