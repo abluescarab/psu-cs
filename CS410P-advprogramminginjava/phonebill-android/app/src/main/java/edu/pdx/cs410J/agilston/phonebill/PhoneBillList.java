@@ -1,5 +1,11 @@
 package edu.pdx.cs410J.agilston.phonebill;
 
+import android.content.Context;
+
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -85,5 +91,16 @@ public class PhoneBillList {
         }
 
         return 0;
+    }
+
+    public static void addItemDecoration(RecyclerView recyclerView) {
+        // add item divider decoration
+        Context context = recyclerView.getContext();
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                layoutManager.getOrientation());
+
+        recyclerView.addItemDecoration(dividerItemDecoration);
+        recyclerView.setLayoutManager(layoutManager);
     }
 }
