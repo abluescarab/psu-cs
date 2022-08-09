@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -20,29 +21,36 @@ public class PhoneBillList {
     private static CustomerAdapter customerAdapter;
     private static CallAdapter callAdapter;
 
-    public static void addBill(String customer) {
-        bills.put(customer, new PhoneBill(customer));
+    public static void addBill(Context context, String customer) {
+        PhoneBill bill = new PhoneBill(customer);
+        bills.put(customer, bill);
 
         if(customerAdapter != null) {
             customerAdapter.addCustomer(customer);
         }
+
+        FileUtils.save(context, bill);
     }
 
-    public static void addBill(PhoneBill bill) {
+    public static void addBill(Context context, PhoneBill bill) {
         bills.put(bill.getCustomer(), bill);
 
         if(customerAdapter != null) {
             customerAdapter.addCustomer(bill.getCustomer());
         }
+
+        FileUtils.save(context, bill);
     }
 
-    public static void addCall(String customer, PhoneCall call) {
+    public static void addCall(Context context, String customer, PhoneCall call) {
         PhoneBill bill = bills.containsKey(customer) ? bills.get(customer) : new PhoneBill(customer);
         bill.addPhoneCall(call);
 
         if(callAdapter != null) {
             callAdapter.addCall(call);
         }
+
+        FileUtils.save(context, bill);
     }
 
     public static PhoneBill getBill(String customer) {
