@@ -3,6 +3,7 @@ package edu.pdx.cs410J.agilston.phonebill.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,10 +80,12 @@ public class CallFragment extends Fragment {
         PhoneBillList.addItemDecoration(recyclerView);
 
         if(bundle != null) {
-            customer = bundle.getString(Extras.CUSTOMER);
+            String newCustomer = bundle.getString(Extras.CUSTOMER);
 
-            if(PhoneBillList.getCallAdapter() == null) {
-                PhoneBillList.setCallAdapter(new CallAdapter(new ArrayList<>(PhoneBillList.getBill(customer).getPhoneCalls())));
+            if(!TextUtils.equals(newCustomer, customer)) {
+                customer = bundle.getString(Extras.CUSTOMER);
+                PhoneBillList.setCallAdapter(new CallAdapter(new ArrayList<>(PhoneBillList.getBill(customer)
+                                                                                          .getPhoneCalls())));
             }
 
             Activity activity = requireActivity();
