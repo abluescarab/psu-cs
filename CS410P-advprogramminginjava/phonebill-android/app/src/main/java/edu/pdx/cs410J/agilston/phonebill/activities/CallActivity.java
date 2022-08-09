@@ -119,7 +119,7 @@ public class CallActivity extends AppCompatActivity {
                         .build();
 
         editEndTime.setOnClickListener(view -> {
-            if(endTimePicker.isAdded()) {
+            if(!endTimePicker.isAdded()) {
                 endTimePicker.show(getSupportFragmentManager(), "MATERIAL_END_TIME_PICKER");
             }
         });
