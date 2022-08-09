@@ -21,7 +21,7 @@ import androidx.fragment.app.DialogFragment;
 
 import edu.pdx.cs410J.agilston.phonebill.R;
 
-public class AlertDialogFragment extends DialogFragment {
+public class TextInputDialogFragment extends DialogFragment {
     public static String TAG = "ALERT_DIALOG";
 
     private final int layout;
@@ -34,9 +34,9 @@ public class AlertDialogFragment extends DialogFragment {
     private EditText editText;
     private AlertDialog dialog;
 
-    public AlertDialogFragment(@LayoutRes int layout, @StringRes int title, @StringRes int positiveButton,
-                               @StringRes int negativeButton, @StringRes int hint, @StringRes int emptyError,
-                               OnClickListener positiveAction, OnClickListener negativeAction) {
+    public TextInputDialogFragment(@LayoutRes int layout, @StringRes int title, @StringRes int positiveButton,
+                                   @StringRes int negativeButton, @StringRes int hint, @StringRes int emptyError,
+                                   OnClickListener positiveAction, OnClickListener negativeAction) {
         this.layout = layout;
         this.title = title;
         this.positiveButton = positiveButton;

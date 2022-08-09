@@ -62,7 +62,7 @@ public class CustomerFragment extends Fragment {
 
             FloatingActionButton fab = activity.findViewById(R.id.fab);
             fab.setOnClickListener(v -> {
-                AlertDialogFragment dialog = new AlertDialogFragment(
+                TextInputDialogFragment dialog = new TextInputDialogFragment(
                         R.layout.dialog_add_customer,
                         R.string.title_add_customer,
                         R.string.add,
@@ -75,7 +75,7 @@ public class CustomerFragment extends Fragment {
                             dialogInterface.dismiss();
                         },
                         (dialogInterface, editText) -> dialogInterface.cancel());
-                dialog.show(mainActivity.getSupportFragmentManager(), AlertDialogFragment.TAG);
+                dialog.show(mainActivity.getSupportFragmentManager(), TextInputDialogFragment.TAG);
             });
         }
     }
