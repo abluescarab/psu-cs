@@ -51,7 +51,6 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
         return null;
     }
 
-    // TODO: do not add if duplicate
     public void addCustomer(String customer) {
         customers.add(customer);
         notifyItemInserted(customers.indexOf(customer));
