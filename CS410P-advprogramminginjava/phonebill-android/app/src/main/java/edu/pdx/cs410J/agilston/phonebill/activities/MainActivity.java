@@ -103,15 +103,12 @@ public class MainActivity extends AppCompatActivity implements CustomerAdapter.O
             startActivity(intent);
             return true;
         }
-        else if(item.getItemId() == R.id.action_search) {
-            if(hasFragment(CallFragment.class)) {
-                // open search window if current fragment shows calls in a bill
-                Intent intent = new Intent(this, CallActivity.class);
-                intent.putExtra(CallActivity.Extras.ACTION, CallActivity.Extras.ACTION_SEARCH_CALLS);
-                // TODO: pass customer name to search activity
-                startActivity(intent);
-                return true;
-            }
+        else if(item.getItemId() == R.id.action_filter) {
+            Intent intent = new Intent(this, CallActivity.class);
+            intent.putExtra(CallActivity.Extras.ACTION, CallActivity.Extras.ACTION_SEARCH_CALLS);
+            intent.putExtra(CallActivity.Extras.ACTION_CUSTOMER, currentCustomer);
+            startActivity(intent);
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
