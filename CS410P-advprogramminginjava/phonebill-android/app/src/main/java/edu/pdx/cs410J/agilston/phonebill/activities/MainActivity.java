@@ -26,6 +26,7 @@ import edu.pdx.cs410J.agilston.phonebill.fragments.CallFragment;
 public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
     private NavController navController;
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +65,8 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
         MenuItem searchButton = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView)searchButton.getActionView();
 
+        searchView = (SearchView)searchButton.getActionView();
         searchView.setQueryHint(getText(R.string.search_hint));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -100,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
                 // open search window if current fragment shows calls in a bill
                 Intent intent = new Intent(this, CallActivity.class);
                 intent.putExtra(CallActivity.Extras.ACTION, CallActivity.Extras.ACTION_SEARCH_CALLS);
-                // TODO: pass customer name
+                // TODO: pass customer name to search activity
                 startActivity(intent);
                 return true;
             }
@@ -128,6 +129,13 @@ public class MainActivity extends AppCompatActivity {
     public void flipCallView(String customer) {
         flipView(findViewById(R.id.call_flipper), findViewById(R.id.call_list), PhoneBillList.getCallCount(customer),
                 PhoneBillList.getCallAdapter());
+    }
+
+    public void resetSearch() {
+        if(searchView != null) {
+            searchView.setQuery("", false);
+            searchView.setIconified(true);
+        }
     }
 
     private void flipView(ViewFlipper flipper, RecyclerView recyclerView, int count, RecyclerView.Adapter adapter) {

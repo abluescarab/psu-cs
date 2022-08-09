@@ -132,7 +132,6 @@ public class CallActivity extends AppCompatActivity {
         // assign action to fab
         fab.setOnClickListener(view -> {
             if(validate()) {
-                // TODO: save/search call(s)
                 if(TextUtils.equals(action, Extras.ACTION_ADD_CALL)) {
                     Intent intent = new Intent();
                     intent.putExtra(Extras.ACTION_CUSTOMER, getIntent().getStringExtra(Extras.ACTION_CUSTOMER));
@@ -146,6 +145,7 @@ public class CallActivity extends AppCompatActivity {
                     setResult(Activity.RESULT_OK, intent);
                     finish();
                 }
+                // TODO: search calls
                 else {
 
                 }

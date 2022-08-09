@@ -11,19 +11,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SortedList;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.pdx.cs410J.agilston.phonebill.databinding.FragmentCustomerEntryBinding;
 
 public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.CustomerViewHolder> implements Filterable {
     private final OnItemClickListener onItemClickListener;
-    private SortedList<String> customers;
-    private SortedList<String> customersFiltered;
+    private final SortedList<String> customers;
+    private List<String> customersFiltered;
 
     public CustomerAdapter(List<String> customers, OnItemClickListener onItemClickListener) {
         this.customers = new SortedList<>(String.class, new CustomerListCallback());
         this.customers.addAll(customers);
-        this.customersFiltered = this.customers;
+        this.customersFiltered = customers;
         this.onItemClickListener = onItemClickListener;
     }
 
@@ -36,7 +37,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
 
     @Override
     public void onBindViewHolder(@NonNull CustomerViewHolder holder, int position) {
-        holder.customerName.setText(customers.get(position));
+        holder.customerName.setText(customersFiltered.get(position));
         holder.itemView.setOnClickListener(view -> onItemClickListener.onItemClick(customersFiltered.get(position)));
     }
 
@@ -48,7 +49,46 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
     @Override
     public Filter getFilter() {
         // TODO: filter customers
-        return null;
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                FilterResults results = new FilterResults();
+                customersFiltered = new ArrayList<>();
+
+                if(TextUtils.isEmpty(constraint)) {
+                    for(int i = 0; i < customers.size(); i++) {
+                        customersFiltered.add(customers.get(i));
+                    }
+                }
+                else {
+                    for(int i = 0; i < customers.size(); i++) {
+                        String item = customers.get(i);
+
+                        if(item.contains(constraint)) {
+                            customersFiltered.add(item);
+                        }
+                    }
+                }
+
+                results.count = customersFiltered.size();
+                results.values = customersFiltered;
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                if(results.values == null) {
+                    customersFiltered = new ArrayList<>();
+                }
+                else {
+                    if(results.values.getClass() == ArrayList.class) {
+                        customersFiltered = (ArrayList<String>)results.values;
+                    }
+                }
+
+                notifyDataSetChanged();
+            }
+        };
     }
 
     public void addCustomer(String customer) {

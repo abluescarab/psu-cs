@@ -40,12 +40,17 @@ public class CustomerFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        NavController navController = Navigation.findNavController(requireActivity(),
-                R.id.nav_host_fragment_content_main);
+
+        Activity activity = requireActivity();
+        NavController navController = Navigation.findNavController(activity, R.id.nav_host_fragment_content_main);
         View view = requireView();
         RecyclerView recyclerView = view.findViewById(R.id.customer_list);
 
         adapter = new CustomerAdapter(PhoneBillList.getCustomers(), item -> {
+            if(activity instanceof MainActivity) {
+                ((MainActivity)activity).resetSearch();
+            }
+
             Bundle bundle = new Bundle();
             bundle.putString(CallFragment.Extras.CUSTOMER, item);
             navController.navigate(R.id.action_customers_to_calls, bundle);
@@ -56,8 +61,6 @@ public class CustomerFragment extends Fragment {
         }
 
         PhoneBillList.addItemDecoration(recyclerView);
-
-        Activity activity = requireActivity();
 
         if(activity instanceof MainActivity) {
             MainActivity mainActivity = (MainActivity)activity;
