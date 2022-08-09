@@ -22,12 +22,12 @@ import java.util.Objects;
 import edu.pdx.cs410J.agilston.phonebill.R;
 
 public class CallActivity extends AppCompatActivity {
-    EditText editCallerNumber;
-    EditText editCalleeNumber;
-    EditText editStartDate;
-    EditText editStartTime;
-    EditText editEndDate;
-    EditText editEndTime;
+    private EditText editCallerNumber;
+    private EditText editCalleeNumber;
+    private EditText editStartDate;
+    private EditText editStartTime;
+    private EditText editEndDate;
+    private EditText editEndTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
