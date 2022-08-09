@@ -48,7 +48,6 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
 
     @Override
     public Filter getFilter() {
-        // TODO: filter customers
         return new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
@@ -93,12 +92,10 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
 
     public void addCustomer(String customer) {
         customers.add(customer);
-        notifyItemInserted(customers.indexOf(customer));
     }
 
     public void addCustomers(String[] customers) {
         this.customers.addAll(customers);
-        notifyDataSetChanged();
     }
 
     public interface OnItemClickListener {
