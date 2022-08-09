@@ -42,6 +42,18 @@ public class PhoneBillList {
         FileUtils.save(context, bill);
     }
 
+    public static void addBills(Context context, Map<String, PhoneBill> bills, boolean saveAdded) {
+        PhoneBillList.bills.putAll(bills);
+
+        if(customerAdapter != null) {
+            customerAdapter.addCustomers(bills.keySet().toArray(new String[0]));
+        }
+
+        if(saveAdded) {
+            FileUtils.save(context, bills.values());
+        }
+    }
+
     public static void addCall(Context context, String customer, PhoneCall call) {
         PhoneBill bill = bills.containsKey(customer) ? bills.get(customer) : new PhoneBill(customer);
         bill.addPhoneCall(call);
@@ -63,10 +75,6 @@ public class PhoneBillList {
 
     public static List<String> getCustomers() {
         return Arrays.asList(bills.keySet().toArray(new String[0]));
-    }
-
-    public static int indexOf(String customer) {
-        return bills.headMap(customer).size();
     }
 
     public static CustomerAdapter getCustomerAdapter() {
