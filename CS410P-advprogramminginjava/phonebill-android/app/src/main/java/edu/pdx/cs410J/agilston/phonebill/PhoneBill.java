@@ -55,22 +55,41 @@ public class PhoneBill extends AbstractPhoneBill<PhoneCall> {
     }
 
     /**
-     * Returns a new PhoneBill containing only the calls between two times.
+     * Returns a new PhoneBill containing only the calls between two times with the specified caller/callee numbers.
      *
      * @param beginString time call began
      * @param endString   time call ended
      * @return new PhoneBill with calls that fall between begin and end
      */
-    public PhoneBill filter(String beginString, String endString) {
+    public PhoneBill filter(String caller, String callee, String beginString, String endString) {
         PhoneBill bill = new PhoneBill(customer);
-        ZonedDateTime begin = PhoneCall.formatDateTime(beginString);
-        ZonedDateTime end = PhoneCall.formatDateTime(endString);
+        ZonedDateTime begin = null;
+        ZonedDateTime end = null;
+
+        // trim any whitespace to ensure isEmpty works
+        caller = caller.trim();
+        callee = callee.trim();
+        beginString = beginString.trim();
+        endString = endString.trim();
+
+        if(!TextUtils.isEmpty(beginString.trim())) {
+            begin = PhoneCall.formatDateTime(beginString);
+        }
+
+        if(!TextUtils.isEmpty(endString.trim())) {
+            end = PhoneCall.formatDateTime(endString);
+        }
 
         for(PhoneCall call : calls) {
+            if(!TextUtils.isEmpty(caller) && !TextUtils.equals(caller, call.getCaller()) ||
+                    !TextUtils.isEmpty(callee) && !TextUtils.equals(callee, call.getCallee())) {
+                continue;
+            }
+
             Date beginDate = call.getBeginTime();
             ZonedDateTime beginInstant = beginDate.toInstant().atZone(ZoneId.systemDefault());
 
-            if(begin.isAfter(beginInstant) || end.isBefore(beginInstant)) {
+            if((begin != null && begin.isAfter(beginInstant)) || (end != null && end.isBefore(beginInstant))) {
                 continue;
             }
 

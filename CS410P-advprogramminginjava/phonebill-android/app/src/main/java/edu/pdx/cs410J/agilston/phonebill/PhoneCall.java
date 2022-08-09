@@ -21,9 +21,9 @@ public class PhoneCall extends AbstractPhoneCall implements Comparable<PhoneCall
     public static final String DATE_TIME_REGEX = "(\\d{1,2})/(\\d{1,2})/(\\d{4}) (\\d{1,2}):(\\d{1,2}) ([APap][Mm])";
     public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a")
                                                                                  .withZone(ZoneId.systemDefault());
-
     private static final DateTimeFormatter DATE_STRING_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/yy h:mm a")
                                                                                     .withZone(ZoneId.systemDefault());
+
     private final String caller;
     private final String callee;
     private final ZonedDateTime beginTime;

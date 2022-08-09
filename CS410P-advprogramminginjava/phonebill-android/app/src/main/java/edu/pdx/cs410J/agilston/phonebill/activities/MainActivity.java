@@ -21,6 +21,7 @@ import edu.pdx.cs410J.agilston.phonebill.PhoneBillList;
 import edu.pdx.cs410J.agilston.phonebill.R;
 import edu.pdx.cs410J.agilston.phonebill.adapters.CustomerAdapter;
 import edu.pdx.cs410J.agilston.phonebill.databinding.ActivityMainBinding;
+import edu.pdx.cs410J.agilston.phonebill.fragments.CallFragment;
 
 public class MainActivity extends AppCompatActivity implements CustomerAdapter.OnItemClickListener {
     private AppBarConfiguration appBarConfiguration;
@@ -104,10 +105,12 @@ public class MainActivity extends AppCompatActivity implements CustomerAdapter.O
             return true;
         }
         else if(item.getItemId() == R.id.action_filter) {
-            Intent intent = new Intent(this, CallActivity.class);
-            intent.putExtra(CallActivity.Extras.ACTION, CallActivity.Extras.ACTION_SEARCH_CALLS);
-            intent.putExtra(CallActivity.Extras.ACTION_CUSTOMER, currentCustomer);
-            startActivity(intent);
+            Fragment fragment = getFragment(CallFragment.class);
+
+            if(fragment != null) {
+                ((CallFragment)fragment).launchCallActivity(CallActivity.Extras.ACTION_SEARCH_CALLS);
+            }
+
             return true;
         }
 

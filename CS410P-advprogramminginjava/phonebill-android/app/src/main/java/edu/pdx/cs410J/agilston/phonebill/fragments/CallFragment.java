@@ -17,8 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
-
 import edu.pdx.cs410J.agilston.phonebill.PhoneBill;
 import edu.pdx.cs410J.agilston.phonebill.PhoneBillList;
 import edu.pdx.cs410J.agilston.phonebill.PhoneCall;
@@ -42,14 +40,9 @@ public class CallFragment extends Fragment {
                 Intent data = result.getData();
 
                 if(data != null) {
-                    String caller = new StringBuilder(data.getStringExtra(CallActivity.Extras.RESULT_CALLER))
-                            .insert(3, "-")
-                            .insert(7, "-")
-                            .toString();
-                    String callee = new StringBuilder(data.getStringExtra(CallActivity.Extras.RESULT_CALLEE))
-                            .insert(3, "-")
-                            .insert(7, "-")
-                            .toString();
+                    String action = data.getStringExtra(CallActivity.Extras.ACTION);
+                    String caller = data.getStringExtra(CallActivity.Extras.RESULT_CALLER);
+                    String callee = data.getStringExtra(CallActivity.Extras.RESULT_CALLEE);
                     String start = String.format("%s %s",
                             data.getStringExtra(CallActivity.Extras.RESULT_START_DATE),
                             data.getStringExtra(CallActivity.Extras.RESULT_START_TIME));
@@ -57,12 +50,31 @@ public class CallFragment extends Fragment {
                             data.getStringExtra(CallActivity.Extras.RESULT_END_DATE),
                             data.getStringExtra(CallActivity.Extras.RESULT_END_TIME));
 
-                    PhoneCall call = new PhoneCall(caller, callee, start, end);
-                    Activity activity = requireActivity();
-                    PhoneBillList.addCall(activity, customer, call);
+                    if(!TextUtils.isEmpty(caller)) {
+                        caller = new StringBuilder(caller)
+                                .insert(3, "-")
+                                .insert(7, "-")
+                                .toString();
+                    }
 
-                    if(PhoneBillList.getCallCount(customer) == 1 && activity instanceof MainActivity) {
-                        ((MainActivity)activity).flipCallView(customer);
+                    if(!TextUtils.isEmpty(callee)) {
+                        callee = new StringBuilder(callee)
+                                .insert(3, "-")
+                                .insert(7, "-")
+                                .toString();
+                    }
+
+                    if(TextUtils.equals(action, CallActivity.Extras.ACTION_ADD_CALL)) {
+                        PhoneCall call = new PhoneCall(caller, callee, start, end);
+                        Activity activity = requireActivity();
+                        PhoneBillList.addCall(activity, customer, call);
+
+                        if(PhoneBillList.getCallCount(customer) == 1 && activity instanceof MainActivity) {
+                            ((MainActivity)activity).flipCallView(customer);
+                        }
+                    }
+                    else {
+                        PhoneBillList.getCallAdapter().filter(caller, callee, start, end);
                     }
                 }
             }
@@ -96,8 +108,7 @@ public class CallFragment extends Fragment {
                 PhoneBill bill = PhoneBillList.getBill(customer);
 
                 if(bill != null) {
-                    PhoneBillList.setCallAdapter(new CallAdapter(new ArrayList<>(PhoneBillList.getBill(customer)
-                                                                                              .getPhoneCalls())));
+                    PhoneBillList.setCallAdapter(new CallAdapter(bill));
                 }
             }
 
@@ -109,14 +120,22 @@ public class CallFragment extends Fragment {
 
                 if(fab != null) {
                     fab.setOnClickListener(v -> {
-                        Intent intent = new Intent(activity, CallActivity.class);
-                        intent.putExtra(CallActivity.Extras.ACTION, CallActivity.Extras.ACTION_ADD_CALL);
-                        intent.putExtra(CallActivity.Extras.ACTION_CUSTOMER, customer);
-                        launcher.launch(intent);
+//                        Intent intent = new Intent(activity, CallActivity.class);
+//                        intent.putExtra(CallActivity.Extras.ACTION, CallActivity.Extras.ACTION_ADD_CALL);
+//                        intent.putExtra(CallActivity.Extras.ACTION_CUSTOMER, customer);
+//                        launcher.launch(intent);
+                        launchCallActivity(CallActivity.Extras.ACTION_ADD_CALL);
                     });
                 }
             }
         }
+    }
+
+    public void launchCallActivity(String action) {
+        Intent intent = new Intent(getActivity(), CallActivity.class);
+        intent.putExtra(CallActivity.Extras.ACTION, action);
+        intent.putExtra(CallActivity.Extras.RESULT_CUSTOMER, customer);
+        launcher.launch(intent);
     }
 
     public static class Extras {

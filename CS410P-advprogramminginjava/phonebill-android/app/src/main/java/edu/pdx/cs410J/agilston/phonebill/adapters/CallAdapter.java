@@ -7,16 +7,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import edu.pdx.cs410J.agilston.phonebill.PhoneBill;
 import edu.pdx.cs410J.agilston.phonebill.PhoneCall;
 import edu.pdx.cs410J.agilston.phonebill.databinding.FragmentCallEntryBinding;
 
 public class CallAdapter extends RecyclerView.Adapter<CallAdapter.CallViewHolder> {
+    private final PhoneBill bill;
     private final List<PhoneCall> calls;
+    private List<PhoneCall> callsFiltered;
 
-    public CallAdapter(List<PhoneCall> calls) {
-        this.calls = calls;
+    public CallAdapter(PhoneBill bill) {
+        this.bill = bill;
+        this.calls = new ArrayList<>(bill.getPhoneCalls());
+        this.callsFiltered = new ArrayList<>(bill.getPhoneCalls());
     }
 
     @NonNull
@@ -28,7 +34,7 @@ public class CallAdapter extends RecyclerView.Adapter<CallAdapter.CallViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull CallViewHolder holder, int position) {
-        PhoneCall call = calls.get(position);
+        PhoneCall call = callsFiltered.get(position);
 
         holder.callerNumber.setText(call.getCaller());
         holder.calleeNumber.setText(call.getCallee());
@@ -39,12 +45,17 @@ public class CallAdapter extends RecyclerView.Adapter<CallAdapter.CallViewHolder
 
     @Override
     public int getItemCount() {
-        return calls.size();
+        return callsFiltered.size();
     }
 
     public void addCall(PhoneCall call) {
         calls.add(call);
-        notifyItemInserted(calls.indexOf(call));
+    }
+
+    public void filter(String caller, String callee, String startString, String endString) {
+        PhoneBill filteredBill = bill.filter(caller, callee, startString, endString);
+        callsFiltered = new ArrayList<>(filteredBill.getPhoneCalls());
+        notifyDataSetChanged();
     }
 
     public class CallViewHolder extends RecyclerView.ViewHolder {

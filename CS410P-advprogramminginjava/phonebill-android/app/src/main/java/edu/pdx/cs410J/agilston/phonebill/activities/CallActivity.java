@@ -64,10 +64,12 @@ public class CallActivity extends AppCompatActivity {
         editEndTime = findViewById(R.id.edit_time_end);
         ZonedDateTime dateTime = ZonedDateTime.now();
 
-        // set the start date, end date, and end time to the current day and time
-        editStartDate.setText(formatDate(dateTime.getMonthValue(), dateTime.getDayOfMonth(), dateTime.getYear()));
-        editEndDate.setText(formatDate(dateTime.getMonthValue(), dateTime.getDayOfMonth(), dateTime.getYear()));
-        editEndTime.setText(formatTime(dateTime.getHour(), dateTime.getMinute()));
+        // set the start date, end date, and end time to the current day and time if adding call
+        if(TextUtils.equals(action, Extras.ACTION_ADD_CALL)) {
+            editStartDate.setText(formatDate(dateTime.getMonthValue(), dateTime.getDayOfMonth(), dateTime.getYear()));
+            editEndDate.setText(formatDate(dateTime.getMonthValue(), dateTime.getDayOfMonth(), dateTime.getYear()));
+            editEndTime.setText(formatTime(dateTime.getHour(), dateTime.getMinute()));
+        }
 
         // create a date picker for the start date
         MaterialDatePicker<?> startDatePicker =
@@ -137,24 +139,21 @@ public class CallActivity extends AppCompatActivity {
 
         // assign action to fab
         fab.setOnClickListener(view -> {
-            if(validate()) {
-                if(TextUtils.equals(action, Extras.ACTION_ADD_CALL)) {
-                    Intent intent = new Intent();
-                    intent.putExtra(Extras.ACTION_CUSTOMER, getIntent().getStringExtra(Extras.ACTION_CUSTOMER));
-                    intent.putExtra(Extras.RESULT_CALLER, editCallerNumber.getText().toString());
-                    intent.putExtra(Extras.RESULT_CALLEE, editCalleeNumber.getText().toString());
-                    intent.putExtra(Extras.RESULT_START_DATE, editStartDate.getText().toString());
-                    intent.putExtra(Extras.RESULT_START_TIME, editStartTime.getText().toString());
-                    intent.putExtra(Extras.RESULT_END_DATE, editEndDate.getText().toString());
-                    intent.putExtra(Extras.RESULT_END_TIME, editEndTime.getText().toString());
+            if(TextUtils.equals(action, Extras.ACTION_SEARCH_CALLS) || validate()) {
+                Intent intent = new Intent();
 
-                    setResult(Activity.RESULT_OK, intent);
-                    finish();
-                }
-                // TODO: search calls
-                else {
+                // TODO: ensure both date & time are provided if one is given
+                intent.putExtra(Extras.ACTION, action);
+                intent.putExtra(Extras.RESULT_CUSTOMER, getIntent().getStringExtra(Extras.RESULT_CUSTOMER));
+                intent.putExtra(Extras.RESULT_CALLER, editCallerNumber.getText().toString());
+                intent.putExtra(Extras.RESULT_CALLEE, editCalleeNumber.getText().toString());
+                intent.putExtra(Extras.RESULT_START_DATE, editStartDate.getText().toString());
+                intent.putExtra(Extras.RESULT_START_TIME, editStartTime.getText().toString());
+                intent.putExtra(Extras.RESULT_END_DATE, editEndDate.getText().toString());
+                intent.putExtra(Extras.RESULT_END_TIME, editEndTime.getText().toString());
 
-                }
+                setResult(Activity.RESULT_OK, intent);
+                finish();
             }
         });
     }
@@ -266,8 +265,8 @@ public class CallActivity extends AppCompatActivity {
         public static final String ACTION = "ACTION";
         public static final String ACTION_ADD_CALL = "ADD_CALL";
         public static final String ACTION_SEARCH_CALLS = "SEARCH_CALLS";
-        public static final String ACTION_CUSTOMER = "CUSTOMER";
 
+        public static final String RESULT_CUSTOMER = "CUSTOMER";
         public static final String RESULT_CALLER = "CALLER";
         public static final String RESULT_CALLEE = "CALLEE";
         public static final String RESULT_START_DATE = "START_DATE";
