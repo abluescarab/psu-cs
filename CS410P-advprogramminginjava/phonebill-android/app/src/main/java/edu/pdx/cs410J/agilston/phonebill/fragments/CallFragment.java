@@ -19,6 +19,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
+import edu.pdx.cs410J.agilston.phonebill.PhoneBill;
 import edu.pdx.cs410J.agilston.phonebill.PhoneBillList;
 import edu.pdx.cs410J.agilston.phonebill.PhoneCall;
 import edu.pdx.cs410J.agilston.phonebill.R;
@@ -42,13 +43,22 @@ public class CallFragment extends Fragment {
                 Intent data = result.getData();
 
                 if(data != null) {
-                    PhoneCall call = new PhoneCall(
-                            data.getStringExtra(CallActivity.Extras.RESULT_CALLER),
-                            data.getStringExtra(CallActivity.Extras.RESULT_CALLEE),
-                            data.getStringExtra(CallActivity.Extras.RESULT_START),
-                            data.getStringExtra(CallActivity.Extras.RESULT_END)
-                    );
+                    String caller = new StringBuilder(data.getStringExtra(CallActivity.Extras.RESULT_CALLER))
+                            .insert(3, "-")
+                            .insert(7, "-")
+                            .toString();
+                    String callee = new StringBuilder(data.getStringExtra(CallActivity.Extras.RESULT_CALLEE))
+                            .insert(3, "-")
+                            .insert(7, "-")
+                            .toString();
+                    String start = String.format("%s %s",
+                            data.getStringExtra(CallActivity.Extras.RESULT_START_DATE),
+                            data.getStringExtra(CallActivity.Extras.RESULT_START_TIME));
+                    String end = String.format("%s %s",
+                            data.getStringExtra(CallActivity.Extras.RESULT_END_DATE),
+                            data.getStringExtra(CallActivity.Extras.RESULT_END_TIME));
 
+                    PhoneCall call = new PhoneCall(caller, callee, start, end);
                     Activity activity = requireActivity();
                     PhoneBillList.addCall(activity, customer, call);
 
@@ -81,7 +91,7 @@ public class CallFragment extends Fragment {
 
         if(bundle != null) {
             String newCustomer = bundle.getString(Extras.CUSTOMER);
-            Log.i("NEW_CUSTOMER", newCustomer);
+
             if(!TextUtils.equals(newCustomer, customer)) {
                 customer = bundle.getString(Extras.CUSTOMER);
                 PhoneBill bill = PhoneBillList.getBill(customer);
