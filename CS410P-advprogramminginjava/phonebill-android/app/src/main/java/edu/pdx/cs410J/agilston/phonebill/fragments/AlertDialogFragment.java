@@ -68,7 +68,10 @@ public class AlertDialogFragment extends DialogFragment {
         editText.setOnFocusChangeListener((view, b) ->
                 dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE));
         editText.addTextChangedListener(new DialogTextWatcher());
-        dialog.show();
+
+        if(!dialog.isShowing()) {
+            dialog.show();
+        }
 
         Button positive = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
         positive.setEnabled(false);

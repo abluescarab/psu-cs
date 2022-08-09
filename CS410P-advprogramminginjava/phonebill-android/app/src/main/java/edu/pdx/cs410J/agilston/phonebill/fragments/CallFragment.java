@@ -81,26 +81,31 @@ public class CallFragment extends Fragment {
 
         if(bundle != null) {
             String newCustomer = bundle.getString(Extras.CUSTOMER);
-
+            Log.i("NEW_CUSTOMER", newCustomer);
             if(!TextUtils.equals(newCustomer, customer)) {
                 customer = bundle.getString(Extras.CUSTOMER);
-                PhoneBillList.setCallAdapter(new CallAdapter(new ArrayList<>(PhoneBillList.getBill(customer)
-                                                                                          .getPhoneCalls())));
+                PhoneBill bill = PhoneBillList.getBill(customer);
+
+                if(bill != null) {
+                    PhoneBillList.setCallAdapter(new CallAdapter(new ArrayList<>(PhoneBillList.getBill(customer)
+                                                                                              .getPhoneCalls())));
+                }
             }
 
             Activity activity = requireActivity();
 
             if(activity instanceof MainActivity) {
                 ((MainActivity)activity).flipCallView(customer);
-
                 FloatingActionButton fab = activity.findViewById(R.id.fab);
 
-                fab.setOnClickListener(v -> {
-                    Intent intent = new Intent(activity, CallActivity.class);
-                    intent.putExtra(CallActivity.Extras.ACTION, CallActivity.Extras.ACTION_ADD_CALL);
-                    intent.putExtra(CallActivity.Extras.ACTION_CUSTOMER, customer);
-                    launcher.launch(intent);
-                });
+                if(fab != null) {
+                    fab.setOnClickListener(v -> {
+                        Intent intent = new Intent(activity, CallActivity.class);
+                        intent.putExtra(CallActivity.Extras.ACTION, CallActivity.Extras.ACTION_ADD_CALL);
+                        intent.putExtra(CallActivity.Extras.ACTION_CUSTOMER, customer);
+                        launcher.launch(intent);
+                    });
+                }
             }
         }
     }

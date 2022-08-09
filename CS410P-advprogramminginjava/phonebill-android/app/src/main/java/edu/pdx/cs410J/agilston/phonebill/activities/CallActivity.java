@@ -68,8 +68,11 @@ public class CallActivity extends AppCompatActivity {
                                           .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
                                           .build();
 
-        editStartDate.setOnClickListener(view ->
-                startDatePicker.show(getSupportFragmentManager(), "MATERIAL_START_DATE_PICKER"));
+        editStartDate.setOnClickListener(view -> {
+            if(!startDatePicker.isAdded()) {
+                startDatePicker.show(getSupportFragmentManager(), "MATERIAL_START_DATE_PICKER");
+            }
+        });
         startDatePicker.addOnPositiveButtonClickListener(selection ->
                 editStartDate.setText(formatDate(startDatePicker.getHeaderText())));
 
@@ -82,8 +85,11 @@ public class CallActivity extends AppCompatActivity {
                         .setMinute(dateTime.getMinute())
                         .build();
 
-        editStartTime.setOnClickListener(view ->
-                startTimePicker.show(getSupportFragmentManager(), "MATERIAL_START_TIME_PICKER"));
+        editStartTime.setOnClickListener(view -> {
+            if(!startTimePicker.isAdded()) {
+                startTimePicker.show(getSupportFragmentManager(), "MATERIAL_START_TIME_PICKER");
+            }
+        });
         startTimePicker.addOnPositiveButtonClickListener(selection ->
                 editStartTime.setText(formatTime(startTimePicker.getHour(), startTimePicker.getMinute())));
 
@@ -95,8 +101,11 @@ public class CallActivity extends AppCompatActivity {
                                           .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
                                           .build();
 
-        editEndDate.setOnClickListener(view ->
-                endDatePicker.show(getSupportFragmentManager(), "MATERIAL_END_DATE_PICKER"));
+        editEndDate.setOnClickListener(view -> {
+            if(!endDatePicker.isAdded()) {
+                endDatePicker.show(getSupportFragmentManager(), "MATERIAL_END_DATE_PICKER");
+            }
+        });
         endDatePicker.addOnPositiveButtonClickListener(selection ->
                 editEndDate.setText(formatDate(endDatePicker.getHeaderText())));
 
@@ -109,8 +118,11 @@ public class CallActivity extends AppCompatActivity {
                         .setMinute(dateTime.getMinute())
                         .build();
 
-        editEndTime.setOnClickListener(view ->
-                endTimePicker.show(getSupportFragmentManager(), "MATERIAL_END_TIME_PICKER"));
+        editEndTime.setOnClickListener(view -> {
+            if(endTimePicker.isAdded()) {
+                endTimePicker.show(getSupportFragmentManager(), "MATERIAL_END_TIME_PICKER");
+            }
+        });
         endTimePicker.addOnPositiveButtonClickListener(selection ->
                 editEndTime.setText(formatTime(endTimePicker.getHour(), endTimePicker.getMinute())));
 
