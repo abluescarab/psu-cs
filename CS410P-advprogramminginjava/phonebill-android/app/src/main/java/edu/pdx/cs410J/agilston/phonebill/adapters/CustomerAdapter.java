@@ -16,15 +16,15 @@ import java.util.List;
 import edu.pdx.cs410J.agilston.phonebill.databinding.FragmentCustomerEntryBinding;
 
 public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.CustomerViewHolder> implements Filterable {
-    private final OnItemClickListener onItemClick;
+    private final OnItemClickListener onItemClickListener;
     private SortedList<String> customers;
     private SortedList<String> customersFiltered;
 
-    public CustomerAdapter(List<String> customers, OnItemClickListener onItemClick) {
+    public CustomerAdapter(List<String> customers, OnItemClickListener onItemClickListener) {
         this.customers = new SortedList<>(String.class, new CustomerListCallback());
         this.customers.addAll(customers);
         this.customersFiltered = this.customers;
-        this.onItemClick = onItemClick;
+        this.onItemClickListener = onItemClickListener;
     }
 
     @NonNull
@@ -37,7 +37,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
     @Override
     public void onBindViewHolder(@NonNull CustomerViewHolder holder, int position) {
         holder.customerName.setText(customers.get(position));
-        holder.itemView.setOnClickListener(view -> onItemClick.onItemClick(customersFiltered.get(position)));
+        holder.itemView.setOnClickListener(view -> onItemClickListener.onItemClick(customersFiltered.get(position)));
     }
 
     @Override
