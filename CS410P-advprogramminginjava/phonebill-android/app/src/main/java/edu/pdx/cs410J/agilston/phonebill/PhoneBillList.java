@@ -109,6 +109,10 @@ public class PhoneBillList {
         return 0;
     }
 
+    public static boolean hasCustomer(String customer) {
+        return bills.containsKey(customer);
+    }
+
     public static void addItemDecoration(RecyclerView recyclerView) {
         // add item divider decoration
         Context context = recyclerView.getContext();

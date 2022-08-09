@@ -1,10 +1,13 @@
 package edu.pdx.cs410J.agilston.phonebill.fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -62,22 +65,43 @@ public class CustomerFragment extends Fragment {
 
             FloatingActionButton fab = activity.findViewById(R.id.fab);
             fab.setOnClickListener(v -> {
-                TextInputDialogFragment dialog = new TextInputDialogFragment(
+                TextInputDialogFragment inputDialog = new TextInputDialogFragment(
                         R.layout.dialog_add_customer,
                         R.string.title_add_customer,
                         R.string.add,
                         R.string.cancel,
                         R.string.hint_customer_name,
-                        R.string.required,
                         (dialogInterface, editText) -> {
-                            PhoneBillList.addBill(activity, editText.getText().toString());
-                            mainActivity.flipCustomerView();
-                            dialogInterface.dismiss();
+                            String customer = editText.getText().toString();
+
+                            if(PhoneBillList.hasCustomer(customer)) {
+                                String message = getText(R.string.confirm_replace_customer).toString();
+                                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+
+                                builder.setTitle(R.string.confirm);
+                                builder.setMessage(String.format(message, customer));
+                                builder.setPositiveButton(R.string.yes, (dialog, i) -> {
+                                    confirm(editText, dialog);
+                                    dialogInterface.dismiss();
+                                });
+                                builder.setNegativeButton(R.string.no, (dialog, which) -> dialog.dismiss());
+                                builder.show();
+                            }
+                            else {
+                                confirm(editText, dialogInterface);
+                            }
                         },
                         (dialogInterface, editText) -> dialogInterface.cancel());
-                dialog.show(mainActivity.getSupportFragmentManager(), TextInputDialogFragment.TAG);
+                inputDialog.show(mainActivity.getSupportFragmentManager(), TextInputDialogFragment.TAG);
             });
         }
+    }
+
+    private void confirm(EditText editText, DialogInterface dialog) {
+        MainActivity activity = (MainActivity)requireActivity();
+        PhoneBillList.addBill(activity, editText.getText().toString());
+        activity.flipCustomerView();
+        dialog.dismiss();
     }
 
     @Override
