@@ -37,7 +37,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
     @Override
     public void onBindViewHolder(@NonNull CustomerViewHolder holder, int position) {
         holder.customerName.setText(customers.get(position));
-        holder.itemView.setOnClickListener(view -> onItemClick.invoke(customersFiltered.get(position)));
+        holder.itemView.setOnClickListener(view -> onItemClick.onItemClick(customersFiltered.get(position)));
     }
 
     @Override
@@ -62,7 +62,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
     }
 
     public interface OnItemClickListener {
-        void invoke(String item);
+        void onItemClick(String item);
     }
 
     public class CustomerViewHolder extends RecyclerView.ViewHolder {
