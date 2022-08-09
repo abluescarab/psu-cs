@@ -2,6 +2,8 @@ package edu.pdx.cs410J.agilston.phonebill.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.EditText;
@@ -24,6 +26,12 @@ public class CallActivity extends AppCompatActivity {
         public static final String ACTION = "ACTION";
         public static final String ACTION_ADD_CALL = "ADD_CALL";
         public static final String ACTION_SEARCH_CALLS = "SEARCH_CALLS";
+        public static final String ACTION_CUSTOMER = "CUSTOMER";
+
+        public static final String RESULT_CALLER = "CALLER";
+        public static final String RESULT_CALLEE = "CALLEE";
+        public static final String RESULT_START = "START";
+        public static final String RESULT_END = "END";
     }
 
     EditText editCallerNumber;
@@ -51,23 +59,34 @@ public class CallActivity extends AppCompatActivity {
             fab.setImageResource(R.drawable.ic_search);
         }
 
-        // assign action to fab
-        fab.setOnClickListener(view -> {
-            // TODO: save/search call(s)
-            if(TextUtils.equals(action, Extras.ACTION_ADD_CALL)) {
-
-            }
-            else {
-
-            }
-        });
-
         editCallerNumber = findViewById(R.id.edit_caller_number);
         editCalleeNumber = findViewById(R.id.edit_callee_number);
         editStartDate = findViewById(R.id.edit_date_start);
         editStartTime = findViewById(R.id.edit_time_start);
         editEndDate = findViewById(R.id.edit_date_end);
         editEndTime = findViewById(R.id.edit_time_end);
+
+        // assign action to fab
+        fab.setOnClickListener(view -> {
+            // TODO: save/search call(s)
+            if(TextUtils.equals(action, Extras.ACTION_ADD_CALL)) {
+                Intent intent = new Intent();
+                intent.putExtra(Extras.ACTION_CUSTOMER, getIntent().getStringExtra(Extras.ACTION_CUSTOMER));
+                intent.putExtra(Extras.RESULT_CALLER, editCallerNumber.getText().toString());
+                intent.putExtra(Extras.RESULT_CALLEE, editCalleeNumber.getText().toString());
+                intent.putExtra(Extras.RESULT_START, String.format("%s %s",
+                        editStartDate.getText().toString(), editStartTime.getText().toString()));
+                intent.putExtra(Extras.RESULT_END, String.format("%s %s",
+                        editEndDate.getText().toString(), editEndTime.getText().toString()));
+
+                setResult(Activity.RESULT_OK, intent);
+                finish();
+            }
+            else {
+
+            }
+        });
+
         ZonedDateTime dateTime = ZonedDateTime.now();
 
         // set the start date, end date, and end time to the current day and time
@@ -154,14 +173,5 @@ public class CallActivity extends AppCompatActivity {
 
     private DateTimeFormatter getFormatter(String pattern) {
         return DateTimeFormatter.ofPattern(pattern).withZone(ZoneId.systemDefault());
-    }
-
-    private void addCall() {
-        String callerNumber = editCallerNumber.getText().toString();
-        String calleeNumber = editCalleeNumber.getText().toString();
-        String startDate = editStartDate.getText().toString();
-        String startTime = editStartTime.getText().toString();
-        String endDate = editEndDate.getText().toString();
-        String endTime = editEndTime.getText().toString();
     }
 }

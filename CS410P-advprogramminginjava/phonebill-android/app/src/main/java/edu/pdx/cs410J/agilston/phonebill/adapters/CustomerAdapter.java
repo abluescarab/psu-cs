@@ -56,6 +56,11 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
         notifyItemInserted(customers.indexOf(customer));
     }
 
+    public void addCustomers(String[] customers) {
+        this.customers.addAll(customers);
+        notifyDataSetChanged();
+    }
+
     public interface OnItemClickListener {
         void invoke(String item);
     }

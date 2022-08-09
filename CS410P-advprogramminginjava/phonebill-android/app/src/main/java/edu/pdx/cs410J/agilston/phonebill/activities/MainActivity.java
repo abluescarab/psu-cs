@@ -16,15 +16,12 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.RecyclerView;
 
-import edu.pdx.cs410J.agilston.phonebill.PhoneBill;
+import edu.pdx.cs410J.agilston.phonebill.FileUtils;
 import edu.pdx.cs410J.agilston.phonebill.PhoneBillList;
-import edu.pdx.cs410J.agilston.phonebill.PhoneCall;
 import edu.pdx.cs410J.agilston.phonebill.R;
 import edu.pdx.cs410J.agilston.phonebill.adapters.CustomerAdapter;
 import edu.pdx.cs410J.agilston.phonebill.databinding.ActivityMainBinding;
-import edu.pdx.cs410J.agilston.phonebill.fragments.AlertDialogFragment;
 import edu.pdx.cs410J.agilston.phonebill.fragments.CallFragment;
-import edu.pdx.cs410J.agilston.phonebill.fragments.CustomerFragment;
 
 public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
@@ -38,8 +35,6 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar);
-
-        loadBills();
 
         // set up navcontroller for fragment navigation
         navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
@@ -56,30 +51,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // bind floating action button
-        binding.fab.setOnClickListener(view -> {
-            if(hasFragment(CustomerFragment.class)) {
-                AlertDialogFragment dialog = new AlertDialogFragment(
-                        R.layout.dialog_add_customer,
-                        R.string.title_add_customer,
-                        R.string.add,
-                        R.string.cancel,
-                        R.string.hint_customer_name,
-                        R.string.required,
-                        (dialogInterface, editText) -> {
-                            PhoneBillList.addBill(editText.getText().toString());
-                            flipCustomerView();
-                            dialogInterface.dismiss();
-                        },
-                        (dialogInterface, editText) -> dialogInterface.cancel());
-                dialog.show(getSupportFragmentManager(), AlertDialogFragment.TAG);
-            }
-            else {
-                Intent intent = new Intent(this, CallActivity.class);
-                intent.putExtra(CallActivity.Extras.ACTION, CallActivity.Extras.ACTION_ADD_CALL);
-                startActivity(intent);
-            }
-        });
+        PhoneBillList.addBills(this, FileUtils.loadAll(this), false);
     }
 
     @Override
@@ -128,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
                 // open search window if current fragment shows calls in a bill
                 Intent intent = new Intent(this, CallActivity.class);
                 intent.putExtra(CallActivity.Extras.ACTION, CallActivity.Extras.ACTION_SEARCH_CALLS);
+                // TODO: pass customer name
                 startActivity(intent);
                 return true;
             }
@@ -168,24 +141,6 @@ public class MainActivity extends AppCompatActivity {
 
         if(count > 0) {
             recyclerView.setAdapter(adapter);
-        }
-    }
-
-    private void loadBills() {
-        // TODO: replace test bills
-        String numberFormat = "%1$s%1$s%1$s-%1$s%1$s%1$s-%1$s%1$s%1$s%1$s";
-        String dateFormat = "01/01/2022 0%1$s:00 PM";
-
-        for(int i = 1; i <= 5; i++) {
-            PhoneBill bill = new PhoneBill("Customer " + i);
-
-            for(int j = 1; j <= 5; j++) {
-                PhoneCall call = new PhoneCall(String.format(numberFormat, i), String.format(numberFormat, i + 1),
-                        String.format(dateFormat, j), String.format(dateFormat, j + 1));
-                bill.addPhoneCall(call);
-            }
-
-            PhoneBillList.addBill(bill);
         }
     }
 }

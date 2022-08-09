@@ -12,6 +12,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import edu.pdx.cs410J.agilston.phonebill.PhoneBillList;
 import edu.pdx.cs410J.agilston.phonebill.R;
 import edu.pdx.cs410J.agilston.phonebill.activities.MainActivity;
@@ -42,7 +44,7 @@ public class CustomerFragment extends Fragment {
 
         adapter = new CustomerAdapter(PhoneBillList.getCustomers(), item -> {
             Bundle bundle = new Bundle();
-            bundle.putString(CallFragment.Extras.ITEM_NAME, item);
+            bundle.putString(CallFragment.Extras.CUSTOMER, item);
             navController.navigate(R.id.action_customers_to_calls, bundle);
         });
 
@@ -55,7 +57,26 @@ public class CustomerFragment extends Fragment {
         Activity activity = requireActivity();
 
         if(activity instanceof MainActivity) {
-            ((MainActivity)activity).flipCustomerView();
+            MainActivity mainActivity = (MainActivity)activity;
+            mainActivity.flipCustomerView();
+
+            FloatingActionButton fab = activity.findViewById(R.id.fab);
+            fab.setOnClickListener(v -> {
+                AlertDialogFragment dialog = new AlertDialogFragment(
+                        R.layout.dialog_add_customer,
+                        R.string.title_add_customer,
+                        R.string.add,
+                        R.string.cancel,
+                        R.string.hint_customer_name,
+                        R.string.required,
+                        (dialogInterface, editText) -> {
+                            PhoneBillList.addBill(activity, editText.getText().toString());
+                            mainActivity.flipCustomerView();
+                            dialogInterface.dismiss();
+                        },
+                        (dialogInterface, editText) -> dialogInterface.cancel());
+                dialog.show(mainActivity.getSupportFragmentManager(), AlertDialogFragment.TAG);
+            });
         }
     }
 
