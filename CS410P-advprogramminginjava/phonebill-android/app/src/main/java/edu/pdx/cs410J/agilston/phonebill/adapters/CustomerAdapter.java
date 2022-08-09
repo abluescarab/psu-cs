@@ -47,6 +47,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
 
     @Override
     public Filter getFilter() {
+        // TODO: filter customers
         return null;
     }
 
@@ -92,7 +93,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
 
         @Override
         public boolean areItemsTheSame(String item1, String item2) {
-            return item1 == item2;
+            return TextUtils.equals(item1, item2);
         }
 
         @Override
