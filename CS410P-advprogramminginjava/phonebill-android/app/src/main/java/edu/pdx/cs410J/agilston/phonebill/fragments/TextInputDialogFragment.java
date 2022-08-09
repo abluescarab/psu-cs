@@ -22,7 +22,7 @@ import androidx.fragment.app.DialogFragment;
 import edu.pdx.cs410J.agilston.phonebill.R;
 
 public class TextInputDialogFragment extends DialogFragment {
-    public static String TAG = "ALERT_DIALOG";
+    public static String TAG = "INPUT_DIALOG";
 
     private final int layout;
     private final int title;
