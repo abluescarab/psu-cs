@@ -20,6 +20,7 @@
     <string name="menu_main_readme">README</string>
     <string name="menu_main_search">Search</string>
     <string name="search_hint">Search…</string>
+    <string name="menu_main_filter">Filter</string>
 
     <!-- Phone call interface -->
     <string name="title_add_call">Add New Call</string>

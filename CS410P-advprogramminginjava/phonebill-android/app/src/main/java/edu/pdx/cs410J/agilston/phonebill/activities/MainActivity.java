@@ -21,12 +21,13 @@ import edu.pdx.cs410J.agilston.phonebill.PhoneBillList;
 import edu.pdx.cs410J.agilston.phonebill.R;
 import edu.pdx.cs410J.agilston.phonebill.adapters.CustomerAdapter;
 import edu.pdx.cs410J.agilston.phonebill.databinding.ActivityMainBinding;
-import edu.pdx.cs410J.agilston.phonebill.fragments.CallFragment;
 
 public class MainActivity extends AppCompatActivity implements CustomerAdapter.OnItemClickListener {
     private AppBarConfiguration appBarConfiguration;
     private NavController navController;
     private SearchView searchView;
+    private MenuItem searchButton;
+    private MenuItem filterButton;
     private String currentCustomer;
 
     @Override
@@ -45,11 +46,15 @@ public class MainActivity extends AppCompatActivity implements CustomerAdapter.O
 
         // change fab icon based on fragment
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-            if(destination.getId() == R.id.CustomerFragment) {
-                binding.fab.setImageResource(R.drawable.ic_add_person);
+            binding.fab.setImageResource(destination.getId() == R.id.CustomerFragment ? R.drawable.ic_add_person :
+                    R.drawable.ic_add_call);
+
+            if(searchButton != null) {
+                searchButton.setVisible(destination.getId() == R.id.CustomerFragment);
             }
-            else {
-                binding.fab.setImageResource(R.drawable.ic_add_call);
+
+            if(filterButton != null) {
+                filterButton.setVisible(destination.getId() == R.id.CallFragment);
             }
         });
 
@@ -65,8 +70,10 @@ public class MainActivity extends AppCompatActivity implements CustomerAdapter.O
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
-        MenuItem searchButton = menu.findItem(R.id.action_search);
+        searchButton = menu.findItem(R.id.action_search);
+        filterButton = menu.findItem(R.id.action_filter);
         searchView = (SearchView)searchButton.getActionView();
+
         searchView.setQueryHint(getText(R.string.search_hint));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
