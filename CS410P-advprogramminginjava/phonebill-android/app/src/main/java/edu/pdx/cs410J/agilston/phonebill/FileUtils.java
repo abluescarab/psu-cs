@@ -37,11 +37,9 @@ public class FileUtils {
 
     public static void save(Context context, PhoneBill bill) {
         String filename = formatFile(context, bill);
-        Log.i("FILES", filename);
 
         try {
             if(!canWriteFile(filename)) {
-                Log.i("FILES", "can't write");
                 return;
             }
 
@@ -57,22 +55,6 @@ public class FileUtils {
             save(context, bill);
         }
     }
-
-//    public static PhoneBill load(Context context, String customer) {
-//        try {
-//            TextParser parser = new TextParser(new FileReader(formatFile(context, customer)));
-//            PhoneBill bill = parser.parse();
-//
-//            if(!TextUtils.equals(customer, bill.getCustomer())) {
-//                return null;
-//            }
-//
-//            return bill;
-//        }
-//        catch(IOException | ParserException e) {
-//            return null;
-//        }
-//    }
 
     public static Map<String, PhoneBill> loadAll(Context context) {
         Map<String, PhoneBill> map = new TreeMap<>();
