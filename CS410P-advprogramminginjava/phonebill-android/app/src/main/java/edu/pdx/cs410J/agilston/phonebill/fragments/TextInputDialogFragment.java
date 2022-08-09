@@ -35,7 +35,7 @@ public class TextInputDialogFragment extends DialogFragment {
     private AlertDialog dialog;
 
     public TextInputDialogFragment(@LayoutRes int layout, @StringRes int title, @StringRes int positiveButton,
-                                   @StringRes int negativeButton, @StringRes int hint, @StringRes int emptyError,
+                                   @StringRes int negativeButton, @StringRes int hint,
                                    OnClickListener positiveAction, OnClickListener negativeAction) {
         this.layout = layout;
         this.title = title;
