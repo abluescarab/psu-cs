@@ -23,10 +23,11 @@ import edu.pdx.cs410J.agilston.phonebill.adapters.CustomerAdapter;
 import edu.pdx.cs410J.agilston.phonebill.databinding.ActivityMainBinding;
 import edu.pdx.cs410J.agilston.phonebill.fragments.CallFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements CustomerAdapter.OnItemClickListener {
     private AppBarConfiguration appBarConfiguration;
     private NavController navController;
     private SearchView searchView;
+    private String currentCustomer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar);
 
-        // set up navcontroller for fragment navigation
+        // set up nav controller for fragment navigation
         navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
@@ -65,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
         MenuItem searchButton = menu.findItem(R.id.action_search);
-
         searchView = (SearchView)searchButton.getActionView();
         searchView.setQueryHint(getText(R.string.search_hint));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private <T extends Fragment> boolean hasFragment(Class<T> clazz) {
+    private <T extends Fragment> boolean showingFragment(Class<T> clazz) {
         Fragment nav = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_content_main);
 
         if(nav != null) {
@@ -119,6 +119,20 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return false;
+    }
+
+    private <T extends Fragment> Fragment getFragment(Class<T> clazz) {
+        Fragment nav = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_content_main);
+
+        if(nav != null) {
+            for(Fragment fragment : nav.getChildFragmentManager().getFragments()) {
+                if(fragment.getClass() == clazz) {
+                    return fragment;
+                }
+            }
+        }
+
+        return null;
     }
 
     public void flipCustomerView() {
@@ -150,5 +164,10 @@ public class MainActivity extends AppCompatActivity {
         if(count > 0) {
             recyclerView.setAdapter(adapter);
         }
+    }
+
+    @Override
+    public void onItemClick(String item) {
+        currentCustomer = item;
     }
 }
