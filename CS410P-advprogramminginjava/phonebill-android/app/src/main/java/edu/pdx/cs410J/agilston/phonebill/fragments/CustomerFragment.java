@@ -118,6 +118,12 @@ public class CustomerFragment extends Fragment {
         PhoneBillList.addBill(activity, editText.getText().toString());
         activity.flipCustomerView();
         dialog.dismiss();
+
+        CustomerAdapter adapter = PhoneBillList.getCustomerAdapter();
+
+        if(adapter != null) {
+            adapter.getFilter().filter("");
+        }
     }
 
     @Override
