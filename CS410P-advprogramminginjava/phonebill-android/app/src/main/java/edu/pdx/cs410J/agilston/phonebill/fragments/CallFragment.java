@@ -64,6 +64,8 @@ public class CallFragment extends Fragment {
                                 .toString();
                     }
 
+                    CallAdapter adapter = PhoneBillList.getCallAdapter();
+
                     if(TextUtils.equals(action, CallActivity.Extras.ACTION_ADD_CALL)) {
                         PhoneCall call = new PhoneCall(caller, callee, start, end);
                         Activity activity = requireActivity();
@@ -72,9 +74,11 @@ public class CallFragment extends Fragment {
                         if(PhoneBillList.getCallCount(customer) == 1 && activity instanceof MainActivity) {
                             ((MainActivity)activity).flipCallView(customer);
                         }
+
+                        adapter.clearFilter();
                     }
                     else {
-                        PhoneBillList.getCallAdapter().filter(caller, callee, start, end);
+                        adapter.filter(caller, callee, start, end);
                     }
                 }
             }
@@ -120,10 +124,6 @@ public class CallFragment extends Fragment {
 
                 if(fab != null) {
                     fab.setOnClickListener(v -> {
-//                        Intent intent = new Intent(activity, CallActivity.class);
-//                        intent.putExtra(CallActivity.Extras.ACTION, CallActivity.Extras.ACTION_ADD_CALL);
-//                        intent.putExtra(CallActivity.Extras.ACTION_CUSTOMER, customer);
-//                        launcher.launch(intent);
                         launchCallActivity(CallActivity.Extras.ACTION_ADD_CALL);
                     });
                 }

@@ -58,6 +58,11 @@ public class CallAdapter extends RecyclerView.Adapter<CallAdapter.CallViewHolder
         notifyDataSetChanged();
     }
 
+    public void clearFilter() {
+        callsFiltered = new ArrayList<>(bill.getPhoneCalls());
+        notifyDataSetChanged();
+    }
+
     public class CallViewHolder extends RecyclerView.ViewHolder {
         public final TextView callerNumber;
         public final TextView calleeNumber;
