@@ -102,7 +102,7 @@ public class CustomerFragment extends Fragment {
 
     private void confirm(EditText editText, DialogInterface dialog) {
         MainActivity activity = (MainActivity)requireActivity();
-        PhoneBillList.addBill(activity, editText.getText().toString());
+        PhoneBillList.addCustomer(activity, editText.getText().toString());
         activity.flipCustomerView();
         dialog.dismiss();
 

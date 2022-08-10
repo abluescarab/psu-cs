@@ -171,9 +171,4 @@ public class MainActivity extends AppCompatActivity {
             recyclerView.setAdapter(adapter);
         }
     }
-
-    @Override
-    public void onItemClick(String item) {
-        currentCustomer = item;
-    }
 }

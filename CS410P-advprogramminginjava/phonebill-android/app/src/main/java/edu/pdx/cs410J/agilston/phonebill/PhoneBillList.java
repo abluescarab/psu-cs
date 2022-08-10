@@ -20,7 +20,7 @@ public class PhoneBillList {
     private static CustomerAdapter customerAdapter;
     private static CallAdapter callAdapter;
 
-    public static void addBill(Context context, String customer) {
+    public static void addCustomer(Context context, String customer) {
         PhoneBill bill = new PhoneBill(customer);
         bills.put(customer, bill);
 
