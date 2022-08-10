@@ -272,8 +272,8 @@ public class CallActivity extends AppCompatActivity {
             }
         }
 
-        if(isWrongLength(editCallerNumber) || isWrongLength(editCalleeNumber)) {
-            Toast.makeText(this, R.string.err_invalid_phone_number, Toast.LENGTH_LONG).show();
+        if((editCallerNumber.length() > 0 && !isValidPhoneNumber(editCallerNumber))
+                || (editCalleeNumber.length() > 0 && !isValidPhoneNumber(editCalleeNumber))) {
             return false;
         }
 
