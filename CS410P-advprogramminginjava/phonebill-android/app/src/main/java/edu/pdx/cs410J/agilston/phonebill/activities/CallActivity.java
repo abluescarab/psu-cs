@@ -305,8 +305,8 @@ public class CallActivity extends AppCompatActivity {
         public static final String RESULT_END_TIME = "END_TIME";
     }
 
-    private class DateTimeTextWatcher implements TextWatcher {
-        private EditText editText;
+    private static class DateTimeTextWatcher implements TextWatcher {
+        private final EditText editText;
 
         DateTimeTextWatcher(EditText editText) {
             this.editText = editText;

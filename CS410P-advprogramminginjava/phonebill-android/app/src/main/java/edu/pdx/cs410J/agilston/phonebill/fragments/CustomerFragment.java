@@ -2,7 +2,6 @@ package edu.pdx.cs410J.agilston.phonebill.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,26 +26,15 @@ import edu.pdx.cs410J.agilston.phonebill.databinding.FragmentCustomerBinding;
 public class CustomerFragment extends Fragment {
     private FragmentCustomerBinding binding;
     private CustomerAdapter adapter;
-    private CustomerAdapter.OnItemClickListener onItemClickListener;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentCustomerBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        try {
-            onItemClickListener = (CustomerAdapter.OnItemClickListener)context;
-        }
-        catch(ClassCastException ignored) {
-        }
     }
 
     @Override
@@ -65,7 +53,6 @@ public class CustomerFragment extends Fragment {
 
             Bundle bundle = new Bundle();
             bundle.putString(CallFragment.Extras.CUSTOMER, item);
-            onItemClickListener.onItemClick(item);
             navController.navigate(R.id.action_customers_to_calls, bundle);
         });
 
@@ -118,8 +105,6 @@ public class CustomerFragment extends Fragment {
         PhoneBillList.addBill(activity, editText.getText().toString());
         activity.flipCustomerView();
         dialog.dismiss();
-
-        CustomerAdapter adapter = PhoneBillList.getCustomerAdapter();
 
         if(adapter != null) {
             adapter.getFilter().filter("");

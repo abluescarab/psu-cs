@@ -19,18 +19,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import edu.pdx.cs410J.agilston.phonebill.FileUtils;
 import edu.pdx.cs410J.agilston.phonebill.PhoneBillList;
 import edu.pdx.cs410J.agilston.phonebill.R;
-import edu.pdx.cs410J.agilston.phonebill.adapters.CallAdapter;
 import edu.pdx.cs410J.agilston.phonebill.adapters.CustomerAdapter;
 import edu.pdx.cs410J.agilston.phonebill.databinding.ActivityMainBinding;
 import edu.pdx.cs410J.agilston.phonebill.fragments.CallFragment;
 
-public class MainActivity extends AppCompatActivity implements CustomerAdapter.OnItemClickListener {
+public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
     private NavController navController;
     private SearchView searchView;
     private MenuItem searchButton;
     private MenuItem filterButton;
-    private String currentCustomer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

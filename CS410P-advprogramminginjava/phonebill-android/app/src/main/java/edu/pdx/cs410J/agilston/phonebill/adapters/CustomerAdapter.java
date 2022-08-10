@@ -1,5 +1,6 @@
 package edu.pdx.cs410J.agilston.phonebill.adapters;
 
+import android.annotation.SuppressLint;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -74,6 +75,8 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
                 return results;
             }
 
+            @SuppressWarnings("unchecked")
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 if(results.values == null) {
@@ -102,7 +105,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
         void onItemClick(String item);
     }
 
-    public class CustomerViewHolder extends RecyclerView.ViewHolder {
+    public static class CustomerViewHolder extends RecyclerView.ViewHolder {
         public final TextView customerName;
 
         public CustomerViewHolder(FragmentCustomerEntryBinding binding) {

@@ -86,7 +86,7 @@ public class CallFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentCallBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -123,9 +123,7 @@ public class CallFragment extends Fragment {
                 FloatingActionButton fab = activity.findViewById(R.id.fab);
 
                 if(fab != null) {
-                    fab.setOnClickListener(v -> {
-                        launchCallActivity(CallActivity.Extras.ACTION_ADD_CALL);
-                    });
+                    fab.setOnClickListener(v -> launchCallActivity(CallActivity.Extras.ACTION_ADD_CALL));
                 }
             }
         }
