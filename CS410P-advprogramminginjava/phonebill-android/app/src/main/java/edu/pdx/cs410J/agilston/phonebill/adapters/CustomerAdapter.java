@@ -93,6 +93,11 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
         };
     }
 
+    /**
+     * Adds a customer to the adapter.
+     *
+     * @param customer customer to add
+     */
     public void addCustomer(String customer) {
         int index = customers.add(customer);
 
@@ -104,6 +109,11 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
         }
     }
 
+    /**
+     * Adds a list of customers.
+     *
+     * @param customers customers to add
+     */
     public void addCustomers(String[] customers) {
         for(String customer : customers) {
             addCustomer(customer);

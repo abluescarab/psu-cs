@@ -145,12 +145,20 @@ public class CallFragment extends Fragment {
         }
     }
 
+    /**
+     * Flips the fragment view between an empty message and a list of calls.
+     */
     private void flipView() {
         CallAdapter adapter = PhoneBillList.getCallAdapter();
         MainActivity.flipView(binding.callFlipper, requireActivity().findViewById(R.id.call_list),
                 adapter.getItemCount(), adapter);
     }
 
+    /**
+     * Launches the {@link CallActivity} with the specified action.
+     *
+     * @param action action to put in the intent
+     */
     public void launchCallActivity(String action) {
         Intent intent = new Intent(getActivity(), CallActivity.class);
         intent.putExtra(CallActivity.Extras.ACTION, action);

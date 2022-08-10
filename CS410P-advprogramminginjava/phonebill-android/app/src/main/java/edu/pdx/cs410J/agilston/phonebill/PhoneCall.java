@@ -210,6 +210,12 @@ public class PhoneCall extends AbstractPhoneCall implements Comparable<PhoneCall
         return caller.compareTo(o.caller);
     }
 
+    /**
+     * Checks whether the given object matches the current object.
+     *
+     * @param obj object to compare
+     * @return whether the objects match
+     */
     @Override
     public boolean equals(Object obj) {
         if(obj == this) {

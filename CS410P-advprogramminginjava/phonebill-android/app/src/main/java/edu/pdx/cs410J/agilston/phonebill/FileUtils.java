@@ -34,6 +34,12 @@ public class FileUtils {
         return file.createNewFile() || file.canWrite();
     }
 
+    /**
+     * Saves a bill to the file system.
+     *
+     * @param context calling context
+     * @param bill    bill to save
+     */
     public static void save(Context context, PhoneBill bill) {
         String filename = formatFile(context, bill);
 
@@ -49,12 +55,24 @@ public class FileUtils {
         }
     }
 
+    /**
+     * Saves a collection of bills to the file system.
+     *
+     * @param context calling context
+     * @param bills   bills to save
+     */
     public static void save(Context context, Collection<PhoneBill> bills) {
         for(PhoneBill bill : bills) {
             save(context, bill);
         }
     }
 
+    /**
+     * Loads a collection of bills from the file system.
+     *
+     * @param context calling context
+     * @return map of all phone bills with customers as keys
+     */
     public static Map<String, PhoneBill> loadAll(Context context) {
         Map<String, PhoneBill> map = new TreeMap<>();
 
@@ -77,14 +95,33 @@ public class FileUtils {
         return map;
     }
 
+    /**
+     * Formats the file path for a bill.
+     *
+     * @param context calling context
+     * @param bill    bill to format file path for
+     * @return formatted file path
+     */
     private static String formatFile(Context context, PhoneBill bill) {
         return formatFile(context, bill.getCustomer());
     }
 
+    /**
+     * Formats the file path for a customer.
+     *
+     * @param context  calling context
+     * @param customer customer to format file path for
+     * @return formatted file path
+     */
     private static String formatFile(Context context, String customer) {
         return Paths.get(getStorageFolder(context), customer + ".txt").normalize().toString();
     }
 
+    /**
+     * Gets the app's internal storage folder.
+     *
+     * @param context calling context
+     */
     private static String getStorageFolder(Context context) {
         return context.getFilesDir().getAbsolutePath();
     }

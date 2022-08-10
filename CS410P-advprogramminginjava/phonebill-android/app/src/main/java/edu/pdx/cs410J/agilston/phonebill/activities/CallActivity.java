@@ -38,12 +38,26 @@ public class CallActivity extends AppCompatActivity {
     private EditText editEndDate;
     private EditText editEndTime;
 
+    /**
+     * Checks whether an {@link EditText} is empty and sets its error message.
+     *
+     * @param editText     EditText to check
+     * @param errorMessage error message to set to
+     * @return whether the EditText is empty
+     */
     private static boolean isEmpty(EditText editText, @StringRes int errorMessage) {
         boolean isEmpty = TextUtils.isEmpty(editText.getText());
         editText.setError(isEmpty ? editText.getContext().getText(errorMessage) : null);
         return isEmpty;
     }
 
+    /**
+     * Checks whether any one of a list of {@link EditText}s is empty and sets their error messages.
+     *
+     * @param errorMessage error message to set to
+     * @param editTexts    EditTexts to check
+     * @return whether any EditText is empty
+     */
     private static boolean oneEmpty(@StringRes int errorMessage, EditText... editTexts) {
         boolean oneEmpty = false;
 
@@ -56,6 +70,12 @@ public class CallActivity extends AppCompatActivity {
         return oneEmpty;
     }
 
+    /**
+     * Checks whether any {@link EditText} in a list has text.
+     *
+     * @param editTexts EditTexts to check
+     * @return whether any EditText has text
+     */
     private static boolean anyText(EditText... editTexts) {
         for(EditText editText : editTexts) {
             if(!TextUtils.isEmpty(editText.getText())) {
@@ -66,6 +86,12 @@ public class CallActivity extends AppCompatActivity {
         return false;
     }
 
+    /**
+     * Checks whether the {@link EditText} contains a valid phone number.
+     *
+     * @param editText EditText to check
+     * @return whether the EditText has a valid phone number
+     */
     private static boolean isValidPhoneNumber(EditText editText) {
         String text = editText.getText().toString();
         Resources resources = editText.getResources();
@@ -208,6 +234,11 @@ public class CallActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Formats a date for {@link EditText}s in the activity.
+     *
+     * @return formatted date string
+     */
     private String formatDate(int month, int day, int year) {
         String date = String.format("%s/%s/%s", month, day, year);
         DateTimeFormatter from = getFormatter("M/d/yyyy");
@@ -216,6 +247,12 @@ public class CallActivity extends AppCompatActivity {
         return to.format(parsed);
     }
 
+    /**
+     * Formats a date for {@link EditText}s in the activity.
+     *
+     * @param date date string from a {@link MaterialDatePicker} and {@link MaterialTimePicker}
+     * @return formatted date string
+     */
     private String formatDate(String date) {
         DateTimeFormatter from = getFormatter("MMM d, yyyy");
         DateTimeFormatter to = getFormatter(DATE_PATTERN);
@@ -223,6 +260,11 @@ public class CallActivity extends AppCompatActivity {
         return to.format(parsed);
     }
 
+    /**
+     * Formats a time for {@link EditText}s in the activity.
+     *
+     * @return formatted time string
+     */
     private String formatTime(int hour, int minute) {
         DateTimeFormatter from = getFormatter("H:m");
         DateTimeFormatter to = getFormatter(TIME_PATTERN);
@@ -230,10 +272,21 @@ public class CallActivity extends AppCompatActivity {
         return to.format(parsed);
     }
 
+    /**
+     * Gets a {@link DateTimeFormatter} with the specified pattern and the system default timezone.
+     *
+     * @param pattern pattern to create with
+     */
     private DateTimeFormatter getFormatter(String pattern) {
         return DateTimeFormatter.ofPattern(pattern).withZone(ZoneId.systemDefault());
     }
 
+    /**
+     * Validates the activity's data before submitting.
+     *
+     * @param action action passed in the {@link Intent}
+     * @return whether the data is valid
+     */
     private boolean validate(String action) {
         EditText[] editTexts = {
                 editCallerNumber,

@@ -100,12 +100,21 @@ public class CustomerFragment extends Fragment {
         }
     }
 
+    /**
+     * Flips the fragment view between an empty message and a list of customers.
+     */
     private void flipView() {
         CustomerAdapter adapter = PhoneBillList.getCustomerAdapter();
         MainActivity.flipView(binding.customerFlipper, requireActivity().findViewById(R.id.customer_list),
                 adapter.getItemCount(), adapter);
     }
 
+    /**
+     * Confirms the add customer dialog box.
+     *
+     * @param editText dialog box editText
+     * @param dialog   dialog box
+     */
     private void confirm(EditText editText, DialogInterface dialog) {
         MainActivity activity = (MainActivity)requireActivity();
         PhoneBillList.addCustomer(activity, editText.getText().toString());

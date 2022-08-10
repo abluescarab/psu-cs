@@ -48,10 +48,23 @@ public class CallAdapter extends RecyclerView.Adapter<CallAdapter.CallViewHolder
         return callsFiltered.size();
     }
 
+    /**
+     * Adds a call to the adapter.
+     *
+     * @param call call to add
+     */
     public void addCall(PhoneCall call) {
         calls.add(call);
     }
 
+    /**
+     * Filters the adapter data.
+     *
+     * @param caller      caller to filter for
+     * @param callee      callee to filter for
+     * @param startString start date/time to filter for
+     * @param endString   end date/time to filter for
+     */
     @SuppressLint("NotifyDataSetChanged")
     public void filter(String caller, String callee, String startString, String endString) {
         PhoneBill filteredBill = new PhoneBill("", calls).filter(caller, callee, startString, endString);
@@ -59,6 +72,9 @@ public class CallAdapter extends RecyclerView.Adapter<CallAdapter.CallViewHolder
         notifyDataSetChanged();
     }
 
+    /**
+     * Clears the filter.
+     */
     @SuppressLint("NotifyDataSetChanged")
     public void clearFilter() {
         callsFiltered = calls;

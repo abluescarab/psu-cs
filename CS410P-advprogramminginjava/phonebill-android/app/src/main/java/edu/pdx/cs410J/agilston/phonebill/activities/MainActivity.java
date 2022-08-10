@@ -33,6 +33,14 @@ public class MainActivity extends AppCompatActivity {
     private MenuItem searchButton;
     private MenuItem filterButton;
 
+    /**
+     * Flips the view of a specified {@link ViewFlipper} depending on the contents of a {@link RecyclerView} adapter.
+     *
+     * @param flipper      flipper to flip
+     * @param recyclerView RecyclerView to set adapter for
+     * @param count        number of elements in the adapter
+     * @param adapter      adapter to set to
+     */
     public static void flipView(ViewFlipper flipper, RecyclerView recyclerView, int count,
                                 RecyclerView.Adapter<?> adapter) {
         if(flipper == null) {
@@ -49,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Adds a dividing line between {@link RecyclerView} elements.
      *
-     * @param recyclerView recycler view to add dividers to
+     * @param recyclerView RecyclerView to add dividers to
      */
     public static void addItemDecoration(RecyclerView recyclerView) {
         // add item divider decoration
@@ -148,6 +156,12 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Gets a fragment by type.
+     *
+     * @param clazz fragment type
+     * @param <T>   fragment type
+     */
     private <T extends Fragment> Fragment getFragment(Class<T> clazz) {
         Fragment nav = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_content_main);
 
@@ -162,6 +176,9 @@ public class MainActivity extends AppCompatActivity {
         return null;
     }
 
+    /**
+     * Resets the search view.
+     */
     public void resetSearch() {
         if(searchView != null) {
             searchView.setQuery("", false);
