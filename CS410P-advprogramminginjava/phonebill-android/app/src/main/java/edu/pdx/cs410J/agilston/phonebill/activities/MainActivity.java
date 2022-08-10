@@ -129,17 +129,6 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private <T extends Fragment> boolean showingFragment(Class<T> clazz) {
-        Fragment nav = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_content_main);
-
-        if(nav != null) {
-            Fragment fragment = nav.getChildFragmentManager().getPrimaryNavigationFragment();
-            return fragment != null && fragment.getClass() == clazz;
-        }
-
-        return false;
-    }
-
     private <T extends Fragment> Fragment getFragment(Class<T> clazz) {
         Fragment nav = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_content_main);
 
