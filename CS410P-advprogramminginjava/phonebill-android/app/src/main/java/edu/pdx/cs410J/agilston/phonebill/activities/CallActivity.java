@@ -3,10 +3,13 @@ package edu.pdx.cs410J.agilston.phonebill.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -70,6 +73,12 @@ public class CallActivity extends AppCompatActivity {
             editEndDate.setText(formatDate(dateTime.getMonthValue(), dateTime.getDayOfMonth(), dateTime.getYear()));
             editEndTime.setText(formatTime(dateTime.getHour(), dateTime.getMinute()));
         }
+
+        // add text changed listener that clears errors
+        editStartDate.addTextChangedListener(new DateTimeTextWatcher(editStartDate));
+        editStartTime.addTextChangedListener(new DateTimeTextWatcher(editStartTime));
+        editEndDate.addTextChangedListener(new DateTimeTextWatcher(editEndDate));
+        editEndTime.addTextChangedListener(new DateTimeTextWatcher(editEndTime));
 
         // create a date picker for the start date
         MaterialDatePicker<?> startDatePicker =
@@ -139,10 +148,9 @@ public class CallActivity extends AppCompatActivity {
 
         // assign action to fab
         fab.setOnClickListener(view -> {
-            if(TextUtils.equals(action, Extras.ACTION_SEARCH_CALLS) || validate()) {
+            if(validate(action)) {
                 Intent intent = new Intent();
 
-                // TODO: ensure both date & time are provided if one is given
                 intent.putExtra(Extras.ACTION, action);
                 intent.putExtra(Extras.RESULT_CUSTOMER, getIntent().getStringExtra(Extras.RESULT_CUSTOMER));
                 intent.putExtra(Extras.RESULT_CALLER, editCallerNumber.getText().toString());
@@ -184,81 +192,103 @@ public class CallActivity extends AppCompatActivity {
         return DateTimeFormatter.ofPattern(pattern).withZone(ZoneId.systemDefault());
     }
 
-    private boolean validate() {
-        boolean failed = isEmpty(editCalleeNumber);
+    private boolean validate(String action) {
+        EditText[] editTexts = {
+                editCallerNumber,
+                editCalleeNumber,
+                editStartDate,
+                editStartTime,
+                editEndDate,
+                editEndTime
+        };
+        EditText[] editTextDates = {
+                editStartDate,
+                editStartTime,
+                editEndDate,
+                editEndTime
+        };
+        boolean anyDate = anyText(editTextDates);
 
-        if(isEmpty(editCallerNumber)) {
-            failed = true;
-        }
-
-        if(isEmpty(editStartDate)) {
-            failed = true;
-        }
-
-        if(isEmpty(editStartTime)) {
-            failed = true;
-        }
-
-        if(isEmpty(editEndDate)) {
-            failed = true;
-        }
-
-        if(isEmpty(editEndTime)) {
-            failed = true;
-        }
-
-        if(failed) {
-            Toast.makeText(this, R.string.error_missing_data, Toast.LENGTH_LONG).show();
+        if(anyDate && oneEmpty(R.string.err_all_date_fields_required, editTextDates)) {
+            Toast.makeText(this, R.string.err_all_date_fields_required, Toast.LENGTH_LONG).show();
             return false;
         }
 
-        if(isWrongLength(editCallerNumber)) {
-            failed = true;
+        if(TextUtils.equals(action, Extras.ACTION_ADD_CALL)) {
+            boolean valid = true;
+
+            for(EditText editText : editTexts) {
+                if(isEmpty(editText, R.string.required)) {
+                    valid = false;
+                }
+            }
+
+            if(!valid) {
+                Toast.makeText(this, R.string.err_missing_data, Toast.LENGTH_LONG).show();
+                return false;
+            }
         }
 
-        if(isWrongLength(editCalleeNumber)) {
-            failed = true;
-        }
-
-        if(failed) {
-            Toast.makeText(this, R.string.error_invalid_phone_number, Toast.LENGTH_LONG).show();
+        if(isWrongLength(editCallerNumber) || isWrongLength(editCalleeNumber)) {
+            Toast.makeText(this, R.string.err_invalid_phone_number, Toast.LENGTH_LONG).show();
             return false;
         }
 
-        DateTimeFormatter formatter = getFormatter(String.format("%s %s", DATE_PATTERN, TIME_PATTERN));
-        ZonedDateTime startZdt = ZonedDateTime.parse(String.format("%s %s", editStartDate.getText(),
-                editStartTime.getText()), formatter);
-        ZonedDateTime endZdt = ZonedDateTime.parse(String.format("%s %s", editEndDate.getText(),
-                editEndTime.getText()), formatter);
+        if(anyDate) {
+            DateTimeFormatter formatter = getFormatter(String.format("%s %s", DATE_PATTERN, TIME_PATTERN));
+            ZonedDateTime startZdt = ZonedDateTime.parse(String.format("%s %s", editStartDate.getText(),
+                    editStartTime.getText()), formatter);
+            ZonedDateTime endZdt = ZonedDateTime.parse(String.format("%s %s", editEndDate.getText(),
+                    editEndTime.getText()), formatter);
 
-        if(startZdt.isAfter(endZdt)) {
-            editStartDate.setError(getText(R.string.error_start_after_end));
-            editStartTime.setError(getText(R.string.error_start_after_end));
-            editEndDate.setError(getText(R.string.error_start_after_end));
-            editEndTime.setError(getText(R.string.error_start_after_end));
-            Toast.makeText(this, R.string.error_start_after_end, Toast.LENGTH_LONG).show();
-            return false;
-        }
-        else {
-            editStartDate.setError(null);
-            editStartTime.setError(null);
-            editEndDate.setError(null);
-            editEndTime.setError(null);
+            if(startZdt.isAfter(endZdt)) {
+                editStartTime.setError(getText(R.string.err_start_after_end));
+                editEndTime.setError(getText(R.string.err_start_after_end));
+                Toast.makeText(this, R.string.err_start_after_end, Toast.LENGTH_LONG).show();
+                return false;
+            }
+            else {
+                editStartTime.setError(null);
+                editEndTime.setError(null);
+            }
         }
 
         return true;
     }
 
-    private boolean isEmpty(EditText editText) {
+    private boolean isEmpty(EditText editText, @StringRes int errorMessage) {
         boolean isEmpty = TextUtils.isEmpty(editText.getText());
-        editText.setError(isEmpty ? getText(R.string.required) : null);
+        editText.setError(isEmpty ? getText(errorMessage) : null);
         return isEmpty;
     }
 
+    private boolean oneEmpty(@StringRes int errorMessage, EditText... editTexts) {
+        boolean oneEmpty = false;
+
+        for(EditText editText : editTexts) {
+            if(isEmpty(editText, errorMessage)) {
+                oneEmpty = true;
+            }
+        }
+
+        return oneEmpty;
+    }
+
     private boolean isWrongLength(EditText editText) {
-        boolean wrongLength = editText.length() != getResources().getInteger(R.integer.phone_number_input_length);
-        editText.setError(wrongLength ? getText(R.string.error_invalid_phone_number) : null);
+        int length = editText.length();
+        boolean wrongLength = length > 0 && length != getResources().getInteger(R.integer.phone_number_input_length);
+        editText.setError(wrongLength ? getText(R.string.err_invalid_phone_number) : null);
         return wrongLength;
+    }
+
+    private boolean anyText(EditText... editTexts) {
+        for(EditText editText : editTexts) {
+            if(!TextUtils.isEmpty(editText.getText())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public static class Extras {
@@ -273,5 +303,26 @@ public class CallActivity extends AppCompatActivity {
         public static final String RESULT_START_TIME = "START_TIME";
         public static final String RESULT_END_DATE = "END_DATE";
         public static final String RESULT_END_TIME = "END_TIME";
+    }
+
+    private class DateTimeTextWatcher implements TextWatcher {
+        private EditText editText;
+
+        DateTimeTextWatcher(EditText editText) {
+            this.editText = editText;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            editText.setError(null);
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+        }
     }
 }
