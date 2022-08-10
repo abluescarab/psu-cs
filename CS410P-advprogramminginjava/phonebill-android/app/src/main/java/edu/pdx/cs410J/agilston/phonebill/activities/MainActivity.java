@@ -30,6 +30,19 @@ public class MainActivity extends AppCompatActivity {
     private MenuItem searchButton;
     private MenuItem filterButton;
 
+    public static void flipView(ViewFlipper flipper, RecyclerView recyclerView, int count,
+                                RecyclerView.Adapter<?> adapter) {
+        if(flipper == null) {
+            return;
+        }
+
+        if(count == 0 || (count > 0 && flipper.getDisplayedChild() == 1)) {
+            flipper.showNext();
+        }
+
+        recyclerView.setAdapter(adapter);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,34 +154,10 @@ public class MainActivity extends AppCompatActivity {
         return null;
     }
 
-    public void flipCustomerView() {
-        flipView(findViewById(R.id.customer_flipper), findViewById(R.id.customer_list),
-                PhoneBillList.getCustomerCount(), PhoneBillList.getCustomerAdapter());
-    }
-
-    public void flipCallView(String customer) {
-        CallAdapter adapter = PhoneBillList.getCallAdapter();
-        flipView(findViewById(R.id.call_flipper), findViewById(R.id.call_list), adapter.getItemCount(), adapter);
-    }
-
     public void resetSearch() {
         if(searchView != null) {
             searchView.setQuery("", false);
             searchView.setIconified(true);
-        }
-    }
-
-    private void flipView(ViewFlipper flipper, RecyclerView recyclerView, int count, RecyclerView.Adapter adapter) {
-        if(flipper == null) {
-            return;
-        }
-
-        if(count == 0 || (count > 0 && flipper.getDisplayedChild() == 1)) {
-            flipper.showNext();
-        }
-
-        if(count > 0) {
-            recyclerView.setAdapter(adapter);
         }
     }
 }

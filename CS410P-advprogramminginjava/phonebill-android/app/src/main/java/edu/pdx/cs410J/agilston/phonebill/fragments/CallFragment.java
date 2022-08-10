@@ -65,20 +65,29 @@ public class CallFragment extends Fragment {
                     }
 
                     CallAdapter adapter = PhoneBillList.getCallAdapter();
+                    Activity activity = requireActivity();
+                    MainActivity mainActivity = null;
+
+                    if(activity instanceof MainActivity) {
+                        mainActivity = (MainActivity)activity;
+                    }
 
                     if(TextUtils.equals(action, CallActivity.Extras.ACTION_ADD_CALL)) {
                         PhoneCall call = new PhoneCall(caller, callee, start, end);
-                        Activity activity = requireActivity();
                         PhoneBillList.addCall(activity, customer, call);
 
-                        if(PhoneBillList.getCallCount(customer) == 1 && activity instanceof MainActivity) {
-                            ((MainActivity)activity).flipCallView(customer);
+                        if(PhoneBillList.getCallCount(customer) == 1 && mainActivity != null) {
+                            flipView();
                         }
 
                         adapter.clearFilter();
                     }
                     else {
                         adapter.filter(caller, callee, start, end);
+
+                        if(mainActivity != null) {
+                            flipView();
+                        }
                     }
                 }
             }
@@ -119,7 +128,7 @@ public class CallFragment extends Fragment {
             Activity activity = requireActivity();
 
             if(activity instanceof MainActivity) {
-                ((MainActivity)activity).flipCallView(customer);
+                flipView();
                 FloatingActionButton fab = activity.findViewById(R.id.fab);
 
                 if(fab != null) {
@@ -127,6 +136,12 @@ public class CallFragment extends Fragment {
                 }
             }
         }
+    }
+
+    private void flipView() {
+        CallAdapter adapter = PhoneBillList.getCallAdapter();
+        MainActivity.flipView(binding.callFlipper, requireActivity().findViewById(R.id.call_list),
+                adapter.getItemCount(), adapter);
     }
 
     public void launchCallActivity(String action) {

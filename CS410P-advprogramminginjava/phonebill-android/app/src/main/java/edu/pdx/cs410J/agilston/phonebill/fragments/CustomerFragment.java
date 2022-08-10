@@ -64,7 +64,7 @@ public class CustomerFragment extends Fragment {
 
         if(activity instanceof MainActivity) {
             MainActivity mainActivity = (MainActivity)activity;
-            mainActivity.flipCustomerView();
+            flipView();
 
             FloatingActionButton fab = activity.findViewById(R.id.fab);
             fab.setOnClickListener(v -> {
@@ -100,10 +100,16 @@ public class CustomerFragment extends Fragment {
         }
     }
 
+    private void flipView() {
+        CustomerAdapter adapter = PhoneBillList.getCustomerAdapter();
+        MainActivity.flipView(binding.customerFlipper, requireActivity().findViewById(R.id.customer_list),
+                adapter.getItemCount(), adapter);
+    }
+
     private void confirm(EditText editText, DialogInterface dialog) {
         MainActivity activity = (MainActivity)requireActivity();
         PhoneBillList.addCustomer(activity, editText.getText().toString());
-        activity.flipCustomerView();
+        flipView();
         dialog.dismiss();
 
         if(adapter != null) {
