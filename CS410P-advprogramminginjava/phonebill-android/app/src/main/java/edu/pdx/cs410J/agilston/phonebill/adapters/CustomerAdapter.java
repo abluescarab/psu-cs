@@ -94,11 +94,14 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
     }
 
     public void addCustomer(String customer) {
-        customers.add(customer);
+        int index = customers.add(customer);
+        customersFiltered.set(index, customer);
     }
 
     public void addCustomers(String[] customers) {
-        this.customers.addAll(customers);
+        for(String customer : customers) {
+            addCustomer(customer);
+        }
     }
 
     public interface OnItemClickListener {
