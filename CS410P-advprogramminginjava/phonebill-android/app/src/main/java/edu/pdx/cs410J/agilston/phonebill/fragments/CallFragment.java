@@ -78,6 +78,7 @@ public class CallFragment extends Fragment {
 
                         if(PhoneBillList.getCallCount(customer) == 1 && mainActivity != null) {
                             flipView();
+                            binding.callFlipperText.setText(R.string.empty_call_list);
                         }
 
                         adapter.clearFilter();
@@ -86,7 +87,13 @@ public class CallFragment extends Fragment {
                         adapter.filter(caller, callee, start, end);
 
                         if(mainActivity != null) {
-                            flipView();
+                            if(adapter.getItemCount() == 0 && binding.callFlipper.getDisplayedChild() != 1) {
+                                flipView();
+                                binding.callFlipperText.setText(R.string.empty_search_results);
+                            }
+                            else if(adapter.getItemCount() > 0 && binding.callFlipper.getDisplayedChild() == 1) {
+                                flipView();
+                            }
                         }
                     }
                 }
