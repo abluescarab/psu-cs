@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import edu.pdx.cs410J.agilston.phonebill.FileUtils;
 import edu.pdx.cs410J.agilston.phonebill.PhoneBillList;
 import edu.pdx.cs410J.agilston.phonebill.R;
+import edu.pdx.cs410J.agilston.phonebill.adapters.CallAdapter;
 import edu.pdx.cs410J.agilston.phonebill.adapters.CustomerAdapter;
 import edu.pdx.cs410J.agilston.phonebill.databinding.ActivityMainBinding;
 import edu.pdx.cs410J.agilston.phonebill.fragments.CallFragment;
@@ -148,8 +149,8 @@ public class MainActivity extends AppCompatActivity implements CustomerAdapter.O
     }
 
     public void flipCallView(String customer) {
-        flipView(findViewById(R.id.call_flipper), findViewById(R.id.call_list), PhoneBillList.getCallCount(customer),
-                PhoneBillList.getCallAdapter());
+        CallAdapter adapter = PhoneBillList.getCallAdapter();
+        flipView(findViewById(R.id.call_flipper), findViewById(R.id.call_list), adapter.getItemCount(), adapter);
     }
 
     public void resetSearch() {
@@ -164,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements CustomerAdapter.O
             return;
         }
 
-        if(count == 0 || (count == 1 && flipper.getDisplayedChild() == 1)) {
+        if(count == 0 || (count > 0 && flipper.getDisplayedChild() == 1)) {
             flipper.showNext();
         }
 
