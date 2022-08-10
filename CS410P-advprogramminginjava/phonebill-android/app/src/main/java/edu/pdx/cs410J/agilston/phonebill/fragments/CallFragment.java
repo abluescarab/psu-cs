@@ -45,10 +45,10 @@ public class CallFragment extends Fragment {
                     String callee = data.getStringExtra(CallActivity.Extras.RESULT_CALLEE);
                     String start = String.format("%s %s",
                             data.getStringExtra(CallActivity.Extras.RESULT_START_DATE),
-                            data.getStringExtra(CallActivity.Extras.RESULT_START_TIME));
+                            data.getStringExtra(CallActivity.Extras.RESULT_START_TIME)).trim();
                     String end = String.format("%s %s",
                             data.getStringExtra(CallActivity.Extras.RESULT_END_DATE),
-                            data.getStringExtra(CallActivity.Extras.RESULT_END_TIME));
+                            data.getStringExtra(CallActivity.Extras.RESULT_END_TIME)).trim();
 
                     if(!TextUtils.isEmpty(caller)) {
                         caller = new StringBuilder(caller)
