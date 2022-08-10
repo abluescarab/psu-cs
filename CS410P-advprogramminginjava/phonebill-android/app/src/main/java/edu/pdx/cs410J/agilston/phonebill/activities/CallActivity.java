@@ -2,6 +2,7 @@ package edu.pdx.cs410J.agilston.phonebill.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -21,7 +22,9 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
+import java.util.Locale;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 import edu.pdx.cs410J.agilston.phonebill.R;
 
@@ -34,6 +37,45 @@ public class CallActivity extends AppCompatActivity {
     private EditText editStartTime;
     private EditText editEndDate;
     private EditText editEndTime;
+
+    private static boolean isEmpty(EditText editText, @StringRes int errorMessage) {
+        boolean isEmpty = TextUtils.isEmpty(editText.getText());
+        editText.setError(isEmpty ? editText.getContext().getText(errorMessage) : null);
+        return isEmpty;
+    }
+
+    private static boolean oneEmpty(@StringRes int errorMessage, EditText... editTexts) {
+        boolean oneEmpty = false;
+
+        for(EditText editText : editTexts) {
+            if(isEmpty(editText, errorMessage)) {
+                oneEmpty = true;
+            }
+        }
+
+        return oneEmpty;
+    }
+
+    private static boolean anyText(EditText... editTexts) {
+        for(EditText editText : editTexts) {
+            if(!TextUtils.isEmpty(editText.getText())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static boolean isValidPhoneNumber(EditText editText) {
+        String text = editText.getText().toString();
+        Resources resources = editText.getResources();
+        int phoneNumberLength = resources.getInteger(R.integer.phone_number_input_length);
+        Pattern pattern = Pattern.compile(String.format(Locale.getDefault(), "\\d{%d}", phoneNumberLength));
+        boolean valid = pattern.matcher(editText.getText().toString()).matches();
+
+        editText.setError(valid ? null : resources.getText(R.string.err_invalid_phone_number));
+        return valid;
+    }
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -207,6 +249,7 @@ public class CallActivity extends AppCompatActivity {
                 editEndDate,
                 editEndTime
         };
+
         boolean anyDate = anyText(editTextDates);
 
         if(anyDate && oneEmpty(R.string.err_all_date_fields_required, editTextDates)) {
@@ -254,41 +297,6 @@ public class CallActivity extends AppCompatActivity {
         }
 
         return true;
-    }
-
-    private boolean isEmpty(EditText editText, @StringRes int errorMessage) {
-        boolean isEmpty = TextUtils.isEmpty(editText.getText());
-        editText.setError(isEmpty ? getText(errorMessage) : null);
-        return isEmpty;
-    }
-
-    private boolean oneEmpty(@StringRes int errorMessage, EditText... editTexts) {
-        boolean oneEmpty = false;
-
-        for(EditText editText : editTexts) {
-            if(isEmpty(editText, errorMessage)) {
-                oneEmpty = true;
-            }
-        }
-
-        return oneEmpty;
-    }
-
-    private boolean isWrongLength(EditText editText) {
-        int length = editText.length();
-        boolean wrongLength = length > 0 && length != getResources().getInteger(R.integer.phone_number_input_length);
-        editText.setError(wrongLength ? getText(R.string.err_invalid_phone_number) : null);
-        return wrongLength;
-    }
-
-    private boolean anyText(EditText... editTexts) {
-        for(EditText editText : editTexts) {
-            if(!TextUtils.isEmpty(editText.getText())) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     public static class Extras {
