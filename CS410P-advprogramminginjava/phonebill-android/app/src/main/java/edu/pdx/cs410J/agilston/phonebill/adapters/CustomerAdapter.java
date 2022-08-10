@@ -20,12 +20,12 @@ import edu.pdx.cs410J.agilston.phonebill.databinding.FragmentCustomerEntryBindin
 public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.CustomerViewHolder> implements Filterable {
     private final OnItemClickListener onItemClickListener;
     private final SortedList<String> customers;
-    private List<String> customersFiltered;
+    private ArrayList<String> customersFiltered;
 
     public CustomerAdapter(List<String> customers, OnItemClickListener onItemClickListener) {
         this.customers = new SortedList<>(String.class, new CustomerListCallback());
         this.customers.addAll(customers);
-        this.customersFiltered = customers;
+        this.customersFiltered = new ArrayList<>(customers);
         this.onItemClickListener = onItemClickListener;
     }
 
@@ -95,7 +95,13 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Custom
 
     public void addCustomer(String customer) {
         int index = customers.add(customer);
-        customersFiltered.set(index, customer);
+
+        if(index < customersFiltered.size()) {
+            customersFiltered.set(index, customer);
+        }
+        else {
+            customersFiltered.add(index, customer);
+        }
     }
 
     public void addCustomers(String[] customers) {
