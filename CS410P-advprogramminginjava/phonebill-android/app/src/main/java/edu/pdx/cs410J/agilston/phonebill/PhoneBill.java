@@ -29,6 +29,17 @@ public class PhoneBill extends AbstractPhoneBill<PhoneCall> {
     }
 
     /**
+     * Creates a new phone bill with a list of calls.
+     *
+     * @param customer customer name
+     * @param calls    calls to add
+     */
+    public PhoneBill(String customer, List<PhoneCall> calls) {
+        this.customer = customer;
+        this.calls = calls;
+    }
+
+    /**
      * Gets customer's name.
      */
     @Override
@@ -57,6 +68,8 @@ public class PhoneBill extends AbstractPhoneBill<PhoneCall> {
     /**
      * Returns a new PhoneBill containing only the calls between two times with the specified caller/callee numbers.
      *
+     * @param caller      caller number
+     * @param callee      callee number
      * @param beginString time call began
      * @param endString   time call ended
      * @return new PhoneBill with calls that fall between begin and end

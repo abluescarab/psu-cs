@@ -1,5 +1,6 @@
 package edu.pdx.cs410J.agilston.phonebill.adapters;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -8,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import edu.pdx.cs410J.agilston.phonebill.PhoneBill;
@@ -15,14 +17,12 @@ import edu.pdx.cs410J.agilston.phonebill.PhoneCall;
 import edu.pdx.cs410J.agilston.phonebill.databinding.FragmentCallEntryBinding;
 
 public class CallAdapter extends RecyclerView.Adapter<CallAdapter.CallViewHolder> {
-    private final PhoneBill bill;
     private final List<PhoneCall> calls;
     private List<PhoneCall> callsFiltered;
 
-    public CallAdapter(PhoneBill bill) {
-        this.bill = bill;
-        this.calls = new ArrayList<>(bill.getPhoneCalls());
-        this.callsFiltered = new ArrayList<>(bill.getPhoneCalls());
+    public CallAdapter(Collection<PhoneCall> calls) {
+        this.calls = new ArrayList<>(calls);
+        this.callsFiltered = new ArrayList<>(calls);
     }
 
     @NonNull
@@ -52,18 +52,20 @@ public class CallAdapter extends RecyclerView.Adapter<CallAdapter.CallViewHolder
         calls.add(call);
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void filter(String caller, String callee, String startString, String endString) {
-        PhoneBill filteredBill = bill.filter(caller, callee, startString, endString);
+        PhoneBill filteredBill = new PhoneBill("", calls).filter(caller, callee, startString, endString);
         callsFiltered = new ArrayList<>(filteredBill.getPhoneCalls());
         notifyDataSetChanged();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void clearFilter() {
-        callsFiltered = new ArrayList<>(bill.getPhoneCalls());
+        callsFiltered = calls;
         notifyDataSetChanged();
     }
 
-    public class CallViewHolder extends RecyclerView.ViewHolder {
+    public static class CallViewHolder extends RecyclerView.ViewHolder {
         public final TextView callerNumber;
         public final TextView calleeNumber;
         public final TextView startDate;

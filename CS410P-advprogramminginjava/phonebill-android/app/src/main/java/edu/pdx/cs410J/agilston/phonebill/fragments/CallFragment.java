@@ -112,7 +112,7 @@ public class CallFragment extends Fragment {
                 PhoneBill bill = PhoneBillList.getBill(customer);
 
                 if(bill != null) {
-                    PhoneBillList.setCallAdapter(new CallAdapter(bill));
+                    PhoneBillList.setCallAdapter(new CallAdapter(bill.getPhoneCalls()));
                 }
             }
 
