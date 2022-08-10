@@ -1,5 +1,6 @@
 package edu.pdx.cs410J.agilston.phonebill.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -14,6 +15,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import edu.pdx.cs410J.agilston.phonebill.FileUtils;
@@ -41,6 +44,22 @@ public class MainActivity extends AppCompatActivity {
         }
 
         recyclerView.setAdapter(adapter);
+    }
+
+    /**
+     * Adds a dividing line between {@link RecyclerView} elements.
+     *
+     * @param recyclerView recycler view to add dividers to
+     */
+    public static void addItemDecoration(RecyclerView recyclerView) {
+        // add item divider decoration
+        Context context = recyclerView.getContext();
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                layoutManager.getOrientation());
+
+        recyclerView.addItemDecoration(dividerItemDecoration);
+        recyclerView.setLayoutManager(layoutManager);
     }
 
     @Override

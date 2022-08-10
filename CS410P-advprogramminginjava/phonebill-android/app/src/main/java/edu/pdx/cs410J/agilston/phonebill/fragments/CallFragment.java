@@ -118,7 +118,7 @@ public class CallFragment extends Fragment {
 
         Bundle bundle = getArguments();
         RecyclerView recyclerView = view.findViewById(R.id.call_list);
-        PhoneBillList.addItemDecoration(recyclerView);
+        MainActivity.addItemDecoration(recyclerView);
 
         if(bundle != null) {
             String newCustomer = bundle.getString(Extras.CUSTOMER);

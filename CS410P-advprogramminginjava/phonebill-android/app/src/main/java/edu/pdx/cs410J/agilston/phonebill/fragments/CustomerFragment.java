@@ -60,7 +60,7 @@ public class CustomerFragment extends Fragment {
             PhoneBillList.setCustomerAdapter(adapter);
         }
 
-        PhoneBillList.addItemDecoration(recyclerView);
+        MainActivity.addItemDecoration(recyclerView);
 
         if(activity instanceof MainActivity) {
             MainActivity mainActivity = (MainActivity)activity;
