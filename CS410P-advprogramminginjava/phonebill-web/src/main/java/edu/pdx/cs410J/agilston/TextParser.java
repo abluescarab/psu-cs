@@ -26,14 +26,26 @@ public class TextParser {
                 Matcher matcher = pattern.matcher(line);
 
                 if(!matcher.find()) {
-                    throw new ParserException("Unexpected text: " + line);
+                    throw new ParserException(String.format("Unexpected text: \"%s\"", line));
                 }
 
                 String customer = matcher.group(1);
-                String billString = matcher.group(2);
-                PhoneBill bill = new PhoneBill(customer);
+                String callString = matcher.group(2);
+                PhoneBill bill;
 
-                bills.put(customer, bill);
+                if(bills.containsKey(customer)) {
+                    bill = bills.get(customer);
+                }
+                else {
+                    bill = new PhoneBill(customer);
+                    bills.put(customer, bill);
+                }
+
+                PhoneCall call = parseCall(callString);
+
+                if(call != null) {
+                    bill.addPhoneCall(call);
+                }
             }
         }
         catch(IOException e) {
@@ -41,5 +53,16 @@ public class TextParser {
         }
 
         return bills;
+    }
+
+    private PhoneCall parseCall(String callString) {
+        String[] call = callString.split(",");
+
+        if(call.length == 4) {
+            return new PhoneCall(call[0], call[1], call[2], call[3]);
+        }
+        else {
+            return null;
+        }
     }
 }

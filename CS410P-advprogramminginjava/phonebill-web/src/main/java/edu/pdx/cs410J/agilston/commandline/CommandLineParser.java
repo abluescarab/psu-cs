@@ -271,6 +271,13 @@ public class CommandLineParser {
     }
 
     /**
+     * Gets the number of parsed arguments from the command line.
+     */
+    public int argumentCount() {
+        return givenArguments.size();
+    }
+
+    /**
      * Checks whether an argument has been provided on the command line.
      *
      * @param name name to check for

@@ -31,7 +31,7 @@ class Project4IT extends InvokeMainTestCase {
     @Test
     void testNoCommandLineArguments() {
         MainMethodResult result = invokeMain();
-        assertThat(result.getTextWrittenToStandardError(), containsString(Project4.MISSING_ARGS));
+        assertThat(result.getTextWrittenToStandardOut(), containsString("phonebill-2022.0.0.jar"));
     }
 
     @Test
@@ -244,5 +244,100 @@ class Project4IT extends InvokeMainTestCase {
     void testRemoveAllMappings() throws IOException {
         PhoneBillRestClient client = new PhoneBillRestClient(HOSTNAME, Integer.parseInt(PORT));
         client.removeAllPhoneBills();
+    }
+
+    // The following tests are from the Project4 grading email
+    @Test
+    void test0AddCall() {
+        MainMethodResult result = invokeMain(
+                ("-host localhost -port 8080 -print Project4 123-456-7890 237-425-2345 01/08/2022 8:00 am 01/08/2022 "
+                        + "8:02 am").split(" "));
+
+        assertThat(result.getTextWrittenToStandardOut(), containsString("Added phone call from 123-456-7890 "
+                + "to 237-425-2345 from 01/08/22 08:00 am to 01/08/22 08:02 am to Project4"));
+    }
+
+    @Test
+    void test1QueryEmptyPhoneBill() {
+        MainMethodResult result = invokeMain(
+                "-search -host localhost -port 8080 Project4 01/06/2022 5:00 pm 01/06/2022 7:00 pm".split(" "));
+
+        assertThat(result.getTextWrittenToStandardOut(), containsString("There are no phone calls associated "
+                + "with Project4."));
+    }
+
+    @Test
+    void test2AddSecondPhoneCall() {
+        MainMethodResult result = invokeMain(
+                "-host localhost -port 8080 Project4 123-456-7890 234-235-2354 01/10/2022 10:00 am 01/10/2022 10:14 am"
+                        .split(" "));
+
+        assertThat(result.getTextWrittenToStandardOut(), containsString("Added phone call from 123-456-7890 "
+                + "to 234-235-2354 from 01/10/22 10:00 am to 01/10/22 10:14 am to Project4"));
+    }
+
+    @Test
+    void test3AddThirdPhoneCall() {
+        MainMethodResult result = invokeMain(
+                "-host localhost -port 8080 Project4 123-456-7890 124-142-6246 01/12/2022 12:00 pm 01/12/2022 12:15 pm"
+                        .split(" "));
+
+        assertThat(result.getTextWrittenToStandardOut(), containsString("Added phone call from 123-456-7890 "
+                + "to 124-142-6246 from 01/12/22 12:00 pm to 01/12/22 12:15 pm to Project4"));
+    }
+
+    @Test
+    void test4QueryPhoneCall() {
+        MainMethodResult result = invokeMain(
+                "-search -host localhost -port 8080 Project4 01/09/2022 1:00 pm 01/20/2022 1:23 pm".split(" "));
+
+        assertThat(result.getTextWrittenToStandardOut(), containsString("234-235-2354"));
+        assertThat(result.getTextWrittenToStandardOut(), containsString("124-142-6246"));
+    }
+
+    @Test
+    void test5AddFourthPhoneCall() {
+        MainMethodResult result = invokeMain(
+                "-host localhost -port 8080 Project4 123-456-7890 124-142-6246 01/31/2022 12:00 pm 01/31/2022 12:15 pm"
+                        .split(" "));
+
+        assertThat(result.getTextWrittenToStandardOut(), containsString("Added phone call from 123-456-7890 "
+                + "to 124-142-6246 from 01/31/22 12:00 pm to 01/31/22 12:15 pm to Project4"));
+    }
+
+    @Test
+    void test6QueryPhoneBill() {
+        MainMethodResult result = invokeMain(
+                "-search -host localhost -port 8080 Project4 01/30/2022 12:00 pm 02/01/2022 12:15 pm".split(" "));
+
+        assertThat(result.getTextWrittenToStandardOut(), containsString(""));
+    }
+
+    @Test
+    void test7AddSecondPhoneBill() {
+        MainMethodResult result = invokeMain(
+                ("-host localhost -port 8080 -print Project4a 131-313-1313 234-345-5467 01/13/2022 8:00 am 01/13/2022 "
+                        + "8:02 am").split(" "));
+
+        assertThat(result.getTextWrittenToStandardOut(), containsString("Added phone call from 131-313-1313 "
+                + "to 234-345-5467 from 01/13/22 08:00 am to 01/13/22 08:02 am to Project4a"));
+    }
+
+    @Test
+    void test8AddPhoneCallToSecondBill() {
+        MainMethodResult result = invokeMain(
+                ("-host localhost -port 8080 -print Project4a 131-313-1313 123-456-7890 02/13/2022 9:00 am 02/13/2022 "
+                        + "10:02 am").split(" "));
+
+        assertThat(result.getTextWrittenToStandardOut(), containsString("Added phone call from 131-313-1313 "
+                + "to 123-456-7890 from 02/13/22 09:00 am to 02/13/22 10:02 am to Project4a"));
+    }
+
+    @Test
+    void test9QuerySecondPhoneBill() {
+        MainMethodResult result = invokeMain(
+                "-search -host localhost -port 8080 Project4a 02/01/2022 12:00 am 02/15/2022 12:00 am".split(" "));
+
+        assertThat(result.getTextWrittenToStandardOut(), containsString("123-456-7890"));
     }
 }

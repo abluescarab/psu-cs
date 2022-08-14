@@ -33,6 +33,8 @@ public class PhoneBillRestClientTest {
         StringWriter writer = new StringWriter();
         new TextDumper(writer).dump(dictionary);
 
+        System.out.println(dictionary);
+
         return new HttpRequestHelper.Response(writer.toString());
     }
 }

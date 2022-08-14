@@ -3,6 +3,7 @@ package edu.pdx.cs410J.agilston;
 import com.google.common.annotations.VisibleForTesting;
 import edu.pdx.cs410J.ParserException;
 import edu.pdx.cs410J.agilston.commandline.CommandLineParser;
+import edu.pdx.cs410J.web.HttpRequestHelper;
 
 import java.io.*;
 import java.time.temporal.ChronoUnit;
@@ -23,7 +24,9 @@ public class Project4 {
         CommandLineParser parser = createParser();
 
         try {
-            validateArguments(parser, args);
+            if(!validateArguments(parser, args)) {
+                return;
+            }
 
             PhoneBillRestClient client = new PhoneBillRestClient(parser.getValueOrDefault("-host"),
                     Integer.parseInt(parser.getValueOrDefault("-port")));
@@ -66,8 +69,17 @@ public class Project4 {
                     }
                 }
             }
+            catch(HttpRequestHelper.RestException e) {
+                StringBuilder builder = new StringBuilder(String.format("Error %d: ", e.getHttpStatusCode()));
+
+                if(e.getHttpStatusCode() == 404) {
+                    builder.append("No results found");
+                }
+
+                throw new RuntimeException(builder.toString());
+            }
             catch(IOException | ParserException e) {
-                throw new RuntimeException("While contacting server: " + e, e);
+                throw new RuntimeException("While contacting server: " + e.getMessage(), e);
             }
 
             System.out.println(message);
@@ -149,12 +161,6 @@ public class Project4 {
         parser.addFlag("-host", "Host computer on which the server runs", new String[] { "host_name" });
         parser.addFlag("-port", "Port on which the server is listening", new String[] { "port_number" });
         parser.addFlag("-search", "Phone calls which should be searched for", null);
-        parser.addArgument("customer", "Person whose phone bill we're modeling");
-        parser.addArgument("caller_number", "Phone number of caller");
-        parser.addArgument("callee_number", "Phone number of person who was called");
-        parser.addListArgument("begin", "Date and time call began",
-                new String[] { "date", "time", "am_pm" });
-        parser.addListArgument("end", "Date and time call ended", new String[] { "date", "time", "am_pm" });
 
         return parser;
     }
@@ -164,7 +170,7 @@ public class Project4 {
      *
      * @param parser parser to validate with
      * @param args   command line arguments
-     * @return whether arguments successfully validated
+     * @return whether program should continue
      */
     private static boolean validateArguments(CommandLineParser parser, String[] args) {
         List<String> missingArgs = List.of(
@@ -178,9 +184,22 @@ public class Project4 {
                 "end_time",
                 "end_ampm");
 
+        // change positional arguments if -search is provided
+        List<String> argList = List.of(args);
+
+        parser.addArgument("customer", "Person whose phone bill we're modeling");
+
+        if(!argList.contains("-search")) {
+            parser.addArgument("caller_number", "Phone number of caller");
+            parser.addArgument("callee_number", "Phone number of person who was called");
+        }
+
+        parser.addListArgument("begin", "Date and time call began",
+                new String[] { "date", "time", "am_pm" });
+        parser.addListArgument("end", "Date and time call ended", new String[] { "date", "time", "am_pm" });
         parser.parse(args);
 
-        if(parser.hasArgument("-help")) {
+        if(parser.hasArgument("-help") || parser.argumentCount() == 0) {
             System.out.println(parser.getUsageInformation());
             return false;
         }
@@ -223,11 +242,13 @@ public class Project4 {
                     missingArgs.subList(args.length, missingArgs.size()))));
         }
 
-        if(!isValidPhoneNumber(parser.getValueOrDefault("caller_number"))) {
+        if(parser.hasArgument("caller_number") &&
+                !isValidPhoneNumber(parser.getValueOrDefault("caller_number"))) {
             throw new IllegalArgumentException("Invalid argument: Caller number must be in format ###-###-####");
         }
 
-        if(!isValidPhoneNumber(parser.getValueOrDefault("callee_number"))) {
+        if(parser.hasArgument("callee_number") &&
+                !isValidPhoneNumber(parser.getValueOrDefault("callee_number"))) {
             throw new IllegalArgumentException("Invalid argument: Callee number must be in format ###-###-####");
         }
 
