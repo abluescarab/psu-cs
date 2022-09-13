@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/CustomerFragment">
+
+    <fragment
+        android:id="@+id/CustomerFragment"
+        android:name="edu.pdx.cs410J.agilston.phonebill.fragments.CustomerFragment"
+        android:label="@string/bill_fragment_label"
+        tools:layout="@layout/fragment_customer">
+
+        <action
+            android:id="@+id/action_customers_to_calls"
+            app:destination="@id/CallFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/CallFragment"
+        android:name="edu.pdx.cs410J.agilston.phonebill.fragments.CallFragment"
+        android:label="@string/call_fragment_label"
+        tools:layout="@layout/fragment_call">
+    </fragment>
+</navigation>

@@ -1,0 +1,59 @@
+<resources>
+    <string name="app_name">Phone Bill</string>
+
+    <!-- Dialogs -->
+    <string name="add">Add</string>
+    <string name="cancel">Cancel</string>
+    <string name="required">Required</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="confirm">Confirm</string>
+
+    <string name="confirm_replace_customer">Are you sure you want to replace customer \"%s\"?</string>
+
+    <!-- Strings used for fragments for navigation -->
+    <string name="bill_fragment_label">@string/app_name</string>
+    <string name="call_fragment_label">Calls</string>
+
+    <!-- Main toolbar -->
+    <string name="menu_main_help">Help</string>
+    <string name="menu_main_readme">README</string>
+    <string name="menu_main_search">Search</string>
+    <string name="search_hint">Search…</string>
+    <string name="menu_main_filter">Filter</string>
+
+    <!-- Phone call interface -->
+    <string name="title_add_call">Add New Call</string>
+    <string name="title_search_call">Search Calls</string>
+    <string name="title_add_customer">Add Customer</string>
+
+    <string name="hint_customer_name">Customer name</string>
+    <string name="hint_caller_number">Caller number</string>
+    <string name="hint_callee_number">Callee number</string>
+    <string name="hint_start_date">Start date</string>
+    <string name="hint_end_date">End date</string>
+    <string name="hint_start_time">Start time</string>
+    <string name="hint_end_time">End time</string>
+
+    <string name="entry_caller">Caller:</string>
+    <string name="entry_callee">Receiver:</string>
+    <string name="entry_start">Began:</string>
+    <string name="entry_end">Ended:</string>
+    <string name="entry_duration">Duration:</string>
+
+    <string name="empty_customer_list">No customers added</string>
+    <string name="empty_call_list">No calls added</string>
+    <string name="empty_search_results">No results found</string>
+
+    <string name="err_invalid_phone_number">Invalid phone number</string>
+    <string name="err_missing_data">Missing data</string>
+    <string name="err_start_after_end">Start date must be before or equal to end date</string>
+    <string name="err_all_date_fields_required">Start date, start time, end date, and end time must all be entered</string>
+
+    <!-- Placeholders -->
+    <string name="placeholder_caller">000-000-0000</string>
+    <string name="placeholder_callee">111-111-1111</string>
+    <string name="placeholder_start">01/01/2022 01:00 PM</string>
+    <string name="placeholder_end">01/01/2022 02:00 PM</string>
+    <string name="placeholder_duration">0 hours 0 minutes</string>
+</resources>
