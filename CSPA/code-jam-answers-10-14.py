@@ -3,18 +3,22 @@
 ################################################################################
 
 class LinkedListNode:
-    def __init__(self, data):
+    def __init__(self, data): # constructor with one parameter
         self.data = data
         self.next = None
 
 
+# Making a separate class here because there was a bug after challenge 7 where
+# the rest of the list would drop out of memory after the function ended. An
+# instance is kept in the Program() class at the bottom of the file. This wasn't
+# an issue with the binary tree, so there is no separate BinaryTree class.
 class LinkedList:
-    def __init__(self):
+    def __init__(self): # constructor with no parameters
         self.head = None
 
 
 class BinaryTreeNode:
-    def __init__(self, data):
+    def __init__(self, data): # constructor with one parameter
         self.data = data
         self.left = None
         self.right = None
@@ -98,11 +102,11 @@ def challenge4(s1, s2):
     str2 = s2.replace(" ", "")
 
     while len(str1) > 0 and len(str2) > 0:
-        index = str2.find(str1[0])
+        index = str2.find(str1[0]) # find index of first char in str1 within str2
 
         if index > -1:
-            str1 = str1[1:]
-            str2 = str2[:index] + str2[index + 1:]
+            str1 = str1[1:] # capture the first string from index 1 to the end
+            str2 = str2[:index] + str2[index + 1:] # cut out character at index
         else:
             print(f"\"{s1}\" and \"{s2}\" are not anagrams")
             return
@@ -123,7 +127,7 @@ def challenge5(array):
         if i > largest:
             second = largest
             largest = i
-        elif i != largest and i > second:
+        elif i != largest and i > second: # ensure second != largest at the end
             second = i
 
     print(f"The second largest number is: {second}")
@@ -156,13 +160,18 @@ def challenge7(linked_list):
     prev = None
     curr = linked_list.head
 
+    # 1 -> 2 -> 3, where curr = 1 and prev = None
+    # step 1: next = 2,    curr.next = None, prev = 1, curr = 2
+    # step 2: next = 3,    curr.next = 1,    prev = 2, curr = 3
+    # step 3: next = None, curr.next = 2,    prev = 3, curr = None
+    # 3 -> 2 -> 1
     while curr:
         next = curr.next
         curr.next = prev
         prev = curr
         curr = next
 
-    linked_list.head = prev
+    linked_list.head = prev # update the original node in the linked list
     print(f"After:  {print_list(linked_list, ' -> ')}")
 
 
@@ -174,7 +183,7 @@ class MyBaseClass:
 
 class MySubClass(MyBaseClass):
     def my_func(self):
-        super().my_func()
+        super().my_func() # call the base function
         print("My subclass function!")
 
 
@@ -219,10 +228,10 @@ def max_depth(root):
     if not root:
         return 0
 
-    left = max_depth(root.left) + 1
-    right = max_depth(root.right) + 1
+    left = max_depth(root.left) + 1     # call max_depth recursively, adding 1
+    right = max_depth(root.right) + 1   # to count the number of nodes
 
-    return left if left > right else right
+    return left if left > right else right # return highest count from left or right
 
 
 def challenge10(root):
@@ -257,9 +266,12 @@ def challenge11(linked_list, n):
 
         i += 1
 
-    prev.next = current.next
-    current.next = current.next.next
-    prev.next.next = current
+    # 1 -> 2 -> 3, where prev = 1 and current = 2
+    prev.next = current.next            # prev.next = 3
+    current.next = current.next.next    # current.next = 3
+    prev.next.next = current            # prev.next.next = 2
+    # 1 -> 3 -> 2
+
     print(f"After:  {print_list(linked_list, ' -> ')}")
 
 
@@ -269,7 +281,7 @@ def challenge12(A):
     Create an array B from array A, where each element B[i] = A[A[i]].
     """
     # Option 1 (Python exclusive)
-    B = [A[A[i]] for i in range(len(A))]
+    B = [A[A[i]] for i in range(len(A))] # short for loop
 
     # Option 2
     B = [None] * len(A) # make an array the same size as A
@@ -281,7 +293,7 @@ def challenge12(A):
     print(f"B: {B}")
 
 ################################################################################
-# Main program
+# Main program (ignore unless you're interested)
 ################################################################################
 
 import random
