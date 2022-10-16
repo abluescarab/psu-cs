@@ -326,16 +326,17 @@ class Program:
         self.A = random.sample(range(10), 10)
         self.array = random.sample(range(100), 10)
 
-    def run_challenge(self, n, *args):
-        """
-        Run a challenge by its number.
-        """
-        if n > 12:
-            return
 
-        print(f"CHALLENGE {n}:")
-        globals()[f"challenge{n}"](*args)
-        print("-" * 80)
+def run_challenge(n, *args):
+    """
+    Run a challenge by its number.
+    """
+    if n > 12:
+        return
+
+    print(f"CHALLENGE {n}:")
+    globals()[f"challenge{n}"](*args)
+    print("-" * 80)
 
 
 def print_list(linked_list, delim):
@@ -387,15 +388,15 @@ if __name__ == "__main__":
     program = Program()
     program.build_challenges()
 
-    program.run_challenge(1)
-    program.run_challenge(2, "My string")
-    program.run_challenge(3, 12345)
-    program.run_challenge(4, "eleven plus two", "twelve plus one")
-    program.run_challenge(5, [86, 80, 46, 47, 0, 85, 14, 52, 57, 2])
-    program.run_challenge(6, 25)
-    program.run_challenge(7, program.list)
-    program.run_challenge(8)
-    program.run_challenge(9, 101)
-    program.run_challenge(10, program.tree)
-    program.run_challenge(11, program.list, 5)
-    program.run_challenge(12, program.A)
+    run_challenge(1)
+    run_challenge(2, "My string")
+    run_challenge(3, 12345)
+    run_challenge(4, "eleven plus two", "twelve plus one")
+    run_challenge(5, [86, 80, 46, 47, 0, 85, 14, 52, 57, 2])
+    run_challenge(6, 25)
+    run_challenge(7, program.list)
+    run_challenge(8)
+    run_challenge(9, 101)
+    run_challenge(10, program.tree)
+    run_challenge(11, program.list, 5)
+    run_challenge(12, program.A)
