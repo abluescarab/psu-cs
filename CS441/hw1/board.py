@@ -1,6 +1,10 @@
 class Board:
     def __init__(self, board):
         self.board = board
+        self.initial_state = board
+        self.goal_state = [[1, 2, 3],
+                           [4, 5, 6],
+                           [7, 8, "b"]]
 
     def display(self):
         """
@@ -47,10 +51,7 @@ class Board:
         """
         Tests if the board is in its goal state.
         """
-        if self.board == [[1, 2, 3], [4, 5, 6], [7, 8, "b"]]:
-            return True
-
-        return False
+        return self.board == self.goal_state
 
     def connected(self, value):
         """
