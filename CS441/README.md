@@ -8,3 +8,6 @@ Consider a 3x3 grid for the vacuum world environment. The agent can go up, down,
 4. Apply Murphy’s law conditions (as in iii) for a randomized agent.
 
 In summary: in the end, you should have comparative performance measures for each of the (4) agents, for cases of 1, 3 and 5 initial dirt piles (12 cases in all), respectively; run each experiment 100 or so times.
+
+## HW1
+Implement best-first search and A\* search on a sliding puzzle using three different heuristics.

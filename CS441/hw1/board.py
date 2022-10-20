@@ -57,7 +57,7 @@ class Board:
         Finds the squares connected to the given value.
 
         Args:
-            value (_type_): value to search for
+            value: value to search for
 
         Returns:
             list: list of connected squares
