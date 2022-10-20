@@ -2,12 +2,7 @@ from collections import deque
 from enum import Enum
 
 from board import Board
-
-
-class Node:
-    def __init__(self, state, path_cost):
-        self.state = state
-        self.path_cost = path_cost
+from node import Node, NodeQueue
 
 
 class Heuristic(Enum):
