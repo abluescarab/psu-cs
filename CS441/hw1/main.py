@@ -4,6 +4,12 @@ from enum import Enum
 from board import Board
 
 
+class Node:
+    def __init__(self, state, path_cost):
+        self.state = state
+        self.path_cost = path_cost
+
+
 class Heuristic(Enum):
     Manhattan = 0
     Misplaced = 1
