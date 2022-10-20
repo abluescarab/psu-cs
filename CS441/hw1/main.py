@@ -1,6 +1,13 @@
 from collections import deque
+from enum import Enum
 
 from board import Board
+
+
+class Heuristic(Enum):
+    Manhattan = 0
+    Misplaced = 1
+    Custom = 2
 
 
 # func Tree-Search(problem) returns solution or failure
@@ -22,7 +29,7 @@ from board import Board
 #     expand node, add resulting nodes to frontier (only if not in frontier or
 #       explored set)
 
-def best_first(board: Board, heuristic):
+def best_first(board: Board, heuristic: Heuristic):
     # TODO
     frontier = deque()
     explored = {}
@@ -51,7 +58,7 @@ def best_first(board: Board, heuristic):
 #       else if child.State in frontier with higher Path-Cost
 #         replace frontier node with child
 
-def a_star(board: Board, heuristic):
+def a_star(board: Board, heuristic: Heuristic):
     # TODO
     pass
 
