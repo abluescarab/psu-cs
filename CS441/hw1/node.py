@@ -6,11 +6,32 @@ class Node:
         self.state = state
         self.path_cost = path_cost
 
+    def __eq__(self, other):
+        if isinstance(other, Node):
+            return (self.state == other.state) and \
+                    (self.path_cost == other.path_cost)
+
+        return NotImplemented
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __lt__(self, other):
+        return self.path_cost < other.path_cost
+
+    def __le__(self, other):
+        return self.path_cost <= other.path_cost
+
+    def __gt__(self, other):
+        return self.path_cost > other.path_cost
+
+    def __ge__(self, other):
+        return self.path_cost >= other.path_cost
+
 
 class NodeQueue:
     def __init__(self):
         self.queue = PriorityQueue()
-        self.map = {}
 
     def __str__(self):
         return self.queue.__str__()
@@ -22,11 +43,7 @@ class NodeQueue:
         return node in self.queue
 
     def push(self, node: Node):
-        item = (node.path_cost, node)
-        self.map[node] = item
-        self.queue.push(item)
+        self.queue.push(node)
 
     def pop(self):
-        path_cost, node = self.queue.pop()
-        del self.map[node]
-        return node
+        return self.queue.pop()
