@@ -1,23 +1,22 @@
 class Board:
     def __init__(self, board):
-        self.board = board
         self.initial_state = board
         self.goal_state = [[1, 2, 3],
                            [4, 5, 6],
                            [7, 8, "b"]]
 
-    def display(self):
+    def display(self, state):
         """
         Displays the board in the command line.
         """
         print(f"+{'-' * 7}+")
 
-        for i in range(len(self.board)):
+        for i in range(len(state)):
             print("| ", end="")
 
-            for j in range(len(self.board[i])):
-                if type(self.board[i][j]) == int:
-                    print(self.board[i][j], end=" ")
+            for j in range(len(state[i])):
+                if type(state[i][j]) == int:
+                    print(state[i][j], end=" ")
                 else:
                     print(" ", end=" ")
 
@@ -47,47 +46,47 @@ class Board:
         # TODO
         pass
 
-    def goal_test(self):
+    def actions(self, state):
         """
-        Tests if the board is in its goal state.
-        """
-        return self.board == self.goal_state
-
-    def connected(self, value):
-        """
-        Finds the squares connected to the given value.
+        Finds the possible actions that the blank square can do.
 
         Args:
-            value: value to search for
+            state: state to search in
 
         Returns:
-            list: list of connected squares
+            list: list of possible actions
         """
-        connected = []
-        rows = len(self.board)
-        cols = len(self.board[0])
+        actions = []
+        rows = len(state)
+        cols = len(state[0])
         row = -1
         col = -1
 
-        for r in range(len(self.board)):
-            if value in self.board[r]:
+        for r in range(len(state)):
+            if "b" in state[r]:
                 row = r
-                col = self.board[r].index(value)
+                col = state[r].index("b")
                 break
 
         if row < 0 or row > rows or col < 0 or col > cols:
             return None
 
         if row - 1 >= 0: # top node
-            connected.append(self.board[row - 1][col])
+            actions.append(Action.up)
 
         if col - 1 >= 0: # left node
-            connected.append(self.board[row][col - 1])
+            actions.append(Action.left)
 
         if row + 1 < rows: # bottom node
-            connected.append(self.board[row + 1][col])
+            actions.append(Action.down)
 
         if col + 1 < cols: # right node
-            connected.append(self.board[row][col + 1])
+            actions.append(Action.right)
 
-        return connected
+        return actions
+
+    def goal_test(self, state):
+        """
+        Tests if the given state is the same as the goal state.
+        """
+        return state == self.goal_state
