@@ -6,6 +6,12 @@ class Node:
         self.state = state
         self.path_cost = path_cost
 
+    def __repr__(self):
+        return self.__str__()
+
+    def __str__(self):
+        return f"{{'state': {self.state}, 'path_cost': {self.path_cost}}}"
+
     def __eq__(self, other):
         if isinstance(other, Node):
             return (self.state == other.state) and \
