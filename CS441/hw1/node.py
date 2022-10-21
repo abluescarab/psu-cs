@@ -23,37 +23,55 @@ class Node:
         return not self.__eq__(other)
 
     def __lt__(self, other):
-        return self.path_cost < other.path_cost
+        if other:
+            return self.path_cost < other.path_cost
+        else:
+            return False
 
     def __le__(self, other):
-        return self.path_cost <= other.path_cost
+        if other:
+            return self.path_cost <= other.path_cost
+        else:
+            return False
 
     def __gt__(self, other):
-        return self.path_cost > other.path_cost
+        if other:
+            return self.path_cost > other.path_cost
+        else:
+            return True
 
     def __ge__(self, other):
-        return self.path_cost >= other.path_cost
+        if other:
+            return self.path_cost >= other.path_cost
+        else:
+            return True
 
 
-class NodeQueue:
-    def __init__(self, *nodes):
-        self.queue = PriorityQueue()
+class NodeQueue(PriorityQueue):
+    def has_state(self, node: Node):
+        for n in self._items:
+            if n[1].state == node.state:
+                return True
 
-        if nodes:
-            for node in nodes:
-                self.push(node)
+        return False
 
-    def __str__(self):
-        return self.queue.__str__()
-
-    def __len__(self):
-        return len(self.queue)
-
-    def __contains__(self, node):
-        return node in self.queue
-
-    def push(self, node: Node):
-        self.queue.push(node)
+    def push(self, item: Node):
+        super().push((item.path_cost, item))
 
     def pop(self):
-        return self.queue.pop()
+        path_cost, node = -1, None
+
+        while not node and len(self._items) > 0:
+            path_cost, node = super().pop()
+
+        return node
+
+    def update(self, node: Node):
+        if not self.has_state(node):
+            self.push(node)
+            return
+
+        for i in range(len(self._items)):
+            if self._items[i][1] and self._items[i][1].state == node.state:
+                self._items[i] = (self._items[i][0], None)
+                self.push(node)
