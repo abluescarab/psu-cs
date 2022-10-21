@@ -12,9 +12,9 @@ class Action(Enum):
 class Board:
     def __init__(self, board):
         self.initial_state = board
-        self.goal_state = [[1, 2, 3],
-                           [4, 5, 6],
-                           [7, 8, "b"]]
+        self.goal_state = [["1", "2", "3"],
+                           ["4", "5", "6"],
+                           ["7", "8", "b"]]
 
     def _find_blank(self, state):
         """
@@ -59,10 +59,7 @@ class Board:
             print("| ", end="")
 
             for j in range(len(state[i])):
-                if type(state[i][j]) == int:
-                    print(state[i][j], end=" ")
-                else:
-                    print(" ", end=" ")
+                print(" " if state[i][j] == "b" else state[i][j], end=" ")
 
             print("|")
 

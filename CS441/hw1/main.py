@@ -81,7 +81,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     try:
-        values = [int(v) if v.isdigit() else v for v in vars(args).values()]
+        values = [v for v in vars(args).values()]
 
         if values.count("b") != 1:
             raise ValueError("Invalid arguments: One square must be \"b\" for blank")
