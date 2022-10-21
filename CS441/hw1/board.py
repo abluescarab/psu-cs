@@ -16,7 +16,7 @@ class Board:
                            [4, 5, 6],
                            [7, 8, "b"]]
 
-    def __find_blank(self, state):
+    def _find_blank(self, state):
         """
         Find the blank square in the grid.
 
@@ -32,7 +32,7 @@ class Board:
 
         return (-1, -1)
 
-    def __copy_state(self, state):
+    def _copy_state(self, state):
         """
         Copy a state to a new array.
 
