@@ -19,7 +19,19 @@ class PriorityQueue:
         return item in self._items
 
     def push(self, item):
+        """
+        Push an item onto the queue.
+
+        Args:
+            item: item to push
+        """
         heappush(self._items, item)
 
     def pop(self):
+        """
+        Pop an item from the queue.
+
+        Returns:
+            any: popped item
+        """
         return heappop(self._items)

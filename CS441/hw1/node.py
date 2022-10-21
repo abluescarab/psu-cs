@@ -49,16 +49,53 @@ class Node:
 
 class NodeQueue(PriorityQueue):
     def has_state(self, node: Node):
+        """
+        Check if the queue has a node with a given state.
+
+        Args:
+            node (Node): node with desired state
+
+        Returns:
+            bool: True if state exists in queue; False otherwise
+        """
         for n in self._items:
             if n[1].state == node.state:
                 return True
 
         return False
 
+    def path_cost(self, node: Node):
+        """
+        Get the path cost of the given node in the queue.
+
+        Args:
+            node (Node): node to get
+
+        Returns:
+            int: path cost from node
+        """
+        for n in self._items:
+            if n[1].state == node.state:
+                return n[0]
+
+        return -1
+
     def push(self, item: Node):
+        """
+        Push an item onto the queue.
+
+        Args:
+            item (Node): node to push
+        """
         super().push((item.path_cost, item))
 
     def pop(self):
+        """
+        Pop an item off the queue.
+
+        Returns:
+            Node: popped node
+        """
         path_cost, node = -1, None
 
         while not node and len(self._items) > 0:
@@ -67,6 +104,12 @@ class NodeQueue(PriorityQueue):
         return node
 
     def update(self, node: Node):
+        """
+        Update a node in the queue based on its state.
+
+        Args:
+            node (Node): node to update
+        """
         if not self.has_state(node):
             self.push(node)
             return
