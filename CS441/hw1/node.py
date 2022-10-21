@@ -30,8 +30,12 @@ class Node:
 
 
 class NodeQueue:
-    def __init__(self):
+    def __init__(self, *nodes):
         self.queue = PriorityQueue()
+
+        if nodes:
+            for node in nodes:
+                self.push(node)
 
     def __str__(self):
         return self.queue.__str__()
