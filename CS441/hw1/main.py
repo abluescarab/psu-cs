@@ -87,7 +87,7 @@ def a_star(board: Board, heuristic: Heuristic):
         for action in board.actions(node.state):
             child = Node(
                 board.result(node.state, action),
-                node.path_cost + board.step_cost(node.state, action),
+                node.path_cost + 1,
                 node
             )
 

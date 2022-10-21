@@ -65,17 +65,6 @@ class Board:
 
         print(f"+{'-' * 7}+")
 
-    def step_cost(self, state, action):
-        """
-        Calculate the step cost to apply an action to the current state.
-
-        Args:
-            state: the current state
-            action: action to take
-        """
-        # TODO
-        return 1
-
     def result(self, state, action):
         """
         Calculate the result of taking an action in the given state.
