@@ -213,8 +213,15 @@ TargaImage* TargaImage::Load_Image(char *filename)
 ///////////////////////////////////////////////////////////////////////////////
 bool TargaImage::To_Grayscale()
 {
-    ClearToBlack();
-    return false;
+    for(int i = 0; i < width * height * 4; i += 4) {
+        float result = 0.299 * data[i + RED] + 0.587 * data[i + GREEN] + 0.114 * data[i + BLUE];
+
+        data[i + RED] = result;
+        data[i + GREEN] = result;
+        data[i + BLUE] = result;
+    }
+
+    return true;
 }// To_Grayscale
 
 
@@ -226,8 +233,13 @@ bool TargaImage::To_Grayscale()
 ///////////////////////////////////////////////////////////////////////////////
 bool TargaImage::Quant_Uniform()
 {
-    ClearToBlack();
-    return false;
+    for(int i = 0; i < width * height * 4; i += 4) {
+        data[i + RED] = (data[i + RED] / 32) * 32;
+        data[i + GREEN] = (data[i + GREEN] / 32) * 32; 
+        data[i + BLUE] = (data[i + BLUE] / 64) * 64;
+    }
+
+    return true;
 }// Quant_Uniform
 
 
@@ -540,7 +552,6 @@ bool TargaImage::NPR_Paint()
     ClearToBlack();
     return false;
 }
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
