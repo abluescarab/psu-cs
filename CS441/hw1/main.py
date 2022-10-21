@@ -11,6 +11,17 @@ class Heuristic(Enum):
     Custom = 2
 
 
+def solution(node: Node):
+    current = node
+    path = []
+
+    while current:
+        path.insert(0, current.state)
+        current = current.parent
+
+    return path
+
+
 # func Tree-Search(problem) returns solution or failure
 #   init frontier using init state of problem
 #   loop do
@@ -32,11 +43,8 @@ class Heuristic(Enum):
 
 def best_first(board: Board, heuristic: Heuristic):
     # TODO
-    frontier = deque()
-    explored = {}
-    moves = board.connected("b")
-
-    print(moves)
+    frontier = deque(Node(board.initial_state, 0))
+    explored = []
 
     while True:
         if len(frontier) == 0:
@@ -60,8 +68,34 @@ def best_first(board: Board, heuristic: Heuristic):
 #         replace frontier node with child
 
 def a_star(board: Board, heuristic: Heuristic):
-    # TODO
-    pass
+    node = Node(board.initial_state, 0)
+    frontier = NodeQueue(node)
+    explored = []
+
+    while True:
+        if len(frontier) == 0:
+            return None
+
+        node = frontier.pop()
+
+        if board.goal_test(node.state):
+            return solution(node)
+
+        if node.state not in explored:
+            explored.append(node.state)
+
+        for action in board.actions(node.state):
+            child = Node(
+                board.result(node.state, action),
+                node.path_cost + board.step_cost(node.state, action),
+                node
+            )
+
+            if child.state not in explored and child.state not in frontier:
+                frontier.push(child)
+            elif child.state in frontier and \
+                frontier.path_cost(child) > child.path_cost:
+                frontier.update(child)
 
 
 if __name__ == "__main__":
@@ -89,7 +123,5 @@ if __name__ == "__main__":
         input = [values[0:3], values[3:6], values[6:9]]
         board = Board(input)
 
-        board.display()
-        best_first(board, [])
     except ValueError as e:
         print(e)

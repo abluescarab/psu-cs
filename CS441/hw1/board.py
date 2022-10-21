@@ -74,7 +74,7 @@ class Board:
             action: action to take
         """
         # TODO
-        pass
+        return 1
 
     def result(self, state, action):
         """

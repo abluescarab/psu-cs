@@ -2,9 +2,10 @@ from priority_queue import PriorityQueue
 
 
 class Node:
-    def __init__(self, state, path_cost):
+    def __init__(self, state, path_cost, parent=None):
         self.state = state
         self.path_cost = path_cost
+        self.parent = parent
 
     def __repr__(self):
         return self.__str__()
