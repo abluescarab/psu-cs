@@ -16,9 +16,33 @@ class Board:
                            [4, 5, 6],
                            [7, 8, "b"]]
 
+    def __find_blank(self, state):
+        """
+        Find the blank square in the grid.
+
+        Args:
+            state: state to check
+
+        Returns:
+            tuple: (row, column) of blank in the grid
+        """
+        for r in range(len(state)):
+            if "b" in state[r]:
+                return (r, state[r].index("b"))
+
+        return (-1, -1)
+
+    def __copy_state(self, state):
+        new_state = []
+
+        for row in state:
+            new_state.append(row.copy())
+
+        return new_state
+
     def display(self, state):
         """
-        Displays the board in the command line.
+        Display the board in the command line.
         """
         print(f"+{'-' * 7}+")
 
@@ -37,7 +61,7 @@ class Board:
 
     def step_cost(self, state, action):
         """
-        Calculates the step cost to apply an action to the current state.
+        Calculate the step cost to apply an action to the current state.
 
         Args:
             state: the current state
@@ -48,18 +72,33 @@ class Board:
 
     def result(self, state, action):
         """
-        Calculates the result of taking an action in the given state.
+        Calculate the result of taking an action in the given state.
 
         Args:
             state: state to take action in
             action: action to take
         """
-        # TODO
-        pass
+        row, col = self.__find_blank(state)
+        new_state = self.__copy_state(state)
+
+        if action == Action.left:
+            new_state[row][col], new_state[row][col - 1] = \
+                new_state[row][col - 1], new_state[row][col]
+        elif action == Action.down:
+            new_state[row][col], new_state[row + 1][col] = \
+                new_state[row + 1][col], new_state[row][col]
+        elif action == Action.right:
+            new_state[row][col], new_state[row][col + 1] = \
+                new_state[row][col + 1], new_state[row][col]
+        elif action == Action.up:
+            new_state[row][col], new_state[row - 1][col] = \
+                new_state[row - 1][col], new_state[row][col]
+
+        return new_state
 
     def actions(self, state):
         """
-        Finds the possible actions that the blank square can do.
+        Find the possible actions that the blank square can do.
 
         Args:
             state: state to search in
@@ -68,16 +107,9 @@ class Board:
             list: list of possible actions
         """
         actions = []
+        row, col = self.__find_blank(state)
         rows = len(state)
         cols = len(state[0])
-        row = -1
-        col = -1
-
-        for r in range(len(state)):
-            if "b" in state[r]:
-                row = r
-                col = state[r].index("b")
-                break
 
         if row < 0 or row > rows or col < 0 or col > cols:
             return None
@@ -98,6 +130,6 @@ class Board:
 
     def goal_test(self, state):
         """
-        Tests if the given state is the same as the goal state.
+        Test if the given state is the same as the goal state.
         """
         return state == self.goal_state
