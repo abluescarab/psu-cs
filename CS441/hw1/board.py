@@ -87,8 +87,8 @@ class Board:
             state: state to take action in
             action: action to take
         """
-        row, col = self.__find_blank(state)
-        new_state = self.__copy_state(state)
+        row, col = self._find_blank(state)
+        new_state = self._copy_state(state)
 
         if action == Action.left:
             new_state[row][col], new_state[row][col - 1] = \
@@ -116,7 +116,7 @@ class Board:
             list: list of possible actions
         """
         actions = []
-        row, col = self.__find_blank(state)
+        row, col = self._find_blank(state)
         rows = len(state)
         cols = len(state[0])
 
