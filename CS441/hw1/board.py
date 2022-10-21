@@ -33,6 +33,15 @@ class Board:
         return (-1, -1)
 
     def __copy_state(self, state):
+        """
+        Copy a state to a new array.
+
+        Args:
+            state: state to copy
+
+        Returns:
+            list: copy of state
+        """
         new_state = []
 
         for row in state:
