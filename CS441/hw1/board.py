@@ -1,3 +1,14 @@
+from enum import Enum
+from node import Node
+
+
+class Action(Enum):
+    left = 0
+    down = 1
+    right = 2
+    up = 3
+
+
 class Board:
     def __init__(self, board):
         self.initial_state = board
