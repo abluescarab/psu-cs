@@ -263,8 +263,21 @@ bool TargaImage::Quant_Populosity()
 ///////////////////////////////////////////////////////////////////////////////
 bool TargaImage::Dither_Threshold()
 {
-    ClearToBlack();
-    return false;
+    To_Grayscale();
+
+    for(int y = 0; y < height; y++) {
+        int offset = y * width * 4;
+
+        for(int x = 0; x < width; x++) {
+            int pixel = offset + x * 4;
+
+            for(int i = 0; i < 3; i++) {
+                data[pixel + i] = (data[pixel + i] < 128 ? 0 : 255);
+            }
+        }
+    }
+
+    return true;
 }// Dither_Threshold
 
 
