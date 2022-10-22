@@ -99,6 +99,24 @@ class Board:
 
         return sum
 
+    def _calculate_custom(self, state):
+        pass
+
+    def is_solveable(self):
+        seen = []
+        inversions = 0
+
+        for i in range(len(self.initial_state)):
+            for j in range(len(self.initial_state[i])):
+                # print(seen, self.initial_state[i][j])
+                if any(self.initial_state[i][j] > n for n in seen):
+                    inversions += 1
+
+                seen.append(self.initial_state[i][j])
+
+        # print(inversions)
+        return inversions % 2 == 0
+
     def display(self, state):
         """
         Display the board in the command line.
@@ -175,6 +193,26 @@ class Board:
             actions.append(Action.right)
 
         return actions
+
+    def remaining_cost(self, state, heuristic: Heuristic):
+        """
+        Calculate the remaining cost on a state.
+
+        Args:
+            state: state to perform action on
+            heuristic: heuristic to calculate cost
+
+        Returns:
+            int: remaining cost with heuristic
+        """
+        func = self._calculate_custom
+
+        if heuristic == Heuristic.Misplaced:
+            func = self._calculate_misplaced
+        elif heuristic == Heuristic.Manhattan:
+            func = self._calculate_manhattan
+
+        return func(state)
 
     def goal_test(self, state):
         """

@@ -17,7 +17,8 @@ class Node:
     def __eq__(self, other):
         if isinstance(other, Node):
             return (self.state == other.state) and \
-                    (self.path_cost == other.path_cost)
+                    (self.path_cost == other.path_cost) and \
+                    (self.parent == other.parent)
 
         return NotImplemented
 

@@ -14,6 +14,14 @@ def solution(node: Node):
     return path
 
 
+def node_in(node: Node, list):
+    for item in list:
+        if node.state == item.state:
+            return True
+
+    return False
+
+
 # func Graph-Search(problem) returns solution or failure
 #   init frontier
 #   init explored set to empty
@@ -25,14 +33,15 @@ def solution(node: Node):
 #     expand node, add resulting nodes to frontier (only if not in frontier or
 #       explored set)
 
-def best_first(board: Board, heuristic: Heuristic):
+def best_first(board: Board, heuristic: Heuristic, max_steps=-1):
     # TODO
     frontier = deque([Node(board.initial_state, 0)])
     explored = []
     temp = None
     node = None
+    step = 0
 
-    while True:
+    while (max_steps == -1) or (step < max_steps):
         if len(frontier) == 0:
             return False
 
@@ -45,18 +54,21 @@ def best_first(board: Board, heuristic: Heuristic):
             node.parent = temp
 
         if board.goal_test(node.state):
-            return solution(node)
+            return (True, solution(node))
 
-        if node not in explored:
-            explored.append(node)
-
+        explored.append(node)
         actions = board.actions(node.state)
 
         for action in actions:
             result = board.result(node.state, action)
+            next = Node(result, 0)
 
-            if result not in explored and result not in frontier:
-                frontier.append(Node(result, 0))
+            if not node_in(next, explored) and not node_in(next, frontier):
+                frontier.append(next)
+
+        step += 1
+
+    return (False, solution(node))
 
 
 # func Uniform-Cost-Search(problem) returns solution or failure
@@ -75,19 +87,20 @@ def best_first(board: Board, heuristic: Heuristic):
 #       else if child.State in frontier with higher Path-Cost
 #         replace frontier node with child
 
-def a_star(board: Board, heuristic: Heuristic):
+def a_star(board: Board, heuristic: Heuristic, max_steps=-1):
     node = Node(board.initial_state, 0)
     frontier = NodeQueue(node)
     explored = []
+    step = 0
 
-    while True:
+    while (max_steps == -1) or (step < max_steps):
         if len(frontier) == 0:
             return None
 
         node = frontier.pop()
 
         if board.goal_test(node.state):
-            return solution(node)
+            return (True, solution(node))
 
         if node.state not in explored:
             explored.append(node.state)
@@ -105,42 +118,59 @@ def a_star(board: Board, heuristic: Heuristic):
                 frontier.adjusted_cost(child) > child.path_cost:
                 frontier.update(child)
 
+        step += 1
 
-def start(args):
-    values = [v for v in vars(args).values()]
+    return (False, solution(node))
 
-    if values.count("b") != 1:
-        raise ValueError("Invalid arguments: One square must be \"b\" for blank")
-
+def start(values):
     input = [values[0:3], values[3:6], values[6:9]]
     board = Board(input)
+    max_steps = 2000
 
-    # if not board.is_solveable():
-    #     print("Configuration cannot be solved")
-    #     # return
+    if not board.is_solveable():
+        print("Configuration cannot be solved.")
+        return
 
     solutions = []
 
     for i in range(2):
         for j in range(3):
+            type_str = ""
+
             if i == 0:
-                solutions.append(best_first(board, j))
+                type_str = "Best first "
+                func = best_first
+                solutions.append(best_first(board, j, max_steps))
             else:
-                solutions.append(a_star(board, j))
+                type_str = "A* "
+                func = a_star
+                solutions.append(a_star(board, j, max_steps))
 
-    for solution in solutions:
-        for i in range(len(solution)):
-            print(f"({i + 1}) ", end="")
-
-            for row in solution[i]:
-                print(" ".join(row), end=" ")
-
-            if i < len(solution) - 1:
-                print("-> ")
+            if j == 0:
+                type_str += "(Misplaced):"
+            elif j == 1:
+                type_str += "(Manhattan):"
             else:
-                print()
+                type_str += "(Custom):"
 
-        print()
+            solution = func(board, j, max_steps)
+            print(type_str)
+
+            if not solution[0]:
+                print(f"Could not find solution in {max_steps} steps.")
+            else:
+                for i in range(len(solution[1])):
+                    print(f"({i + 1}) ", end="")
+
+                    for row in solution[1][i]:
+                        print(" ".join(row), end=" ")
+
+                    if i < len(solution[1]) - 1 and ((i + 1) % 5 != 0):
+                        print("-> ", end="")
+                    else:
+                        print()
+
+            print()
 
 
 if __name__ == "__main__":
@@ -158,8 +188,15 @@ if __name__ == "__main__":
     parser.add_argument("bottom_right")
 
     args = parser.parse_args()
+    values = [v for v in vars(args).values()]
+
+    if values.count("b") != 1:
+        raise ValueError("Invalid arguments: One square must be \"b\" for blank")
+
+    if any(values.count(i) > 1 for i in values):
+        raise ValueError("Invalid arguments: Cannot contain duplicate values")
 
     try:
-        start(args)
+        start(values)
     except ValueError as e:
         print(e)
