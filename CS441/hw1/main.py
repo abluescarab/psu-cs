@@ -14,14 +14,6 @@ def solution(node: Node):
     return path
 
 
-# func Tree-Search(problem) returns solution or failure
-#   init frontier using init state of problem
-#   loop do
-#     if frontier empty return failure
-#     choose leaf & remove from frontier
-#     if node contains goal state return solution
-#     expand node, add resulting nodes to frontier
-
 # func Graph-Search(problem) returns solution or failure
 #   init frontier
 #   init explored set to empty

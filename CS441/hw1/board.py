@@ -54,6 +54,51 @@ class Board:
 
         return new_state
 
+    def _calculate_misplaced(self, state):
+        """
+        Calculate the misplaced tiles heuristic.
+
+        Args:
+            state: state to check against goal
+
+        Returns:
+            int: number of misplaced tiles
+        """
+        misplaced = set()
+
+        for i in range(len(state)):
+            for j in range(len(state[i])):
+                if state[i][j] != "b" and state[i][j] != self.goal_state[i][j]:
+                    misplaced.add(state[i][j])
+
+        return len(misplaced)
+
+    def _calculate_manhattan(self, state):
+        """
+        Calculate the Manhattan distance heuristic.
+
+        Args:
+            state: state to check against goal
+
+        Returns:
+            int: sum of Manhattan distances
+        """
+        sum = 0
+        goal_dict = {self.goal_state[x][y]: (x, y)
+            for x in range(len(self.goal_state))
+            for y in range(len(self.goal_state[x]))
+            if self.goal_state[x][y] != "b"}
+
+        for i in range(len(state)):
+            for j in range(len(state[i])):
+                if state[i][j] == "b":
+                    continue
+
+                x, y = goal_dict[state[i][j]]
+                sum += abs(x - i) + abs(y - j)
+
+        return sum
+
     def display(self, state):
         """
         Display the board in the command line.
