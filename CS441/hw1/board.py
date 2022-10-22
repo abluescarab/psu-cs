@@ -8,6 +8,12 @@ class Action(Enum):
     up = 3
 
 
+class Heuristic(Enum):
+    Misplaced = 0
+    Manhattan = 1
+    Custom = 2
+
+
 class Board:
     def __init__(self, board):
         self.initial_state = board

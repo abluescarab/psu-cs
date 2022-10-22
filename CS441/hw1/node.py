@@ -1,3 +1,4 @@
+from board import Heuristic
 from priority_queue import PriorityQueue
 
 

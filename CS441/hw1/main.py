@@ -1,14 +1,6 @@
 from collections import deque
-from enum import Enum
-
-from board import Board
+from board import Board, Heuristic
 from node import Node, NodeQueue
-
-
-class Heuristic(Enum):
-    Manhattan = 0
-    Misplaced = 1
-    Custom = 2
 
 
 def solution(node: Node):
