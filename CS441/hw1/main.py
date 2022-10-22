@@ -35,7 +35,7 @@ def solution(node: Node):
 
 def best_first(board: Board, heuristic: Heuristic):
     # TODO
-    frontier = deque(Node(board.initial_state, 0))
+    frontier = deque([Node(board.initial_state, 0)])
     explored = []
 
     while True:
