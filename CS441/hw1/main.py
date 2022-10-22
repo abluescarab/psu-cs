@@ -110,7 +110,7 @@ def a_star(board: Board, heuristic: Heuristic):
             if child.state not in explored and child.state not in frontier:
                 frontier.push(child)
             elif child.state in frontier and \
-                frontier.path_cost(child) > child.path_cost:
+                frontier.adjusted_cost(child) > child.path_cost:
                 frontier.update(child)
 
 

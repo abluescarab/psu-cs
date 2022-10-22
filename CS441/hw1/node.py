@@ -66,7 +66,7 @@ class NodeQueue(PriorityQueue):
 
         return False
 
-    def path_cost(self, node: Node):
+    def adjusted_cost(self, node: Node):
         """
         Get the path cost of the given node in the queue.
 
