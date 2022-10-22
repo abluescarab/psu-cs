@@ -70,13 +70,16 @@ class Board:
 
         print(f"+{'-' * 7}+")
 
-    def result(self, state, action):
+    def result(self, state, action: Action):
         """
         Calculate the result of taking an action in the given state.
 
         Args:
             state: state to take action in
             action: action to take
+
+        Returns:
+            state: state after action taken
         """
         row, col = self._find_blank(state)
         new_state = self._copy_state(state)
