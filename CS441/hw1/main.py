@@ -37,10 +37,34 @@ def best_first(board: Board, heuristic: Heuristic):
     # TODO
     frontier = deque([Node(board.initial_state, 0)])
     explored = []
+    temp = None
+    node = None
 
     while True:
         if len(frontier) == 0:
             return False
+
+        if node:
+            temp = node
+
+        node = frontier.popleft()
+
+        if temp:
+            node.parent = temp
+
+        if board.goal_test(node.state):
+            return solution(node)
+
+        if node not in explored:
+            explored.append(node)
+
+        actions = board.actions(node.state)
+
+        for action in actions:
+            result = board.result(node.state, action)
+
+            if result not in explored and result not in frontier:
+                frontier.append(Node(result, 0))
 
 
 # func Uniform-Cost-Search(problem) returns solution or failure
