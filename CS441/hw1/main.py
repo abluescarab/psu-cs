@@ -114,6 +114,43 @@ def a_star(board: Board, heuristic: Heuristic):
                 frontier.update(child)
 
 
+def start(args):
+    values = [v for v in vars(args).values()]
+
+    if values.count("b") != 1:
+        raise ValueError("Invalid arguments: One square must be \"b\" for blank")
+
+    input = [values[0:3], values[3:6], values[6:9]]
+    board = Board(input)
+
+    # if not board.is_solveable():
+    #     print("Configuration cannot be solved")
+    #     # return
+
+    solutions = []
+
+    for i in range(2):
+        for j in range(3):
+            if i == 0:
+                solutions.append(best_first(board, j))
+            else:
+                solutions.append(a_star(board, j))
+
+    for solution in solutions:
+        for i in range(len(solution)):
+            print(f"({i + 1}) ", end="")
+
+            for row in solution[i]:
+                print(" ".join(row), end=" ")
+
+            if i < len(solution) - 1:
+                print("-> ")
+            else:
+                print()
+
+        print()
+
+
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(epilog="The blank square should be "
@@ -131,13 +168,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     try:
-        values = [v for v in vars(args).values()]
-
-        if values.count("b") != 1:
-            raise ValueError("Invalid arguments: One square must be \"b\" for blank")
-
-        input = [values[0:3], values[3:6], values[6:9]]
-        board = Board(input)
-
+        start(args)
     except ValueError as e:
         print(e)
