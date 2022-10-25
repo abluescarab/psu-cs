@@ -235,7 +235,7 @@ bool TargaImage::Quant_Uniform()
 {
     for(int i = 0; i < width * height * 4; i += 4) {
         data[i + RED] = (data[i + RED] / 32) * 32;
-        data[i + GREEN] = (data[i + GREEN] / 32) * 32; 
+        data[i + GREEN] = (data[i + GREEN] / 32) * 32;
         data[i + BLUE] = (data[i + BLUE] / 64) * 64;
     }
 
@@ -301,8 +301,133 @@ bool TargaImage::Dither_Random()
 ///////////////////////////////////////////////////////////////////////////////
 bool TargaImage::Dither_FS()
 {
-    ClearToBlack();
-    return false;
+    To_Grayscale();
+
+    int offset = -1;
+    int pixel = -1;
+    int down = -1;
+    double error = 0.0;
+    float* gray = new float[width * height + 1];
+
+    double r_mult = 7.0 / 16.0;  // I_acc(x + 1, y    ) += 7/16e (right)
+    double d_mult = 5.0 / 16.0;  // I_acc(x    , y + 1) += 5/16e (down)
+    double rd_mult = 1.0 / 16.0; // I_acc(x + 1, y + 1) += 1/16e (right down)
+    double ld_mult = 3.0 / 16.0; // I_acc(x - 1, y + 1) += 3/16e (left down)
+
+    // first convert all pixels to grayscale in range 0-1
+    for(int i = 0; i < width * height * 4; i += 4) {
+        gray[i / 4] = data[i] / 255.0;
+    }
+
+    for(int y = 0; y < height; y++) {
+        offset = y * width;
+
+        if(y % 2 == 0) {
+            for(int x = 0; x < width; x++) {
+                pixel = offset + x;
+                down = pixel + height;
+
+                if(gray[pixel] <= 0.5) {
+                    error = gray[pixel];
+                    gray[pixel] = 0.0;
+                }
+                else {
+                    error = gray[pixel] - 1.0;
+                    gray[pixel] = 1.0;
+                }
+
+                if(x == 0) { // first pixel in row
+                    if(y == height - 1) { // first pixel in last row
+                        // only change right
+                        gray[pixel + 1] += error * r_mult;
+                    }
+                    else { // first pixel in any other row
+                        // change right, down, and right-down
+                        gray[pixel + 1] += error * r_mult;
+                        gray[down] += error * d_mult;
+                        gray[down + 1] += error * rd_mult;
+                    }
+                }
+                else if(x == width - 1) { // last pixel in row
+                    if(y < height - 1) { // last pixel in any but last row
+                        // change down and left-down
+                        gray[down] += error * d_mult;
+                        gray[down - 1] += error * ld_mult;
+                    }
+                }
+                else { // pixel at any other position in row
+                    if(y == height - 1) { // pixel at any other position in last row
+                        // only change right
+                        gray[pixel + 1] += error * r_mult;
+                    }
+                    else { // pixel at any other position in any other row
+                        // change all
+                        gray[pixel + 1] += error * r_mult;
+                        gray[down + 1] += error * rd_mult;
+                        gray[down] += error * d_mult;
+                        gray[down - 1] += error * ld_mult;
+                    }
+                }
+            }
+        }
+        else {
+            for(int x = width - 1; x >= 0; x--) {
+                pixel = offset + x;
+                down = pixel + height;
+
+                if(gray[pixel] <= 0.5) {
+                    error = gray[pixel];
+                    gray[pixel] = 0.0;
+                }
+                else {
+                    error = gray[pixel] - 1.0;
+                    gray[pixel] = 1.0;
+                }
+
+                // for opposite rows, flip mults (e.g., left will mult with 7/16, 
+                // left-down will mult with 1/16, etc.)
+                if(x == 0) { // first pixel in row
+                    if(y < height - 1) { // first pixel in any row but last
+                        // change down and right-down
+                        gray[down] += error * d_mult;
+                        gray[down + 1] += error * ld_mult;
+                    }
+                }
+                else if(x == width - 1) { // last pixel in row
+                    if(y == height - 1) { // last pixel in last row
+                        // only change left-down
+                        gray[pixel - 1] += error * r_mult;
+                    }
+                    else {
+                        // change left, down, and left-down
+                        gray[pixel - 1] += error * r_mult;
+                        gray[down] += error * d_mult;
+                        gray[down - 1] += error * rd_mult;
+                    }
+                }
+                else { // pixel at any other position in row
+                    if(y == height - 1) { // pixel at any other position in last row
+                        // only change left
+                        gray[pixel - 1] += error * r_mult;
+                    }
+                    else { // pixel at any other position in any other row
+                        // change all
+                        gray[pixel - 1] += error * r_mult;
+                        gray[down + 1] += error * ld_mult;
+                        gray[down] += error * d_mult;
+                        gray[down - 1] += error * rd_mult;
+                    }
+                }
+            }
+        }
+    }
+
+    // threshold original data based on modified grayscale
+    for(int i = 0; i < width * height * 4; i += 4) {
+        Set_RGBA(data, i, gray[i / 4] <= 0.5 ? 0.0 : 255.0);
+    }
+
+    return true;
 }// Dither_FS
 
 
@@ -734,6 +859,18 @@ void TargaImage::Paint_Stroke(const Stroke& s) {
          }
       }
    }
+
+///////////////////////////////////////////////////////////////////////////////
+//
+//      Helper function to set a pixel's RGB channels to the same value.
+//
+///////////////////////////////////////////////////////////////////////////////
+void TargaImage::Set_RGBA(unsigned char* rgba, int pixel, float value) {
+    if(pixel < (width * height * 4) - 4) {
+        rgba[pixel + RED] = value;
+        rgba[pixel + GREEN] = value;
+        rgba[pixel + BLUE] = value;
+    }
 }
 
 

@@ -81,6 +81,9 @@ class TargaImage
 	// Draws a filled circle according to the stroke data
         void Paint_Stroke(const Stroke& s);
 
+        // Set a pixel's RGB channels to the same value
+        void Set_RGBA(unsigned char* rgba, int pixel, float value);
+
     // members
     public:
         int		width;	    // width of the image in pixels
