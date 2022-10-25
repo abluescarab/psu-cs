@@ -833,32 +833,35 @@ void TargaImage::ClearToBlack()
 //
 ///////////////////////////////////////////////////////////////////////////////
 void TargaImage::Paint_Stroke(const Stroke& s) {
-   int radius_squared = (int)s.radius * (int)s.radius;
-   for (int x_off = -((int)s.radius); x_off <= (int)s.radius; x_off++) {
-      for (int y_off = -((int)s.radius); y_off <= (int)s.radius; y_off++) {
-         int x_loc = (int)s.x + x_off;
-         int y_loc = (int)s.y + y_off;
-         // are we inside the circle, and inside the image?
-         if ((x_loc >= 0 && x_loc < width && y_loc >= 0 && y_loc < height)) {
-            int dist_squared = x_off * x_off + y_off * y_off;
-            if (dist_squared <= radius_squared) {
-               data[(y_loc * width + x_loc) * 4 + 0] = s.r;
-               data[(y_loc * width + x_loc) * 4 + 1] = s.g;
-               data[(y_loc * width + x_loc) * 4 + 2] = s.b;
-               data[(y_loc * width + x_loc) * 4 + 3] = s.a;
-            } else if (dist_squared == radius_squared + 1) {
-               data[(y_loc * width + x_loc) * 4 + 0] = 
-                  (data[(y_loc * width + x_loc) * 4 + 0] + s.r) / 2;
-               data[(y_loc * width + x_loc) * 4 + 1] = 
-                  (data[(y_loc * width + x_loc) * 4 + 1] + s.g) / 2;
-               data[(y_loc * width + x_loc) * 4 + 2] = 
-                  (data[(y_loc * width + x_loc) * 4 + 2] + s.b) / 2;
-               data[(y_loc * width + x_loc) * 4 + 3] = 
-                  (data[(y_loc * width + x_loc) * 4 + 3] + s.a) / 2;
+    int radius_squared = (int)s.radius * (int)s.radius;
+    for(int x_off = -((int)s.radius); x_off <= (int)s.radius; x_off++) {
+        for(int y_off = -((int)s.radius); y_off <= (int)s.radius; y_off++) {
+            int x_loc = (int)s.x + x_off;
+            int y_loc = (int)s.y + y_off;
+            // are we inside the circle, and inside the image?
+            if((x_loc >= 0 && x_loc < width && y_loc >= 0 && y_loc < height)) {
+                int dist_squared = x_off * x_off + y_off * y_off;
+                if(dist_squared <= radius_squared) {
+                    data[(y_loc * width + x_loc) * 4 + 0] = s.r;
+                    data[(y_loc * width + x_loc) * 4 + 1] = s.g;
+                    data[(y_loc * width + x_loc) * 4 + 2] = s.b;
+                    data[(y_loc * width + x_loc) * 4 + 3] = s.a;
+                }
+                else if(dist_squared == radius_squared + 1) {
+                    data[(y_loc * width + x_loc) * 4 + 0] =
+                        (data[(y_loc * width + x_loc) * 4 + 0] + s.r) / 2;
+                    data[(y_loc * width + x_loc) * 4 + 1] =
+                        (data[(y_loc * width + x_loc) * 4 + 1] + s.g) / 2;
+                    data[(y_loc * width + x_loc) * 4 + 2] =
+                        (data[(y_loc * width + x_loc) * 4 + 2] + s.b) / 2;
+                    data[(y_loc * width + x_loc) * 4 + 3] =
+                        (data[(y_loc * width + x_loc) * 4 + 3] + s.a) / 2;
+                }
             }
-         }
-      }
-   }
+        }
+    }
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////
 //
