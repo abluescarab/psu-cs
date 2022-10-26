@@ -2,10 +2,10 @@ from enum import Enum
 
 
 class Action(Enum):
-    left = 0
-    down = 1
-    right = 2
-    up = 3
+    Left = 0
+    Down = 1
+    Right = 2
+    Up = 3
 
 
 class Heuristic(Enum):
@@ -147,16 +147,16 @@ class Board:
         row, col = self._find_blank(state)
         new_state = self._copy_state(state)
 
-        if action == Action.left:
+        if action == Action.Left:
             new_state[row][col], new_state[row][col - 1] = \
                 new_state[row][col - 1], new_state[row][col]
-        elif action == Action.down:
+        elif action == Action.Down:
             new_state[row][col], new_state[row + 1][col] = \
                 new_state[row + 1][col], new_state[row][col]
-        elif action == Action.right:
+        elif action == Action.Right:
             new_state[row][col], new_state[row][col + 1] = \
                 new_state[row][col + 1], new_state[row][col]
-        elif action == Action.up:
+        elif action == Action.Up:
             new_state[row][col], new_state[row - 1][col] = \
                 new_state[row - 1][col], new_state[row][col]
 
@@ -181,16 +181,16 @@ class Board:
             return None
 
         if row - 1 >= 0: # top node
-            actions.append(Action.up)
+            actions.append(Action.Up)
 
         if col - 1 >= 0: # left node
-            actions.append(Action.left)
+            actions.append(Action.Left)
 
         if row + 1 < rows: # bottom node
-            actions.append(Action.down)
+            actions.append(Action.Down)
 
         if col + 1 < cols: # right node
-            actions.append(Action.right)
+            actions.append(Action.Right)
 
         return actions
 
