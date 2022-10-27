@@ -1,6 +1,7 @@
 from collections import deque
 from board import Board, Heuristic
 from node import Node, NodeQueue
+from priority_queue import PriorityQueue
 
 
 def solution(node: Node):
@@ -12,14 +13,6 @@ def solution(node: Node):
         current = current.parent
 
     return path
-
-
-def node_in(node: Node, list):
-    for item in list:
-        if node.state == item.state:
-            return True
-
-    return False
 
 
 # func Graph-Search(problem) returns solution or failure
@@ -34,41 +27,32 @@ def node_in(node: Node, list):
 #       explored set)
 
 def best_first(board: Board, heuristic: Heuristic, max_steps=-1):
-    # TODO
-    frontier = deque([Node(board.initial_state, 0)])
-    explored = []
-    temp = None
-    node = None
+    node = Node(board.initial_state)
+    frontier = PriorityQueue(node)
+    explored = set()
     step = 0
 
-    while (max_steps == -1) or (step < max_steps):
-        if len(frontier) == 0:
-            return False
-
-        if node:
-            temp = node
-
-        node = frontier.popleft()
-
-        if temp:
-            node.parent = temp
+    while frontier and ((max_steps == -1) or (step < max_steps)):
+        node = frontier.pop()
 
         if board.goal_test(node.state):
-            return (True, solution(node))
+            return solution(node)
 
-        explored.append(node)
-        actions = board.actions(node.state)
+        explored.add(node.state)
 
-        for action in actions:
-            result = board.result(node.state, action)
-            next = Node(result, 0)
+        for action in board.actions(node.state):
+            child = Node(board.result(node.state, action), node.path_cost + 1,
+                         node)
 
-            if not node_in(next, explored) and not node_in(next, frontier):
-                frontier.append(next)
+            if child.state not in explored and child not in frontier:
+                frontier.push(child)
+            elif child in frontier:
+                if board.path_cost(child.state, heuristic) < frontier[child][0]:
+                    frontier.update(child)
 
         step += 1
 
-    return (False, solution(node))
+    return None
 
 
 # func Uniform-Cost-Search(problem) returns solution or failure
@@ -93,14 +77,11 @@ def a_star(board: Board, heuristic: Heuristic, max_steps=-1):
     explored = []
     step = 0
 
-    while (max_steps == -1) or (step < max_steps):
-        if len(frontier) == 0:
-            return None
-
+    while frontier and ((max_steps == -1) or (step < max_steps)):
         node = frontier.pop()
 
         if board.goal_test(node.state):
-            return (True, solution(node))
+            return solution(node)
 
         if node.state not in explored:
             explored.append(node.state)
@@ -120,7 +101,7 @@ def a_star(board: Board, heuristic: Heuristic, max_steps=-1):
 
         step += 1
 
-    return (False, solution(node))
+    return None
 
 def start(values):
     input = (tuple(values[0:3]), tuple(values[3:6]), tuple(values[6:9]))
@@ -155,13 +136,13 @@ def start(values):
             if not solution[0]:
                 print(f"Could not find solution in {max_steps} steps.")
             else:
-                for i in range(len(solution[1])):
+                for i in range(len(solution)):
                     print(f"({i + 1}) ", end="")
 
-                    for row in solution[1][i]:
+                    for row in solution[i]:
                         print(" ".join(row), end=" ")
 
-                    if i < len(solution[1]) - 1 and ((i + 1) % 5 != 0):
+                    if i < len(solution) - 1 and ((i + 1) % 5 != 0):
                         print("-> ", end="")
                     else:
                         print()
