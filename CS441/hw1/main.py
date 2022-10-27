@@ -1,3 +1,7 @@
+# TODO: come up with custom heuristic
+# TODO: calculate heuristic for each
+
+
 from collections import deque
 from board import Board, Heuristic
 from node import Node, NodeQueue
