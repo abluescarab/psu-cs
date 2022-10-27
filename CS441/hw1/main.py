@@ -18,19 +18,7 @@ def solution(node: Node):
 
     return path
 
-
-# func Graph-Search(problem) returns solution or failure
-#   init frontier
-#   init explored set to empty
-#   loop do
-#     if frontier empty return failure
-#     choose leaf & remove from frontier
-#     if node contains goal return solution
-#     add node to explored state
-#     expand node, add resulting nodes to frontier (only if not in frontier or
-#       explored set)
-
-def best_first(board: Board, heuristic: Heuristic, max_steps=-1):
+def uniform_cost(board: Board, heuristic: Heuristic, max_steps=-1):
     node = Node(board.initial_state)
     frontier = PriorityQueue(node)
     explored = set()
@@ -45,8 +33,11 @@ def best_first(board: Board, heuristic: Heuristic, max_steps=-1):
         explored.add(node.state)
 
         for action in board.actions(node.state):
-            child = Node(board.result(node.state, action), node.path_cost + 1,
-                         node)
+            child = Node(
+                board.result(node.state, action),
+                node.path_cost + 1,
+                node
+            )
 
             if child.state not in explored and child not in frontier:
                 frontier.push(child)
@@ -59,53 +50,13 @@ def best_first(board: Board, heuristic: Heuristic, max_steps=-1):
     return None
 
 
-# func Uniform-Cost-Search(problem) returns solution or failure
-#   node <- node w/ State = problem.Init-State, Path-Cost = 0
-#   frontier <- priority queue ordered by Path-Cost, node the only element
-#   explored <- empty set
-#   loop do
-#     if Empty?(frontier) return failure
-#     node <- Pop(frontier) # chooses lowest-cost node
-#     if problem.Goal-Test(node.State) return Solution(node)
-#     add node.State to explored
-#     for each action in problem.Actions(node.State) do
-#       child <- Child-Node(problem, node, action)
-#       if child.State not in explored or frontier
-#         frontier <- Insert(child, frontier)
-#       else if child.State in frontier with higher Path-Cost
-#         replace frontier node with child
+def best_first(board: Board, heuristic: Heuristic, max_steps=-1):
+    return uniform_cost(board, heuristic, max_steps)
+
 
 def a_star(board: Board, heuristic: Heuristic, max_steps=-1):
-    node = Node(board.initial_state, 0)
-    frontier = NodeQueue(node)
-    explored = []
-    step = 0
+    return uniform_cost(board, heuristic, max_steps)
 
-    while frontier and ((max_steps == -1) or (step < max_steps)):
-        node = frontier.pop()
-
-        if board.goal_test(node.state):
-            return solution(node)
-
-        if node.state not in explored:
-            explored.append(node.state)
-
-        for action in board.actions(node.state):
-            child = Node(
-                board.result(node.state, action),
-                node.path_cost + 1,
-                node
-            )
-
-            if child.state not in explored and child.state not in frontier:
-                frontier.push(child)
-            elif child.state in frontier and \
-                frontier.adjusted_cost(child) > child.path_cost:
-                frontier.update(child)
-
-        step += 1
-
-    return None
 
 def start(values):
     input = (tuple(values[0:3]), tuple(values[3:6]), tuple(values[6:9]))
