@@ -173,16 +173,16 @@ class Board:
 
         return actions
 
-    def remaining_cost(self, state, heuristic: Heuristic):
+    def path_cost(self, state, heuristic: Heuristic):
         """
-        Calculate the remaining cost on a state.
+        Calculate the path cost on a state.
 
         Args:
             state: state to perform action on
             heuristic: heuristic to calculate cost
 
         Returns:
-            int: remaining cost with heuristic
+            int: path cost with heuristic
         """
         func = self._calculate_custom
 
