@@ -37,23 +37,6 @@ class Board:
 
         return (-1, -1)
 
-    def _copy_state(self, state):
-        """
-        Copy a state to a new array.
-
-        Args:
-            state: state to copy
-
-        Returns:
-            list: copy of state
-        """
-        new_state = []
-
-        for row in state:
-            new_state.append(row.copy())
-
-        return new_state
-
     def _calculate_misplaced(self, state):
         """
         Calculate the misplaced tiles heuristic.
