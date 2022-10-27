@@ -51,6 +51,13 @@ class Node:
 
 
 class NodeQueue(PriorityQueue):
+    def __getitem__(self, key):
+        for cost, item in self._items:
+            if key == item:
+                return (cost, item)
+
+        raise KeyError(f"{key} is not in priority queue")
+
     def has_state(self, node: Node):
         """
         Check if the queue has a node with a given state.

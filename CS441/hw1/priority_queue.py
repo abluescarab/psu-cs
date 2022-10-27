@@ -18,6 +18,13 @@ class PriorityQueue:
     def __contains__(self, item):
         return item in self._items
 
+    def __getitem__(self, key):
+        for item in self._items:
+            if key == item:
+                return item
+
+        raise KeyError(f"{key} is not in priority queue")
+
     def push(self, item):
         """
         Push an item onto the queue.
