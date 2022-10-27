@@ -83,6 +83,16 @@ class Board:
         return sum
 
     def _calculate_custom(self, state):
+        """
+        Calculate the custom heuristic.
+
+        Args:
+            state: state to check against goal
+
+        Returns:
+            int: result of custom heuristic
+        """
+        # TODO
         pass
 
     def is_solveable(self):
