@@ -86,18 +86,14 @@ class Board:
         pass
 
     def is_solveable(self):
-        seen = []
+        flat = [n for row in self.initial_state for n in row]
         inversions = 0
 
-        for i in range(len(self.initial_state)):
-            for j in range(len(self.initial_state[i])):
-                # print(seen, self.initial_state[i][j])
-                if any(self.initial_state[i][j] > n for n in seen):
+        for i in range(len(flat)):
+            for j in range(i + 1, len(flat)):
+                if (flat[i] > flat[j]) and flat[i] != "b" and flat[j] != "b":
                     inversions += 1
 
-                seen.append(self.initial_state[i][j])
-
-        # print(inversions)
         return inversions % 2 == 0
 
     def display(self, state):
