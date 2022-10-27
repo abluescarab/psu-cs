@@ -123,7 +123,7 @@ def a_star(board: Board, heuristic: Heuristic, max_steps=-1):
     return (False, solution(node))
 
 def start(values):
-    input = [values[0:3], values[3:6], values[6:9]]
+    input = (tuple(values[0:3]), tuple(values[3:6]), tuple(values[6:9]))
     board = Board(input)
     max_steps = 2000
 

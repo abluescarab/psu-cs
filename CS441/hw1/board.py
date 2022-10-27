@@ -17,9 +17,9 @@ class Heuristic(Enum):
 class Board:
     def __init__(self, board):
         self.initial_state = board
-        self.goal_state = [["1", "2", "3"],
-                           ["4", "5", "6"],
-                           ["7", "8", "b"]]
+        self.goal_state = (("1", "2", "3"),
+                           ("4", "5", "6"),
+                           ("7", "8", "b"))
 
     def _find_blank(self, state):
         """
@@ -145,7 +145,7 @@ class Board:
             state: state after action taken
         """
         row, col = self._find_blank(state)
-        new_state = self._copy_state(state)
+        new_state = [[item for item in row] for row in state]
 
         if action == Action.Left:
             new_state[row][col], new_state[row][col - 1] = \
@@ -160,7 +160,7 @@ class Board:
             new_state[row][col], new_state[row - 1][col] = \
                 new_state[row - 1][col], new_state[row][col]
 
-        return new_state
+        return tuple(tuple(item for item in row) for row in new_state)
 
     def actions(self, state):
         """
