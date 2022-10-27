@@ -131,8 +131,6 @@ def start(values):
         print("Configuration cannot be solved.")
         return
 
-    solutions = []
-
     for i in range(2):
         for j in range(3):
             type_str = ""
@@ -140,11 +138,9 @@ def start(values):
             if i == 0:
                 type_str = "Best first "
                 func = best_first
-                solutions.append(best_first(board, j, max_steps))
             else:
                 type_str = "A* "
                 func = a_star
-                solutions.append(a_star(board, j, max_steps))
 
             if j == 0:
                 type_str += "(Misplaced):"
