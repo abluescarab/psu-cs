@@ -3,7 +3,7 @@ from priority_queue import PriorityQueue
 
 
 class Node:
-    def __init__(self, state, path_cost, parent=None):
+    def __init__(self, state, path_cost=0, parent=None):
         self.state = state
         self.path_cost = path_cost
         self.parent = parent
