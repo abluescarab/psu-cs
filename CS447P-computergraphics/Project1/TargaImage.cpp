@@ -424,7 +424,9 @@ bool TargaImage::Dither_FS()
 
     // threshold original data based on modified grayscale
     for(int i = 0; i < width * height * 4; i += 4) {
-        Set_RGBA(data, i, gray[i / 4] <= 0.5 ? 0.0 : 255.0);
+        data[i + RED] = gray[i / 4] <= 0.5 ? 0.0 : 255.0;
+        data[i + BLUE] = gray[i / 4] <= 0.5 ? 0.0 : 255.0;
+        data[i + GREEN] = gray[i / 4] <= 0.5 ? 0.0 : 255.0;
     }
 
     return true;
@@ -647,7 +649,7 @@ bool TargaImage::Filter_Gaussian()
 bool TargaImage::Filter_Gaussian_N( unsigned int N )
 {
     ClearToBlack();
-   return false;
+    return false;
 }// Filter_Gaussian_N
 
 
@@ -865,24 +867,11 @@ void TargaImage::Paint_Stroke(const Stroke& s) {
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-//      Helper function to set a pixel's RGB channels to the same value.
-//
-///////////////////////////////////////////////////////////////////////////////
-void TargaImage::Set_RGBA(unsigned char* rgba, int pixel, float value) {
-    if(pixel < (width * height * 4) - 4) {
-        rgba[pixel + RED] = value;
-        rgba[pixel + GREEN] = value;
-        rgba[pixel + BLUE] = value;
-    }
-}
-
-
-///////////////////////////////////////////////////////////////////////////////
-//
 //      Build a Stroke
 //
 ///////////////////////////////////////////////////////////////////////////////
 Stroke::Stroke() {}
+
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -894,4 +883,3 @@ Stroke::Stroke(unsigned int iradius, unsigned int ix, unsigned int iy,
    radius(iradius),x(ix),y(iy),r(ir),g(ig),b(ib),a(ia)
 {
 }
-
