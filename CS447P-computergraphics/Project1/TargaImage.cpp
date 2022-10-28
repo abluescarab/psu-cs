@@ -29,6 +29,7 @@ using namespace std;
 const int           RED             = 0;                // red channel
 const int           GREEN           = 1;                // green channel
 const int           BLUE            = 2;                // blue channel
+const int           ALPHA           = 3;                // alpha channel
 const unsigned char BACKGROUND[3]   = { 0, 0, 0 };      // background color
 
 
@@ -486,8 +487,17 @@ bool TargaImage::Comp_Over(TargaImage* pImage)
         return false;
     }
 
-    ClearToBlack();
-    return false;
+    for(int i = 0; i < width * height * 4; i += 4) {
+        // if the current image's alpha is 0 and the other image's alpha isn't 0,
+        // composite the other image's pixel over the existing one
+        if(data[i + ALPHA] == 0 && pImage->data[i + ALPHA] > 0) {
+            for(int j = 0; j < 4; j++) {
+                data[i + j] = pImage->data[i + j];
+            }
+        }
+    }
+
+    return true;
 }// Comp_Over
 
 
@@ -505,8 +515,13 @@ bool TargaImage::Comp_In(TargaImage* pImage)
         return false;
     }
 
-    ClearToBlack();
-    return false;
+    for(int i = 0; i < width * height * 4; i += 4) {
+        if(data[i + ALPHA] > 0) {
+            data[i + ALPHA] = pImage->data[i + ALPHA];
+        }
+    }
+
+    return true;
 }// Comp_In
 
 
@@ -524,8 +539,13 @@ bool TargaImage::Comp_Out(TargaImage* pImage)
         return false;
     }
 
-    ClearToBlack();
-    return false;
+    for(int i = 0; i < width * height * 4; i += 4) {
+        if(data[i + ALPHA] > 0 && pImage->data[i + ALPHA] > 0) {
+            data[i + ALPHA] -= pImage->data[i + ALPHA];
+        }
+    }
+
+    return true;
 }// Comp_Out
 
 
@@ -543,8 +563,18 @@ bool TargaImage::Comp_Atop(TargaImage* pImage)
         return false;
     }
 
-    ClearToBlack();
-    return false;
+    for(int i = 0; i < width * height * 4; i += 4) {
+        if(data[i + ALPHA] == 0 && pImage->data[i + ALPHA] > 0) {
+            for(int j = 0; j < 4; j++) {
+                data[i + j] = pImage->data[i + j];
+            }
+        }
+        else {
+            data[i + ALPHA] = pImage->data[i + ALPHA];
+        }
+    }
+
+    return true;
 }// Comp_Atop
 
 
@@ -562,8 +592,18 @@ bool TargaImage::Comp_Xor(TargaImage* pImage)
         return false;
     }
 
-    ClearToBlack();
-    return false;
+    for(int i = 0; i < width * height * 4; i += 4) {
+        if(data[i + ALPHA] > 0 && pImage->data[i + ALPHA] > 0) {
+            data[i + ALPHA] = pImage->data[i + ALPHA];
+        }
+        else if(data[i + ALPHA] == 0 && pImage->data[i + ALPHA] > 0) {
+            for(int j = 0; j < 4; j++) {
+                data[i + j] = pImage->data[i + j];
+            }
+        }
+    }
+
+    return true;
 }// Comp_Xor
 
 
