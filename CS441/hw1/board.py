@@ -200,6 +200,10 @@ class Board:
             func = self._calculate_misplaced
         elif heuristic == Heuristic.Manhattan:
             func = self._calculate_manhattan
+        elif heuristic == Heuristic.Custom:
+            func = self._calculate_custom
+        else:
+            return 1
 
         return func(state)
 
