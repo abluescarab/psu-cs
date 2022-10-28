@@ -2,25 +2,26 @@
 # TODO: calculate heuristic for each
 
 
-from collections import deque
 from board import Board, Heuristic
 from node import Node, NodeQueue
-from priority_queue import PriorityQueue
 
 
-def solution(node: Node):
+def solution(node: Node, board: Board, heuristic: Heuristic):
     current = node
     path = []
+    cost = 0
 
     while current:
+        cost += board.path_cost(current.state, heuristic)
         path.insert(0, current.state)
         current = current.parent
 
-    return path
+    return (cost, path)
 
-def uniform_cost(board: Board, heuristic: Heuristic, max_steps=-1):
+
+def uniform_search(board: Board, heuristic: Heuristic, use_heuristic, max_steps=-1):
     node = Node(board.initial_state)
-    frontier = PriorityQueue(node)
+    frontier = NodeQueue(node)
     explored = set()
     step = 0
 
@@ -28,55 +29,45 @@ def uniform_cost(board: Board, heuristic: Heuristic, max_steps=-1):
         node = frontier.pop()
 
         if board.goal_test(node.state):
-            return solution(node)
+            return solution(node, board, heuristic)
 
         explored.add(node.state)
 
-        for action in board.actions(node.state):
-            child = Node(
-                board.result(node.state, action),
-                node.path_cost + 1,
-                node
-            )
-
+        for child in node.expand(board):
             if child.state not in explored and child not in frontier:
                 frontier.push(child)
             elif child in frontier:
-                if board.path_cost(child.state, heuristic) < frontier[child][0]:
+                # only difference: whether to use heuristic in path calculation
+                cost = board.path_cost(child.state,
+                        heuristic if use_heuristic else None)
+
+                if cost < frontier[child][0]:
                     frontier.update(child)
 
         step += 1
 
-    return None
-
-
-def best_first(board: Board, heuristic: Heuristic, max_steps=-1):
-    return uniform_cost(board, heuristic, max_steps)
-
-
-def a_star(board: Board, heuristic: Heuristic, max_steps=-1):
-    return uniform_cost(board, heuristic, max_steps)
+    return (0, None)
 
 
 def start(values):
     input = (tuple(values[0:3]), tuple(values[3:6]), tuple(values[6:9]))
     board = Board(input)
-    max_steps = 2000
+    max_steps = 10000
 
     if not board.is_solveable():
         print("Configuration cannot be solved.")
         return
 
     for i in range(2):
-        for j in range(3):
+        for j in range(2):
             type_str = ""
 
             if i == 0:
                 type_str = "Best first "
-                func = best_first
+                use_heuristic = False
             else:
                 type_str = "A* "
-                func = a_star
+                use_heuristic = True
 
             if j == 0:
                 type_str += "(Misplaced):"
@@ -85,23 +76,24 @@ def start(values):
             else:
                 type_str += "(Custom):"
 
-            solution = func(board, j, max_steps)
+            solution = uniform_search(board, Heuristic(j), use_heuristic, max_steps)
             print(type_str)
 
-            if not solution[0]:
+            if not solution[1]:
                 print(f"Could not find solution in {max_steps} steps.")
             else:
-                for i in range(len(solution)):
-                    print(f"({i + 1}) ", end="")
+                for n in range(len(solution[1])):
+                    print(f"({n + 1}) ", end="")
 
-                    for row in solution[i]:
+                    for row in solution[1][n]:
                         print(" ".join(row), end=" ")
 
-                    if i < len(solution) - 1 and ((i + 1) % 5 != 0):
+                    if n < len(solution[1]) - 1 and ((n + 1) % 5 != 0):
                         print("-> ", end="")
                     else:
                         print()
 
+            print(f"Heuristic cost: {solution[0]}")
             print()
 
 
