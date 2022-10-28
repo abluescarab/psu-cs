@@ -92,7 +92,6 @@ class Board:
         Returns:
             int: result of custom heuristic
         """
-        # TODO
         return 0
 
     def is_solveable(self):
