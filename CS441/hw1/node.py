@@ -49,6 +49,10 @@ class Node:
         else:
             return True
 
+    def expand(self, board: Board):
+        return [Node(board.result(self.state, action), self.path_cost + 1, self)
+                for action in board.actions(self.state)]
+
 
 class NodeQueue(PriorityQueue):
     def __contains__(self, item):
