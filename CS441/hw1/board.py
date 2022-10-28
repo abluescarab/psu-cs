@@ -93,7 +93,7 @@ class Board:
             int: result of custom heuristic
         """
         # TODO
-        pass
+        return 0
 
     def is_solveable(self):
         flat = [n for row in self.initial_state for n in row]

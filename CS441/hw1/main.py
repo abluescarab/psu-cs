@@ -1,7 +1,3 @@
-# TODO: come up with custom heuristic
-# TODO: calculate heuristic for each
-
-
 from board import Board, Heuristic
 from node import Node, NodeQueue
 
