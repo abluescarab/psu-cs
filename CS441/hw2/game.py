@@ -10,7 +10,8 @@ class Game:
         if count > len(population):
             count = len(population)
 
-        return [population.peek(i)[1] for i in range(count)]
+        return [population.peek(i)[1]
+                for i in random.sample(range(len(population)), count)]
 
     def _reproduce(self, x, y):
         # ensure at least one element from x and y
