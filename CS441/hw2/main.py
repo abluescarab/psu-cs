@@ -1,5 +1,20 @@
 from game import Game
 
+def fitness_fn(state):
+    checks = 0
+
+    # number of checks on the board
+    for i in range(len(state)):
+        for j in range(len(state)):
+            if j == i:
+                continue
+
+            if abs(j - i) == abs(state[j] - state[i]) or \
+                state[j] == state[i]:
+                checks += 1
+
+    return checks
+
 # function Genetic-Algorithm(population, Fitness-Fn) returns an individual
 #     inputs: population, a set of individuals
 #             Fitness-Fn, a function that measures fitness of individual
