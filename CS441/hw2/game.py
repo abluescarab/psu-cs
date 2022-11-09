@@ -21,7 +21,7 @@ class Game:
         c = random.randint(1, 7)
         return x[:c] + y[c:]
 
-    def populate(self, population):
+    def run(self, population):
         state = None
 
         while len(self.states) < population:
@@ -30,6 +30,5 @@ class Game:
             if state not in self.states:
                 self.states.push(state)
 
-    def run(self):
         x, y = self._select_states(2)
         self._reproduce(x, y)
