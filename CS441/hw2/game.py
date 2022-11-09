@@ -47,7 +47,7 @@ class Game:
         cycle = 0
 
         while cycle < max_cycles and population.peek()[0] != 0:
-            x, y = self._select_states(2)
+            x, y = self._select_states(population, 2)
             child = self._reproduce(x, y)
             population.push(child)
             cycle += 1
