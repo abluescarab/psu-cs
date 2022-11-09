@@ -18,8 +18,16 @@ class Game:
         c = random.randint(1, 7)
         return x[:c] + y[c:]
 
-    def _mutate(self, state):
-        pass
+    def _mutate(self, state, mutation_chance):
+        if random.choices([True, False],
+                          [mutation_chance, 100.0 - mutation_chance])[0]:
+            # pick the queen by column
+            column = random.randint(0, 7)
+            # generate the list of possible positions, minus the current position
+            positions = list(range(8))
+            positions.remove(state[column])
+            # change the position of the queen
+            state[column] = random.choice(positions)
 
     # function Genetic-Algorithm(population, Fitness-Fn) returns an individual
     #     inputs: population, a set of individuals
@@ -36,7 +44,7 @@ class Game:
     #         population <- new_population
     #     until some individual is fit enough, or enough time has elapsed
     #     return the best individual in population, according to Fitness-Fn
-    def run(self, fitness_fn, population_size, max_cycles):
+    def run(self, fitness_fn, population_size, mutation_chance, max_cycles):
         population = StateQueue(fitness_fn)
 
         while len(population) < population_size:
@@ -50,6 +58,7 @@ class Game:
         while cycle < max_cycles and population.peek()[0] != 0:
             x, y = self._select_states(population, 2)
             child = self._reproduce(x, y)
+            self._mutate(child, mutation_chance)
             population.push(child)
             cycle += 1
 
