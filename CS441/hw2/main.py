@@ -1,4 +1,4 @@
-from board import Board
+from game import Game
 
 # function Genetic-Algorithm(population, Fitness-Fn) returns an individual
 #     inputs: population, a set of individuals
@@ -18,6 +18,6 @@ from board import Board
 
 
 if __name__ == "__main__":
-    board = Board()
-    board.populate(10)
-    board.run()
+    game = Game()
+    game.populate(10)
+    game.run()
