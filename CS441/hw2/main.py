@@ -33,6 +33,6 @@ def fitness_fn(state):
 
 
 if __name__ == "__main__":
-    game = Game()
+    game = Game(fitness_fn)
     game.populate(10)
     game.run()
