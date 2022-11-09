@@ -9,11 +9,7 @@ class Game:
     def _generate_state(self):
         return random.sample(range(8), 8)
 
-    # function Reproduce(x, y) returns an individual
-    #     inputs: x, y, parent individuals
 
-    #     n <- Length(x); c <- random number from 1 to n
-    #     return Append(Substring(x, 1, c), Substring(y, c + 1, n))
     def _reproduce(self, x, y):
         # ensure at least one element from x and y
         c = random.randint(1, 7)
