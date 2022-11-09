@@ -36,12 +36,12 @@ class StateQueue(PriorityQueue):
         Returns:
             item: popped item
         """
-        item = None
+        val, item = -1, None
 
         while not item and len(self._items) > 0:
             val, item = super().pop()
 
-        return item
+        return (val, item)
 
     def update(self, item):
         """
