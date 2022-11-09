@@ -2,7 +2,7 @@ import math
 import random
 
 
-class Board:
+class Game:
     def __init__(self):
         self.states = []
 
@@ -28,6 +28,6 @@ class Board:
             if state not in self.states:
                 self.states.append(state)
 
-    def run(self):
+    def run(self, fitness_fn):
         x, y = random.sample(self.states, 2)
         self._reproduce(x, y)
