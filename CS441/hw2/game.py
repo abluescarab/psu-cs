@@ -4,47 +4,72 @@ from state_queue import StateQueue
 
 class Game:
     def _generate_state(self):
+        """
+        Generates a game state.
+
+        Returns:
+            list: queen positions by column then row
+        """
         return random.sample(range(8), 8)
 
-    def _select_states(self, population, count):
+    def _select_individuals(self, population, count):
+        """
+        Selects individuals from the population.
+
+        Args:
+            population (list): current population of states
+            count (int): number of individuals to select
+        """
         if count > len(population):
             count = len(population)
 
-        return [population.peek(i)[1]
-                for i in random.sample(range(len(population)), count)]
+        return [population.pop()[1] for _ in range(count)]
 
     def _reproduce(self, x, y):
+        """
+        Reproduces with parents x and y.
+
+        Args:
+            x, y: individuals from the population
+
+        Returns:
+            list: state produced from parents
+        """
         # ensure at least one element from x and y
         c = random.randint(1, 7)
         return x[:c] + y[c:]
 
-    def _mutate(self, state, mutation_chance):
+    def _mutate(self, individual, mutation_chance):
+        """
+        Mutates a given individual.
+
+        Args:
+            individual: state from the population
+            mutation_chance: percent chance to mutate out of 100
+        """
         if random.choices([True, False],
                           [mutation_chance, 100.0 - mutation_chance])[0]:
             # pick the queen by column
             column = random.randint(0, 7)
             # generate the list of possible positions, minus the current position
             positions = list(range(8))
-            positions.remove(state[column])
+            positions.remove(individual[column])
             # change the position of the queen
-            state[column] = random.choice(positions)
+            individual[column] = random.choice(positions)
 
-    # function Genetic-Algorithm(population, Fitness-Fn) returns an individual
-    #     inputs: population, a set of individuals
-    #             Fitness-Fn, a function that measures fitness of individual
-
-    #     repeat
-    #         new_population <- empty set
-    #         for i = 1 to Size(population) do
-    #             x <- Random-Selection(population, Fitness-Fn)
-    #             y <- Random-Selection(population, Fitness-Fn)
-    #             child <- Reproduce(x, y)
-    #             if small random probability then child <- Mutate(child)
-    #             add child to new_population
-    #         population <- new_population
-    #     until some individual is fit enough, or enough time has elapsed
-    #     return the best individual in population, according to Fitness-Fn
     def run(self, fitness_fn, population_size, mutation_chance, max_cycles):
+        """
+        Run the game.
+
+        Args:
+            fitness_fn: function to calculate individual fitness
+            population_size: number of individuals in population
+            mutation_chance: percent chance for a child to mutate out of 100
+            max_cycles: maximum number of reproduction cycles
+
+        Returns:
+            list: most fit individual
+        """
         population = StateQueue(fitness_fn)
 
         while len(population) < population_size:
