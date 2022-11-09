@@ -58,3 +58,6 @@ class StateQueue(PriorityQueue):
             if self._items[i][1] == item:
                 self._items[i] = (self._items[i][0], None)
                 self.push(item)
+
+    def peek(self, skip=0):
+        return self._items[skip]

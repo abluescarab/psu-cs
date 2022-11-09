@@ -17,5 +17,5 @@ def fitness_fn(state):
 
 
 if __name__ == "__main__":
-    game = Game(fitness_fn)
-    game.run(10)
+    game = Game()
+    game.run(fitness_fn, 10, 100)
