@@ -42,3 +42,6 @@ class PriorityQueue:
             any: popped item
         """
         return heappop(self._items)
+
+    def peek(self, skip=0):
+        return self._items[skip]
