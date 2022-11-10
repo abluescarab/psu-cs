@@ -13,13 +13,6 @@ class StateQueue(PriorityQueue):
     def __contains__(self, item):
         return item in [t[1] for t in self._items]
 
-    def __getitem__(self, key):
-        for val, item in self._items:
-            if key == item:
-                return (val, item)
-
-        raise KeyError(f"{key} is not in priority queue")
-
     def push(self, item):
         """
         Push an item onto the queue.

@@ -23,7 +23,7 @@ class Game:
         if count > len(population):
             count = len(population)
 
-        return [population.pop()[1] for _ in range(count)]
+        return [population.peek(i)[1] for i in range(count)]
 
     def _reproduce(self, x, y):
         """
@@ -80,7 +80,7 @@ class Game:
 
         cycle = 0
 
-        while cycle < max_cycles and population.peek()[0] != 0:
+        while cycle < max_cycles and population.peek()[0] != 0.0:
             x, y = self._select_individuals(population, 2)
 
             for _ in range(2):
