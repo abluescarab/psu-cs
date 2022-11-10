@@ -19,3 +19,4 @@ def fitness_fn(state):
 if __name__ == "__main__":
     game = Game()
     fitness, result = game.run(fitness_fn, 1000, 0.2, 10000)
+    print(f"Final fitness: {fitness} for state {result}")
