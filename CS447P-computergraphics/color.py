@@ -122,6 +122,12 @@ def sobel(image, horizontal):
             [-1, -2, -1]])
 
 
+def laplace(image):
+    return convolve(image,
+        [[0, -1, 0],
+         [-1, 4, -1],
+         [0, -1, 0]])
+
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
@@ -133,6 +139,7 @@ if __name__ == "__main__":
         metavar=("r", "g", "b", "xn", "yn", "zn"), nargs=6)
     parser.add_argument("--sobel-horizontal", "-sh", nargs="+")
     parser.add_argument("--sobel-vertical", "-sv", nargs="+")
+    parser.add_argument("--laplace", "-l", nargs="+")
     parser.add_argument("--convolve", "-c", type=str,
         metavar=("matrix", "filter"), nargs=2)
 
@@ -194,6 +201,25 @@ if __name__ == "__main__":
                     [s[0], s[1], s[2], s[3], s[4], s[5]]
                 ], args.sobel_horizontal))
 
+    if args.laplace:
+        s = args.laplace
+
+        if len(s) == 1:
+            file = s[0]
+            matrix = read_matrix(file)
+
+            if matrix:
+                print_matrix(laplace(matrix))
+        elif len(s) == 36:
+            print_matrix(laplace([
+                    [s[0], s[1], s[2], s[3], s[4], s[5]],
+                    [s[6], s[7], s[8], s[9], s[10], s[11]],
+                    [s[12], s[13], s[14], s[15], s[16], s[17]],
+                    [s[18], s[19], s[20], s[21], s[22], s[23]],
+                    [s[24], s[25], s[26], s[27], s[28], s[29]],
+                    [s[30], s[31], s[32], s[33], s[34], s[35]],
+                ]))
+
     if args.convolve:
         matrix_file = args.convolve[0]
         filter_file = args.convolve[1]
@@ -203,4 +229,3 @@ if __name__ == "__main__":
 
         if matrix and filter:
             print_matrix(convolve(matrix, filter))
-        pass
