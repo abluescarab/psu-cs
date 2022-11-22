@@ -37,28 +37,24 @@ def rgb_to_xyz(r, g, b):
         result[i] = sum
         sum = 0.0
 
-    result_tuple = tuple(result)
-    return result_tuple
+    return tuple(result)
 
 
 def rgb_to_lab(r, g, b, xn, yn, zn):
-    xyz = rgb_to_xyz(r, g, b)
-    x_xn = xyz[0] / xn
-    y_yn = xyz[1] / yn
-    z_zn = xyz[2] / zn
-    l = 0.0
-    a = 0.0
-    b = 0.0
+    x, y, z = rgb_to_xyz(r, g, b)
+    x /= xn
+    y /= yn
+    z /= zn
 
-    f = lambda t: pow(t, 1 / 3) - 16 if t > 0.008856 else (7.787 * t) + (16 / 116)
+    f = lambda t: (t ** (1 / 3)) - 16 if t > 0.008856 else (7.787 * t) + (16 / 116)
 
-    if y_yn > 0.008856:
-        l = 116 * pow(y_yn, 1 / 3) - 16
+    if y > 0.008856:
+        l = 116 * (y ** (1 / 3)) - 16
     else:
-        l = 903.3 * pow(y_yn, 1 / 3)
+        l = 903.3 * (y ** (1 / 3))
 
-    a = 500 * (f(x_xn) - f(y_yn))
-    b = 200 * (f(y_yn) - f(z_zn))
+    a = 500 * (f(x) - f(y))
+    b = 200 * (f(y) - f(z))
 
     return (round(l, 4), round(a, 4), round(b, 4))
 
