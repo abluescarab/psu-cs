@@ -6,6 +6,7 @@
 *.o
 *.tar
 *.zip
+*.sln
 
 # IntelliJ
 **/.idea/*
