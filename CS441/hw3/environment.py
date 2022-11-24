@@ -28,12 +28,13 @@ class Environment:
             return -5 if self._has_wall(square, action) else 0
 
     def _generate(self):
-        self.state = []
+        state = []
 
         for _ in range(100):
-            self.state.append(random.choices([0, 1], [0.5, 0.5])[0])
+            state.append(random.choices([0, 1], [0.5, 0.5])[0])
 
-        self.robby = random.randint(0, 99)
+        return state, random.randint(0, 99)
 
     def run(self):
-        self._generate()
+        reward = 0
+        state, robby = self._generate()
