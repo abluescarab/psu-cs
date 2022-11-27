@@ -86,6 +86,7 @@ WorldWindow::draw(void)
 	// Initialize all the objects.
 	ground.Initialize();
 	traintrack.Initialize();
+	road.Initialize();
     }
 
     // Stuff out here relies on a coordinate system or must be done on every
@@ -113,6 +114,7 @@ WorldWindow::draw(void)
     // Draw stuff. Everything.
     ground.Draw();
     traintrack.Draw();
+	road.Draw();
 }
 
 
