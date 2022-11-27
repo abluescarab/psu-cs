@@ -1,5 +1,6 @@
 import random
 from enum import Enum
+from algorithm import QLearning
 
 
 class Action(Enum):
@@ -33,8 +34,4 @@ class Environment:
         for _ in range(100):
             state.append(random.choices([0, 1], [0.5, 0.5])[0])
 
-        return state, random.randint(0, 99)
-
-    def run(self):
-        reward = 0
-        state, robby = self._generate()
+        self.state, self.robby = state, random.randint(0, 99)
