@@ -87,23 +87,20 @@ WorldWindow::draw(void)
         ground.Initialize();
         traintrack.Initialize();
         road.Initialize();
-        building[ 0].Initialize(Point3D(16.5, 25.0, 0.1), Point3D( 7.0,  5.0, 18.0));
-        building[ 1].Initialize(Point3D(27.5, 25.0, 0.1), Point3D( 5.0, 10.0, 14.0));
-        building[ 2].Initialize(Point3D(17.0, 30.5, 0.1), Point3D(10.0,  5.0, 12.0));
-        building[ 3].Initialize(Point3D(33.0, 32.5, 0.1), Point3D( 3.0,  3.0, 22.0));
-        building[ 4].Initialize(Point3D(17.0, 36.5, 0.1), Point3D(18.0,  5.0, 20.0));
-        building[ 5].Initialize(Point3D(24.0, 25.0, 0.1), Point3D( 3.0,  5.0,  6.0));
-        building[ 6].Initialize(Point3D(13.0, 25.0, 0.1), Point3D( 3.0, 14.0,  4.0));
-        building[ 7].Initialize(Point3D( 0.0, 25.0, 0.1), Point3D( 3.0,  3.0, 10.0));
-        building[ 8].Initialize(Point3D( 0.0, 28.0, 0.1), Point3D( 3.0,  6.0,  8.0));
-        building[ 9].Initialize(Point3D( 0.0, 34.0, 0.1), Point3D( 3.0,  3.0, 10.0));
-        building[10].Initialize(Point3D( 3.0, 25.0, 0.1), Point3D( 6.0,  3.0,  8.0));
-        building[11].Initialize(Point3D( 9.0, 25.0, 0.1), Point3D( 3.0,  3.0, 10.0));
-        building[12].Initialize(Point3D( 3.0, 34.0, 0.1), Point3D( 6.0,  3.0,  8.0));
-        building[13].Initialize(Point3D( 9.0, 34.0, 0.1), Point3D( 3.0,  3.0, 10.0));
-        building[14].Initialize(Point3D( 9.0, 28.0, 0.1), Point3D( 3.0,  6.0,  8.0));
-        building[15].Initialize(Point3D( 9.0, 31.0, 5.0), Point3D(10.0,  3.0,  2.0));
-        building[16].Initialize(Point3D(36.0, 32.5, 0.1), Point3D( 3.0,  5.0, 22.0));
+        building[ 0].Initialize(Point3D(-16.0, 24.0, 0.1), Point3D( 3.0,  3.0, 13.0));
+        building[ 1].Initialize(Point3D(-16.0, 27.0, 0.1), Point3D( 3.0,  6.0, 11.0));
+        building[ 2].Initialize(Point3D(-16.0, 33.0, 0.1), Point3D( 3.0,  3.0, 13.0));
+        building[ 3].Initialize(Point3D(-13.0, 24.0, 0.1), Point3D( 6.0,  3.0, 11.0));
+        building[ 4].Initialize(Point3D(-13.0, 33.0, 0.1), Point3D( 6.0,  3.0, 11.0));
+        building[ 5].Initialize(Point3D( -7.0, 24.0, 0.1), Point3D( 3.0,  3.0, 13.0));
+        building[ 6].Initialize(Point3D( -7.0, 27.0, 0.1), Point3D( 3.0,  6.0, 11.0));
+        building[ 7].Initialize(Point3D( -7.0, 30.0, 8.0), Point3D(10.0,  3.0,  2.0));
+        building[ 8].Initialize(Point3D( -7.0, 33.0, 0.1), Point3D( 3.0,  3.0, 13.0));
+        building[ 9].Initialize(Point3D( -3.0, 24.0, 0.1), Point3D( 3.0, 14.0,  7.0));
+        building[10].Initialize(Point3D(  0.5, 35.0, 0.1), Point3D(15.0,  5.0, 20.0));
+        building[11].Initialize(Point3D(  0.5, 25.0, 0.1), Point3D( 5.0, 10.0, 20.0));
+        building[12].Initialize(Point3D(  8.0, 30.0, 0.1), Point3D( 8.0,  4.0, 17.0));
+        building[13].Initialize(Point3D( 16.0, 30.0, 0.1), Point3D( 3.0,  9.0, 17.0));
     }
 
     // Stuff out here relies on a coordinate system or must be done on every

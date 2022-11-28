@@ -37,7 +37,7 @@ public:
     bool	Update(float);
 
 private:
-    static const int BUILDING_COUNT = 17;
+    static const int BUILDING_COUNT = 14;
 
     Ground	    ground;	    // The ground object.
     Track  traintrack;	    // The train and track.
