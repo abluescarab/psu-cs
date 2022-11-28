@@ -99,6 +99,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Building.cpp" />
     <ClCompile Include="CubicBspline.cpp" />
     <ClCompile Include="GenericException.cpp" />
     <ClCompile Include="Ground.cpp" />
@@ -106,12 +107,14 @@
     <ClCompile Include="Point2D.cpp" />
     <ClCompile Include="Point3D.cpp" />
     <ClCompile Include="Road.cpp" />
+    <ClCompile Include="TexturedObject.cpp" />
     <ClCompile Include="Track.cpp" />
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="World.cpp" />
     <ClCompile Include="WorldWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Building.h" />
     <ClInclude Include="CubicBspline.h" />
     <ClInclude Include="GenericException.h" />
     <ClInclude Include="Ground.h" />
@@ -119,6 +122,7 @@
     <ClInclude Include="Point2D.h" />
     <ClInclude Include="Point3D.h" />
     <ClInclude Include="Road.h" />
+    <ClInclude Include="TexturedObject.h" />
     <ClInclude Include="Track.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="WorldWindow.h" />

@@ -2,18 +2,12 @@
 #define _ROAD_H_
 
 #include <Fl/gl.h>
+#include "TexturedObject.h"
 
-class Road {
-private:
-    GLubyte display_list;
-    GLuint texture_obj;
-    bool initialized;
-
+class Road : public TexturedObject {
 public:
-    Road();
-    ~Road();
     bool Initialize();
-    void Draw();
+    void InitializeDisplay();
 };
 
 #endif
