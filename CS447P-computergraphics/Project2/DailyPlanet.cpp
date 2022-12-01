@@ -19,7 +19,7 @@ bool DailyPlanet::Initialize(Point3D location, GLfloat topSize) {
         size.y -= 1.0;
     }
     
-    Point3D topSectionSize = Point3D(1.0, 1.0, 2.0);
+    Point3D topSectionSize = Point3D(1.0, 1.0, 1.5);
 
     topSection.Initialize(
         location + 
