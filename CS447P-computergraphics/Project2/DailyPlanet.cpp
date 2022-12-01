@@ -36,12 +36,14 @@ bool DailyPlanet::Initialize(Point3D location, GLfloat topSize) {
 }
 
 void DailyPlanet::Draw() {
-    for(int i = 0; i < SECTION_COUNT; i++) {
-        sections[i].Draw();
-    }
+    if(initialized) {
+        for(int i = 0; i < SECTION_COUNT; i++) {
+            sections[i].Draw();
+        }
 
-    topSection.Draw();
-    topSphere.Render(true);
+        topSection.Draw();
+        topSphere.Render(true);
+    }
 }
 
 void DailyPlanet::Subdivide(unsigned int n) {
