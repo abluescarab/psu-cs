@@ -110,7 +110,6 @@
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="TexturedObject.cpp" />
     <ClCompile Include="Track.cpp" />
-    <ClCompile Include="utils.cpp" />
     <ClCompile Include="World.cpp" />
     <ClCompile Include="WorldWindow.cpp" />
   </ItemGroup>
@@ -126,7 +125,6 @@
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="TexturedObject.h" />
     <ClInclude Include="Track.h" />
-    <ClInclude Include="utils.h" />
     <ClInclude Include="WorldWindow.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
