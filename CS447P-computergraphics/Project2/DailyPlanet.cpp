@@ -4,10 +4,15 @@ DailyPlanet::DailyPlanet() {
     initialized = false;
 }
 
-bool DailyPlanet::Initialize(Point3D location, GLfloat topSize) {
+bool DailyPlanet::Initialize(Point3D location, GLfloat topSize, bool center) {
     float heights[] = { 3.5, 1.5, 3.5, 4.5, 1.5, 1.5, 3.5, 8.5, 1.5, 1.5 };
     Point3D size = Point3D(12.0, 12.0, heights[0]);
     int i = 0;
+
+    if(center) {
+        location.x -= size.x / 2;
+        location.y -= size.y / 2;
+    }
 
     for(int i = 0; i < SECTION_COUNT; i++) {
         size.z = heights[i];
