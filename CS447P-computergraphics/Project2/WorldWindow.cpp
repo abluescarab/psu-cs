@@ -101,6 +101,7 @@ WorldWindow::draw(void)
         building[11].Initialize(Point3D(  0.5, 25.0, 0.1), Point3D( 5.0, 10.0, 20.0));
         building[12].Initialize(Point3D(  8.0, 30.0, 0.1), Point3D( 8.0,  4.0, 17.0));
         building[13].Initialize(Point3D( 16.0, 30.0, 0.1), Point3D( 3.0,  9.0, 17.0));
+        dailyPlanet.Initialize(Point3D(-34.0, 0.0, 0.1), 4.0);
     }
 
     // Stuff out here relies on a coordinate system or must be done on every
@@ -129,6 +130,7 @@ WorldWindow::draw(void)
     ground.Draw();
     traintrack.Draw();
     road.Draw();
+    dailyPlanet.Draw();
 
     for(int i = 0; i < BUILDING_COUNT; i++) {
         building[i].Draw();
@@ -225,6 +227,12 @@ WorldWindow::handle(int event)
         case FL_RELEASE:
             button = -1;
             return 1;
+        case FL_KEYBOARD:
+            if(Fl::event_key() == 's') {
+                dailyPlanet.Subdivide(1);
+                redraw();
+                return 1;
+            }
     }
 
     // Pass any other event types on the superclass.

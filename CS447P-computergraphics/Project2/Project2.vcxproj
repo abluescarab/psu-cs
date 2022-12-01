@@ -101,11 +101,13 @@
   <ItemGroup>
     <ClCompile Include="Building.cpp" />
     <ClCompile Include="CubicBspline.cpp" />
+    <ClCompile Include="DailyPlanet.cpp" />
     <ClCompile Include="GenericException.cpp" />
     <ClCompile Include="Ground.cpp" />
     <ClCompile Include="libtarga.c" />
     <ClCompile Include="Point3D.cpp" />
     <ClCompile Include="Road.cpp" />
+    <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="TexturedObject.cpp" />
     <ClCompile Include="Track.cpp" />
     <ClCompile Include="utils.cpp" />
@@ -115,11 +117,13 @@
   <ItemGroup>
     <ClInclude Include="Building.h" />
     <ClInclude Include="CubicBspline.h" />
+    <ClInclude Include="DailyPlanet.h" />
     <ClInclude Include="GenericException.h" />
     <ClInclude Include="Ground.h" />
     <ClInclude Include="libtarga.h" />
     <ClInclude Include="Point3D.h" />
     <ClInclude Include="Road.h" />
+    <ClInclude Include="Sphere.h" />
     <ClInclude Include="TexturedObject.h" />
     <ClInclude Include="Track.h" />
     <ClInclude Include="utils.h" />
