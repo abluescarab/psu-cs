@@ -16,6 +16,8 @@ struct Point3D {
     Point3D(const Point3D& point);
     ~Point3D();
 
+    GLfloat* ToArray();
+
     friend std::ostream& operator<<(std::ostream& os, Point3D const& p);
     friend Point3D operator+(const Point3D& p1, const Point3D& p2);
     friend Point3D operator+(const Point3D& p1, const GLfloat add);
