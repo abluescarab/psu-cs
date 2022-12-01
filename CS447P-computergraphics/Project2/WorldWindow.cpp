@@ -20,13 +20,8 @@ WorldWindow::WorldWindow(int x, int y, int width, int height, char* label)
 {
     button = -1;
 
-    // Initial viewing parameters.
-    phi = 45.0f;
-    theta = 0.0f;
-    dist = 100.0f;
-    x_at = 0.0f;
-    y_at = 0.0f;
-
+    // Moved initial viewing parameters to ResetCamera()
+    ResetCamera();
 }
 
 
@@ -101,7 +96,7 @@ WorldWindow::draw(void)
         building[11].Initialize(Point3D(  0.5, 25.0, 0.1), Point3D( 5.0, 10.0, 20.0));
         building[12].Initialize(Point3D(  8.0, 30.0, 0.1), Point3D( 8.0,  4.0, 17.0));
         building[13].Initialize(Point3D( 16.0, 30.0, 0.1), Point3D( 3.0,  9.0, 17.0));
-        dailyPlanet.Initialize(Point3D(-34.0, 0.0, 0.1), 4.0);
+        daily_planet.Initialize(Point3D(-34.0,  0.0, 0.1), 3.0);
     }
 
     // Stuff out here relies on a coordinate system or must be done on every
@@ -111,14 +106,14 @@ WorldWindow::draw(void)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // Set up the viewing transformation. The viewer is at a distance
-    // dist from (x_at, y_ay, 2.0) in the direction (theta, phi) defined
-    // by two angles. They are looking at (x_at, y_ay, 2.0) and z is up.
+    // dist from (x_at, y_ay, z_at) in the direction (theta, phi) defined
+    // by two angles. They are looking at (x_at, y_ay, z_at) and z is up.
     eye[0] = x_at + dist * cos(theta * M_PI / 180.0) * cos(phi * M_PI / 180.0);
     eye[1] = y_at + dist * sin(theta * M_PI / 180.0) * cos(phi * M_PI / 180.0);
-    eye[2] = 2.0 + dist * sin(phi * M_PI / 180.0);
+    eye[2] = z_at + dist * sin(phi * M_PI / 180.0);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(eye[0], eye[1], eye[2], x_at, y_at, 2.0, 0.0, 0.0, 1.0);
+    gluLookAt(eye[0], eye[1], eye[2], x_at, y_at, z_at, 0.0, 0.0, 1.0);
 
     // Position the light source. This has to happen after the viewing
     // transformation is set up, so that the light stays fixed in world
@@ -127,10 +122,24 @@ WorldWindow::draw(void)
     glLightfv(GL_LIGHT0, GL_POSITION, dir);
 
     // Draw stuff. Everything.
+    float posn[3];
+    float new_phi;
+    float new_theta;
+
     ground.Draw();
-    traintrack.Draw();
+    traintrack.Draw(posn, new_phi, new_theta);
+
+    if(camera_follow) {
+        theta = new_theta;
+        phi = -new_phi;
+        x_at = posn[0];
+        y_at = posn[1];
+        z_at = posn[2] + 5.0;
+        dist = -0.1;
+    }
+
     road.Draw();
-    dailyPlanet.Draw();
+    daily_planet.Draw();
 
     for(int i = 0; i < BUILDING_COUNT; i++) {
         building[i].Draw();
@@ -185,6 +194,19 @@ WorldWindow::Drag(float dt)
     }
 }
 
+void WorldWindow::ChangeCamera(float xAngle, float zAngle) {
+    phi = xAngle;
+    theta = zAngle;
+    dist = 100.0f;
+    x_at = 0.0f;
+    y_at = 0.0f;
+    z_at = 2.0f;
+    camera_follow = false;
+}
+
+void WorldWindow::ResetCamera() {
+    ChangeCamera(45.0, 0.0);
+}
 
 bool
 WorldWindow::Update(float dt)
@@ -192,7 +214,7 @@ WorldWindow::Update(float dt)
     // Update the view. This gets called once per frame before doing the
     // drawing.
 
-    if(button != -1) // Only do anything if the mouse button is down.
+    if(button != -1 && !camera_follow) // Only do anything if the mouse button is down.
         Drag(dt);
 
     // Animate the train.
@@ -228,10 +250,32 @@ WorldWindow::handle(int event)
             button = -1;
             return 1;
         case FL_KEYBOARD:
-            if(Fl::event_key() == 's') {
-                dailyPlanet.Subdivide(1);
-                redraw();
-                return 1;
+            switch(Fl::event_key()) {
+                case 's':
+                    daily_planet.Subdivide(1);
+                    redraw();
+                    return 1;
+                case '1': // front view
+                    ChangeCamera(0.0, -90.0);
+                    return 1;
+                case '2': // left view
+                    ChangeCamera(0.0, 180.0);
+                    return 1;
+                case '3': // back view
+                    ChangeCamera(0.0, 90.0);
+                    return 1;
+                case '4': // right view
+                    ChangeCamera(0.0, 0.0);
+                    return 1;
+                case '5': // top view
+                    ChangeCamera(90.0, -90.0);
+                    return 1;
+                case '6': // reset view
+                    ResetCamera();
+                    return 1;
+                case ' ': // space key follows car
+                    camera_follow = true;
+                    return 1;
             }
     }
 

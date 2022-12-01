@@ -133,12 +133,8 @@ Track::Initialize(void)
 
 
 // Draw
-void
-Track::Draw(void)
-{
-    float   posn[3];
+void Track::Draw(float* posn, float& phi, float& theta) {
     float   tangent[3];
-    double  angle;
 
     if ( ! initialized )
 	return;
@@ -161,12 +157,12 @@ Track::Draw(void)
     Normalize_3(tangent);
 
     // Rotate it to poitn along the track, but stay horizontal
-    angle = atan2(tangent[1], tangent[0]) * 180.0 / M_PI;
-    glRotatef((float)angle, 0.0f, 0.0f, 1.0f);
+    theta = atan2(tangent[1], tangent[0]) * 180.0 / M_PI;
+    glRotatef((float)theta, 0.0f, 0.0f, 1.0f);
 
     // Another rotation to get the tilt right.
-    angle = asin(-tangent[2]) * 180.0 / M_PI;
-    glRotatef((float)angle, 0.0f, 1.0f, 0.0f);
+    phi = asin(-tangent[2]) * 180.0 / M_PI;
+    glRotatef((float)phi, 0.0f, 1.0f, 0.0f);
 
     // Draw the train
     glCallList(train_list);

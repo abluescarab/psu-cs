@@ -32,9 +32,9 @@ class Track {
     // Destructor
     ~Track(void);
 
-    bool    Initialize(void);	// Gets everything set up for drawing.
-    void    Update(float);	// Updates the location of the train
-    void    Draw(void);		// Draws everything.
+    bool Initialize(void);      // Gets everything set up for drawing.
+    void Update(float);         // Updates the location of the train
+    void Draw(float* posn, float& phi, float& theta); // Draws everything.
 };
 
 
