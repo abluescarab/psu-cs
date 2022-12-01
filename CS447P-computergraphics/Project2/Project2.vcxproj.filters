@@ -45,9 +45,6 @@
     <ClCompile Include="Point3D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Point2D.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Building.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -81,9 +78,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Point3D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Point2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Building.h">

@@ -1,5 +1,4 @@
 #include "utils.h"
-#include "Point2D.h"
 
 void utils::TexturedQuadStrip(Point3D& left, Point3D& right, Point3D offset,
     int count, bool stretch, bool moveLeft, bool moveRight) {

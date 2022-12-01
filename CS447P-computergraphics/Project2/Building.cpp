@@ -1,6 +1,5 @@
 #include "Building.h"
 #include "utils.h"
-#include "Point2D.h"
 
 bool Building::Initialize(Point3D location, Point3D size) {
     this->location = location;
