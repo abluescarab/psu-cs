@@ -18,7 +18,17 @@ struct Point3D {
 
     friend std::ostream& operator<<(std::ostream& os, Point3D const& p);
     friend Point3D operator+(const Point3D& p1, const Point3D& p2);
+    friend Point3D operator+(const Point3D& p1, const GLfloat add);
+    friend Point3D operator-(const Point3D& p1, const Point3D& p2);
+    friend Point3D operator-(const Point3D& p1, const GLfloat sub);
+    friend Point3D operator*(const Point3D& p1, const Point3D& p2);
+    friend Point3D operator*(const Point3D& p1, const GLfloat mul);
+    friend Point3D operator/(const Point3D& p1, const Point3D& p2);
+    friend Point3D operator/(const Point3D& p1, const GLfloat div);
     Point3D& operator+=(const Point3D& other);
+    Point3D& operator-=(const Point3D& other);
+    Point3D& operator*=(const Point3D& other);
+    Point3D& operator/=(const Point3D& other);
 };
 
 #endif
