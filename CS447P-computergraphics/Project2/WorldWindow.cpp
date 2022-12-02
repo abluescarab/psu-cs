@@ -97,9 +97,13 @@ WorldWindow::draw(void)
         building[11].Initialize(Point3D(  0.5, 25.0, 0.1), Point3D( 5.0, 10.0, 20.0));
         building[12].Initialize(Point3D(  8.0, 30.0, 0.1), Point3D( 8.0,  4.0, 17.0));
         building[13].Initialize(Point3D( 16.0, 30.0, 0.1), Point3D( 3.0,  9.0, 17.0));
-        daily_planet.Initialize(Point3D(  0.0,  0.0, 0.1), 3.0);
-        half_sphere.Initialize(Point3D(10.0, 10.0, 10.0), 3.0);
-        quarter_sphere.Initialize(Point3D(10.0, 10.0, 15.0), 3.0);
+
+        half_sphere[0].Initialize(Point3D(-14.5, 25.5, 13.1), 1.5, Orientation::z_pos, 1);
+        half_sphere[1].Initialize(Point3D(-14.5, 34.5, 13.1), 1.5, Orientation::z_pos, 1);
+        half_sphere[2].Initialize(Point3D( -5.5, 25.5, 13.1), 1.5, Orientation::z_pos, 1);
+        half_sphere[3].Initialize(Point3D( -5.5, 34.5, 13.1), 1.5, Orientation::z_pos, 1);
+
+        daily_planet.Initialize(Point3D(0.0, 0.0, 0.1), 3.0);
     }
 
     // Stuff out here relies on a coordinate system or must be done on every
@@ -143,8 +147,10 @@ WorldWindow::draw(void)
 
     road.Draw();
     daily_planet.Draw();
-    half_sphere.Render();
-    quarter_sphere.Render();
+
+    for(int i = 0; i < HALF_SPHERE_COUNT; i++) {
+        half_sphere[i].Render();
+    }
 
     for(int i = 0; i < BUILDING_COUNT; i++) {
         building[i].Draw();
@@ -258,11 +264,19 @@ WorldWindow::handle(int event)
             switch(Fl::event_key()) {
                 case 's': // subdivide
                     daily_planet.Subdivide(1);
-                    half_sphere.Subdivide(1);
+
+                    for(int i = 0; i < HALF_SPHERE_COUNT; i++) {
+                        half_sphere[i].Subdivide(1);
+                    }
+
                     return 1;
                 case 'r': // reset subdivisions
                     daily_planet.ResetSubdivide();
-                    half_sphere.ResetSubdivide();
+
+                    for(int i = 0; i < HALF_SPHERE_COUNT; i++) {
+                        half_sphere[i].ResetSubdivide();
+                    }
+
                     return 1;
                 case '1': // front view
                     ChangeCamera(0.0, -90.0);

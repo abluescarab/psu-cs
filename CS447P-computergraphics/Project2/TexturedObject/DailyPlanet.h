@@ -3,14 +3,17 @@
 
 #include "Building.h"
 #include "../Sphere/Sphere.h"
+#include "../Sphere/QuarterSphere.h"
 
 class DailyPlanet {
 private:
     static const int SECTION_COUNT = 10;
+    static const int SIDE_SECTION_COUNT = 4;
 
     Building sections[SECTION_COUNT];
-    Building topSection;
-    Sphere topSphere;
+    Building top_section;
+    QuarterSphere side_spheres[SIDE_SECTION_COUNT];
+    Sphere top_sphere;
     bool initialized;
 
 public:

@@ -19,7 +19,6 @@
 #include "TexturedObject/Building.h"
 #include "TexturedObject/DailyPlanet.h"
 #include "Sphere/HalfSphere.h"
-#include "Sphere/QuarterSphere.h"
 
 
  // Subclass the Fl_Gl_Window because we want to draw OpenGL in here.
@@ -41,15 +40,15 @@ public:
 
 private:
     static const int BUILDING_COUNT = 14;
+    static const int HALF_SPHERE_COUNT = 4;
 
     Ground      ground;     // The ground object.
     Track       traintrack; // The train and track.
     Road        road;
     Building    building[BUILDING_COUNT];
     DailyPlanet daily_planet;
-    HalfSphere  half_sphere;
-    QuarterSphere quarter_sphere;
-
+    HalfSphere  half_sphere[HALF_SPHERE_COUNT];
+    
     static const double FOV_X; // The horizontal field of view.
 
     float phi;           // Viewer's inclination angle.
