@@ -97,6 +97,7 @@ WorldWindow::draw(void)
         building[12].Initialize(Point3D(  8.0, 30.0, 0.1), Point3D( 8.0,  4.0, 17.0));
         building[13].Initialize(Point3D( 16.0, 30.0, 0.1), Point3D( 3.0,  9.0, 17.0));
         daily_planet.Initialize(Point3D(  0.0,  0.0, 0.1), 3.0);
+        half_sphere.Initialize(Point3D(10.0, 10.0, 10.0), 3.0, Orientation::x_pos);
     }
 
     // Stuff out here relies on a coordinate system or must be done on every
@@ -140,6 +141,7 @@ WorldWindow::draw(void)
 
     road.Draw();
     daily_planet.Draw();
+    half_sphere.Render();
 
     for(int i = 0; i < BUILDING_COUNT; i++) {
         building[i].Draw();
@@ -253,9 +255,11 @@ WorldWindow::handle(int event)
             switch(Fl::event_key()) {
                 case 's': // subdivide
                     daily_planet.Subdivide(1);
+                    half_sphere.Subdivide(1);
                     return 1;
                 case 'r': // reset subdivisions
                     daily_planet.ResetSubdivide();
+                    half_sphere.ResetSubdivide();
                     return 1;
                 case '1': // front view
                     ChangeCamera(0.0, -90.0);
@@ -277,6 +281,29 @@ WorldWindow::handle(int event)
                     return 1;
                 case ' ': // space key follows car
                     camera_follow = true;
+                    return 1;
+                case FL_Tab:
+                    switch(half_sphere.GetOrientation()) {
+                        case Orientation::x_neg:
+                            half_sphere.SetOrientation(Orientation::x_pos);
+                            break;
+                        case Orientation::x_pos:
+                            half_sphere.SetOrientation(Orientation::y_neg);
+                            break;
+                        case Orientation::y_neg:
+                            half_sphere.SetOrientation(Orientation::y_pos);
+                            break;
+                        case Orientation::y_pos:
+                            half_sphere.SetOrientation(Orientation::z_neg);
+                            break;
+                        case Orientation::z_neg:
+                            half_sphere.SetOrientation(Orientation::z_pos);
+                            break;
+                        case Orientation::z_pos:
+                            half_sphere.SetOrientation(Orientation::x_neg);
+                            break;
+                    }
+
                     return 1;
             }
     }

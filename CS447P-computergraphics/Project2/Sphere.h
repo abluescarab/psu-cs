@@ -28,6 +28,9 @@ typedef struct _Triangle {
     bool forward[3];
 } Triangle, * TrianglePtr;
 
+enum class Orientation { 
+    x_neg = 1, x_pos = 2, y_neg = 4, y_pos = 8, z_neg = 16, z_pos = 32
+};
 
 class Sphere {
 protected:

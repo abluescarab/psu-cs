@@ -18,6 +18,7 @@
 #include "Road.h"
 #include "Building.h"
 #include "DailyPlanet.h"
+#include "HalfSphere.h"
 
 
  // Subclass the Fl_Gl_Window because we want to draw OpenGL in here.
@@ -45,6 +46,7 @@ private:
     Road        road;
     Building    building[BUILDING_COUNT];
     DailyPlanet daily_planet;
+    HalfSphere  half_sphere;
 
     static const double FOV_X; // The horizontal field of view.
 

@@ -104,6 +104,7 @@
     <ClCompile Include="DailyPlanet.cpp" />
     <ClCompile Include="GenericException.cpp" />
     <ClCompile Include="Ground.cpp" />
+    <ClCompile Include="HalfSphere.cpp" />
     <ClCompile Include="libtarga.c" />
     <ClCompile Include="Point3D.cpp" />
     <ClCompile Include="Road.cpp" />
@@ -119,6 +120,7 @@
     <ClInclude Include="DailyPlanet.h" />
     <ClInclude Include="GenericException.h" />
     <ClInclude Include="Ground.h" />
+    <ClInclude Include="HalfSphere.h" />
     <ClInclude Include="libtarga.h" />
     <ClInclude Include="Point3D.h" />
     <ClInclude Include="Road.h" />
