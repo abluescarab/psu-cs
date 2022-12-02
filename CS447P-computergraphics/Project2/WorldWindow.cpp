@@ -83,27 +83,27 @@ WorldWindow::draw(void)
         traintrack.Initialize();
         road.Initialize();
 
-        building[ 0].Initialize(Point3D(-16.0, 24.0, 0.1), Point3D( 3.0,  3.0, 13.0));
-        building[ 1].Initialize(Point3D(-16.0, 27.0, 0.1), Point3D( 3.0,  6.0, 11.0));
-        building[ 2].Initialize(Point3D(-16.0, 33.0, 0.1), Point3D( 3.0,  3.0, 13.0));
-        building[ 3].Initialize(Point3D(-13.0, 24.0, 0.1), Point3D( 6.0,  3.0, 11.0));
-        building[ 4].Initialize(Point3D(-13.0, 33.0, 0.1), Point3D( 6.0,  3.0, 11.0));
-        building[ 5].Initialize(Point3D( -7.0, 24.0, 0.1), Point3D( 3.0,  3.0, 13.0));
-        building[ 6].Initialize(Point3D( -7.0, 27.0, 0.1), Point3D( 3.0,  6.0, 11.0));
-        building[ 7].Initialize(Point3D( -7.0, 33.0, 0.1), Point3D( 3.0,  3.0, 13.0));
-        building[ 8].Initialize(Point3D( -7.0, 30.0, 8.0), Point3D(10.0,  3.0,  2.0));
-        building[ 9].Initialize(Point3D( -3.0, 24.0, 0.1), Point3D( 3.0, 14.0,  7.0));
-        building[10].Initialize(Point3D(  0.5, 35.0, 0.1), Point3D(15.0,  5.0, 20.0));
-        building[11].Initialize(Point3D(  0.5, 25.0, 0.1), Point3D( 5.0, 10.0, 20.0));
-        building[12].Initialize(Point3D(  8.0, 30.0, 0.1), Point3D( 8.0,  4.0, 17.0));
-        building[13].Initialize(Point3D( 16.0, 30.0, 0.1), Point3D( 3.0,  9.0, 17.0));
+        building[ 0].Initialize(Point3D(-16.0f, 24.0f, 0.1f), Point3D( 3.0f,  3.0f, 13.0f));
+        building[ 1].Initialize(Point3D(-16.0f, 27.0f, 0.1f), Point3D( 3.0f,  6.0f, 11.0f));
+        building[ 2].Initialize(Point3D(-16.0f, 33.0f, 0.1f), Point3D( 3.0f,  3.0f, 13.0f));
+        building[ 3].Initialize(Point3D(-13.0f, 24.0f, 0.1f), Point3D( 6.0f,  3.0f, 11.0f));
+        building[ 4].Initialize(Point3D(-13.0f, 33.0f, 0.1f), Point3D( 6.0f,  3.0f, 11.0f));
+        building[ 5].Initialize(Point3D( -7.0f, 24.0f, 0.1f), Point3D( 3.0f,  3.0f, 13.0f));
+        building[ 6].Initialize(Point3D( -7.0f, 27.0f, 0.1f), Point3D( 3.0f,  6.0f, 11.0f));
+        building[ 7].Initialize(Point3D( -7.0f, 33.0f, 0.1f), Point3D( 3.0f,  3.0f, 13.0f));
+        building[ 8].Initialize(Point3D( -7.0f, 30.0f, 8.0f), Point3D(10.0f,  3.0f,  2.0f));
+        building[ 9].Initialize(Point3D( -3.0f, 24.0f, 0.1f), Point3D( 3.0f, 14.0f,  7.0f));
+        building[10].Initialize(Point3D(  0.5f, 35.0f, 0.1f), Point3D(15.0f,  5.0f, 20.0f));
+        building[11].Initialize(Point3D(  0.5f, 25.0f, 0.1f), Point3D( 5.0f, 10.0f, 20.0f));
+        building[12].Initialize(Point3D(  8.0f, 30.0f, 0.1f), Point3D( 8.0f,  4.0f, 17.0f));
+        building[13].Initialize(Point3D( 16.0f, 30.0f, 0.1f), Point3D( 3.0f,  9.0f, 17.0f));
 
-        half_sphere[0].Initialize(Point3D(-14.5, 25.5, 13.1), 1.5, Orientation::z_pos, 1);
-        half_sphere[1].Initialize(Point3D(-14.5, 34.5, 13.1), 1.5, Orientation::z_pos, 1);
-        half_sphere[2].Initialize(Point3D( -5.5, 25.5, 13.1), 1.5, Orientation::z_pos, 1);
-        half_sphere[3].Initialize(Point3D( -5.5, 34.5, 13.1), 1.5, Orientation::z_pos, 1);
+        half_sphere[0].Initialize(Point3D(-14.5f, 25.5f, 13.1f), 1.5f, Orientation::z_pos, 1);
+        half_sphere[1].Initialize(Point3D(-14.5f, 34.5f, 13.1f), 1.5f, Orientation::z_pos, 1);
+        half_sphere[2].Initialize(Point3D( -5.5f, 25.5f, 13.1f), 1.5f, Orientation::z_pos, 1);
+        half_sphere[3].Initialize(Point3D( -5.5f, 34.5f, 13.1f), 1.5f, Orientation::z_pos, 1);
 
-        daily_planet.Initialize(Point3D(0.0, 0.0, 0.1), 3.0);
+        daily_planet.Initialize(Point3D(0.0f, 0.0f, 0.1f), 3.0f);
     }
 
     // Stuff out here relies on a coordinate system or must be done on every
@@ -141,8 +141,8 @@ WorldWindow::draw(void)
         phi = -new_phi;
         x_at = posn[0];
         y_at = posn[1];
-        z_at = posn[2] + 5.0;
-        dist = -0.1;
+        z_at = posn[2] + 5.0f;
+        dist = -0.1f;
     }
 
     road.Draw();
@@ -305,5 +305,3 @@ WorldWindow::handle(int event)
     // Pass any other event types on the superclass.
     return Fl_Gl_Window::handle(event);
 }
-
-

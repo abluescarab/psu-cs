@@ -21,11 +21,6 @@ Point3D::~Point3D() {
     this->z = 0.0;
 }
 
-GLfloat * Point3D::ToArray() {
-    GLfloat arr[3] = { this->x, this->y, this->z };
-    return arr;
-}
-
 std::ostream & operator<<(std::ostream & os, Point3D const & p) {
     return os << "(" << p.x << ", " << p.y << ", " << p.z << ")";
 }

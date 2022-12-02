@@ -27,7 +27,14 @@ class Track {
 
   public:
     // Constructor
-    Track(void) { initialized = false; posn_on_track = 0.0f; speed = 0.0f; };
+    Track(void) {
+      track = 0;
+      track_list = 0; 
+      train_list = 0;
+      initialized = false;
+      posn_on_track = 0.0f; 
+      speed = 0.0f; 
+    };
 
     // Destructor
     ~Track(void);

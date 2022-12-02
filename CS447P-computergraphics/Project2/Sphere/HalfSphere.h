@@ -13,6 +13,7 @@ private:
     void RotateZ(); // rotate around z axis
 
 public:
+    HalfSphere() { orientation = Orientation::z_pos; };
     bool Initialize(Point3D location, GLfloat size,
         Orientation orientation = Orientation::z_pos,
         unsigned int subdivisions = 0);

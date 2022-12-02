@@ -92,7 +92,7 @@ void QuarterSphere::SetOrientations(Orientation v_face, Orientation h_face) {
     }
 }
 
-void QuarterSphere::ResetSubdivide(unsigned int subdivisons = 0) {
+void QuarterSphere::ResetSubdivide(unsigned int subdivisons) {
     if(initialized) {
         Reset();
         Initialize(location, size, v_face, h_face, subdivisons);

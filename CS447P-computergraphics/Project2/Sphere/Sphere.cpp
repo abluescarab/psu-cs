@@ -34,7 +34,7 @@ Sphere::~Sphere(void) {
     delete[] faces;
 }
 
-bool Sphere::Initialize(Point3D location, GLfloat size, unsigned int subdivisions = 0) {
+bool Sphere::Initialize(Point3D location, GLfloat size, unsigned int subdivisions) {
     this->location = location;
     this->size = size;
 
@@ -330,7 +330,7 @@ void Sphere::Reset() {
     faces = new Triangle[num_faces];
 }
 
-void Sphere::ResetSubdivide(unsigned int subdivisons = 0) {
+void Sphere::ResetSubdivide(unsigned int subdivisons) {
     if(initialized) {
         Reset();
         Initialize(this->location, this->size, subdivisons);
