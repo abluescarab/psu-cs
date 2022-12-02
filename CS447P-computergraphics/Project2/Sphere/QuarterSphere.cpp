@@ -28,7 +28,7 @@ void QuarterSphere::RotateH() {
     SetOrientations(v_face, new_h);
 }
 
-bool QuarterSphere::Initialize(Point3D location, GLfloat size, 
+bool QuarterSphere::Initialize(Point3D location, GLfloat size,
     Orientation v_face, Orientation h_face, unsigned int subdivisions) {
     Sphere::Initialize(location, size);
 

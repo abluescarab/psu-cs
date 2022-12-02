@@ -64,7 +64,7 @@ void HalfSphere::RotateZ() {
     SetOrientation(new_o);
 }
 
-bool HalfSphere::Initialize(Point3D location, GLfloat size, 
+bool HalfSphere::Initialize(Point3D location, GLfloat size,
     Orientation orientation, unsigned int subdivisions = 0) {
     Sphere::Initialize(location, size);
 

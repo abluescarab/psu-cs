@@ -13,8 +13,8 @@ private:
     void RotateH();
 
 public:
-    bool Initialize(Point3D location, GLfloat size, 
-        Orientation v_face = Orientation::z_neg, 
+    bool Initialize(Point3D location, GLfloat size,
+        Orientation v_face = Orientation::z_neg,
         Orientation h_face = Orientation::y_pos,
         unsigned int subdivisions = 0);
     void Rotate(bool rotate_v, bool rotate_h);

@@ -114,11 +114,11 @@ void Sphere::Subdivide(unsigned int n) {
         return;
 
     unsigned int    num_v;
-    Vertex* new_v;
+    Vertex * new_v;
     unsigned int    num_e;
-    Edge* new_e;
+    Edge * new_e;
     unsigned int    num_f;
-    Triangle* new_f;
+    Triangle * new_f;
     unsigned int    i, j;
 
     // Copy old vertices over

@@ -12,7 +12,7 @@ Point3D::Point3D(GLfloat x, GLfloat y, GLfloat z) {
     this->z = z;
 }
 
-Point3D::Point3D(const Point3D& point) : Point3D(point.x, point.y, point.z) {
+Point3D::Point3D(const Point3D & point) : Point3D(point.x, point.y, point.z) {
 }
 
 Point3D::~Point3D() {
@@ -21,69 +21,69 @@ Point3D::~Point3D() {
     this->z = 0.0;
 }
 
-GLfloat* Point3D::ToArray() {
+GLfloat * Point3D::ToArray() {
     GLfloat arr[3] = { this->x, this->y, this->z };
     return arr;
 }
 
-std::ostream& operator<<(std::ostream& os, Point3D const& p) {
+std::ostream & operator<<(std::ostream & os, Point3D const & p) {
     return os << "(" << p.x << ", " << p.y << ", " << p.z << ")";
 }
 
-Point3D operator+(const Point3D& p1, const Point3D& p2) {
+Point3D operator+(const Point3D & p1, const Point3D & p2) {
     return Point3D(p1.x + p2.x, p1.y + p2.y, p1.z + p2.z);
 }
 
-Point3D operator+(const Point3D& p1, const GLfloat add) {
+Point3D operator+(const Point3D & p1, const GLfloat add) {
     return Point3D(p1.x + add, p1.y + add, p1.z + add);
 }
 
-Point3D operator-(const Point3D& p1, const Point3D& p2) {
+Point3D operator-(const Point3D & p1, const Point3D & p2) {
     return Point3D(p1.x - p2.x, p1.y - p2.y, p1.z - p2.z);
 }
 
-Point3D operator-(const Point3D& p1, const GLfloat sub) {
+Point3D operator-(const Point3D & p1, const GLfloat sub) {
     return Point3D(p1.x - sub, p1.y - sub, p1.z - sub);
 }
 
-Point3D operator*(const Point3D& p1, const Point3D& p2) {
+Point3D operator*(const Point3D & p1, const Point3D & p2) {
     return Point3D(p1.x * p2.x, p1.y * p2.y, p1.z * p2.z);
 }
 
-Point3D operator*(const Point3D& p1, const GLfloat mul) {
+Point3D operator*(const Point3D & p1, const GLfloat mul) {
     return Point3D(p1.x * mul, p1.y * mul, p1.z * mul);
 }
 
-Point3D operator/(const Point3D& p1, const Point3D& p2) {
+Point3D operator/(const Point3D & p1, const Point3D & p2) {
     return Point3D(p1.x / p2.x, p1.y / p2.y, p1.z / p2.z);
 }
 
-Point3D operator/(const Point3D& p1, const GLfloat div) {
+Point3D operator/(const Point3D & p1, const GLfloat div) {
     return Point3D(p1.x / div, p1.y / div, p1.z / div);
 }
 
-Point3D& Point3D::operator+=(const Point3D& other) {
+Point3D & Point3D::operator+=(const Point3D & other) {
     this->x += other.x;
     this->y += other.y;
     this->z += other.z;
     return *this;
 }
 
-Point3D& Point3D::operator-=(const Point3D& other) {
+Point3D & Point3D::operator-=(const Point3D & other) {
     this->x -= other.x;
     this->y -= other.y;
     this->z -= other.z;
     return *this;
 }
 
-Point3D& Point3D::operator*=(const Point3D& other) {
+Point3D & Point3D::operator*=(const Point3D & other) {
     this->x *= other.x;
     this->y *= other.y;
     this->z *= other.z;
     return *this;
 }
 
-Point3D& Point3D::operator/=(const Point3D& other) {
+Point3D & Point3D::operator/=(const Point3D & other) {
     this->x /= other.x;
     this->y /= other.y;
     this->z /= other.z;

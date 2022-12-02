@@ -13,8 +13,8 @@ private:
     void RotateZ(); // rotate around z axis
 
 public:
-    bool Initialize(Point3D location, GLfloat size, 
-        Orientation orientation = Orientation::z_pos, 
+    bool Initialize(Point3D location, GLfloat size,
+        Orientation orientation = Orientation::z_pos,
         unsigned int subdivisions = 0);
     void Rotate(bool rotate_x, bool rotate_y, bool rotate_z);
     void SetOrientation(Orientation orientation);

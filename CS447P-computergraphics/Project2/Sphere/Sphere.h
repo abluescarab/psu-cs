@@ -16,7 +16,7 @@ typedef struct _Vertex {
 typedef struct _Edge {
     unsigned int vs;      // start vertex
     unsigned int ve;      // end vertex
-    unsigned int v_new;  
+    unsigned int v_new;
     unsigned int s_child; // start child
     unsigned int e_child; // end child
 } Edge, * EdgePtr;
@@ -31,11 +31,11 @@ enum class Orientation { x_neg, x_pos, y_neg, y_pos, z_neg, z_pos };
 class Sphere {
 protected:
     unsigned int num_vertices;
-    Vertex* vertices;
+    Vertex * vertices;
     unsigned int num_edges;
-    Edge* edges;
+    Edge * edges;
     unsigned int num_faces;
-    Triangle* faces;
+    Triangle * faces;
     bool initialized = false;
     Point3D location;
     GLfloat size;

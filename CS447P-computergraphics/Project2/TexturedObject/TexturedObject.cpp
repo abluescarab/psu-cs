@@ -17,11 +17,11 @@ TexturedObject::~TexturedObject() {
 }
 
 bool TexturedObject::Initialize(const char * texture) {
-    ubyte* image_data;
+    ubyte * image_data;
     int width;
     int height;
 
-    if(!(image_data = (ubyte*)tga_load(texture, &width, &height, TGA_TRUECOLOR_24))) {
+    if(!(image_data = (ubyte *)tga_load(texture, &width, &height, TGA_TRUECOLOR_24))) {
         fprintf(stderr, "TexturedObject::Initialize: Couldn't load \"%s\"\n.", texture);
         return false;
     }
