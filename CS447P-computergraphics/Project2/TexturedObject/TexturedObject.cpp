@@ -1,5 +1,5 @@
 #include "TexturedObject.h"
-#include "libtarga.h"
+#include "../libtarga.h"
 #include <iostream>
 #include <GL/glu.h>
 

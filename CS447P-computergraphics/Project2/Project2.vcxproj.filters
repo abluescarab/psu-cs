@@ -42,19 +42,19 @@
     <ClCompile Include="Point3D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Building.cpp">
+    <ClCompile Include="TexturedObject\Building.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TexturedObject.cpp">
+    <ClCompile Include="TexturedObject\TexturedObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DailyPlanet.cpp">
+    <ClCompile Include="TexturedObject\DailyPlanet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sphere.cpp">
+    <ClCompile Include="Sphere\Sphere.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="HalfSphere.cpp">
+    <ClCompile Include="Sphere\HalfSphere.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -83,19 +83,21 @@
     <ClInclude Include="Point3D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Building.h">
+    <ClInclude Include="TexturedObject\Building.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TexturedObject.h">
+    <ClInclude Include="TexturedObject\TexturedObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DailyPlanet.h">
+    <ClInclude Include="TexturedObject\DailyPlanet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sphere.h">
+    <ClInclude Include="Sphere\Sphere.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="HalfSphere.h">
+    <ClInclude Include="Sphere\HalfSphere.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -97,7 +97,7 @@ WorldWindow::draw(void)
         building[12].Initialize(Point3D(  8.0, 30.0, 0.1), Point3D( 8.0,  4.0, 17.0));
         building[13].Initialize(Point3D( 16.0, 30.0, 0.1), Point3D( 3.0,  9.0, 17.0));
         daily_planet.Initialize(Point3D(  0.0,  0.0, 0.1), 3.0);
-        half_sphere.Initialize(Point3D(10.0, 10.0, 10.0), 3.0, Orientation::x_pos);
+        half_sphere.Initialize(Point3D(10.0, 10.0, 10.0), 3.0);
     }
 
     // Stuff out here relies on a coordinate system or must be done on every
@@ -283,27 +283,7 @@ WorldWindow::handle(int event)
                     camera_follow = true;
                     return 1;
                 case FL_Tab:
-                    switch(half_sphere.GetOrientation()) {
-                        case Orientation::x_neg:
-                            half_sphere.SetOrientation(Orientation::x_pos);
-                            break;
-                        case Orientation::x_pos:
-                            half_sphere.SetOrientation(Orientation::y_neg);
-                            break;
-                        case Orientation::y_neg:
-                            half_sphere.SetOrientation(Orientation::y_pos);
-                            break;
-                        case Orientation::y_pos:
-                            half_sphere.SetOrientation(Orientation::z_neg);
-                            break;
-                        case Orientation::z_neg:
-                            half_sphere.SetOrientation(Orientation::z_pos);
-                            break;
-                        case Orientation::z_pos:
-                            half_sphere.SetOrientation(Orientation::x_neg);
-                            break;
-                    }
-
+                    half_sphere.Rotate();
                     return 1;
             }
     }

@@ -99,33 +99,33 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Building.cpp" />
+    <ClCompile Include="TexturedObject\Building.cpp" />
     <ClCompile Include="CubicBspline.cpp" />
-    <ClCompile Include="DailyPlanet.cpp" />
+    <ClCompile Include="TexturedObject\DailyPlanet.cpp" />
     <ClCompile Include="GenericException.cpp" />
     <ClCompile Include="Ground.cpp" />
-    <ClCompile Include="HalfSphere.cpp" />
+    <ClCompile Include="Sphere\HalfSphere.cpp" />
     <ClCompile Include="libtarga.c" />
     <ClCompile Include="Point3D.cpp" />
     <ClCompile Include="Road.cpp" />
-    <ClCompile Include="Sphere.cpp" />
-    <ClCompile Include="TexturedObject.cpp" />
+    <ClCompile Include="Sphere\Sphere.cpp" />
+    <ClCompile Include="TexturedObject\TexturedObject.cpp" />
     <ClCompile Include="Track.cpp" />
     <ClCompile Include="World.cpp" />
     <ClCompile Include="WorldWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Building.h" />
+    <ClInclude Include="TexturedObject\Building.h" />
     <ClInclude Include="CubicBspline.h" />
-    <ClInclude Include="DailyPlanet.h" />
+    <ClInclude Include="TexturedObject\DailyPlanet.h" />
     <ClInclude Include="GenericException.h" />
     <ClInclude Include="Ground.h" />
-    <ClInclude Include="HalfSphere.h" />
+    <ClInclude Include="Sphere\HalfSphere.h" />
     <ClInclude Include="libtarga.h" />
     <ClInclude Include="Point3D.h" />
     <ClInclude Include="Road.h" />
-    <ClInclude Include="Sphere.h" />
-    <ClInclude Include="TexturedObject.h" />
+    <ClInclude Include="Sphere\Sphere.h" />
+    <ClInclude Include="TexturedObject\TexturedObject.h" />
     <ClInclude Include="Track.h" />
     <ClInclude Include="WorldWindow.h" />
   </ItemGroup>

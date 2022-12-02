@@ -255,6 +255,9 @@ void Sphere::Subdivide(unsigned int n) {
 }
 
 void Sphere::Render(const bool smooth) {
+    if(!initialized)
+        return;
+
     double  	    l;
     unsigned int    i, j;
 
@@ -321,6 +324,8 @@ void Sphere::Reset() {
 }
 
 void Sphere::ResetSubdivide() {
-    Reset();
-    Initialize(this->location, this->size);
+    if(initialized) {
+        Reset();
+        Initialize(this->location, this->size);
+    }
 }

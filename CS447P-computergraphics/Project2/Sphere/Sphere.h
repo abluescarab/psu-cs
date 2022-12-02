@@ -9,7 +9,7 @@
 
 #include <stdio.h>
 #include <math.h>
-#include "Point3D.h"
+#include "../Point3D.h"
 
 typedef struct _Vertex {
     GLfloat x[3];
@@ -28,9 +28,7 @@ typedef struct _Triangle {
     bool forward[3];
 } Triangle, * TrianglePtr;
 
-enum class Orientation { 
-    x_neg = 1, x_pos = 2, y_neg = 4, y_pos = 8, z_neg = 16, z_pos = 32
-};
+enum class Orientation { x_neg, x_pos, y_neg, y_pos, z_neg, z_pos };
 
 class Sphere {
 protected:

@@ -2,7 +2,7 @@
 #define _ROAD_H_
 
 #include <Fl/gl.h>
-#include "TexturedObject.h"
+#include "TexturedObject/TexturedObject.h"
 #include "Point3D.h"
 
 class Road : public TexturedObject {

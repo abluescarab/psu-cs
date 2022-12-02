@@ -2,7 +2,7 @@
 #define _DAILY_PLANET_H_
 
 #include "Building.h"
-#include "Sphere.h"
+#include "../Sphere/Sphere.h"
 
 class DailyPlanet {
 private:

@@ -16,9 +16,9 @@
 #include "Ground.h"
 #include "Track.h"
 #include "Road.h"
-#include "Building.h"
-#include "DailyPlanet.h"
-#include "HalfSphere.h"
+#include "TexturedObject/Building.h"
+#include "TexturedObject/DailyPlanet.h"
+#include "Sphere/HalfSphere.h"
 
 
  // Subclass the Fl_Gl_Window because we want to draw OpenGL in here.

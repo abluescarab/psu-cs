@@ -3,7 +3,7 @@
 
 #include <FL/gl.h>
 #include "TexturedObject.h"
-#include "Point3D.h"
+#include "../Point3D.h"
 
 class Building : public TexturedObject {
 private:
