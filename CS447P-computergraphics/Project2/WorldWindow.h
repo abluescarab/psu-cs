@@ -19,6 +19,7 @@
 #include "TexturedObject/Building.h"
 #include "TexturedObject/DailyPlanet.h"
 #include "Sphere/HalfSphere.h"
+#include "Sphere/QuarterSphere.h"
 
 
  // Subclass the Fl_Gl_Window because we want to draw OpenGL in here.
@@ -47,6 +48,7 @@ private:
     Building    building[BUILDING_COUNT];
     DailyPlanet daily_planet;
     HalfSphere  half_sphere;
+    QuarterSphere quarter_sphere;
 
     static const double FOV_X; // The horizontal field of view.
 

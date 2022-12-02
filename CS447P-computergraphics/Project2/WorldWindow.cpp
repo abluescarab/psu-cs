@@ -98,6 +98,7 @@ WorldWindow::draw(void)
         building[13].Initialize(Point3D( 16.0, 30.0, 0.1), Point3D( 3.0,  9.0, 17.0));
         daily_planet.Initialize(Point3D(  0.0,  0.0, 0.1), 3.0);
         half_sphere.Initialize(Point3D(10.0, 10.0, 10.0), 3.0);
+        quarter_sphere.Initialize(Point3D(10.0, 10.0, 15.0), 3.0);
     }
 
     // Stuff out here relies on a coordinate system or must be done on every
@@ -142,6 +143,7 @@ WorldWindow::draw(void)
     road.Draw();
     daily_planet.Draw();
     half_sphere.Render();
+    quarter_sphere.Render();
 
     for(int i = 0; i < BUILDING_COUNT; i++) {
         building[i].Draw();
@@ -284,6 +286,7 @@ WorldWindow::handle(int event)
                     return 1;
                 case FL_Tab:
                     half_sphere.Rotate();
+                    quarter_sphere.Rotate();
                     return 1;
             }
     }

@@ -57,6 +57,9 @@
     <ClCompile Include="Sphere\HalfSphere.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Sphere\QuarterSphere.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CubicBspline.h">
@@ -98,6 +101,7 @@
     <ClInclude Include="Sphere\HalfSphere.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Sphere\QuarterSphere.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
