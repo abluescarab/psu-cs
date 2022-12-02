@@ -7,8 +7,6 @@
 #ifndef _SPHERE_H_
 #define _SPHERE_H_
 
-#include <stdio.h>
-#include <math.h>
 #include "../Point3D.h"
 
 typedef struct _Vertex {

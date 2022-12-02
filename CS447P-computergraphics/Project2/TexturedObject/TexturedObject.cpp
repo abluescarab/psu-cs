@@ -1,7 +1,7 @@
 #include "TexturedObject.h"
 #include "../libtarga.h"
 #include <iostream>
-#include <GL/glu.h>
+#include <FL/glu.h>
 
 TexturedObject::TexturedObject() {
     display_list = 0;

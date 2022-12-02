@@ -36,7 +36,7 @@
     <ClCompile Include="WorldWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Road.cpp">
+    <ClCompile Include="TexturedObject\Road.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Point3D.cpp">
@@ -80,7 +80,7 @@
     <ClInclude Include="WorldWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Road.h">
+    <ClInclude Include="TexturedObject\Road.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Point3D.h">

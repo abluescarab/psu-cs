@@ -108,7 +108,7 @@
     <ClCompile Include="libtarga.c" />
     <ClCompile Include="Point3D.cpp" />
     <ClCompile Include="Sphere\QuarterSphere.cpp" />
-    <ClCompile Include="Road.cpp" />
+    <ClCompile Include="TexturedObject\Road.cpp" />
     <ClCompile Include="Sphere\Sphere.cpp" />
     <ClCompile Include="TexturedObject\TexturedObject.cpp" />
     <ClCompile Include="Track.cpp" />
@@ -125,7 +125,7 @@
     <ClInclude Include="libtarga.h" />
     <ClInclude Include="Point3D.h" />
     <ClInclude Include="Sphere\QuarterSphere.h" />
-    <ClInclude Include="Road.h" />
+    <ClInclude Include="TexturedObject\Road.h" />
     <ClInclude Include="Sphere\Sphere.h" />
     <ClInclude Include="TexturedObject\TexturedObject.h" />
     <ClInclude Include="Track.h" />

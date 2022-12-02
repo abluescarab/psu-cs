@@ -82,6 +82,7 @@ WorldWindow::draw(void)
         ground.Initialize();
         traintrack.Initialize();
         road.Initialize();
+
         building[ 0].Initialize(Point3D(-16.0, 24.0, 0.1), Point3D( 3.0,  3.0, 13.0));
         building[ 1].Initialize(Point3D(-16.0, 27.0, 0.1), Point3D( 3.0,  6.0, 11.0));
         building[ 2].Initialize(Point3D(-16.0, 33.0, 0.1), Point3D( 3.0,  3.0, 13.0));

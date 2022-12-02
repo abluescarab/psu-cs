@@ -6,7 +6,6 @@
 
 #include "Sphere.h"
 #include <Fl/gl.h>
-#include <stdlib.h>
 
 Vertex Sphere::VertexLocation(Vertex v, Point3D location) {
     Vertex result = Vertex(v);

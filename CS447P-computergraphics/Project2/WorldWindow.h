@@ -15,7 +15,7 @@
 #include <Fl/Fl_Gl_Window.h>
 #include "Ground.h"
 #include "Track.h"
-#include "Road.h"
+#include "TexturedObject/Road.h"
 #include "TexturedObject/Building.h"
 #include "TexturedObject/DailyPlanet.h"
 #include "Sphere/HalfSphere.h"
