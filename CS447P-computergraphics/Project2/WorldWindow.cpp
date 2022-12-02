@@ -251,9 +251,11 @@ WorldWindow::handle(int event)
             return 1;
         case FL_KEYBOARD:
             switch(Fl::event_key()) {
-                case 's':
+                case 's': // subdivide
                     daily_planet.Subdivide(1);
-                    redraw();
+                    return 1;
+                case 'r': // reset subdivisions
+                    daily_planet.ResetSubdivide();
                     return 1;
                 case '1': // front view
                     ChangeCamera(0.0, -90.0);

@@ -30,7 +30,7 @@ typedef struct _Triangle {
 
 
 class Sphere {
-private:
+protected:
     unsigned int num_vertices;
     Vertex* vertices;
     unsigned int num_edges;
@@ -42,14 +42,16 @@ private:
     GLfloat size;
 
     Vertex VertexLocation(Vertex v, Point3D location);
+    void Reset();
 
 public:
     Sphere(void);
     ~Sphere(void);
 
-    bool Initialize(Point3D location, GLfloat size);
+    virtual bool Initialize(Point3D location, GLfloat size);
     void Subdivide(unsigned int);
     void Render(const bool smooth = true);
+    virtual void ResetSubdivide();
 };
 
 #endif

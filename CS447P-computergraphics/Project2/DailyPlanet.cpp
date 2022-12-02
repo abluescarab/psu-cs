@@ -54,3 +54,7 @@ void DailyPlanet::Draw() {
 void DailyPlanet::Subdivide(unsigned int n) {
     topSphere.Subdivide(n);
 }
+
+void DailyPlanet::ResetSubdivide() {
+    topSphere.ResetSubdivide();
+}

@@ -18,6 +18,7 @@ public:
     bool Initialize(Point3D location, GLfloat topSize, bool center = true);
     void Draw();
     void Subdivide(unsigned int n);
+    void ResetSubdivide();
 };
 
 #endif

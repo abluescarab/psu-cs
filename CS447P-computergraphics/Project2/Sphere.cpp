@@ -40,11 +40,11 @@ bool Sphere::Initialize(Point3D location, GLfloat size) {
     this->size = size;
 
     vertices[0].x[0] = size;
-    vertices[0].x[1] = 0.0f;
+    vertices[0].x[1] = 0.0f; // right vert
     vertices[0].x[2] = 0.0f;
 
     vertices[1].x[0] = -size;
-    vertices[1].x[1] = 0.0f;
+    vertices[1].x[1] = 0.0f; // left vert
     vertices[1].x[2] = 0.0f;
 
     vertices[2].x[0] = 0.0f;
@@ -56,11 +56,11 @@ bool Sphere::Initialize(Point3D location, GLfloat size) {
     vertices[3].x[2] = 0.0f;
 
     vertices[4].x[0] = 0.0f;
-    vertices[4].x[1] = 0.0f;
+    vertices[4].x[1] = 0.0f; // bottom vert
     vertices[4].x[2] = size;
 
     vertices[5].x[0] = 0.0f;
-    vertices[5].x[1] = 0.0f;
+    vertices[5].x[1] = 0.0f; // top vert
     vertices[5].x[2] = -size;
 
     edges[0].vs = 0; edges[0].ve = 4;
@@ -304,4 +304,23 @@ void Sphere::Render(const bool smooth) {
         }
     }
     glEnd();
+}
+
+void Sphere::Reset() {
+    delete[] vertices;
+    delete[] edges;
+    delete[] faces;
+
+    num_vertices = 6;
+    num_edges = 12;
+    num_faces = 8;
+
+    vertices = new Vertex[num_vertices];
+    edges = new Edge[num_edges];
+    faces = new Triangle[num_faces];
+}
+
+void Sphere::ResetSubdivide() {
+    Reset();
+    Initialize(this->location, this->size);
 }
