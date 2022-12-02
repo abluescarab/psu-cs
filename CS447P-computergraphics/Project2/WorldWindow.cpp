@@ -90,8 +90,8 @@ WorldWindow::draw(void)
         building[ 4].Initialize(Point3D(-13.0, 33.0, 0.1), Point3D( 6.0,  3.0, 11.0));
         building[ 5].Initialize(Point3D( -7.0, 24.0, 0.1), Point3D( 3.0,  3.0, 13.0));
         building[ 6].Initialize(Point3D( -7.0, 27.0, 0.1), Point3D( 3.0,  6.0, 11.0));
-        building[ 7].Initialize(Point3D( -7.0, 30.0, 8.0), Point3D(10.0,  3.0,  2.0));
-        building[ 8].Initialize(Point3D( -7.0, 33.0, 0.1), Point3D( 3.0,  3.0, 13.0));
+        building[ 7].Initialize(Point3D( -7.0, 33.0, 0.1), Point3D( 3.0,  3.0, 13.0));
+        building[ 8].Initialize(Point3D( -7.0, 30.0, 8.0), Point3D(10.0,  3.0,  2.0));
         building[ 9].Initialize(Point3D( -3.0, 24.0, 0.1), Point3D( 3.0, 14.0,  7.0));
         building[10].Initialize(Point3D(  0.5, 35.0, 0.1), Point3D(15.0,  5.0, 20.0));
         building[11].Initialize(Point3D(  0.5, 25.0, 0.1), Point3D( 5.0, 10.0, 20.0));
@@ -284,10 +284,6 @@ WorldWindow::handle(int event)
                     return 1;
                 case ' ': // space key follows car
                     camera_follow = true;
-                    return 1;
-                case FL_Tab:
-                    half_sphere.Rotate();
-                    quarter_sphere.Rotate();
                     return 1;
             }
     }

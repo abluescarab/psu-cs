@@ -29,7 +29,7 @@ void QuarterSphere::RotateH() {
 }
 
 bool QuarterSphere::Initialize(Point3D location, GLfloat size, 
-    Orientation v_face, Orientation h_face) {
+    Orientation v_face, Orientation h_face, unsigned int subdivisions) {
     Sphere::Initialize(location, size);
 
     this->v_face = v_face;
@@ -68,6 +68,11 @@ bool QuarterSphere::Initialize(Point3D location, GLfloat size,
     }
 
     initialized = true;
+
+    if(subdivisions > 0) {
+        Subdivide(subdivisions);
+    }
+
     return true;
 }
 
@@ -87,9 +92,9 @@ void QuarterSphere::SetOrientations(Orientation v_face, Orientation h_face) {
     }
 }
 
-void QuarterSphere::ResetSubdivide() {
+void QuarterSphere::ResetSubdivide(unsigned int subdivisons = 0) {
     if(initialized) {
         Reset();
-        Initialize(location, size, v_face, h_face);
+        Initialize(location, size, v_face, h_face, subdivisons);
     }
 }

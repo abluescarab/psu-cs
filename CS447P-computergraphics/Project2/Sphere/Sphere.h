@@ -47,10 +47,10 @@ public:
     Sphere(void);
     ~Sphere(void);
 
-    virtual bool Initialize(Point3D location, GLfloat size);
+    virtual bool Initialize(Point3D location, GLfloat size, unsigned int subdivisions = 0);
     void Subdivide(unsigned int);
     void Render(const bool smooth = true);
-    virtual void ResetSubdivide();
+    virtual void ResetSubdivide(unsigned int subdivisons = 0);
 };
 
 #endif

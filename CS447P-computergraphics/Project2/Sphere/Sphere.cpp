@@ -34,7 +34,7 @@ Sphere::~Sphere(void) {
     delete[] faces;
 }
 
-bool Sphere::Initialize(Point3D location, GLfloat size) {
+bool Sphere::Initialize(Point3D location, GLfloat size, unsigned int subdivisions = 0) {
     this->location = location;
     this->size = size;
 
@@ -101,10 +101,18 @@ bool Sphere::Initialize(Point3D location, GLfloat size) {
     faces[7].edges[2] = 8; faces[7].forward[2] = false;
 
     initialized = true;
+
+    if(subdivisions > 0) {
+        Subdivide(subdivisions);
+    }
+
     return true;
 }
 
 void Sphere::Subdivide(unsigned int n) {
+    if(!initialized)
+        return;
+
     unsigned int    num_v;
     Vertex* new_v;
     unsigned int    num_e;
@@ -322,9 +330,9 @@ void Sphere::Reset() {
     faces = new Triangle[num_faces];
 }
 
-void Sphere::ResetSubdivide() {
+void Sphere::ResetSubdivide(unsigned int subdivisons = 0) {
     if(initialized) {
         Reset();
-        Initialize(this->location, this->size);
+        Initialize(this->location, this->size, subdivisons);
     }
 }

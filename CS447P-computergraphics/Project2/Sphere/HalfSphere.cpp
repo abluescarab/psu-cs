@@ -64,7 +64,8 @@ void HalfSphere::RotateZ() {
     SetOrientation(new_o);
 }
 
-bool HalfSphere::Initialize(Point3D location, GLfloat size, Orientation orientation) {
+bool HalfSphere::Initialize(Point3D location, GLfloat size, 
+    Orientation orientation, unsigned int subdivisions = 0) {
     Sphere::Initialize(location, size);
 
     this->orientation = orientation;
@@ -95,6 +96,11 @@ bool HalfSphere::Initialize(Point3D location, GLfloat size, Orientation orientat
     }
 
     initialized = true;
+
+    if(subdivisions > 0) {
+        Subdivide(subdivisions);
+    }
+
     return true;
 }
 
@@ -108,27 +114,6 @@ void HalfSphere::Rotate(bool rotate_x, bool rotate_y, bool rotate_z) {
     else if(rotate_z) {
         RotateZ();
     }
-
-    /*switch(orientation) {
-        case Orientation::x_neg:
-            SetOrientation(Orientation::y_pos);
-            break;
-        case Orientation::y_pos:
-            SetOrientation(Orientation::x_pos);
-            break;
-        case Orientation::x_pos:
-            SetOrientation(Orientation::y_neg);
-            break;
-        case Orientation::y_neg:
-            SetOrientation(Orientation::z_neg);
-            break;
-        case Orientation::z_neg:
-            SetOrientation(Orientation::z_pos);
-            break;
-        case Orientation::z_pos:
-            SetOrientation(Orientation::x_neg);
-            break;
-    }*/
 }
 
 void HalfSphere::SetOrientation(Orientation orientation) {
@@ -138,7 +123,7 @@ void HalfSphere::SetOrientation(Orientation orientation) {
     }
 }
 
-void HalfSphere::ResetSubdivide() {
+void HalfSphere::ResetSubdivide(unsigned int subdivisons = 0) {
     if(initialized) {
         Reset();
         Initialize(location, size, orientation);
