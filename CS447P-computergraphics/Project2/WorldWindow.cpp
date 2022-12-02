@@ -138,7 +138,7 @@ WorldWindow::draw(void)
 
     if(camera_follow) {
         theta = new_theta;
-        phi = -new_phi;
+        phi = -new_phi - 1.0f; // adjustment for better view angle
         x_at = posn[0];
         y_at = posn[1];
         z_at = posn[2] + 5.0f;
@@ -216,7 +216,7 @@ void WorldWindow::ChangeCamera(float xAngle, float zAngle) {
 }
 
 void WorldWindow::ResetCamera() {
-    ChangeCamera(45.0, 0.0);
+    ChangeCamera(45.0f, 0.0f);
 }
 
 bool
