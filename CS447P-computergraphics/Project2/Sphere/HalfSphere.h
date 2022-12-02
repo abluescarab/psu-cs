@@ -14,7 +14,7 @@ private:
 
 public:
     bool Initialize(Point3D location, GLfloat size, Orientation orientation = Orientation::z_pos);
-    void Rotate();
+    void Rotate(bool rotate_x, bool rotate_y, bool rotate_z);
     void SetOrientation(Orientation orientation);
     void ResetSubdivide();
 };

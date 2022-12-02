@@ -98,8 +98,18 @@ bool HalfSphere::Initialize(Point3D location, GLfloat size, Orientation orientat
     return true;
 }
 
-void HalfSphere::Rotate() {
-    switch(orientation) {
+void HalfSphere::Rotate(bool rotate_x, bool rotate_y, bool rotate_z) {
+    if(rotate_x) {
+        RotateX();
+    }
+    else if(rotate_y) {
+        RotateY();
+    }
+    else if(rotate_z) {
+        RotateZ();
+    }
+
+    /*switch(orientation) {
         case Orientation::x_neg:
             SetOrientation(Orientation::y_pos);
             break;
@@ -118,7 +128,7 @@ void HalfSphere::Rotate() {
         case Orientation::z_pos:
             SetOrientation(Orientation::x_neg);
             break;
-    }
+    }*/
 }
 
 void HalfSphere::SetOrientation(Orientation orientation) {

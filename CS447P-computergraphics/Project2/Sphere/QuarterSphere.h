@@ -12,14 +12,12 @@ private:
     void RotateV();
     void RotateH();
 
-    int rotation_count = 0;
-
 public:
     bool Initialize(Point3D location, GLfloat size, 
         Orientation v_face = Orientation::z_neg, 
         Orientation h_face = Orientation::y_pos);
-    void Rotate();
-    void SetOrientations(Orientation o1, Orientation o2);
+    void Rotate(bool rotate_v, bool rotate_h);
+    void SetOrientations(Orientation v_face, Orientation h_face);
     void ResetSubdivide();
 };
 
