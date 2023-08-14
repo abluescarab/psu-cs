@@ -1,0 +1,80 @@
+/* The class names and style declarations below were added to help you get started.
+If you would prefer, you can delete them and use your own classes and style declarations. */
+
+:root {
+    --base-padding: 15px;
+}
+
+.form {
+    border: 1px solid var(--gray4);
+    padding: var(--base-padding);
+    margin: 0 auto;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.header {
+    text-transform: uppercase;
+}
+
+.flex {
+    display: flex;
+    align-items: baseline;
+}
+
+.input-label, .fieldset-legend {
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+.input-label {
+    width: 30%;
+}
+
+.fieldset {
+    border: 0;
+    padding-left: 0;
+}
+
+.fieldset-p {
+    margin: 0px 0px 0px var(--base-padding);
+}
+
+.fieldset-label {
+    margin-left: var(--base-padding);
+}
+
+.input {
+    width: 70%;
+}
+
+.submit-button, .reset-button {
+    width: calc(50% - 3px);
+    padding: 10px;
+    margin-top: var(--base-padding);
+}
+
+.submit-button {
+    background-color: var(--green);
+    color: var(--white);
+    border: 1px solid var(--black);
+}
+
+.submit-button:hover {
+    background-color: var(--orange);
+    color: var(--black);
+}
+
+.reset-button {
+    background-color: var(--white);
+    border: 1px solid var(--green);
+    color: var(--green);
+}
+
+.reset-button:hover {
+    border: 1px solid var(--orange);
+    color: var(--orange);
+}

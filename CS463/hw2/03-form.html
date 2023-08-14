@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>03 - Form</title>
+        <link rel="stylesheet" href="../styles.css" />
+        <link rel="stylesheet" href="../hw2/03-form.css" />
+    </head>
+    <body>
+        <main>
+            <form action="" class="form">
+                <h1 class="header">Registration Form</h1>
+                <!-- Add your code here -->
+                <div class="flex">
+                    <label for="username-input" class="input-label"
+                        >Username:</label
+                    >
+                    <input
+                        type="text"
+                        id="username-input"
+                        name="username"
+                        class="input" />
+                </div>
+                <div class="flex">
+                    <label for="email-input" class="input-label">Email:</label>
+                    <input
+                        type="email"
+                        id="email-input"
+                        name="email"
+                        class="input" />
+                </div>
+                <div class="flex">
+                    <label for="password-input" class="input-label"
+                        >Password:</label
+                    >
+                    <input
+                        type="password"
+                        id="password-input"
+                        name="email"
+                        class="input" />
+                </div>
+
+                <fieldset class="fieldset">
+                    <legend class="fieldset-legend">
+                        Would you like to sign up for the newsletter?
+                    </legend>
+                    <div class="fieldset-p flex">
+                        <input
+                            type="radio"
+                            id="newsletter-yes"
+                            name="newsletter" />
+                        <label for="newsletter-yes" class="fieldset-label"
+                            >Yes, sign me up</label
+                        >
+                    </div>
+                    <div class="fieldset-p flex">
+                        <input
+                            type="radio"
+                            id="newsletter-no"
+                            name="newsletter" />
+                        <label for="newsletter-no" class="fieldset-label"
+                            >No, thank you</label
+                        >
+                    </div>
+                </fieldset>
+
+                <div class="flex">
+                    <label for="date-input" class="input-label">Date:</label>
+                    <input
+                        type="date"
+                        id="date-input"
+                        name="date"
+                        class="input" />
+                </div>
+                <div>
+                    <button type="submit" class="submit-button">Submit</button>
+                    <button type="reset" class="reset-button">Reset</button>
+                </div>
+            </form>
+        </main>
+    </body>
+</html>

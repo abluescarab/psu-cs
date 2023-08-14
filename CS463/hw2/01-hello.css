@@ -1,0 +1,29 @@
+/* The class names and style below were added to help you get started with the styling the pages.
+If you would prefer, you can delete them and use your own classes and style defintions. */
+
+.container {
+  width: 50vw;
+  margin: 0 auto;
+}
+
+.center {
+  text-align: center;
+}
+
+img {
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+  border-radius: 50%;
+
+  -o-object-fit: cover;
+  object-fit: cover;
+
+  width: 200px;
+  height: 200px;
+}
+
+p::first-line {
+  font-weight: bold;
+}
