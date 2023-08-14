@@ -4,3 +4,9 @@
 [submodule "CS300/python-crash-course"]
 	path = CS300/python-crash-course
 	url = https://github.com/ChocAn-CS300-Winter2022/python-crash-course.git
+[submodule "CS465P/possessed-properties"]
+	path = CS465P/possessed-properties
+	url = git@github.com:abluescarab/cs465p-possessed-properties.git
+[submodule "CS465P/doggr_sp23"]
+	path = CS465P/doggr_sp23
+	url = git@github.com:abluescarab/doggr_sp23.git
